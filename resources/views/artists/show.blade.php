@@ -4,10 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Artist Profile - Aesthetic</title>
+    
 
   <!-- Import Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link href="{{ URL::asset('/css/output.css') }}" rel="stylesheet">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script> 
 
   <style>
     body {
@@ -83,7 +85,8 @@
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
-      align-items: center; /* Center-align content */
+      align-items: center;
+      border: 2px solid #e5e7eb;
     }
 
     .profile-card img {
