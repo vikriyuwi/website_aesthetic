@@ -6,6 +6,7 @@
     <title>Explore - Aesthetic</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet"> 
     <link href="{{ URL::asset('/css/output.css') }}" rel="stylesheet"> 
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script> 
     <style>
         body {
             font-family: 'Open Sans', sans-serif;
@@ -148,7 +149,7 @@
         <ul class="flex space-x-8 text-gray-700">
             <li><a href="{{ url('landing') }}" class="hover:text-indigo-600">Home</a></li>
             <li><a href="#" class="hover:text-indigo-600">Explore</a></li>
-            <li><a href="{{ url('artist') }}" class="hover:text-indigo-600">Artist</a></li>
+            <li><a href="{{ url('artists') }}" class="hover:text-indigo-600">Artist</a></li>
             <li><a href="#art-gallery" class="hover:text-indigo-600">Art Gallery</a></li>
         </ul>           
         <div>
