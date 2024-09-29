@@ -62,4 +62,14 @@ class WebController extends Controller
         return view('landing');
     }
 
+    public function landing2(Request $request)
+    {
+        return view('landing2');
+    }
+
+    public function home(Request $request)
+    {
+        return view('Home.home');
+    }
+
 }

@@ -19,3 +19,6 @@ Route::get('/explore', [App\Http\Controllers\WebController::class, 'explore']);
 
 Route::get('/landing', [App\Http\Controllers\WebController::class, 'landing']);
 
+Route::get('/landing2', [App\Http\Controllers\WebController::class, 'landing2']);
+
+Route::get('/home', [App\Http\Controllers\WebController::class, 'home'])->name('Home.home');
