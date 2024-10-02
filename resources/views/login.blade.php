@@ -1,43 +1,50 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Jim+Nightshade">
-    @vite('resources/css/app.css')
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <title>Login Page</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
 </head>
-<body class="bg-gray-500">
-    <div class="py-96">
-        <div class="flex shadow-xl bg-white rounded-lg shadow-lg overflow-hidden mx-auto max-w-sm lg:max-w-4xl" style="height: 30rem;">
-            <div class="hidden lg:block lg:w-1/2 bg-cover"
-                style="background-image:url('https://images.unsplash.com/photo-1546514714-df0ccc50d7bf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=667&q=80')">
-            </div>
-            <div class="py-12 w-full p-8 lg:w-1/2">
-                <h2 class="text-6xl text-black text-left" style="font-family:'Jim Nightshade'">Aesthetic</h2>
-                <p class="py-3 text-xl font-semibold text-black-100 text-left">Enter the Canvas: Aesthetic Login</p>
-
-                <div class=" mt-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2">Email Address</label>
-                    <input class="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none" type="email" />
-                </div>
-                <div class="mt-4">
-                    <div class="flex justify-between">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">Password</label>
-                        <a href="#" class="text-xs text-gray-500">Forget Password?</a>
-                    </div>
-                    <input class="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none" type="password" />
-                </div>
-                <div class="mt-8">
-                    <button class="bg-indigo-400 text-white py-2 px-4 w-full rounded hover:bg-indigo-500">Login</button>
-                </div>
-                <div class="mt-4 flex items-center justify-between">
-                    <span class="border-b w-1/5 md:w-1/4"></span>
-                    <a href="{{ url('register') }}" class="text-xs text-gray-500 uppercase">or sign up</a>
-                    <span class="border-b w-1/5 md:w-1/4"></span>
-                </div>
-            </div>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen">
+  <div class="flex bg-white shadow-lg rounded-lg overflow-hidden max-w-4xl w-full">
+    
+    <!-- Form Section (Left Side) -->
+    <div class="w-full md:w-1/2 p-8 flex flex-col justify-center">
+      <div class="flex items-center mb-6">
+        <!-- Replace the Flowbite text with your image -->
+        <img alt="Aesthetic Logo Text" class="w-24 h-8" src="{{ asset('images/aestheticlogo.png') }}" /> 
+      </div>
+      <h2 class="text-2xl md:text-3xl font-bold mb-2">Welcome back</h2>
+      <p class="text-gray-600 mb-6">
+        Start your website in seconds. Don't have an account?
+        <a class="text-purple-600" href="#">Sign up.</a>
+      </p>
+      <form>
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">Email</label>
+          <input class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-violet-500 focus:border-violet-500 sm:text-sm" placeholder="name@company.com" type="email" required/>
         </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700">Password</label>
+          <input class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-violet-500 focus:border-violet-500 sm:text-sm" placeholder="••••••••" type="password" required/>
+        </div>
+        <div class="flex items-center mb-4">
+          <input class="focus:ring-violet-500 h-4 w-4 text-violet-600 border-gray-300 rounded mr-2" type="checkbox"/>
+          <label class="text-sm font-medium text-gray-700">Remember me</label>
+        </div>
+        <div class="flex items-center justify-between mb-4">
+          <a class="text-purple-600 hover:underline" href="#">Forgot password?</a>
+        </div>
+        <button class="w-full bg-violet-600 text-white py-2 px-4 rounded-md hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500 mt-6">
+          Sign in to your account
+        </button>
+      </form>
     </div>
+
+    <!-- Image Section (Right Side) -->
+    <div class="hidden md:flex md:w-1/2 bg-gray-100 items-center justify-center">
+      <img alt="Login page illustration" class="w-full h-full object-cover" src="{{ asset('images/loginpage.jpg') }}" />
+    </div>
+  </div>
 </body>
 </html>
