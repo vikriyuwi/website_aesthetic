@@ -1,48 +1,67 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Jim+Nightshade">
-    @vite('resources/css/app.css')
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <title>Login Page</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
 </head>
-<body class="bg-gray-500">
-    <div class="py-96">
-        <div class="flex shadow-xl bg-white rounded-lg shadow-lg overflow-hidden mx-auto max-w-sm lg:max-w-4xl">
-            <div class="hidden lg:block lg:w-1/2 bg-cover order-2"
-                style="background-image:url('https://images.unsplash.com/photo-1546514714-df0ccc50d7bf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=667&q=80')">
-            </div>
-            <div class="py-12 w-full p-8 lg:w-1/2">
-                <h2 class="text-6xl text-black text-left" style="font-family:'Jim Nightshade'">Aesthetic</h2>
-                <p class="py-3 text-xl font-semibold text-black-100 text-left">Enter the Canvas: Aesthetic Sign Up</p>
-
-                <div class=" mt-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2">Username</label>
-                    <input class="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none" type="username" />
-                </div>
-
-                <div class=" mt-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2">Email Address</label>
-                    <input class="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none" type="email" />
-                </div>
-                <div class="mt-4">
-                    <div class="flex justify-between">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">Password</label>
-                        <a href="#" class="text-xs text-gray-500">Forget Password?</a>
-                    </div>
-                    <input class="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none" type="password" />
-                </div>
-                <div class="mt-8">
-                    <button class="bg-indigo-400 text-white py-2 px-4 w-full rounded hover:bg-indigo-500">Sign Up</button>
-                </div>
-                <div class="mt-4 flex items-center justify-between">
-                    <span class="border-b w-1/5 md:w-1/5"></span>
-                    <a href="{{ url('login') }}" class="text-xs text-gray-500 uppercase">Or already have an account?</a>
-                    <span class="border-b w-1/5 md:w-1/5"></span>
-                </div>
-            </div>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen">
+  <div class="flex bg-white shadow-lg rounded-lg overflow-hidden max-w-4xl w-full">
+    
+    <!-- Form Section (Left Side) -->
+    <div class="w-full md:w-1/2 p-8 flex flex-col justify-center">
+      <div class="flex items-center mb-6">
+        <!-- Replace the Flowbite text with your image -->
+        <img alt="Aesthetic Logo Text" class="w-24 h-8" src="{{ asset('images/aestheticlogo.png') }}" /> 
+      </div>
+      <h2 class="text-3xl font-bold mb-2">Create your Account</h2>
+      <p class="text-gray-600 mb-6">
+        Start your website in seconds. Already have an account?
+        <a class="text-purple-600" href="#">Login here.</a>
+      </p>
+      <form>
+      <form>
+        <!-- Full Name -->
+        <div class="mb-4">
+          <label class="block text-gray-700">Full Name</label>
+          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600" placeholder="Enter your full name" type="text" required/>
         </div>
+        <!-- Last Name -->
+        <div class="mb-4">
+          <label class="block text-gray-700">Last Name</label>
+          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600" placeholder="Enter your last name" type="text" required/>
+        </div>
+        <!-- Email -->
+        <div class="mb-4">
+          <label class="block text-gray-700">Email</label>
+          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600" placeholder="name@company.com" type="email" required/>
+        </div>
+        <!-- Password -->
+        <div class="mb-4">
+          <label class="block text-gray-700">Password</label>
+          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600" placeholder="••••••••" type="password" required/>
+        </div>
+        <!-- Terms Checkbox -->
+        <div class="flex items-center mb-6">
+          <input class="mr-2" type="checkbox" required/>
+          <label class="text-gray-600">
+            By signing up, you agree to the
+            <a class="text-purple-600" href="#">Terms of Use</a> and
+            <a class="text-purple-600" href="#">Privacy Policy</a>.
+          </label>
+        </div>
+        <button class="w-full bg-violet-600 text-white py-2 px-4 rounded-md hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500 mt-6">
+          Create an Account
+        </button>
+      </form>
     </div>
+
+    <!-- Image Section (Right Side) -->
+    <div class="hidden md:flex md:w-1/2 bg-gray-100 items-center justify-center">
+      <img alt="Login page illustration" class="w-full h-full object-cover" src="{{ asset('images/signup.jpg') }}" />
+    </div>
+  </div>
 </body>
 </html>
+
+
