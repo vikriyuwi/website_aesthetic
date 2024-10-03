@@ -17,25 +17,25 @@
       <h2 class="text-2xl md:text-3xl font-bold mb-2">Welcome back</h2>
       <p class="text-gray-600 mb-6">
         Start your website in seconds. Don't have an account?
-        <a class="text-purple-600" href="#">Sign up.</a>
+        <a class="text-indigo-600" href="#">Sign up.</a>
       </p>
       <form>
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700">Email</label>
-          <input class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-violet-500 focus:border-violet-500 sm:text-sm" placeholder="name@company.com" type="email" required/>
+          <input class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="name@company.com" type="email" required/>
         </div>
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700">Password</label>
-          <input class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-violet-500 focus:border-violet-500 sm:text-sm" placeholder="••••••••" type="password" required/>
+          <input class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="••••••••" type="password" required/>
         </div>
         <div class="flex items-center mb-4">
-          <input class="focus:ring-violet-500 h-4 w-4 text-violet-600 border-gray-300 rounded mr-2" type="checkbox"/>
+          <input class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded mr-2" type="checkbox"/>
           <label class="text-sm font-medium text-gray-700">Remember me</label>
         </div>
         <div class="flex items-center justify-between mb-4">
-          <a class="text-purple-600 hover:underline" href="#">Forgot password?</a>
+          <a class="text-indigo-600 hover:underline" href="#">Forgot password?</a>
         </div>
-        <button class="w-full bg-violet-600 text-white py-2 px-4 rounded-md hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500 mt-6">
+        <button class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-6">
           Sign in to your account
         </button>
       </form>

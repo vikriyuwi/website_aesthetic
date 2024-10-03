@@ -7,7 +7,7 @@
       <div class="p-6">
         <h4 class="text-xl font-semibold text-gray-900 mb-2">All</h4>
         <p class="text-gray-600 mb-4">150 Arts</p>
-        <a href="{{ route('collection.show', 'all') }}" class=" text-violet-600 font-bold hover:underline">View Collection &rarr;</a>
+        <a href="{{ route('collection.show', 'all') }}" class=" text-indigo-600 font-bold hover:underline">View Collection &rarr;</a>
       </div>
     </div>
 
@@ -17,7 +17,7 @@
       <div class="p-6">
         <h4 class="text-xl font-semibold text-gray-900 mb-2">Featured</h4>
         <p class="text-gray-600 mb-4">120 Arts</p>
-        <a href="{{ route('collection.show', 'featured') }}" class=" text-violet-600 font-bold hover:underline">Explore &rarr;</a>
+        <a href="{{ route('collection.show', 'featured') }}" class=" text-indigo-600 font-bold hover:underline">Explore &rarr;</a>
       </div>
       </div>
 
@@ -27,7 +27,7 @@
       <div class="p-6">
         <h4 class="text-xl font-semibold text-gray-900 mb-2">Anime</h4>
         <p class="text-gray-600 mb-4">30 Arts</p>
-        <a href="#" class=" text-violet-600 font-bold hover:underline">See More &rarr;</a>
+        <a href="#" class=" text-indigo-600 font-bold hover:underline">See More &rarr;</a>
       </div>
   </div>
 </div>
