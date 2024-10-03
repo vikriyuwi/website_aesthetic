@@ -62,7 +62,6 @@ class WebController extends Controller
         return view('landing');
     }
 
-<<<<<<< HEAD
     public function landing2(Request $request)
     {
         return view('landing2');
@@ -73,7 +72,6 @@ class WebController extends Controller
         return view('Home.home');
     }
 
-=======
     public function showCollection($category)
 {
     // Example data for the artworks
@@ -189,5 +187,4 @@ public function showCategory($category)
 
 
 
->>>>>>> 4c8da57 (artist page details)
 }
