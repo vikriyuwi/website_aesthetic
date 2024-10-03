@@ -4,30 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aesthetic</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet"> 
+    <!-- Updated to match artist list font -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"> 
     <link href="{{ URL::asset('/css/output.css') }}" rel="stylesheet"> 
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script> 
     <style> 
         body {
-            font-family: 'Open Sans', sans-serif;
+            font-family: 'Roboto', sans-serif; /* Updated to Roboto */
             background-color: #f7f8fa;
             color: #333;
         }
         h1, h2, h3 {
-            font-family: 'San Fransisco', serif;
+            font-family: 'Roboto', sans-serif; /* Headings use the same font */
             color: #fff;
         }
         a {
             transition: color 0.3s ease, background-color 0.3s ease;
-        }
-        .scroll-animation {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s ease-out;
-        }
-        .scroll-animation.is-visible {
-            opacity: 1;
-            transform: translateY(0);
         }
     </style>
 </head>

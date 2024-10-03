@@ -18,26 +18,26 @@
       <form>
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700" for="email">Email</label>
-          <input class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-violet-500 focus:border-violet-500 sm:text-sm" id="email" name="email" placeholder="name@company.com" type="email" required/>
+          <input class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" id="email" name="email" placeholder="name@company.com" type="email" required/>
         </div>
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700" for="new-password">New Password</label>
-          <input class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-violet-500 focus:border-violet-500 sm:text-sm" id="new-password" name="new-password" placeholder="••••••••" type="password" required/>
+          <input class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" id="new-password" name="new-password" placeholder="••••••••" type="password" required/>
         </div>
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700" for="confirm-password">Confirm Password</label>
-          <input class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-violet-500 focus:border-violet-500 sm:text-sm" id="confirm-password" name="confirm-password" placeholder="••••••••" type="password" required/>
+          <input class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" id="confirm-password" name="confirm-password" placeholder="••••••••" type="password" required/>
         </div>
         <div class="flex items-center mb-6">
-          <input class="focus:ring-violet-500 h-4 w-4 text-violet-600 border-gray-300 rounded mr-2" id="terms" name="terms" type="checkbox" required/>
+          <input class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded mr-2" id="terms" name="terms" type="checkbox" required/>
           <label class="text-sm font-medium text-gray-700" for="terms">
             I agree to the
-            <a class="text-violet-600 hover:underline" href="#">Terms of Use</a>
+            <a class="text-indigo-600 hover:underline" href="#">Terms of Use</a>
             and
-            <a class="text-violet-600 hover:underline" href="#">Privacy Policy</a>.
+            <a class="text-indigo-600 hover:underline" href="#">Privacy Policy</a>.
           </label>
         </div>
-        <button class="w-full bg-violet-600 text-white py-2 px-4 rounded-md hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500" type="submit">
+        <button class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" type="submit">
           Reset Password
         </button>
       </form>

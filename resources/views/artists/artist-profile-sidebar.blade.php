@@ -27,10 +27,10 @@
                         </div>
 
                         <div class="mt-4 flex justify-center items-center">
-                            <button class="bg-white border border-purple-500 rounded-lg p-2 px-4 shadow-md">
+                            <button class="bg-white border border-indigo-500 rounded-lg p-2 px-4 shadow-md">
                             <h1 class="text-sm font-semibold text-center">Hire Something4U</h1>
                             <div class="flex items-center mt-1">
-                                <i class="fas fa-clipboard-list text-purple-500 mr-2"></i>
+                                <i class="fas fa-clipboard-list text-indigo-500 mr-2"></i>
                                 <div>
                                     <p class="text-sm font-small">Freelance/Project</p>
                                     <p class="text-gray-500 text-xs">Available</p>
