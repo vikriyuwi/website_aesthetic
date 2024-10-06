@@ -5,368 +5,155 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Explore - Aesthetic</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet"> 
-    <link href="{{ URL::asset('/css/output.css') }}" rel="stylesheet"> 
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script> 
-    <style>
-        body {
-            font-family: 'Open Sans', sans-serif;
-            background-color: #f7f8fa;
-            color: #333;
-        }
-        h1, h2, h3 {
-            font-family: 'San Fransisco', serif;
-            color: #fff;
-        }
-        a {
-            transition: color 0.3s ease, background-color 0.3s ease;
-        }
-        .scroll-animation {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s ease-out;
-        }
-        .scroll-animation.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        /* Hero Section Styles */
-        #hero {
-            background: url('../images/your-hero-image.jpg') no-repeat center center/cover;
-            height: 60vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: white;
-            position: relative;
-        }
-        #hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5); /* Dark overlay */
-            z-index: 1;
-        }
-        #hero .content {
-            position: relative;
-            z-index: 2;
-        }
-        #hero h1 {
-            font-size: 3rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-        #hero p {
-            font-size: 1.25rem;
-            margin-bottom: 1.5rem;
-        }
-        /* Filter and Sort Area */
-        .filter-sort-area {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 2rem;
-            margin-bottom: 1.5rem;
-        }
-        .filter-sort-area select, .filter-sort-area button {
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            border: 1px solid #E5E7EB;
-            background-color: white;
-            color: #374151;
-        }
-        .filter-sort-area select:focus, .filter-sort-area button:focus {
-            outline: none;
-            border-color: #4F46E5;
-        }
-        .filter-sort-area select:hover, .filter-sort-area button:hover {
-            background-color: #F3F4F6;
-        }
-        /* Gallery Grid */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-        .card {
-            background-color: white;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            transition: transform 0.3s ease;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-        }
-        .card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-        .card-content {
-            padding: 1rem;
-        }
-        .card-content h3 {
-            font-size: 1.125rem;
-            font-weight: 700;
-            color: #111827;
-        }
-        .card-content p {
-            font-size: 0.875rem;
-            color: #6B7280;
-        }
-        .card-content .stats {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 0.75rem;
-        }
-        .card-content .stats svg {
-            margin-right: 0.25rem;
-        }
-        .card-content .stats .likes,
-        .card-content .stats .views {
-            display: flex;
-            align-items: center;
-            color: #6B7280;
-            font-size: 0.875rem;
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"> 
 </head>
-<body>
+<body class="bg-gray-100 font-roboto text-gray-700">
 
 <!-- Navbar Start -->
 @include('layouts.navbar')
 <!-- Navbar End -->
 
 <!-- Hero Section Start -->
-<section id="hero">
-    <div class="content">
-        <h1>Discover Inspiring Design Ideas</h1>
-        <p>Find The Perfect Design For Your Next Project</p>
+<section id="hero" class="relative">
+    <img alt="Abstract background with pastel colors" class="w-full h-96 object-cover" src="https://storage.googleapis.com/a1aa/image/GAqmcA8MPrZZFpbPetB7noYQN2t7Zka9P9lOBK7fvgmucEjTA.jpg" width="1920" height="400"/>
+    <div class="absolute inset-0 flex flex-col items-center justify-center text-center text-white">
+        <h1 class="text-5xl font-bold">Discover Inspiring Design Ideas</h1>
+        <p class="text-lg mt-4">Find The Perfect Design For Your Next Project</p>
+        <div class="mt-8">
+            <a href="#explore" class="px-6 py-3 bg-indigo-600 text-white rounded-full text-lg font-semibold hover:bg-indigo-700 transform hover:scale-105 transition duration-300">Explore Now</a>
+        </div>
     </div>
 </section>
 <!-- Hero Section End -->
 
-<!-- Filter and Sort Area Start -->
-<div class="container mx-auto px-6 filter-sort-area">
-    <div>
+<!-- Content Section with white background -->
+<div class="bg-white py-12">
+    <!-- Filter and Sort Area Start -->
+    <div class="container mx-auto px-6 mt-8 flex justify-between items-center">
         <span class="text-lg font-semibold">10,000+ Assets</span>
+        <div class="flex space-x-4">
+            <select id="categoryFilter" class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="all">All</option>
+                <option value="poster">Poster Design</option>
+                <option value="logo">Logo Design</option>
+                <option value="3d-art">3D Art</option>
+                <option value="animation">Animation</option>
+                <option value="commission">Commission</option>
+            </select>
+            <select class="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option>Sort by likes</option>
+                <option>Most Recent</option>
+                <option>Trending</option>
+            </select>
+        </div>
     </div>
-    <div class="flex space-x-4">
-        <select id="categoryFilter">
-            <option value="all">All</option>
-            <option value="poster">Poster Design</option>
-            <option value="logo">Logo Design</option>
-            <option value="3d-art">3D Art</option>
-            <option value="animation">Animation</option>
-            <option value="commission">Commission</option>
-        </select>
-        <select>
-            <option>Sort by likes</option>
-            <option>Most Recent</option>
-            <option>Trending</option>
-        </select>
-    </div>
+    <!-- Filter and Sort Area End -->
+
+    <!-- Art Gallery Grid Start -->
+    <section id="art-gallery" class="py-8">
+        <div class="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Example Card 1 -->
+            <div class="card bg-white rounded-lg shadow-md hover:shadow-lg transform transition-transform duration-300 hover:-translate-y-1">
+                <img src="/images/Assets/Category/Hero.jpg" alt="Night Kingdom of Fantasy" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="text-lg font-bold text-gray-900">Night Kingdom of Fantasy</h3>
+                    <p class="text-sm text-gray-500">Mike Hawk</p>
+                    <div class="flex justify-between items-center mt-2 text-gray-500 text-sm">
+                        <div class="flex items-center space-x-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 9l-2 1-2-1V5a2 2 0 012-2h0a2 2 0 012 2v4z" />
+                            </svg>
+                            <span>500</span>
+                        </div>
+                        <div class="flex items-center space-x-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                            </svg>
+                            <span>5.2K</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example Card 2 -->
+            <div class="card bg-white rounded-lg shadow-md hover:shadow-lg transform transition-transform duration-300 hover:-translate-y-1">
+                <img src="/images/Assets/Gallery/1.jpg" alt="Sky Fantasy" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="text-lg font-bold text-gray-900">Painting The Sky Fantasy</h3>
+                    <p class="text-sm text-gray-500">Mike Hawk</p>
+                    <div class="flex justify-between items-center mt-2 text-gray-500 text-sm">
+                        <div class="flex items-center space-x-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 9l-2 1-2-1V5a2 2 0 012-2h0a2 2 0 012 2v4z" />
+                            </svg>
+                            <span>500</span>
+                        </div>
+                        <div class="flex items-center space-x-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                            </svg>
+                            <span>5.2K</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example Card 3 -->
+            <div class="card bg-white rounded-lg shadow-md hover:shadow-lg transform transition-transform duration-300 hover:-translate-y-1">
+                <img src="/images/Assets/Gallery/2.jpg" alt="Commission Art" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="text-lg font-bold text-gray-900">Commission Art</h3>
+                    <p class="text-sm text-gray-500">Jane Doe</p>
+                    <div class="flex justify-between items-center mt-2 text-gray-500 text-sm">
+                        <div class="flex items-center space-x-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 9l-2 1-2-1V5a2 2 0 012-2h0a2 2 0 012 2v4z" />
+                            </svg>
+                            <span>400</span>
+                        </div>
+                        <div class="flex items-center space-x-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                            </svg>
+                            <span>4.5K</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example Card 4 -->
+            <div class="card bg-white rounded-lg shadow-md hover:shadow-lg transform transition-transform duration-300 hover:-translate-y-1">
+                <img src="/images/Assets/Gallery/3.jpg" alt="Commission Art" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="text-lg font-bold text-gray-900">Commission Art</h3>
+                    <p class="text-sm text-gray-500">Jane Doe</p>
+                    <div class="flex justify-between items-center mt-2 text-gray-500 text-sm">
+                        <div class="flex items-center space-x-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 9l-2 1-2-1V5a2 2 0 012-2h0a2 2 0 012 2v4z" />
+                            </svg>
+                            <span>400</span>
+                        </div>
+                        <div class="flex items-center space-x-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                            </svg>
+                            <span>4.5K</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+    </section>
+
+    <!-- Art Gallery Grid End -->
 </div>
-<!-- Filter and Sort Area End -->
-
-<!-- Art Gallery Grid Start -->
-<section id="art-gallery" class="py-8 bg-gray-100">
-    <div class="container mx-auto gallery-grid">
-        <!-- Animation Category -->
-        <div class="card category-animation">
-            <img src="/images/Assets/Category/Hero.jpg" alt="Night Kingdom of Fantasy">
-            <div class="card-content">
-                <h3>Night Kingdom of Fantasy</h3>
-                <p>Mike Hawk</p>
-                <div class="stats">
-                    <div class="likes">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 9l-2 1-2-1V5a2 2 0 012-2h0a2 2 0 012 2v4z" />
-                        </svg>
-                        500
-                    </div>
-                    <div class="views">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-                        </svg>
-                        5.2K
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 3D Art Category -->
-        <div class="card category-3d-art">
-            <img src="/images/Assets/Category/Content/6.jpg" alt="Painting The Sky Fantasy">
-            <div class="card-content">
-                <h3>Painting The Sky Fantasy</h3>
-                <p>Mike Hawk</p>
-                <div class="stats">
-                    <div class="likes">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 9l-2 1-2-1V5a2 2 0 012-2h0a2 2 0 012 2v4z" />
-                        </svg>
-                        500
-                    </div>
-                    <div class="views">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-                        </svg>
-                        5.2K
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Commission Category -->
-        <div class="card category-commission">
-            <img src="/images/Assets/Category/Content/7.jpg" alt="Commission Art">
-            <div class="card-content">
-                <h3>Commission Art</h3>
-                <p>Jane Doe</p>
-                <div class="stats">
-                    <div class="likes">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 9l-2 1-2-1V5a2 2 0 012-2h0a2 2 0 012 2v4z" />
-                        </svg>
-                        400
-                    </div>
-                    <div class="views">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-                        </svg>
-                        4.5K
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Poster Design Category -->
-        <div class="card category-poster">
-            <img src="/images/Assets/Category/Content/4.jpg" alt="Creative Poster Design">
-            <div class="card-content">
-                <h3>Creative Poster Design</h3>
-                <p>Artist: Anna Smith</p>
-                <div class="stats">
-                    <div class="likes">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 9l-2 1-2-1V5a2 2 0 012-2h0a2 2 0 012 2v4z" />
-                        </svg>
-                        350
-                    </div>
-                    <div class="views">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-                        </svg>
-                        3.8K
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Logo Design Category -->
-        <div class="card category-logo">
-            <img src="/images/Assets/Category/Content/5.jpg" alt="Innovative Logo Design">
-            <div class="card-content">
-                <h3>Innovative Logo Design</h3>
-                <p>Artist: John Doe</p>
-                <div class="stats">
-                    <div class="likes">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 9l-2 1-2-1V5a2 2 0 012-2h0a2 2 0 012 2v4z" />
-                        </svg>
-                        470
-                    </div>
-                    <div class="views">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-                        </svg>
-                        4.9K
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Illustration Art Category -->
-        <div class="card category-illustration">
-            <img src="/images/Assets/Category/Content/3.jpg" alt="Beautiful Illustration Art">
-            <div class="card-content">
-                <h3>Beautiful Illustration Art</h3>
-                <p>Artist: Emily Rose</p>
-                <div class="stats">
-                    <div class="likes">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 9l-2 1-2-1V5a2 2 0 012-2h0a2 2 0 012 2v4z" />
-                        </svg>
-                        600
-                    </div>
-                    <div class="views">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-                        </svg>
-                        5.5K
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Animation Category (Another Item) -->
-        <div class="card category-animation">
-            <img src="/images/Assets/Category/Content/2.jpg" alt="Dynamic Animation Art">
-            <div class="card-content">
-                <h3>Dynamic Animation Art</h3>
-                <p>Artist: Mark Lee</p>
-                <div class="stats">
-                    <div class="likes">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 9l-2 1-2-1V5a2 2 0 012-2h0a2 2 0 012 2v4z" />
-                        </svg>
-                        800
-                    </div>
-                    <div class="views">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-                        </svg>
-                        6.7K
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Commission Category (Another Item) -->
-        <div class="card category-commission">
-            <img src="/images/Assets/Category/Content/1.jpg" alt="Personalized Commission Art">
-            <div class="card-content">
-                <h3>Personalized Commission Art</h3>
-                <p>Artist: Sarah Brown</p>
-                <div class="stats">
-                    <div class="likes">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 9l-2 1-2-1V5a2 2 0 012-2h0a2 2 0 012 2v4z" />
-                        </svg>
-                        530
-                    </div>
-                    <div class="views">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-                        </svg>
-                        5.8K
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- Art Gallery Grid End -->
 
 <!-- Footer Start -->
 @include('layouts.footer')
-    <!-- Footer End -->
+<!-- Footer End -->
 
     <script>
         // Smooth Scrolling for Anchor Links
