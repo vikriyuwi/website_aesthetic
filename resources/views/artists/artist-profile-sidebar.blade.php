@@ -27,10 +27,10 @@
                         </div>
 
                         <div class="mt-4 flex justify-center items-center">
-                            <button class="bg-white border border-purple-500 rounded-lg p-2 px-4 shadow-md">
+                            <button class="bg-white border border-indigo-500 rounded-lg p-2 px-4 shadow-md">
                             <h1 class="text-sm font-semibold text-center">Hire Something4U</h1>
                             <div class="flex items-center mt-1">
-                                <i class="fas fa-clipboard-list text-purple-500 mr-2"></i>
+                                <i class="fas fa-clipboard-list text-indigo-500 mr-2"></i>
                                 <div>
                                     <p class="text-sm font-small">Freelance/Project</p>
                                     <p class="text-gray-500 text-xs">Available</p>
@@ -82,12 +82,23 @@
                                     <p class="text-gray-600">I'll hibernate for a while :)</p>
                                     <img src="{{ asset('images/Assets/Community/Media/Photos/media 6.jpg') }}" alt="Post image" class="mt-2 rounded-lg object-cover w-full h-32">
                                     <div class="flex justify-between items-center mt-2">
-                                        <div class="flex space-x-2">
-                                            <button class="text-gray-600"><i class="far fa-heart"></i> Like</button>
-                                            <button class="text-gray-600"><i class="far fa-comment"></i> Comment</button>
-                                            <button class="text-gray-600"><i class="fas fa-share-alt"></i> Share</button>
+                                        <div class="flex space-x-10">
+                                            <!-- like button -->
+                                            <button class="text-gray-600 flex flex-col items-center">
+                                                <img src="/images/heart.svg" alt="Shopping Cart" class="w-5 h-5">
+                                                <span class="text-xs mt-1">Like</span>
+                                            </button>
+                                            <!-- comment button -->
+                                            <button class="text-gray-600 flex flex-col items-center">
+                                                <img src="/images/comment.svg" alt="Shopping Cart" class="w-5 h-5">
+                                                <span class="text-xs mt-1">Comment</span>
+                                            </button>
+                                            <!-- share button -->
+                                            <button class="text-gray-600 flex flex-col items-center">
+                                                <img src="/images/share.svg" alt="Shopping Cart" class="w-5 h-5">
+                                                <span class="text-xs mt-1">Share</span>
+                                            </button>
                                         </div>
-                                        <span class="text-gray-600">15</span>
                                     </div>
                                 </div>
                             </div>

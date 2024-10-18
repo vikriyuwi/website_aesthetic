@@ -17,40 +17,40 @@
       <h2 class="text-3xl font-bold mb-2">Create your Account</h2>
       <p class="text-gray-600 mb-6">
         Start your website in seconds. Already have an account?
-        <a class="text-purple-600" href="#">Login here.</a>
+        <a class="text-indigo-600" href="#">Login here.</a>
       </p>
       <form>
       <form>
         <!-- Full Name -->
         <div class="mb-4">
           <label class="block text-gray-700">Full Name</label>
-          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600" placeholder="Enter your full name" type="text" required/>
+          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600" placeholder="Enter your full name" type="text" required/>
         </div>
         <!-- Last Name -->
         <div class="mb-4">
           <label class="block text-gray-700">Last Name</label>
-          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600" placeholder="Enter your last name" type="text" required/>
+          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600" placeholder="Enter your last name" type="text" required/>
         </div>
         <!-- Email -->
         <div class="mb-4">
           <label class="block text-gray-700">Email</label>
-          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600" placeholder="name@company.com" type="email" required/>
+          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600" placeholder="name@company.com" type="email" required/>
         </div>
         <!-- Password -->
         <div class="mb-4">
           <label class="block text-gray-700">Password</label>
-          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600" placeholder="••••••••" type="password" required/>
+          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600" placeholder="••••••••" type="password" required/>
         </div>
         <!-- Terms Checkbox -->
         <div class="flex items-center mb-6">
           <input class="mr-2" type="checkbox" required/>
           <label class="text-gray-600">
             By signing up, you agree to the
-            <a class="text-purple-600" href="#">Terms of Use</a> and
-            <a class="text-purple-600" href="#">Privacy Policy</a>.
+            <a class="text-indigo-600" href="#">Terms of Use</a> and
+            <a class="text-indigo-600" href="#">Privacy Policy</a>.
           </label>
         </div>
-        <button class="w-full bg-violet-600 text-white py-2 px-4 rounded-md hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500 mt-6">
+        <button class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-6">
           Create an Account
         </button>
       </form>
