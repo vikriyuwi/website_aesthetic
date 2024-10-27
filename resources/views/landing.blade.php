@@ -24,7 +24,10 @@
     </style>
 </head>
 <body>
-
+@if (Auth::check())
+<b>Halo {{ Auth::guard('MasterUser')->user()->USERNAME; }}, Login Success</b>
+    
+@endif
 <!-- Navbar Start -->
 <nav class="bg-white shadow-lg sticky top-0 z-50">
     <div class="container mx-auto px-6 py-4 flex justify-between items-center">

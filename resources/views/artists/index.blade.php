@@ -120,7 +120,7 @@
     <div class="container mx-auto px-6">
       <!-- Job Count and Filters -->
       <div class="flex justify-between items-center mb-6">
-          <h2 class="text-2xl font-bold text-gray-800">244 Artists</h2>
+          <h2 class="text-3xl font-bold text-gray-800">{{$countArtist}} Artist</h2>
           <div class="flex items-center space-x-4">
               <div class="relative">
                   <select class="appearance-none pl-4 pr-10 py-2 bg-white border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500" id="locationFilter">
@@ -142,32 +142,37 @@
 
       <!-- Artist Grid -->
       <div id="artistGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          @foreach($artists as $artist)
-              <div class="artist-card bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition transform hover:-translate-y-2 duration-300 ease-in-out" data-field="{{ $artist['job'] }}" data-name="{{ $artist['name'] }}">
+          @foreach($listArtist as $listArtists => $artist)
+              <div class="artist-card bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition transform hover:-translate-y-2 duration-300 ease-in-out" data-field="{{$artist->ROLE}}" data-name="{{$artist->USERNAME}}">
                   <div class="flex items-center mb-4">
                       <!-- Artist Image -->
                       <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-indigo-500">
-                          <img src="{{ asset('images/' . $artist['image']) }}" alt="{{ $artist['name'] }}" class="w-full h-full object-cover">
+                          {{-- <img src="{{ asset('images/' . $artist['image']) }}" alt="{{ $artist['name'] }}" class="w-full h-full object-cover"> --}}
+                          <img src="{{ asset('images/') }}" alt="{{ $artist->USERNAME }}" class="w-full h-full object-cover">
                       </div>
                       <div class="ml-4">
-                          <h2 class="text-xl font-semibold text-gray-900">{{ $artist['name'] }}</h2>
-                          <p class="text-sm text-gray-500">{{ $artist['job'] }}</p>
-                          <p class="text-xs text-gray-400">{{ $artist['location'] }}</p>
+                          <h2 class="text-xl font-semibold text-gray-900">{{ $artist->USERNAME }}</h2>
+                          <p class="text-sm text-gray-500">{{ $artist->ROLE}}</p>
+                          <p class="text-xs text-gray-400">{{ $artist->LOCATION }}</p>
                       </div>
                   </div>
-                  <p class="text-gray-600 mb-4">{{ $artist['bio'] ?? 'No bio available' }}</p>
+                  {{-- <p class="text-gray-600 mb-4">{{ $artist['bio'] ?? 'No bio available' }}</p> --}}
                   <div class="flex justify-between items-center">
-                      <a href="{{ route('artist.show', $artist['id']) }}" class="text-indigo-600 hover:text-indigo-800 font-medium">View Profile</a>
-                      <p class="text-xs text-gray-400">{{ $artist['posted_at'] ?? now()->subDays(rand(1, 10))->diffForHumans() }}</p>
+                      <a href="{{ route('artist.show', $artist->ARTIST_ID) }}" class="text-indigo-600 hover:text-indigo-800 font-medium">View Profile</a>
+                      @if($artist->JOINED <= 0 )
+                      <p class="text-xs text-gray-400">Today</p>
+                      @else
+                      <p class="text-xs text-gray-400">{{ $artist->JOINED }} days ago</p>
+                      @endif
                   </div>
               </div>
           @endforeach
       </div>
 
       <!-- Show More Button -->
-      <div class="flex justify-center mt-8">
+      {{-- <div class="flex justify-center mt-8">
         <button class="show-more-button" onclick="loadMoreArtists()">Show More</button>
-      </div>
+      </div> --}}
     </div>
   </div>
 
