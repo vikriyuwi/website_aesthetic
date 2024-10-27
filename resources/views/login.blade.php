@@ -17,16 +17,17 @@
       <h2 class="text-2xl md:text-3xl font-bold mb-2">Welcome back</h2>
       <p class="text-gray-600 mb-6">
         Start your website in seconds. Don't have an account?
-        <a class="text-indigo-600" href="#">Sign up.</a>
+        <a class="text-indigo-600" href="{{ url('register') }}">Sign up.</a>
       </p>
-      <form>
+      <form action="{{ route('login') }}" method="POST">
+        @csrf
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700">Email</label>
-          <input class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="name@company.com" type="email" required/>
+          <input class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="name@company.com" type="email" name="email" required/>
         </div>
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700">Password</label>
-          <input class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="••••••••" type="password" required/>
+          <input class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="••••••••" type="password" name="password" required/>
         </div>
         <div class="flex items-center mb-4">
           <input class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded mr-2" type="checkbox"/>
@@ -39,6 +40,10 @@
           Sign in to your account
         </button>
       </form>
+      @if (session('fail'))
+      <p class="text-danger">{{ session('fail') }}</p>
+        
+      @endif
     </div>
 
     <!-- Image Section (Right Side) -->

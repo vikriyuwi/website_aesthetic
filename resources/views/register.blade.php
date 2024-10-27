@@ -17,29 +17,39 @@
       <h2 class="text-3xl font-bold mb-2">Create your Account</h2>
       <p class="text-gray-600 mb-6">
         Start your website in seconds. Already have an account?
-        <a class="text-indigo-600" href="#">Login here.</a>
+        <a class="text-indigo-600" href="{{ url('login') }}">Login here.</a>
       </p>
-      <form>
-      <form>
+      <form action="{{ route('register') }}" method="POST">
+        @csrf
         <!-- Full Name -->
         <div class="mb-4">
           <label class="block text-gray-700">Full Name</label>
-          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600" placeholder="Enter your full name" type="text" required/>
+          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600" placeholder="Enter your full name" type="text" name="firstName" required/>
         </div>
         <!-- Last Name -->
         <div class="mb-4">
           <label class="block text-gray-700">Last Name</label>
-          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600" placeholder="Enter your last name" type="text" required/>
+          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600" placeholder="Enter your last name" type="text" name="lastName" required/>
+        </div>
+        <!-- Username -->
+        <div class="mb-4">
+          <label class="block text-gray-700">Phone Number</label>
+          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600" placeholder="+XX-XXXXXXXXXXX" type="text" name="phone" required/>
+        </div>
+        <!-- Username -->
+        <div class="mb-4">
+          <label class="block text-gray-700">Username</label>
+          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600" placeholder="Username" type="text" name="userName" required/>
         </div>
         <!-- Email -->
         <div class="mb-4">
           <label class="block text-gray-700">Email</label>
-          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600" placeholder="name@company.com" type="email" required/>
+          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600" placeholder="name@company.com" type="email" name="email" required/>
         </div>
         <!-- Password -->
         <div class="mb-4">
           <label class="block text-gray-700">Password</label>
-          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600" placeholder="••••••••" type="password" required/>
+          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600" placeholder="••••••••" type="password" name="password" required/>
         </div>
         <!-- Terms Checkbox -->
         <div class="flex items-center mb-6">

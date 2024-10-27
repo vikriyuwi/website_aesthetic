@@ -7,15 +7,6 @@ use Illuminate\Http\Request;
 
 class WebController extends Controller
 {
-    public function login(Request $request)
-    {
-        return view('login');
-    }
-
-    public function register(Request $request)
-    {
-        return view('register');
-    }
     public function resetpassword(Request $request)
     {
         return view('resetpassword'); 
