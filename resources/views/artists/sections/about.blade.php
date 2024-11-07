@@ -1,22 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
 <div class="w-full md:w-3/4 ml-4">
   <!-- About Me Section -->
-  <div class="bg-white rounded-lg shadow-lg p-6">
+  <div class="bg-white rounded-lg shadow-lg p-6 relative">
     <div class="flex justify-between items-center mb-4">
       <h1 class="text-3xl font-bold">About Me</h1>
+      
+      <!-- Ellipsis Button -->
+      <button class="ellipsisButton text-gray-600 hover:text-gray-800 focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+        </svg>
+      </button>
+      
+      <!-- Options Menu -->
+      <div class="optionsMenu absolute top-12 right-4 bg-white border border-gray-200 shadow-lg rounded-md p-2 w-44 hidden">
+        <button class="block w-full text-left px-4 py-2 hover:bg-gray-100" onclick="openEditModal()">Edit</button>
+      </div>
     </div>
+
     <div class="text-gray-700">
-      <p class="mt-2">
-        I'm an illustrator obsessed with creating fantastical realms, gritty cyberpunk landscapes, and nostalgic retro vibes. From childhood notebook doodles to polished client projects, my passion for art has fueled a journey that blends traditional and digital techniques.
-      </p>
-      <p class="mt-2">
-        Inspired by classic fantasy and cyberpunk pioneers, I wield ink, watercolor, and digital tools to bring characters, worlds, and stories to life. Whether it's a book cover, magazine spread, or video game asset, I pour my imagination onto every canvas.
-      </p>
-      <p class="mt-2">
-        When I'm not conjuring up artistic magic for clients, I'm lost in personal projects, exploring character designs, world-building sketches, and the occasional fan art tribute.
-      </p>
-      <p class="mt-2">
-        My art is a portal to the extraordinary, a fusion of the fantastical and the familiar. Come join me on this creative adventure – I can't wait to share what I dream up next.
-      </p>
+      <p class="mt-2">I'm an illustrator obsessed with creating fantastical realms, gritty cyberpunk landscapes, and nostalgic retro vibes. From childhood notebook doodles to polished client projects, my passion for art has fueled a journey that blends traditional and digital techniques.</p>
+      <p class="mt-2">Inspired by classic fantasy and cyberpunk pioneers, I wield ink, watercolor, and digital tools to bring characters, worlds, and stories to life. Whether it's a book cover, magazine spread, or video game asset, I pour my imagination onto every canvas.</p>
+      <p class="mt-2">When I'm not conjuring up artistic magic for clients, I'm lost in personal projects, exploring character designs, world-building sketches, and the occasional fan art tribute.</p>
+      <p class="mt-2">My art is a portal to the extraordinary, a fusion of the fantastical and the familiar. Come join me on this creative adventure – I can't wait to share what I dream up next.</p>
     </div>
 
     <h2 class="mt-8 text-xl font-bold">Skills</h2>
@@ -33,9 +45,8 @@
       English
     </p>
   </div>
-
-  <!-- Reviews Section -->
-  <div class="bg-white rounded-lg shadow-lg p-6 mt-6">
+    <!-- Reviews Section -->
+    <div class="bg-white rounded-lg shadow-lg p-6 mt-6">
     <h2 class="text-xl font-bold mb-4">120 Reviews 
       <span class="text-gray-600 font-medium">4.9</span>
     </h2>
@@ -105,3 +116,93 @@
     </div>
   </div>
 </div>
+</div>
+
+<!-- Edit About Me Modal -->
+<div id="editAboutMeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+  <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl transform transition-all duration-300 mt-16">
+    <h3 class="text-2xl font-semibold text-gray-800 mb-2">Edit About Me 📝</h3>
+    <form id="aboutMeForm" class="space-y-6">
+      <!-- About Me Description -->
+      <div>
+        <label for="aboutDescription" class="block text-gray-700 font-semibold mb-2">Description</label>
+        <textarea id="aboutDescription" rows="8" class="w-full px-4 py-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition" placeholder="Write about yourself...">I'm an illustrator obsessed with creating fantastical realms, gritty cyberpunk landscapes, and nostalgic retro vibes. From childhood notebook doodles to polished client projects, my passion for art has fueled a journey that blends traditional and digital techniques.</textarea>
+      </div>
+
+      <!-- Skills Section with Dropdown and Selection Limit -->
+      <div>
+        <label for="skillsDropdown" class="block text-gray-700 font-semibold mb-2">Skills</label>
+        <select id="skillsDropdown" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition" placeholder="Select skills">
+          <option value="" disabled selected>Select skills...</option>
+          <option value="Graphic Design">Graphic Design</option>
+          <option value="Adobe Illustration">Adobe Illustration</option>
+          <option value="Adobe Photoshop">Adobe Photoshop</option>
+          <option value="Logo Design">Logo Design</option>
+        </select>
+        <div class="flex flex-wrap gap-2 mt-4" id="selectedSkillsContainer">
+          <!-- Selected skills will appear here -->
+        </div>
+      </div>
+
+      <!-- Additional Info Section -->
+      <div class="grid grid-cols-2 gap-6">
+        <div>
+          <label for="sinceDate" class="block text-gray-700 font-semibold mb-2">Aesthetic Since</label>
+          <input type="text" id="sinceDate" class="w-full px-4 py-2 border border-gray-300 rounded-lg" value="October 2023">
+        </div>
+        <div>
+          <label for="language" class="block text-gray-700 font-semibold mb-2">Language</label>
+          <select id="language" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+            <option value="English" selected>English</option>
+            <option value="Indonesian">Indonesian</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="flex justify-end space-x-3 mt-4">
+        <button type="button" id="cancelEditButton" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">Cancel</button>
+        <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+    // Toggle the edit modal visibility
+    function openEditModal() {
+    document.getElementById('editAboutMeModal').classList.remove('hidden');
+  }
+
+  document.getElementById('cancelEditButton').addEventListener('click', () => {
+    document.getElementById('editAboutMeModal').classList.add('hidden');
+  });
+  // Function to toggle options menu visibility
+  document.querySelectorAll('.ellipsisButton').forEach(button => {
+    button.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const optionsMenu = button.nextElementSibling;
+      optionsMenu.classList.toggle('hidden');
+    });
+  });
+
+  // Hide options menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.ellipsisButton') && !e.target.closest('.optionsMenu')) {
+      document.querySelectorAll('.optionsMenu').forEach(menu => menu.classList.add('hidden'));
+    }
+  });
+
+  // Show edit modal when Edit is clicked
+  function openEditModal() {
+    document.getElementById('editAboutMeModal').classList.remove('hidden');
+    document.querySelector('.optionsMenu').classList.add('hidden'); // Hide options menu
+  }
+
+  // Hide the edit modal
+  document.getElementById('cancelEditButton').addEventListener('click', () => {
+    document.getElementById('editAboutMeModal').classList.add('hidden');
+  });
+</script>
+</body>
+</html>

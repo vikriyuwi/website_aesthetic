@@ -62,3 +62,10 @@ Route::get('/landing2', [App\Http\Controllers\WebController::class, 'landing2'])
 
 Route::get('/home', [App\Http\Controllers\WebController::class, 'home'])->name('Home.home');
 
+Route::get('/like-history', [WebController::class, 'likeHistory'])->name('like.history');
+
+Route::get('/follows', [WebController::class, 'folloProfile'])->name('follo.profile');
+
+Route::get('/followers', [WebController::class, 'followers'])->name('followers');
+
+Route::get('/following', [WebController::class, 'following'])->name('following');
