@@ -65,22 +65,6 @@
                                 <span class="text-gray-800">4.9</span>
                             </div>
                         </div>
-                        <div class="flex justify-between">
-                            <span class="text-gray-600">Likes</span>
-                            <span class="text-gray-800">149,518</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-gray-600">Followers</span>
-                            <span class="text-gray-800">85,518</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-gray-600">Following</span>
-                            <span class="text-gray-800">1,490</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-gray-600">Artist Overall Rating</span>
-                            <span class="text-gray-800">4.9</span>
-                        </div>
                     </div>
 
                     <div class="flex justify-center mt-4 space-x-4">
