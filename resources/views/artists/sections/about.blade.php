@@ -5,18 +5,7 @@
       <h1 class="text-3xl font-bold">About Me</h1>
     </div>
     <div class="text-gray-700">
-      <p class="mt-2">
-        I'm an illustrator obsessed with creating fantastical realms, gritty cyberpunk landscapes, and nostalgic retro vibes. From childhood notebook doodles to polished client projects, my passion for art has fueled a journey that blends traditional and digital techniques.
-      </p>
-      <p class="mt-2">
-        Inspired by classic fantasy and cyberpunk pioneers, I wield ink, watercolor, and digital tools to bring characters, worlds, and stories to life. Whether it's a book cover, magazine spread, or video game asset, I pour my imagination onto every canvas.
-      </p>
-      <p class="mt-2">
-        When I'm not conjuring up artistic magic for clients, I'm lost in personal projects, exploring character designs, world-building sketches, and the occasional fan art tribute.
-      </p>
-      <p class="mt-2">
-        My art is a portal to the extraordinary, a fusion of the fantastical and the familiar. Come join me on this creative adventure – I can't wait to share what I dream up next.
-      </p>
+      {{ $artistAbout }}
     </div>
 
     <h2 class="mt-8 text-xl font-bold">Skills</h2>
@@ -36,19 +25,22 @@
 
   <!-- Reviews Section -->
   <div class="bg-white rounded-lg shadow-lg p-6 mt-6">
-    <h2 class="text-xl font-bold mb-4">120 Reviews 
-      <span class="text-gray-600 font-medium">4.9</span>
+    <h2 class="text-xl font-bold mb-4">{{ $countTotalRating }} Reviews 
+      <span class="text-gray-600 font-medium">{{ $averageArtistRating }}</span>
     </h2>
 
     <!-- Star Ratings -->
     <div class="space-y-2">
+      @foreach ($userRatingPercentage as $userRatingPercentage => $percentage)
       <div class="flex items-center">
-        <span class="w-1/5 text-right pr-2">5 Stars</span>
+        <span class="w-1/5 text-right pr-2">{{ $percentage->USER_RATING }} Stars</span>
         <div class="w-4/5 bg-gray-300 h-2 rounded-full">
-          <div class="bg-gray-500 h-2 rounded-full" style="width: 83.33%;"></div>
+          <div class="bg-gray-500 h-2 rounded-full" style="width: {{ ($percentage->COUNT/$countTotalRating)*100 }}%;"></div>
         </div>
       </div>
-      <div class="flex items-center">
+      @endforeach
+      
+      {{-- <div class="flex items-center">
         <span class="w-1/5 text-right pr-2">4 Stars</span>
         <div class="w-4/5 bg-gray-300 h-2 rounded-full">
           <div class="bg-gray-500 h-2 rounded-full" style="width: 12.5%;"></div>
@@ -71,26 +63,27 @@
         <div class="w-4/5 bg-gray-300 h-2 rounded-full">
           <div class="bg-gray-500 h-2 rounded-full" style="width: 0%;"></div>
         </div>
-      </div>
+      </div> --}}
     </div>
 
     <!-- Review List -->
     <h3 class="text-lg font-bold mt-6">Recent Reviews</h3>
     <div class="mt-4">
       <!-- Review 1 -->
+      @foreach ($rating as $rating => $listRating )
       <div class="flex items-start mb-4">
-        <img class="w-12 h-12 rounded-full object-cover" src="{{ asset('images/melody2.jpg') }}" alt="Profile picture of Anya">
+        <img class="w-12 h-12 rounded-full object-cover" src="{{ asset($listRating->PROFILE_IMAGE_PATH) }}" alt="Profile picture of Anya">
         <div class="ml-3">
-          <p class="font-bold">Anya <span class="text-sm text-gray-600">1 month ago</span></p>
-          <p class="text-gray-700 mt-1">The fantasy illustrations are pure magic! It captured the essence of my griffins and dwarven city with incredible detail and atmosphere. The sense of scale and lighting is phenomenal.</p>
+          <p class="font-bold">{{ ($listRating->USERNAME) }} <span class="text-sm text-gray-600">{{ ($listRating->COMMENT_TIME) }}</span><span class="text-sm text-gray-600"> {{ ($listRating->USER_RATING) }} stars</span></p>
+          <p class="text-gray-700 mt-1">{{ ($listRating->CONTENT) }}</p>
           <div class="flex space-x-4 text-sm mt-2">
             <button class="text-gray-600 hover:text-gray-800"><i class="fas fa-thumbs-up mr-1"></i> Helpful?</button>
             <button class="text-gray-600 hover:text-gray-800"><i class="fas fa-thumbs-down mr-1"></i> No</button>
           </div>
         </div>
       </div>
-
-      <!-- Review 2 -->
+      @endforeach
+      {{-- <!-- Review 2 -->
       <div class="flex items-start">
         <img class="w-12 h-12 rounded-full object-cover" src="{{ asset('images/melody.webp') }}" alt="Profile picture of Sam Jetstream">
         <div class="ml-3">
@@ -101,7 +94,7 @@
             <button class="text-gray-600 hover:text-gray-800"><i class="fas fa-thumbs-down mr-1"></i> No</button>
           </div>
         </div>
-      </div>
+      </div> --}}
     </div>
   </div>
 </div>

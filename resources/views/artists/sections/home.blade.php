@@ -13,10 +13,10 @@
                 <a href="#" class="text-gray-600 hover:text-gray-800">See all</a>
             </div>
             <div class="grid grid-cols-3 gap-4 mt-4">
-                <img src="{{ asset('images/Assets/Category/Content/4.jpg') }}" alt="Latest work 1" class="rounded-lg object-cover">
-                <img src="{{ asset('images/Assets/Category/Content/5.jpg') }}" alt="Latest work 2" class="rounded-lg object-cover">
-                <img src="{{ asset('images/Assets/Category/Content/6.jpg') }}" alt="Latest work 3" class="rounded-lg object-cover">
-            </div>
+                @foreach ($homeLatestWork as $homeLatestWork => $listHomeLatestWork )
+                <img src="{{ asset($listHomeLatestWork->IMAGE_PATH) }}" alt="Latest work {{ $listHomeLatestWork->ART_ID }}" class="rounded-lg object-cover">
+                @endforeach
+            </div>  
         </div>
 
         <!-- Portfolio Section -->
@@ -26,9 +26,9 @@
                 <a href="#" class="text-gray-600 hover:text-gray-800">See all</a>
             </div>
             <div class="grid grid-cols-3 gap-4 mt-4">
-                <img src="{{ asset('images/Assets/Category/Content/1.jpg') }}" alt="Portfolio work 1" class="rounded-lg object-cover">
-                <img src="{{ asset('images/Assets/Category/Content/2.jpg') }}" alt="Portfolio work 2" class="rounded-lg object-cover">
-                <img src="{{ asset('images/Assets/Category/Content/3.jpg') }}" alt="Portfolio work 3" class="rounded-lg object-cover">
+                @foreach ($homeLatestPortfolio as $homeLatestPortfolio => $listHomeLatestPortfolio )
+                <img src="{{ asset($listHomeLatestPortfolio->IMAGE_PATH) }}" alt="Portfolio work  {{ $listHomeLatestPortfolio->ART_ID }}" class="rounded-lg object-cover">
+                @endforeach
             </div>
         </div>
 

@@ -11,13 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('MASTER_USER', function (Blueprint $table) {
-            $table->id('USER_ID');
-            $table->string('USERNAME',20);
-            $table->string('EMAIL');
-            $table->string('PASSWORD',255);
-            $table->string('PROFILE_IMAGE_PATH')->nullable();
-            $table->integer('USER_LEVEL');
+        Schema::create('ARTIST_CATEGORY_MASTER', function (Blueprint $table) {
+            $table->id('ARTIST_CATEGORY_MASTER_ID');
+            $table->string('ARTIST_CATEGORY_NAME');
             $table->timestamps();
         });
     }
@@ -27,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('MASTER_USER');
+        Schema::dropIfExists('ARTIST_CATEGORY_MASTER');
     }
 };

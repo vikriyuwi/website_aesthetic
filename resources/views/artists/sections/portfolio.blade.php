@@ -5,14 +5,9 @@
                 <a href="#" class="text-gray-600 hover:text-gray-800"></a>
             </div>
             <div class="grid grid-cols-3 gap-4 mt-4">
-                <img src="{{ asset('images/Assets/Category/Content/1.jpg') }}" alt="Portfolio work 1" class="rounded-lg object-cover">
-                <img src="{{ asset('images/Assets/Category/Content/2.jpg') }}" alt="Portfolio work 2" class="rounded-lg object-cover">
-                <img src="{{ asset('images/Assets/Category/Content/3.jpg') }}" alt="Portfolio work 3" class="rounded-lg object-cover">
-                <img src="{{ asset('images/Assets/Category/Content/4.jpg') }}" alt="Portfolio work 3" class="rounded-lg object-cover">
-                <img src="{{ asset('images/Assets/Category/Content/5.jpg') }}" alt="Portfolio work 3" class="rounded-lg object-cover">
-                <img src="{{ asset('images/Assets/Category/Content/6.jpg') }}" alt="Portfolio work 3" class="rounded-lg object-cover">
-                <img src="{{ asset('images/Assets/Category/Content/7.jpg') }}" alt="Portfolio work 3" class="rounded-lg object-cover">
-                <img src="{{ asset('images/Assets/Category/Content/8.jpg') }}" alt="Portfolio work 3" class="rounded-lg object-cover">
+                @foreach($artistPortfolio as $artistPortfolio => $listArtistPortfolio)
+                <img src="{{ asset( $listArtistPortfolio->IMAGE_PATH ) }}" alt="Portfolio work {{ $listArtistPortfolio->ART_ID }}" class="rounded-lg object-cover">
+                @endforeach
             </div>
         </div>
 

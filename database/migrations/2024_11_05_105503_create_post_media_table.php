@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('IMAGE', function (Blueprint $table) {
-            $table->id('IMAGE_ID');
-            $table->string('IMAGE_PATH');
+        Schema::create('POST_MEDIA', function (Blueprint $table) {
+            $table->id('POST_MEDIA_ID');
+            $table->unsignedBigInteger('POST_ID');
+            $table->foreign('POST_ID')->references('POST_ID')->on('POST');
+            $table->char('POST_MEDIA_PATH')->nullable();
             $table->timestamps();
         });
     }
@@ -23,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('IMAGE');
+        Schema::dropIfExists('POST_MEDIA');
     }
 };
