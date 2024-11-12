@@ -1,3 +1,8 @@
+@extends('layouts.app')
+
+@section('title', 'explore')
+
+@section('content')
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,10 +15,6 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100 font-roboto text-gray-700">
-
-<!-- Navbar Start -->
-@include('layouts.navbar')
-<!-- Navbar End -->
 
 <!-- Hero Section Start -->
 <section id="hero" class="relative">
@@ -158,10 +159,6 @@
     <!-- Art Gallery Grid End -->
 </div>
 
-<!-- Footer Start -->
-@include('layouts.footer')
-<!-- Footer End -->
-
     <script>
         // Smooth Scrolling for Anchor Links
         document.querySelectorAll('.scroll-link').forEach(link => {
@@ -270,3 +267,4 @@
     </script>
 </body>
 </html>
+@endsection

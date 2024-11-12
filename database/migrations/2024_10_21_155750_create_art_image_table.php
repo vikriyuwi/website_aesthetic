@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('like', function (Blueprint $table) {
-            $table->id();
+        Schema::create('ART_IMAGE', function (Blueprint $table) {
+            $table->id('ART_IMAGE_ID');
+            $table->unsignedBigInteger('ART_ID');
+            $table->foreign('ART_ID')->references('ART_ID')->on('ART');
+            $table->string('IMAGE_PATH')->nullable();
             $table->timestamps();
         });
     }
@@ -22,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('like');
+        Schema::dropIfExists('ART_IMAGE');
     }
 };
