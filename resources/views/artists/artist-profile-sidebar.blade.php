@@ -42,24 +42,41 @@
                     </div>
                     </button>
 
-                    <div class="mt-4 space-y-2">
-                        <div class="flex justify-between">
-                            <span class="text-gray-600">Project Views</span>
-                            <span class="text-gray-800">225,210</span>
+                        <div class="mt-4 space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Project Views</span>
+                                <span class="text-gray-800">225,210</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Likes</span>
+                                <span class="text-gray-800">149,518</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <a href="{{ route('followers') }}" class="text-gray-600 hover:underline">Followers</a>
+                                <a href="{{ route('followers') }}" class="text-gray-800">85,518</a>
+                            </div>
+                            <div class="flex justify-between mt-2">
+                                <a href="{{ route('following') }}" class="text-gray-600 hover:underline">Following</a>
+                                <a href="{{ route('following') }}" class="text-gray-800">1,490</a>
+                            </div>
+
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Artist Overall Rating</span>
+                                <span class="text-gray-800">4.9</span>
+                            </div>
                         </div>
                         <div class="flex justify-between">
                             <span class="text-gray-600">Likes</span>
                             <span class="text-gray-800">149,518</span>
                         </div>
                         <div class="flex justify-between">
-                            <a href="{{ route('followers') }}" class="text-gray-600 hover:underline">Followers</a>
-                            <a href="{{ route('followers') }}" class="text-gray-800">85,518</a>
+                            <span class="text-gray-600">Followers</span>
+                            <span class="text-gray-800">85,518</span>
                         </div>
-                        <div class="flex justify-between mt-2">
-                            <a href="{{ route('following') }}" class="text-gray-600 hover:underline">Following</a>
-                            <a href="{{ route('following') }}" class="text-gray-800">1,490</a>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Following</span>
+                            <span class="text-gray-800">1,490</span>
                         </div>
-
                         <div class="flex justify-between">
                             <span class="text-gray-600">Artist Overall Rating</span>
                             <span class="text-gray-800">4.9</span>
