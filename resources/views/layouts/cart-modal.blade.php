@@ -68,7 +68,7 @@
 
   </style>
 </head>
-<body class="bg-gray-100 p-8">
+<body class="bg-gray-100">
 
 <!-- Art Cart Modal -->
 <div id="cartModal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-bg">

@@ -143,12 +143,18 @@
       <!-- Artist Grid -->
       <div id="artistGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           @foreach($listArtist as $listArtists => $artist)
+          @php
+              // Convert to object if $artist is an array
+              if (is_array($artist)) {
+                  $artist = (object) $artist;
+              }
+          @endphp
               <div class="artist-card bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition transform hover:-translate-y-2 duration-300 ease-in-out" data-field="{{$artist->ROLE}}" data-name="{{$artist->USERNAME}}">
                   <div class="flex items-center mb-4">
                       <!-- Artist Image -->
                       <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-indigo-500">
                           {{-- <img src="{{ asset('images/' . $artist['image']) }}" alt="{{ $artist['name'] }}" class="w-full h-full object-cover"> --}}
-                          <img src="{{ asset('images/') }}" alt="{{ $artist->USERNAME }}" class="w-full h-full object-cover">
+                          <img src="{{ asset($artist->PROFILE_IMAGE_PATH) }}" alt="{{ $artist->USERNAME }}" class="w-full h-full object-cover">
                       </div>
                       <div class="ml-4">
                           <h2 class="text-xl font-semibold text-gray-900">{{ $artist->USERNAME }}</h2>

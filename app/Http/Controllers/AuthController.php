@@ -61,4 +61,10 @@ class AuthController extends Controller
             return back()->with('fail','Wrong Email or Password');
         }
     }
+
+    public function logout()
+    {
+        Auth::guard('MasterUser')->logout();
+        return redirect()->route('landing');
+    }
 }

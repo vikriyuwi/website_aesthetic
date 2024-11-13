@@ -1,3 +1,8 @@
+@extends('layouts.app')
+
+@section('title', 'landing')
+
+@section('content')
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,8 +11,8 @@
     <title>Aesthetic</title>
     <!-- Updated to match artist list font -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"> 
-    <link href="{{ URL::asset('/css/output.css') }}" rel="stylesheet"> 
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script> 
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <style> 
         body {
             font-family: 'Roboto', sans-serif; /* Updated to Roboto */
@@ -24,33 +29,6 @@
     </style>
 </head>
 <body>
-@if (Auth::check())
-<b>Halo {{ Auth::guard('MasterUser')->user()->USERNAME; }}, Login Success</b>
-    
-@endif
-<!-- Navbar Start -->
-<nav class="bg-white shadow-lg sticky top-0 z-50">
-    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-        <div class="text-3xl font-semibold italic text-gray-800">
-            <a href="#" class="hover:no-underline">
-                <img src="images/aestheticlogo.png" alt="Aesthetic Logo" class="h-12">
-            </a>
-        </div>
-        <ul class="flex space-x-8 text-gray-700">
-            <li><a href="#" class="hover:text-indigo-600">Home</a></li>
-            <li><a href="{{ url('explore') }}" class="hover:text-indigo-600">Explore</a></li>
-            <li><a href="{{ url('artists') }}" class="hover:text-indigo-600">Artist</a></li>
-            <li><a href="#art-gallery" class="hover:text-indigo-600">Art Gallery</a></li>
-        </ul>           
-        <div>
-            <a href="#" class="mr-4 text-gray-700 hover:text-indigo-600">Sign In</a>
-            <a href="#" class="bg-indigo-600 text-white px-6 py-2 rounded-full hover:bg-indigo-700">Join</a>
-        </div>
-    </div>
-</nav>
-<!-- Navbar End -->
-
-
     <!-- Home Page Start -->
     <section id="artists" class="relative bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
         <div class="relative w-full h-[80vh] overflow-hidden flex items-center justify-center">
@@ -276,71 +254,6 @@
     </section>
     <!-- CTA Section End -->
 
-    <!-- Footer Start -->
-    <footer class="bg-gray-100 py-12">
-        <div class="container mx-auto px-6">
-            <div class="flex flex-wrap justify-between border-b border-gray-300 pb-8">
-                <!-- About Section -->
-                <div class="w-full sm:w-1/2 md:w-1/4 mb-6">
-                    <h4 class="text-lg font-semibold text-gray-900 mb-4">About</h4>
-                    <ul>
-                        <li class="mb-2"><a href="#" class="text-gray-700 hover:text-indigo-600">About us</a></li>
-                        <li class="mb-2"><a href="#" class="text-gray-700 hover:text-indigo-600">Privacy Policy</a></li>
-                        <li class="mb-2"><a href="#" class="text-gray-700 hover:text-indigo-600">Terms of Service</a></li>
-                    </ul>
-                </div>
-                <!-- Community Section -->
-                <div class="w-full sm:w-1/2 md:w-1/4 mb-6">
-                    <h4 class="text-lg font-semibold text-gray-900 mb-4">Community</h4>
-                    <ul>
-                        <li class="mb-2"><a href="#" class="text-gray-700 hover:text-indigo-600">Community Hub</a></li>
-                        <li class="mb-2"><a href="#" class="text-gray-700 hover:text-indigo-600">Forum</a></li>
-                        <li class="mb-2"><a href="#" class="text-gray-700 hover:text-indigo-600">Events</a></li>
-                        <li class="mb-2"><a href="#" class="text-gray-700 hover:text-indigo-600">Blog</a></li>
-                    </ul>
-                </div>
-                <!-- Categories Section -->
-                <div class="w-full sm:w-1/2 md:w-1/4 mb-6">
-                    <h4 class="text-lg font-semibold text-gray-900 mb-4">Categories</h4>
-                    <ul>
-                        <li class="mb-2"><a href="#" class="text-gray-700 hover:text-indigo-600">Poster Design</a></li>
-                        <li class="mb-2"><a href="#" class="text-gray-700 hover:text-indigo-600">Logo Design</a></li>
-                        <li class="mb-2"><a href="#" class="text-gray-700 hover:text-indigo-600">3D Art Design</a></li>
-                        <li class="mb-2"><a href="#" class="text-gray-700 hover:text-indigo-600">Animation Design</a></li>
-                        <li class="mb-2"><a href="#" class="text-gray-700 hover:text-indigo-600">Illustration Art</a></li>
-                    </ul>
-                </div>
-                <!-- Find Us Section -->
-                <div class="w-full sm:w-1/2 md:w-1/4 mb-6">
-                    <h4 class="text-lg font-semibold text-gray-900 mb-4">Find Us</h4>
-                    <ul>
-                        <li class="mb-2"><a href="#" class="text-gray-700 hover:text-indigo-600">Contact Info</a></li>
-                        <li class="mb-2"><a href="#" class="text-gray-700 hover:text-indigo-600">Contact Sales</a></li>
-                        <li class="mb-2"><a href="#" class="text-gray-700 hover:text-indigo-600">Email</a></li>
-                    </ul>
-                    <!-- Social Media Icons -->
-                    <div class="flex space-x-4 mt-4">
-                        <a href="#" class="text-gray-600 hover:text-indigo-600 transition">
-                            <i class="fab fa-tiktok"></i>
-                        </a>
-                        <a href="#" class="text-gray-600 hover:text-indigo-600 transition">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="#" class="text-gray-600 hover:text-indigo-600 transition">
-                            <i class="fab fa-xing"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="flex flex-col md:flex-row justify-between items-center mt-8">
-                <!-- Copyright -->
-                <p class="text-gray-600 text-sm mb-4 md:mb-0">©2023 Aesthetic All Rights Reserved</p>
-                <!-- Logo -->
-                <div class="text-2xl font-semibold italic text-gray-900">Aesthetic</div>
-            </div>
-        </div>
-    </footer>
-    <!-- Footer End -->
 
     <script>
         // Smooth Scrolling for Anchor Links
@@ -432,5 +345,8 @@
 
         handleScrollAnimation();
     </script>
+
 </body>
 </html>
+@endsection
+

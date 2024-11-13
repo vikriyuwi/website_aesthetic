@@ -136,13 +136,19 @@
     </style>
 </head>
 <body>
-    <!-- Navbar -->
+
+    @if (Auth::check())
+    @include('layouts.navbar-login')
+    @else
     @include('layouts.navbar')
+    @endif
+    <!-- Navbar -->
+    
 
     <!-- Main Content -->
-    <div class="py-6">
-        @yield('content')
-    </div>
+    
+    @yield('content')
+    
 
     <!-- Include the Footer -->
     @include('layouts.footer')

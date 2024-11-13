@@ -15,12 +15,11 @@ return new class extends Migration
             $table->id('ART_ID');
             $table->unsignedBigInteger('ARTIST_ID');
             $table->foreign('ARTIST_ID')->references('ARTIST_ID')->on('ARTIST');
-            $table->unsignedBigInteger('IMAGE_ID');
-            $table->foreign('IMAGE_ID')->references('IMAGE_ID')->on('IMAGE');
             $table->string('ART_TITLE');
             $table->text('DESCRIPTION');
-            $table->integer('LIKE');
             $table->integer('VIEW');
+            $table->boolean('IS_SALE');
+            $table->decimal('PRICE', 15, 2)->default(0);
             $table->timestamps();
         });
     }

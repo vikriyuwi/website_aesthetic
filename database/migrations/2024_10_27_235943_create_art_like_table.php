@@ -11,15 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('BUYER', function (Blueprint $table) {
-            $table->id('BUYER_ID');
+        Schema::create('ART_LIKE', function (Blueprint $table) {
+            $table->id('ART_LIKE_ID');
             $table->unsignedBigInteger('USER_ID');
             $table->foreign('USER_ID')->references('USER_ID')->on('MASTER_USER');
-            $table->string('FULLNAME',255);
-            $table->string('PHONE_NUMBER');
-            $table->string('ADDRESS',255);
-            $table->date('ACCOUNT_CREATION_DATE');
-            $table->string('PROFILE_IMAGE_URL')->nullable();
+            $table->unsignedBigInteger('ART_ID');
+            $table->foreign('ART_ID')->references('ART_ID')->on('ART');
             $table->timestamps();
         });
     }
@@ -29,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('BUYER');
+        Schema::dropIfExists('ART_LIKE');
     }
 };

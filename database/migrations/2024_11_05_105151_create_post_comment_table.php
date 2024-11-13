@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('BUYER', function (Blueprint $table) {
-            $table->id('BUYER_ID');
+        Schema::create('POST_COMMENT', function (Blueprint $table) {
+            $table->id('POST_COMMENT_ID');
             $table->unsignedBigInteger('USER_ID');
             $table->foreign('USER_ID')->references('USER_ID')->on('MASTER_USER');
-            $table->string('FULLNAME',255);
-            $table->string('PHONE_NUMBER');
-            $table->string('ADDRESS',255);
-            $table->date('ACCOUNT_CREATION_DATE');
-            $table->string('PROFILE_IMAGE_URL')->nullable();
+            $table->unsignedBigInteger('POST_ID');
+            $table->foreign('POST_ID')->references('POST_ID')->on('POST');
+            $table->text('CONTENT');
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('BUYER');
+        Schema::dropIfExists('POST_COMMENT');
     }
 };
