@@ -177,7 +177,7 @@ public function showCategory($category)
 
     return view('artists.sections.collection-detail', compact('artworks', 'category'));
 }
-public function show()
+public function orderSummary()
 {
     return view('layouts.order-summary');
 }
@@ -204,6 +204,40 @@ public function followers()
 public function following()
 {
     return view('artists.following-sidebar');
+}
+public function cartProfile()
+{
+    return view('profile.cart-profile');
+}
+
+public function aboutUs()
+{
+    return view('footer.about-us');
+}
+
+public function joinArtist()
+{
+    return view('profile.join-artist');
+}
+
+public function insightArtist()
+{
+    return view('profile.insight');
+}
+
+public function blog()
+{
+    return view('footer.blog');
+}
+
+public function blogDetail()
+{
+    return view('footer.blog-detail');
+}
+
+public function contactUs()
+{
+    return view('footer.contact-us');
 }
 
 }
