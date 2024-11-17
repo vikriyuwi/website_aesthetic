@@ -45,77 +45,110 @@
       English
     </p>
   </div>
-    <!-- Reviews Section -->
-    <div class="bg-white rounded-lg shadow-lg p-6 mt-6">
-    <h2 class="text-xl font-bold mb-4">120 Reviews 
-      <span class="text-gray-600 font-medium">4.9</span>
+<!-- Reviews Section -->
+<div class="bg-white rounded-lg shadow-lg p-6 mt-6">
+    <h2 class="text-xl font-bold mb-4">120 Reviews
+        <span class="text-gray-600 font-medium">4.9</span>
     </h2>
 
-    <!-- Star Ratings -->
-    <div class="space-y-2">
-      <div class="flex items-center">
-        <span class="w-1/5 text-right pr-2">5 Stars</span>
-        <div class="w-4/5 bg-gray-300 h-2 rounded-full">
-          <div class="bg-gray-500 h-2 rounded-full" style="width: 83.33%;"></div>
+    <!-- Review Summary (Star Ratings) -->
+    <div class="space-y-2 mb-6">
+        <div class="flex items-center">
+            <span class="w-1/5 text-right pr-2">5 Stars</span>
+            <div class="w-4/5 bg-gray-300 h-2 rounded-full">
+                <div class="bg-yellow-400 h-2 rounded-full" style="width: 83.33%;"></div>
+            </div>
         </div>
-      </div>
-      <div class="flex items-center">
-        <span class="w-1/5 text-right pr-2">4 Stars</span>
-        <div class="w-4/5 bg-gray-300 h-2 rounded-full">
-          <div class="bg-gray-500 h-2 rounded-full" style="width: 12.5%;"></div>
+        <div class="flex items-center">
+            <span class="w-1/5 text-right pr-2">4 Stars</span>
+            <div class="w-4/5 bg-gray-300 h-2 rounded-full">
+                <div class="bg-yellow-400 h-2 rounded-full" style="width: 12.5%;"></div>
+            </div>
         </div>
-      </div>
-      <div class="flex items-center">
-        <span class="w-1/5 text-right pr-2">3 Stars</span>
-        <div class="w-4/5 bg-gray-300 h-2 rounded-full">
-          <div class="bg-gray-500 h-2 rounded-full" style="width: 4.17%;"></div>
+        <div class="flex items-center">
+            <span class="w-1/5 text-right pr-2">3 Stars</span>
+            <div class="w-4/5 bg-gray-300 h-2 rounded-full">
+                <div class="bg-yellow-400 h-2 rounded-full" style="width: 4.17%;"></div>
+            </div>
         </div>
-      </div>
-      <div class="flex items-center">
-        <span class="w-1/5 text-right pr-2">2 Stars</span>
-        <div class="w-4/5 bg-gray-300 h-2 rounded-full">
-          <div class="bg-gray-500 h-2 rounded-full" style="width: 0%;"></div>
+        <div class="flex items-center">
+            <span class="w-1/5 text-right pr-2">2 Stars</span>
+            <div class="w-4/5 bg-gray-300 h-2 rounded-full">
+                <div class="bg-gray-500 h-2 rounded-full" style="width: 0%;"></div>
+            </div>
         </div>
-      </div>
-      <div class="flex items-center">
-        <span class="w-1/5 text-right pr-2">1 Star</span>
-        <div class="w-4/5 bg-gray-300 h-2 rounded-full">
-          <div class="bg-gray-500 h-2 rounded-full" style="width: 0%;"></div>
+        <div class="flex items-center">
+            <span class="w-1/5 text-right pr-2">1 Stars</span>
+            <div class="w-4/5 bg-gray-300 h-2 rounded-full">
+                <div class="bg-gray-500 h-2 rounded-full" style="width: 0%;"></div>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Review List -->
-    <h3 class="text-lg font-bold mt-6">Recent Reviews</h3>
-    <div class="mt-4">
-      <!-- Review 1 -->
-      <div class="flex items-start mb-4">
+<!-- Review Comments -->
+<h3 class="text-lg font-bold mt-6">Recent Reviews</h3>
+<div class="mt-4 max-h-60 overflow-y-scroll">
+    <!-- Review 1 -->
+    <div class="flex items-start mb-4">
         <img class="w-12 h-12 rounded-full object-cover" src="{{ asset('images/melody2.jpg') }}" alt="Profile picture of Anya">
         <div class="ml-3">
-          <p class="font-bold">Anya <span class="text-sm text-gray-600">1 month ago</span></p>
-          <p class="text-gray-700 mt-1">The fantasy illustrations are pure magic! It captured the essence of my griffins and dwarven city with incredible detail and atmosphere. The sense of scale and lighting is phenomenal.</p>
-          <div class="flex space-x-4 text-sm mt-2">
-            <button class="text-gray-600 hover:text-gray-800"><i class="fas fa-thumbs-up mr-1"></i> Helpful?</button>
-            <button class="text-gray-600 hover:text-gray-800"><i class="fas fa-thumbs-down mr-1"></i> No</button>
-          </div>
+            <p class="font-bold">Anya <span class="text-sm text-gray-600">1 month ago</span></p>
+            <!-- Star Rating -->
+            <div class="flex space-x-1 text-yellow-500">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i> 
+            </div>
+            <p class="text-gray-700 mt-1">The fantasy illustrations are pure magic! It captured the essence of my griffins and dwarven city with incredible detail and atmosphere. The sense of scale and lighting is phenomenal.</p>
+            <div class="flex space-x-4 text-sm mt-2">
+                <button class="text-gray-600 hover:text-gray-800"><i class="fas fa-thumbs-up mr-1"></i> Helpful?</button>
+                <button class="text-gray-600 hover:text-gray-800"><i class="fas fa-thumbs-down mr-1"></i> No</button>
+            </div>
         </div>
-      </div>
+    </div>
 
-      <!-- Review 2 -->
-      <div class="flex items-start">
+    <!-- Review 2 -->
+    <div class="flex items-start mb-4">
         <img class="w-12 h-12 rounded-full object-cover" src="{{ asset('images/melody.webp') }}" alt="Profile picture of Sam Jetstream">
         <div class="ml-3">
-          <p class="font-bold">Sam Jetstream <span class="text-sm text-gray-600">3 months ago</span></p>
-          <p class="text-gray-700 mt-1">I needed a gritty cyberpunk illustration for my upcoming novel cover, and Something4U delivered in spades. The neon-drenched streets and towering megacorporations fit perfectly with the story’s tone.</p>
-          <div class="flex space-x-4 text-sm mt-2">
-            <button class="text-gray-600 hover:text-gray-800"><i class="fas fa-thumbs-up mr-1"></i> Helpful?</button>
-            <button class="text-gray-600 hover:text-gray-800"><i class="fas fa-thumbs-down mr-1"></i> No</button>
-          </div>
+            <p class="font-bold">Sam Jetstream <span class="text-sm text-gray-600">3 months ago</span></p>
+            <!-- Star Rating -->
+            <div class="flex space-x-1 text-yellow-500">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="far fa-star"></i> 
+            </div>
+            <p class="text-gray-700 mt-1">I needed a gritty cyberpunk illustration for my upcoming novel cover, and Something4U delivered in spades. The neon-drenched streets and towering megacorporations fit perfectly with the story’s tone.</p>
+            <div class="flex space-x-4 text-sm mt-2">
+                <button class="text-gray-600 hover:text-gray-800"><i class="fas fa-thumbs-up mr-1"></i> Helpful?</button>
+                <button class="text-gray-600 hover:text-gray-800"><i class="fas fa-thumbs-down mr-1"></i> No</button>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-</div>
+
+    <!-- Review 3 -->
+    <div class="flex items-start mb-4">
+        <img class="w-12 h-12 rounded-full object-cover" src="https://w0.peakpx.com/wallpaper/496/631/HD-wallpaper-hello-kitty-hug-cute-hello-kitty-anime-kitty-bear-hello-cat.jpg" alt="Profile picture of Sam Jetstream">
+        <div class="ml-3">
+            <p class="font-bold">Hello Wuffy <span class="text-sm text-gray-600">3 months ago</span></p>
+            <!-- Star Rating -->
+            <div class="flex space-x-1 text-yellow-500">
+                <i class="fas fa-star"></i>
+                <i class="far fa-star"></i>
+                <i class="far fa-star"></i>
+                <i class="far fa-star"></i>
+                <i class="far fa-star"></i> 
+            </div>
+            <p class="text-gray-700 mt-1">Ok, good</p>
+            <div class="flex space-x-4 text-sm mt-2">
+                <button class="text-gray-600 hover:text-gray-800"><i class="fas fa-thumbs-up mr-1"></i> Helpful?</button>
+                <button class="text-gray-600 hover:text-gray-800"><i class="fas fa-thumbs-down mr-1"></i> No</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Edit About Me Modal -->

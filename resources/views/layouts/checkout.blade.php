@@ -247,7 +247,7 @@
       <p>Total</p>
       <p>$2,916</p>
     </div>
-    <button onclick="window.location.href='{{ route('order-summary') }}'" class="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold mt-4 hover:bg-indigo-700 transition">Lanjutkan ke Pembayaran</button>
+    <button onclick="window.location.href='{{ route('order.summary') }}'"class="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold mt-4 hover:bg-indigo-700 transition">Lanjutkan ke Pembayaran</button>
   </div>
 </div>
 
