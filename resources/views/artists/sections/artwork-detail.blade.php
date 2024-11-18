@@ -39,6 +39,9 @@
         .card:hover {
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
+        .ellipsis-button {
+            @apply p-2 border rounded-lg flex items-center justify-center text-gray-600 hover:bg-gray-200 transition-all;
+        }
     </style>
 </head>
 
@@ -57,188 +60,176 @@
             <span class="text-gray-800">{{ $artwork['title'] }}</span>
         </nav>
 
-        <!-- Artwork Details -->
-        <div class="flex flex-col lg:flex-row space-y-4 lg:space-y-0" x-data="{ currentImage: 1 }">
-            <!-- Artwork Image and Thumbnails -->
-            <div class="lg:w-2/3">
-                <img src="{{ asset('images/' . $artwork['image']) }}" alt="{{ $artwork['title'] }}"
-                    class="w-full h-auto object-cover mb-4 lg:mb-0 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300" />
+        <!-- Artwork Image Container -->
+        <div class="flex justify-center items-center max-w-screen-lg p-4">
+            <img src="{{ asset('images/' . $artwork['image']) }}" 
+                 alt="{{ $artwork['title'] }}"
+                 class="max-h-[85vh] w-auto object-contain rounded-lg transition-transform duration-300 transform hover:scale-105 cursor-pointer" />
+        </div>
 
-                <!-- Thumbnail Gallery -->
-                <div class="flex space-x-2 justify-center mt-4">
-                    <button class="carousel-button p-2 bg-gray-200 rounded-full hover:bg-gray-300 transition-all"
-                        @click="currentImage = currentImage === 1 ? 4 : currentImage - 1">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <div class="flex space-x-2">
-                        <template x-for="n in 4">
-                            <img :src="'https://placehold.co/100x100?text=Thumb' + n"
-                                alt="Thumbnail"
-                                class="image-thumbnail w-16 h-16 rounded-lg border hover:scale-105 transition-transform cursor-pointer" />
-                        </template>
+<!-- Artwork Info Section (Redesigned) -->
+<div class="mt-8 lg:flex lg:space-x-4 lg:justify-between">
+            <!-- Basic Artwork Details -->
+            <div class="lg:w-2/3 space-y-4">
+                <!-- Artist Info Above Title -->
+                <div class="flex items-center mb-2">
+                    <img src="https://placehold.co/50x50" alt="Artist Name" class="w-12 h-12 rounded-full mr-4">
+                    <div>
+                        <span class="block text-lg font-semibold text-gray-800">Artist Name</span>
                     </div>
-                    <button class="carousel-button p-2 bg-gray-200 rounded-full hover:bg-gray-300 transition-all"
-                        @click="currentImage = currentImage === 4 ? 1 : currentImage + 1">
-                        <i class="fas fa-chevron-right"></i>
+                </div>
+                <!-- Artwork Title -->
+                <h2 class="text-3xl font-bold text-gray-900">Artwork Title</h2>
+
+                <!-- Category  -->
+                <div class="flex flex-wrap gap-2 mt-2">
+                    <button class="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-medium border border-gray-300 rounded-full hover:bg-gray-200 transition">
+                        Artwork
+                    </button>
+                    <button class="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-medium border border-gray-300 rounded-full hover:bg-gray-200 transition">
+                        Framed
+                    </button>
+                    <button class="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-medium border border-gray-300 rounded-full hover:bg-gray-200 transition">
+                        Painting
+                    </button>
+                    <button class="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-medium border border-gray-300 rounded-full hover:bg-gray-200 transition">
+                        Gallery
+                    </button>
+                    <button class="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-medium border border-gray-300 rounded-full hover:bg-gray-200 transition">
+                        Studio
+                    </button>
+                    <button class="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-medium border border-gray-300 rounded-full hover:bg-gray-200 transition">
+                        Creative Commons
+                    </button>
+                </div>
+
+                <div class="text-xl font-semibold text-indigo-600 mt-4">$2500.00</div>
+                <p class="text-gray-600 leading-relaxed">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ac dui et diam pellentesque gravida. Suspendisse potenti.</p>
+                <!-- Actions -->
+                <div class="flex space-x-4 mt-6">
+                    <button class="bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition btn">
+                        BUY NOW
+                    </button>
+                    <button class="border border-indigo-500 text-indigo-500 py-2 px-4 rounded-lg hover:bg-indigo-50 transition btn">
+                        CONTACT ARTIST
+                    </button>
+                    <button class="flex items-center space-x-2 text-gray-500 hover:text-indigo-500 transition btn">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Add to Cart</span>
                     </button>
                 </div>
             </div>
 
-            <!-- Artwork Info Section -->
-            <div class="lg:w-1/3 lg:pl-8 space-y-4">
-                <!-- Artist Info -->
-                <div class="flex items-center mb-4">
-                    <img src="https://placehold.co/50x50" alt="{{ $artwork['artist'] }}"
-                        class="w-10 h-10 rounded-full mr-2" />
-                    <div>
-                        <span class="text-sm text-gray-500">{{ $artwork['artist'] }}</span>
-                    </div>
-                </div>
-
-                <!-- Artwork Title and Medium -->
-                <h2 class="text-2xl font-bold text-black-700">{{ $artwork['title'] }}</h2>
-                <div class="flex items-center space-x-2 mb-4">
-                    <span class="text-sm text-gray-500">{{ $artwork['medium'] }}</span>
-                    <span class="text-sm text-gray-500">•</span>
-                    <button class="text-sm text-indigo-500 hover:underline">+ More details</button>
-                </div>
-
-                <!-- Price and Actions -->
-                <div class="text-4xl font-bold text-gray-900 mb-4">{{ $artwork['price'] }}</div>
-                <button
-                    class="bg-indigo-500 text-white py-2 px-4 rounded-lg w-full mb-4 hover:bg-indigo-600 transition-all btn">
-                    BUY NOW
-                </button>
-                <button
-                    class="border border-indigo-500 text-indigo-500 py-2 px-4 rounded-lg w-full mb-4 hover:bg-indigo-50 transition-all btn"
-                    @click="alert('Contacting artist...')">
-                    CONTACT {{ strtoupper($artwork['artist']) }}
-                </button>
-                <button
-                    class="flex items-center justify-center space-x-2 text-gray-500 hover:text-indigo-500 transition-all btn"
-                    @click="alert('Item added to cart!')">
-                    <img src="/images/shopping-cart.svg" alt="Shopping Cart" class="w-5 h-5">
-                    <span>Add to Cart</span>
-                </button>
-
-                <!-- Share and Report -->
-                <div class="border-t border-gray-300 pt-4 mt-6">
-                    <h3 class="text-lg font-bold mb-2">Share</h3>
-                    <div class="flex space-x-4 share-icons">
-                        <i class="fab fa-facebook-f text-gray-500 hover:text-blue-600 cursor-pointer"></i>
-                        <i class="fab fa-twitter text-gray-500 hover:text-blue-400 cursor-pointer"></i>
-                        <i class="fab fa-pinterest text-gray-500 hover:text-red-600 cursor-pointer"></i>
-                        <i class="fab fa-instagram text-gray-500 hover:text-pink-500 cursor-pointer"></i>
-                    </div>
-                    <button class="text-gray-500 text-sm mt-4 hover:underline">Report a problem</button>
+            <!-- New Share and More Button Section -->
+            <div class="lg:w-1/3 space-y-4 mt-6 lg:mt-0">
+                <!-- Share and More Button -->
+                <div class="flex space-x-2 mt-4">
+                    <!-- Share Button with New SVG Icon -->
+                    <button class="share-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
+                        </svg>
+                    </button>
+                    <!-- Ellipsis (More Options) Button -->
+                    <button class="ellipsis-button">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </button>
                 </div>
             </div>
         </div>
 
         <!-- Description Section -->
-        <div class="mt-8">
-            <h3 class="text-xl font-bold mb-2">Description</h3>
-            <p class="text-gray-700 mb-4">{{ $artwork['description'] }}</p>
+        <div class="mt-12">
+            <h3 class="text-xl font-semibold mb-4">Description</h3>
+            <p class="text-gray-700 leading-relaxed">Detailed description of the artwork goes here. This section provides insights into the creative process, materials used, and any other relevant information that adds value to the artwork.</p>
+        </div>
 
-            <!-- Artwork Additional Info -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-                <div class="flex items-center space-x-2">
-                    <i class="fas fa-ruler-combined text-gray-500"></i>
-                    <div>
-                        <h4 class="text-sm font-bold">Dimensions</h4>
-                        <p class="text-sm text-gray-500">{{ $artwork['dimensions'] }}</p>
-                    </div>
+        <!-- Additional Details -->
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-ruler-combined text-gray-500"></i>
+                <div>
+                    <h4 class="text-sm font-bold">Dimensions</h4>
+                    <p class="text-sm text-gray-500">24x36 inches</p>
                 </div>
-                <div class="flex items-center space-x-2">
-                    <i class="fas fa-palette text-gray-500"></i>
-                    <div>
-                        <h4 class="text-sm font-bold">Style</h4>
-                        <p class="text-sm text-gray-500">{{ $artwork['style'] }}</p>
-                    </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-palette text-gray-500"></i>
+                <div>
+                    <h4 class="text-sm font-bold">Style</h4>
+                    <p class="text-sm text-gray-500">Abstract</p>
                 </div>
-                <div class="flex items-center space-x-2">
-                    <i class="fas fa-users text-gray-500"></i>
-                    <div>
-                        <h4 class="text-sm font-bold">Subject</h4>
-                        <p class="text-sm text-gray-500">{{ $artwork['subject'] }}</p>
-                    </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-users text-gray-500"></i>
+                <div>
+                    <h4 class="text-sm font-bold">Subject</h4>
+                    <p class="text-sm text-gray-500">Nature</p>
                 </div>
             </div>
         </div>
-
-        <!-- Other Listings Section -->
-        <div class="max-w-7xl mx-auto py-12 mt-12">
-            <div class="text-center">
-                <img alt="Profile picture of Ruslana Levandovska" class="rounded-full mx-auto mb-4" height="50"
-                    src="https://storage.googleapis.com/a1aa/image/rDj0sQ4efjph6kC62n60n8eeiWc0wKvJvDwv9fiqG3VokCYcC.jpg"
-                    width="50" />
-                <h2 class="text-xl font-medium">
-                    Other listings from Ruslana Levandovska
-                </h2>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-8">
-                <div class="text-center">
-                    <div class="relative">
-                        <img alt="Painting of a woman floating on a pink inflatable ring in a pool"
-                            class="w-full h-auto" height="200"
-                            src="https://storage.googleapis.com/a1aa/image/SRST1E7aaGIQDhYXyEwvVWVeWIm3pvJOe7gR5k3IfqBGpAGnA.jpg"
-                            width="300" />
-                        <div class="absolute bottom-0 left-0 bg-gray-800 text-white text-sm px-2 py-1">
-                            £4,600.00
-                        </div>
-                    </div>
-                    <h3 class="mt-4 text-lg font-medium">Sun Kissed Dreams</h3>
-                    <p class="text-gray-600">Ruslana Levandovska</p>
-                    <p class="text-gray-600">Oil</p>
-                </div>
-                <div class="text-center">
-                    <div class="relative">
-                        <img alt="Painting of a woman in a hat sitting by a pool" class="w-full h-auto" height="200"
-                            src="https://storage.googleapis.com/a1aa/image/YlH2tYHKJM7hGZJMHBXfV8VbWbX9OkcauycA8scB6gMUKgxJA.jpg"
-                            width="300" />
-                        <div class="absolute bottom-0 left-0 bg-gray-800 text-white text-sm px-2 py-1">
-                            £3,390.00
-                        </div>
-                    </div>
-                    <h3 class="mt-4 text-lg font-medium">Ocean Daydreaming</h3>
-                    <p class="text-gray-600">Ruslana Levandovska</p>
-                    <p class="text-gray-600">Oil</p>
-                </div>
-                <div class="text-center">
-                    <div class="relative">
-                        <img alt="Painting of a pool with a sunset in the background" class="w-full h-auto" height="200"
-                            src="https://storage.googleapis.com/a1aa/image/jNkgYgmmF7rxIZ3Ubh3nO9NMt2DWbAOt4DbdGAsF5QBJFw4E.jpg"
-                            width="300" />
-                        <div class="absolute bottom-0 left-0 bg-gray-800 text-white text-sm px-2 py-1">
-                            £4,600.00
-                        </div>
-                    </div>
-                    <h3 class="mt-4 text-lg font-medium">Endless Summer Sunset</h3>
-                    <p class="text-gray-600">Ruslana Levandovska</p>
-                    <p class="text-gray-600">Oil</p>
-                </div>
-                <div class="text-center">
-                    <div class="relative">
-                        <img alt="Painting of a person diving into a pool" class="w-full h-auto" height="200"
-                            src="https://storage.googleapis.com/a1aa/image/doVNvaOjVTbYPdVclXu41hlE8wFb4iCHjQWsD9QZyfgTKgxJA.jpg"
-                            width="300" />
-                        <div class="absolute bottom-0 left-0 bg-gray-800 text-white text-sm px-2 py-1">
-                            £3,390.00
-                        </div>
-                    </div>
-                    <h3 class="mt-4 text-lg font-medium">Into the Blue</h3>
-                    <p class="text-gray-600">Ruslana Levandovska</p>
-                    <p class="text-gray-600">Oil</p>
-                </div>
-            </div>
-            <div class="text-center mt-8">
-                <button
-                    class="bg-white text-indigo-500 border border-indigo-600 px-4 py-2 rounded-lg hover:bg-indigo-600 hover:text-white transition">
-                    See more
-                </button>
-            </div>
-        </div>
+<!-- Other Listings Section -->
+<div class="max-w-7xl mx-auto py-12 mt-12">
+    <div class="text-center mb-8">
+        <img alt="Profile picture of Ruslana Levandovska" class="rounded-full mx-auto mb-4 w-16 h-16 object-cover"
+             src="https://storage.googleapis.com/a1aa/image/rDj0sQ4efjph6kC62n60n8eeiWc0wKvJvDwv9fiqG3VokCYcC.jpg" />
+        <h2 class="text-2xl font-semibold text-gray-700 mt-2">
+            Other listings from Ruslana Levandovska
+        </h2>
     </div>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- Listing Card 1 -->
+        <a href="listing-detail-sun-kissed-dreams.html" class="group bg-white rounded-lg border border-gray-200 overflow-hidden shadow hover:shadow-lg transition">
+            <img src="https://storage.googleapis.com/a1aa/image/SRST1E7aaGIQDhYXyEwvVWVeWIm3pvJOe7gR5k3IfqBGpAGnA.jpg" 
+                 alt="Sun Kissed Dreams" 
+                 class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105">
+            <div class="p-4">
+                <h3 class="text-lg font-semibold text-gray-800 mb-1 group-hover:text-indigo-600 transition-colors">Sun Kissed Dreams</h3>
+                <p class="text-gray-500">Ruslana Levandovska</p>
+                <p class="text-gray-500 text-sm">Oil</p>
+            </div>
+        </a>
+        
+        <!-- Listing Card 2 -->
+        <a href="listing-detail-ocean-daydreaming.html" class="group bg-white rounded-lg border border-gray-200 overflow-hidden shadow hover:shadow-lg transition">
+            <img src="https://storage.googleapis.com/a1aa/image/YlH2tYHKJM7hGZJMHBXfV8VbWbX9OkcauycA8scB6gMUKgxJA.jpg" 
+                 alt="Ocean Daydreaming" 
+                 class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105">
+            <div class="p-4">
+                <h3 class="text-lg font-semibold text-gray-800 mb-1 group-hover:text-indigo-600 transition-colors">Ocean Daydreaming</h3>
+                <p class="text-gray-500">Ruslana Levandovska</p>
+                <p class="text-gray-500 text-sm">Oil</p>
+            </div>
+        </a>
+        
+        <!-- Listing Card 3 -->
+        <a href="listing-detail-endless-summer-sunset.html" class="group bg-white rounded-lg border border-gray-200 overflow-hidden shadow hover:shadow-lg transition">
+            <img src="https://storage.googleapis.com/a1aa/image/jNkgYgmmF7rxIZ3Ubh3nO9NMt2DWbAOt4DbdGAsF5QBJFw4E.jpg" 
+                 alt="Endless Summer Sunset" 
+                 class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105">
+            <div class="p-4">
+                <h3 class="text-lg font-semibold text-gray-800 mb-1 group-hover:text-indigo-600 transition-colors">Endless Summer Sunset</h3>
+                <p class="text-gray-500">Ruslana Levandovska</p>
+                <p class="text-gray-500 text-sm">Oil</p>
+            </div>
+        </a>
+        
+        <!-- Listing Card 4 -->
+        <a href="listing-detail-into-the-blue.html" class="group bg-white rounded-lg border border-gray-200 overflow-hidden shadow hover:shadow-lg transition">
+            <img src="https://storage.googleapis.com/a1aa/image/doVNvaOjVTbYPdVclXu41hlE8wFb4iCHjQWsD9QZyfgTKgxJA.jpg" 
+                 alt="Into the Blue" 
+                 class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105">
+            <div class="p-4">
+                <h3 class="text-lg font-semibold text-gray-800 mb-1 group-hover:text-indigo-600 transition-colors">Into the Blue</h3>
+                <p class="text-gray-500">Ruslana Levandovska</p>
+                <p class="text-gray-500 text-sm">Oil</p>
+            </div>
+        </a>
+    </div>
+</div>
+
+
 </body>
 
 </html>

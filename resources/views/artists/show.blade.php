@@ -85,7 +85,7 @@
                         <a href="{{ route('artist.show', ['id' => $artistId, 'section' => 'portfolio']) }}" class="text-gray-600 hover:text-gray-800">Portfolio</a>
                         <a href="{{ route('artist.show', ['id' => $artistId, 'section' => 'collection']) }}" class="text-gray-600 hover:text-gray-800">Collection</a>
                         <a href="{{ route('artist.show', ['id' => $artistId, 'section' => 'posts']) }}" class="text-gray-600 hover:text-gray-800">Posts</a>
-                        <a href="{{ route('artist.show', ['id' => $artistId, 'section' => 'community']) }}" class="text-gray-600 hover:text-gray-800">Community</a>
+                        <a href="{{ route('artist.show', ['id' => $artistId, 'section' => 'community']) }}" class="text-gray-600 hover:text-gray-800">Art Work</a>
                         <a href="{{ route('artist.show', ['id' => $artistId, 'section' => 'about']) }}" class="text-gray-600 hover:text-gray-800">About</a>
                     </nav>
 
@@ -102,7 +102,7 @@
                    @elseif($section === 'posts')
                        @include('artists.sections.posts')
                    @elseif($section === 'community')
-                       @include('artists.sections.community')
+                       @include('artists.sections.artwork')
                    @elseif($section === 'about')
                        @include('artists.sections.about')
                    @endif
