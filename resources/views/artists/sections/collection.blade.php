@@ -38,16 +38,17 @@
   <div class="max-w-screen-lg mx-auto mt-8">
     <div class="flex justify-between items-center mb-6">
       <h3 class="text-3xl font-extrabold text-gray-800">Collections</h3>
-      <button id="addCollectionButton" class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-5 py-2 rounded-full shadow-md hover:from-blue-600 hover:to-indigo-700 transition duration-300 transform hover:scale-105">
-        + Add Collection
-      </button>
+      @if (Auth::user()->USER_ID == $artistUserId )
+        <button id="addCollectionButton" class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-5 py-2 rounded-full shadow-md hover:from-blue-600 hover:to-indigo-700 transition duration-300 transform hover:scale-105">
+          + Add Collection
+        </button>
+      @endif
     </div>
-    @endforeach
 
     <!-- Collections Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
       <!-- Collection Item Example -->
-
+      @foreach($listCollection as $listCollection => $collections)
       <div class="relative bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 overflow-hidden border border-gray-200 collection-card">
         <button class="ellipsisButton text-gray-600 hover:text-gray-800 focus:outline-none" onclick="toggleOptionsMenu(event, this)">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -59,32 +60,14 @@
           <button class="block w-full text-left px-4 py-2 hover:bg-gray-100">Edit Collection</button>
           <button class="block w-full text-left px-4 py-2 hover:bg-gray-100" onclick="confirmDeleteCollection(event)">Delete Collection</button>
         </div>
-        <img alt="Collection Image 1" class="w-full h-48 object-cover transform hover:scale-110 transition-transform duration-500" src="{{ asset('images/paintingart3.png') }}">
+        <img alt="Collection Image 1" class="w-full h-48 object-cover transform hover:scale-110 transition-transform duration-500" src="{{ asset($collections->IMAGE_PATH) }}">
         <div class="p-6">
-          <h4 class="text-xl font-semibold text-gray-900 mb-2">All</h4>
-          <p class="text-gray-600 mb-4">150 Arts</p>
-          <a href="{{ route('collection.show', 'all') }}" class=" text-indigo-600 font-bold hover:underline">View Collection &rarr;</a>
+          <h4 class="text-xl font-semibold text-gray-900 mb-2">{{ $collections->COLLECTION_NAME }}</h4>
+          <p class="text-gray-600 mb-4">{{ $collections->TOTAL_ARTWORKS }} Arts</p>
+          <a href="{{ route('collection.show', $collections->ARTIST_COLLECTION_ID) }}" class=" text-indigo-600 font-bold hover:underline">View Collection &rarr;</a>
         </div>
       </div>
-      <!-- Collection Item Example -->
-      <div class="relative bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 overflow-hidden border border-gray-200 collection-card">
-        <button class="ellipsisButton text-gray-600 hover:text-gray-800 focus:outline-none" onclick="toggleOptionsMenu(event, this)">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 0 1.5ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 0 1.5ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 0 1.5Z" />
-          </svg>
-        </button>
-        <!-- Options Menu -->
-        <div class="optionsMenu">
-          <button class="block w-full text-left px-4 py-2 hover:bg-gray-100">Edit Collection</button>
-          <button class="block w-full text-left px-4 py-2 hover:bg-gray-100" onclick="confirmDeleteCollection()">Delete Collection</button>
-        </div>
-        <img alt="Collection Image 1" class="w-full h-48 object-cover transform hover:scale-110 transition-transform duration-500" src="{{ asset('images/homepage.jpg') }}">
-        <div class="p-6">
-          <h4 class="text-xl font-semibold text-gray-900 mb-2">Painting Oil</h4>
-          <p class="text-gray-600 mb-4">12 Arts</p>
-          <a href="{{ route('collection.show', 'all') }}" class=" text-indigo-600 font-bold hover:underline">View Collection &rarr;</a>
-        </div>
-      </div>
+      @endforeach
       
       <!-- More collection items can be added similarly -->
     </div>

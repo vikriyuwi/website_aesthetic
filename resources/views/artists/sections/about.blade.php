@@ -12,16 +12,18 @@
       <h1 class="text-3xl font-bold">About Me</h1>
       
       <!-- Ellipsis Button -->
+      @if (Auth::user()->USER_ID == $artistUserId )
       <button class="ellipsisButton text-gray-600 hover:text-gray-800 focus:outline-none">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
         </svg>
       </button>
-      
       <!-- Options Menu -->
+      
       <div class="optionsMenu absolute top-12 right-4 bg-white border border-gray-200 shadow-lg rounded-md p-2 w-44 hidden">
         <button class="block w-full text-left px-4 py-2 hover:bg-gray-100" onclick="openEditModal()">Edit</button>
       </div>
+      @endif
     </div>
 
     <div class="text-gray-700">

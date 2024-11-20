@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
   <style>
@@ -40,15 +41,20 @@
     <!-- Add Post Button -->
     <div class="flex justify-between items-center mt-8">
       <h2 class="text-2xl font-bold">Posts</h2>
-      <button id="addPostButton" class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-5 py-2 rounded-full shadow-md hover:from-blue-600 hover:to-indigo-700 transition duration-300 transform hover:scale-105">
-        + Add Post
-      </button>
+      @if (Auth::user()->USER_ID == $artistUserId )
+        <button id="addPostButton" class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-5 py-2 rounded-full shadow-md hover:from-blue-600 hover:to-indigo-700 transition duration-300 transform hover:scale-105">
+          + Add Post 
+        </button>
+      @endif
     </div>
 
     <!-- Post Section -->
+    
     <div class="mt-8">
+      @foreach ($listPost as $posts )
       <!-- Post Example -->
-      <div class="bg-white p-4 rounded-lg shadow-md mb-4 border border-gray-300 post-card relative cursor-pointer" onclick="showPostDetail('Something4U', 'Feb 27, 2023', 'I\'ll Hibernate for a while ;)', '20', '15', '{{ asset('images/Assets/Category/Content/1.jpg') }}')">
+      <div class="bg-white p-4 rounded-lg shadow-md mb-4 border border-gray-300 post-card relative cursor-pointer" onclick="showPostDetail({{ $posts->POST_ID }})">
+        <!-- Options Menu and Profile Section Omitted for Brevity -->
         <button class="ellipsisButton text-gray-600 hover:text-gray-800 focus:outline-none" onclick="toggleOptionsMenu(event, this)">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 0 1.5ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
@@ -61,77 +67,80 @@
         </div>
 
         <div class="flex items-center space-x-4">
-          <img alt="Profile picture of the user" class="w-10 h-10 rounded-full" src="{{ asset('images/Assets/About me/sam.jpg') }}">
+          <img alt="Profile picture of the user" class="w-10 h-10 rounded-full" src="{{ asset($posts->PROFILE_IMAGE_PATH) }}">
           <div>
-            <h2 class="text-lg font-bold">Something4U</h2>
-            <p class="text-sm text-gray-600">Feb 27, 2023</p>
+            <h2 class="text-lg font-bold">{{ $posts->USERNAME }}</h2>
+            <p class="text-sm text-gray-600">{{ $posts->CREATED_DATE }}</p>
           </div>
         </div>
-        <p class="mt-4 text-sm">I'll Hibernate for a while ;)</p>
+        <p class="mt-4 text-sm">{{ $posts->CONTENT }}</p>
 
         <!-- Image Container -->
         <div class="aspect-w-2 aspect-h-1 mt-4 rounded-lg overflow-hidden">
-          <img alt="Anime character with pink hair" class="aspect-inner object-cover" src="{{ asset('images/Assets/Category/Content/1.jpg') }}">
+          <img alt="Anime character with pink hair" class="aspect-inner object-cover" src="{{ asset($posts->POST_MEDIA_PATH) }}">
         </div>
 
         <div class="mt-2 flex space-x-4 text-gray-600 text-sm">
-          <button class="flex items-center space-x-1"><i class="far fa-heart"></i><span>20</span></button>
-          <button class="flex items-center space-x-1"><i class="far fa-comment"></i><span>15</span></button>
+          <button class="flex items-center space-x-1"><i class="far fa-heart"></i><span>{{ $posts->TOTAL_LIKE }}</span></button>
+          <button class="flex items-center space-x-1"><i class="far fa-comment"></i><span id="postTotalComments-{{ $posts->POST_ID }}">{{ $posts->TOTAL_COMMENT }}</span></button>
           <button class="flex items-center space-x-1"><i class="far fa-share-square"></i><span>Share</span></button>
         </div>
       </div>
     </div>
+    @endforeach
   </div>
-
+  
   <!-- Post Detail Modal -->
   <div id="postDetailModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden modal-overlay">
     <div class="bg-white p-8 rounded-lg shadow-lg w-10/12 max-w-4xl flex space-x-8 relative">
-    <button class="absolute top-4 right-4 text-gray-600 hover:text-gray-800" onclick="closePostDetail()">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-       <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-    </svg>
-    </button>
-
-      <!-- Left Side: Image and Interactions -->
-      <div class="flex-shrink-0 w-1/2">
-        <img id="postDetailImage" class="w-full h-auto rounded-lg shadow-lg" src="{{ asset('images/Assets/Category/Content/1.jpg') }}" alt="Post Image">
-        <div class="flex space-x-4 mt-4 text-gray-600">
-          <button class="flex items-center space-x-2 hover:text-gray-800"><i class="far fa-heart"></i><span id="postDetailLikes">20</span></button>
-          <button class="flex items-center space-x-2 hover:text-gray-800"><i class="far fa-comment"></i><span id="postDetailComments">15</span></button>
-          <button class="flex items-center space-x-2 hover:text-gray-800"><i class="far fa-share-square"></i><span>Share</span></button>
+        <button class="absolute top-4 right-4 text-gray-600 hover:text-gray-800" onclick="closePostDetail()">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+  
+        <!-- Left Side: Image and Interactions -->
+        <div class="flex-shrink-0 w-1/2">
+            <img id="postDetailImage" class="w-full h-auto rounded-lg shadow-lg" src="" alt="Post Image">
+            <div class="flex space-x-4 mt-4 text-gray-600">
+                <button class="flex items-center space-x-2 hover:text-gray-800"><i class="far fa-heart"></i><span id="postDetailLikes"></span></button>
+                <button class="flex items-center space-x-2 hover:text-gray-800"><i class="far fa-comment"></i><span id="postDetailComments"></span></button>
+                <button class="flex items-center space-x-2 hover:text-gray-800"><i class="far fa-share-square"></i><span>Share</span></button>
+            </div>
         </div>
-      </div>
-
-      <!-- Right Side: Details and Comments -->
-      <div class="w-1/2">
-        <!-- User Info -->
-        <div class="flex items-center space-x-4 mb-4">
-          <img class="w-12 h-12 rounded-full" src="{{ asset('images/Assets/About me/sam.jpg') }}" alt="Profile picture">
-          <div>
-            <h3 id="postDetailUser" class="text-2xl font-bold">Something4U</h3>
-            <p id="postDetailDate" class="text-gray-600">Feb 27, 2023</p>
-          </div>
+  
+        <!-- Right Side: Details and Comments -->
+        <div class="w-1/2">
+            <!-- User Info -->
+            <div class="flex items-center space-x-4 mb-4">
+                <img id="postDetailProfileImage" class="w-12 h-12 rounded-full" src="" alt="Profile picture">
+                <div>
+                    <h3 id="postDetailUser" class="text-2xl font-bold"></h3>
+                    <p id="postDetailDate" class="text-gray-600"></p>
+                </div>
+            </div>
+  
+            <!-- Caption -->
+            <p id="postDetailContent" class="text-gray-700 mt-2"></p>
+  
+            <!-- Comments Section -->
+            <div class="mt-8">
+                <h4 class="text-lg font-semibold mb-2">Comments</h4>
+                <div id="commentsSection" class="space-y-4 h-40 overflow-y-auto pr-2 border-t border-gray-200 pt-4">
+                    <!-- Comments will be dynamically inserted here -->
+                </div>
+                <!-- Add Comment Form -->
+                <div class="mt-4">
+                    <label for="newComment" class="block text-gray-700 font-semibold mb-2">Add a Comment</label>
+                    <textarea id="newComment" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition" placeholder="Write your comment..."></textarea>
+                    <button onclick="addComment()" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">Post Comment</button>
+                </div>
+            </div>
         </div>
-
-        <!-- Caption -->
-        <p id="postDetailContent" class="text-gray-700 mt-2">I'll Hibernate for a while ;)</p>
-
-        <!-- Comments Section -->
-        <div class="mt-8">
-          <h4 class="text-lg font-semibold mb-2">Comments</h4>
-          <div id="commentsSection" class="space-y-4 h-40 overflow-y-auto pr-2 border-t border-gray-200 pt-4">
-            <!-- Placeholder comments, populated dynamically -->
-          </div>
-          <!-- Add Comment Form -->
-          <div class="mt-4">
-            <label for="newComment" class="block text-gray-700 font-semibold mb-2">Add a Comment</label>
-            <textarea id="newComment" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition" placeholder="Write your comment..."></textarea>
-            <button onclick="addComment()" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">Post Comment</button>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
+
+
 <!-- Add Post Modal -->
 <div id="addPostModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden modal-overlay">
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl">
@@ -167,47 +176,156 @@
 
   <!-- JavaScript -->
   <script>
-    const commentsData = [
-      { name: "Anya", date: "1 month ago", text: "The fantasy illustrations are pure magic!" },
-      { name: "Sam Jetstream", date: "3 months ago", text: "The neon-drenched streets are amazing!" }
-    ];
+    // const commentsData = {
+    //   { name: "Anya", date: "1 month ago", text: "The fantasy illustrations are pure magic!" },
+    //   { name: "Sam Jetstream", date: "3 months ago", text: "The neon-drenched streets are amazing!" }
+    // };
 
-    function showPostDetail(user, date, content, likes, comments, imageUrl) {
-      document.getElementById('postDetailUser').textContent = user;
-      document.getElementById('postDetailDate').textContent = date;
-      document.getElementById('postDetailContent').textContent = content;
-      document.getElementById('postDetailLikes').textContent = likes;
-      document.getElementById('postDetailComments').textContent = comments;
-      document.getElementById('postDetailImage').src = imageUrl;
-      populateComments();
-      document.getElementById('postDetailModal').classList.remove('hidden');
-    }
+    const postsData = {
+          @foreach ($listPost as $posts)
+              "{{ $posts->POST_ID }}": {
+                  user: "{{ $posts->USERNAME }}",
+                  date: "{{ $posts->CREATED_DATE }}",
+                  content: "{{ $posts->CONTENT }}",
+                  likes: {{ $posts->TOTAL_LIKE }},
+                  comments: {{ $posts->TOTAL_COMMENT }},
+                  imageUrl: "{{ asset($posts->POST_MEDIA_PATH) }}",
+                  profileImageUrl: "{{ asset($posts->PROFILE_IMAGE_PATH) }}"
+              },
+          @endforeach
+      };
 
-    function populateComments() {
-      const commentsSection = document.getElementById('commentsSection');
-      commentsSection.innerHTML = '';
-      commentsData.forEach(comment => {
+  const cachedComments = {}; // Cache for comments by postId
+
+  function decodeHtmlEntities(text) {
+      const textarea = document.createElement("textarea");
+      textarea.innerHTML = text;
+      return textarea.value;
+  }
+
+  function showPostDetail(postId) {
+      const post = postsData[postId];
+      if (post) {
+          document.getElementById('postDetailUser').textContent = post.user;
+          document.getElementById('postDetailDate').textContent = post.date;
+          document.getElementById('postDetailContent').textContent = decodeHtmlEntities(post.content);
+          document.getElementById('postDetailLikes').textContent = post.likes;
+          document.getElementById('postDetailComments').textContent = post.comments;
+          document.getElementById('postDetailImage').src = post.imageUrl;
+          document.getElementById('postDetailProfileImage').src = post.profileImageUrl;
+
+          // Check if comments are cached
+          if (cachedComments[postId]) {
+              populateComments(cachedComments[postId]);
+          } else {
+              // Fetch comments for this post and cache them
+              fetch(`/comments/${postId}`)
+                  .then(response => response.json())
+                  .then(comments => {
+                      cachedComments[postId] = comments; // Cache the comments for this postId
+                      populateComments(comments);
+                  })
+                  .catch(error => console.error('Error fetching comments:', error));
+          }
+
+          document.getElementById('commentsSection').setAttribute('data-post-id', postId);
+          document.getElementById('postDetailModal').classList.remove('hidden');
+      } else {
+          console.error('Post data not found for POST_ID:', postId);
+      }
+  }
+
+  function populateComments(comments) {
+    const commentsSection = document.getElementById('commentsSection');
+    commentsSection.innerHTML = ''; // Clear existing comments
+
+    comments.forEach(comment => {
+        const name = comment.USERNAME || 'Anonymous';
+        const date = comment.COMMENT_TIME || 'Unknown date';
+        const text = comment.CONTENT || 'No content available';
+        const imagePath = comment.PROFILE_IMAGE_PATH || '/path/to/default_profile.png';
+
         const commentElement = document.createElement('div');
         commentElement.classList.add('flex', 'space-x-4', 'items-start');
         commentElement.innerHTML = `
-          <img class="w-10 h-10 rounded-full object-cover" src="{{ asset('images/melody.webp') }}" alt="${comment.name}">
-          <div>
-            <p class="font-bold">${comment.name} <span class="text-sm text-gray-600">${comment.date}</span></p>
-            <p class="text-gray-700 mt-1">${comment.text}</p>
-          </div>
+            <img class="w-10 h-10 rounded-full object-cover" src="{{ asset('${imagePath}') }}" alt="${name}">
+            <div>
+                <p class="font-bold">${name} <span class="text-sm text-gray-600">${date}</span></p>
+                <p class="text-gray-700 mt-1">${text}</p>
+            </div>
         `;
         commentsSection.appendChild(commentElement);
-      });
-    }
+    });
+}
 
-    function addComment() {
-      const newCommentText = document.getElementById('newComment').value;
-      if (newCommentText) {
-        commentsData.push({ name: "Current User", date: "Just now", text: newCommentText });
-        document.getElementById('newComment').value = '';
-        populateComments();
-      }
+function addComment() {
+    const newCommentText = document.getElementById('newComment').value;
+    const postId = document.getElementById('commentsSection').getAttribute('data-post-id');
+    
+    if (newCommentText && postId) {
+        fetch(`/comments/${postId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ content: newCommentText })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(newComment => {
+            console.log("New Comment Data:", newComment); // Check structure in console
+
+            document.getElementById('newComment').value = '';
+
+            const commentsSection = document.getElementById('commentsSection');
+            const commentElement = document.createElement('div');
+            commentElement.classList.add('flex', 'space-x-4', 'items-start');
+            commentElement.innerHTML = `
+                <img class="w-10 h-10 rounded-full object-cover" src="{{ asset('${newComment.PROFILE_IMAGE_PATH}') }}" alt="${newComment.USERNAME}">
+                <div>
+                    <p class="font-bold">${newComment.USERNAME} <span class="text-sm text-gray-600">${newComment.COMMENT_TIME}</span></p>
+                    <p class="text-gray-700 mt-1">${newComment.CONTENT}</p>
+                </div>
+            `;
+            commentsSection.appendChild(commentElement);
+
+            // Cache the new comment
+            if (!cachedComments[postId]) {
+                cachedComments[postId] = [];
+            }
+            cachedComments[postId].push({
+                USERNAME: newComment.USERNAME,
+                COMMENT_TIME: newComment.COMMENT_TIME,
+                CONTENT: newComment.CONTENT,
+                PROFILE_IMAGE_PATH: newComment.PROFILE_IMAGE_PATH
+            });
+
+            // Update the comment count in the post data and on the modal
+            postsData[postId].comments += 1;
+            document.getElementById('postDetailComments').textContent = postsData[postId].comments;
+
+            const postCommentCount = document.getElementById(`postTotalComments-${postId}`);
+            if (postCommentCount) {
+                postCommentCount.textContent = postsData[postId].comments;
+            }
+        })
+        .catch(error => console.error('Error adding comment:', error));
     }
+}
+
+    // function addComment() {
+    //   const newCommentText = document.getElementById('newComment').value;
+    //   if (newCommentText) {
+    //     commentsData.push({ name: "Current User", date: "Just now", text: newCommentText });
+    //     document.getElementById('newComment').value = '';
+    //     populateComments();
+    //   }
+    // }
 
     function closePostDetail() {
       document.getElementById('postDetailModal').classList.add('hidden');

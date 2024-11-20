@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PostComment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ArtistProfileController extends Controller
@@ -59,6 +61,18 @@ class ArtistProfileController extends Controller
             $averageArtistRating = number_format($averageArtistRating, 1);
             $artistId = $ARTIST_ID;
 
+            $latestPost = DB::table('post as P')
+                        ->select([
+                            'MU.USERNAME',
+                            'MU.PROFILE_IMAGE_PATH',
+                            'P.CONTENT',
+                            'PM.POST_MEDIA_PATH',
+                        ])
+                        ->join('post_media as PM', 'PM.POST_ID', '=', 'P.POST_ID')
+                        ->join('master_user as MU', 'MU.USER_ID', '=', 'P.USER_ID')
+                        ->orderBy('P.CREATED_AT', 'desc')
+                        ->first();
+
             //render home
             $homeLatestWork = DB::table('ART')
                             ->select('ART.ART_ID', 'ART_IMAGE.IMAGE_PATH')
@@ -80,7 +94,7 @@ class ArtistProfileController extends Controller
 
             //render portfolio
             $artistPortfolio =  DB::table('ART')
-                            ->select('ART.ART_ID', 'ART_IMAGE.IMAGE_PATH')
+                            ->select('ART.ART_ID', 'ART_IMAGE.IMAGE_PATH','ART.ART_TITLE','ART.DESCRIPTION')
                             ->join('ART_IMAGE','ART_IMAGE.ART_ID','=','ART.ART_ID')
                             ->where('ART.ARTIST_ID','=',$ARTIST_ID)
                             ->where('IS_SALE','=',0)
@@ -105,6 +119,58 @@ class ArtistProfileController extends Controller
                             ->join('ART_IMAGE as ai', 'ai.ART_ID', '=', 'ac.ART_ID')
                             ->join('ARTIST_COLLECTION as artist', 'ac.ARTIST_COLLECTION_ID', '=', 'artist.ARTIST_COLLECTION_ID')
                             ->get();
+
+            //render post
+            $listPost = DB::table('POST as P')
+                        ->select([
+                            DB::raw('CAST(P.POST_ID AS BIGINT) as POST_ID'),
+                            'MU.USER_ID',
+                            'MU.PROFILE_IMAGE_PATH',
+                            'MU.USERNAME',
+                            'P.CONTENT',
+                            DB::raw("FORMAT(CONVERT(DATE, P.created_at), 'd MMMM yyyy') AS CREATED_DATE"),
+                            'PM.POST_MEDIA_PATH',
+                            DB::raw("
+                                COALESCE(
+                                    CASE
+                                        WHEN TOTAL_COMMENT.CNT_CMMT > 999 THEN CONCAT(ROUND(TOTAL_COMMENT.CNT_CMMT / 1000, 1), 'K')
+                                        ELSE COALESCE(TOTAL_COMMENT.CNT_CMMT, 0)
+                                    END,
+                                    '0'
+                                ) AS TOTAL_COMMENT
+                            "),
+                            DB::raw("
+                                COALESCE(
+                                    CASE
+                                        WHEN TOTAL_LIKE.CNT_LIKE > 999 THEN CONCAT(ROUND(TOTAL_LIKE.CNT_LIKE / 1000, 1), 'K')
+                                        ELSE COALESCE(TOTAL_LIKE.CNT_LIKE, 0)
+                                    END,
+                                    '0'
+                                ) AS TOTAL_LIKE
+                            "),
+                        ])
+                        ->join('MASTER_USER as MU', 'P.USER_ID', '=', 'MU.USER_ID')
+                        ->join('POST_MEDIA as PM', 'P.POST_ID', '=', 'PM.POST_ID')
+                        ->leftJoinSub(
+                            DB::table('POST_COMMENT')
+                                ->select('POST_ID', DB::raw('COUNT(*) as CNT_CMMT'))
+                                ->groupBy('POST_ID'),
+                            'TOTAL_COMMENT',
+                            'P.POST_ID',
+                            '=',
+                            'TOTAL_COMMENT.POST_ID'
+                        )
+                        ->leftJoinSub(
+                            DB::table('POST_LIKE')
+                                ->select('POST_ID', DB::raw('COUNT(*) as CNT_LIKE'))
+                                ->groupBy('POST_ID'),
+                            'TOTAL_LIKE',
+                            'P.POST_ID',
+                            '=',
+                            'TOTAL_LIKE.POST_ID'
+                        )
+                        ->orderBy('P.created_at', 'desc')
+                        ->get();
 
             //render about
             $countTotalRating = DB::table('ARTIST_RATING')
@@ -141,11 +207,12 @@ class ArtistProfileController extends Controller
                     ->orderBy('AR.CREATED_AT', 'desc')
                     ->get();
 
-            return view('artists.show', compact('artist', 'countArtistView','countArtistLikes','countArtistFollowers', //SIDE ARTIST PROFILE DATA
-                                                'countArtistFollowing','averageArtistRating','section', 'artistId',
+            return view('artists.show', compact('artist', 'countArtistView','countArtistLikes','countArtistFollowers','latestPost', //SIDE ARTIST PROFILE DATA
+                                                'countArtistFollowing','averageArtistRating','section', 'artistId','artistUserId',
                                                 'homeLatestWork','homeLatestPortfolio', //HOME RENDER
                                                 'artistPortfolio',// PORTFOLIO RENDER
                                                 'listCollection', // COLLECTION RENDER
+                                                'listPost',// POST RENDER
                                                 'countTotalRating','userRatingPercentage','rating')); //ABOUT RENDER
 
         }
@@ -178,5 +245,81 @@ class ArtistProfileController extends Controller
                         ->count();
 
         return view('artists.sections.collection-detail', compact('artworks', 'artistCollectionId','totalArtWorks'));
+    }
+
+    public function getComments($postId)
+    {
+        // Fetch comments associated with the specified post ID
+        $comments = DB::table('post_comment as PC')
+                    ->select([
+                        'PC.CONTENT',
+                        'MU.USERNAME',
+                        'MU.PROFILE_IMAGE_PATH',
+                        DB::raw("
+                            CASE
+                                WHEN DATEDIFF(DAY, PC.CREATED_AT, GETDATE()) <= 0 THEN 'Today'
+                                WHEN DATEDIFF(YEAR, PC.CREATED_AT, GETDATE()) >= 1 THEN CAST(DATEDIFF(YEAR, PC.CREATED_AT, GETDATE()) AS VARCHAR) + ' Years Ago'
+                                WHEN DATEDIFF(MONTH, PC.CREATED_AT, GETDATE()) >= 1 THEN CAST(DATEDIFF(MONTH, PC.CREATED_AT, GETDATE()) AS VARCHAR) + ' Months Ago'
+                                ELSE CAST(DATEDIFF(DAY, PC.CREATED_AT, GETDATE()) AS VARCHAR) + ' Days Ago'
+                            END AS COMMENT_TIME
+                        ")
+                    ])
+                    ->join('master_user as MU', 'MU.USER_ID', '=', 'PC.USER_ID')
+                    ->where('PC.POST_ID', $postId)
+                    ->get();
+
+        // Return comments as a JSON response
+        return response()->json($comments);
+    }
+
+    // PostController.php
+    // public function addComment(Request $request, $postId)
+    // {
+    //     // Validate the request
+    //     $request->validate([
+    //         'content' => 'required|string|max:255',
+    //     ]);
+
+    //     // Save the new comment in the database
+    //     $postComment = new PostComment();
+    //     $postComment->POST_ID = $postId;
+    //     $postComment->USER_ID = Auth::id(); // Gets the currently authenticated user's ID
+    //     $postComment->CONTENT = $request->content;
+    //     $postComment->created_at = now();
+    //     $postComment->save();
+
+    //     // Retrieve the username of the authenticated user
+    //     $postCommentUsername = Auth::user()->USERNAME;    
+    //     $userImagePath = Auth::user()->PROFILE_IMAGE_PATH;
+
+    //     // Return the new comment data to the frontend
+    //     return response()->json([
+    //         'name' => $postCommentUsername,
+    //         'date' => $postComment->created_at->diffForHumans(),
+    //         'text' => $postComment->CONTENT,
+    //         'image_path' => $userImagePath,
+    //     ]);
+    // }
+
+    public function addComment(Request $request, $postId)
+    {
+        $request->validate([
+            'content' => 'required|string|max:255',
+        ]);
+
+        $postComment = new PostComment();
+        $postComment->POST_ID = $postId;
+        $postComment->USER_ID = Auth::id(); // Assuming the user is authenticated
+        $postComment->CONTENT = $request->content;
+        $postComment->created_at = now()->setTimezone('Asia/Jakarta');;
+        $postComment->save();
+
+        // Return a consistent structure for the comment
+        return response()->json([
+            'USERNAME' => Auth::user()->USERNAME, // Assuming USERNAME is the field for the user's name
+            'COMMENT_TIME' => $postComment->created_at->diffForHumans(),
+            'CONTENT' => $postComment->CONTENT,
+            'PROFILE_IMAGE_PATH' => Auth::user()->PROFILE_IMAGE_PATH
+        ]);
     }
 }
