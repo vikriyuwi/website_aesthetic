@@ -74,11 +74,20 @@
                                 <div class="mt-4 space-y-2">
                                     <div class="flex justify-between">
                                         <span class="text-gray-600">Project Views</span>
+                                        @if (is_null($countArtistView)|| is_null($countArtistView->TOTAL_VIEWS))
+                                        <span class="text-gray-800">0</span>
+                                        @else
                                         <span class="text-gray-800">{{ $countArtistView->TOTAL_VIEWS }}</span>
+                                        @endif
                                     </div>
                                     <div class="flex justify-between">
                                         <span class="text-gray-600">Likes</span>
+                                        @if (is_null($countArtistLikes) || is_null($countArtistLikes->TOTAL_LIKES))
+                                        <span class="text-gray-800">0</span>
+                                        @else
                                         <span class="text-gray-800">{{ $countArtistLikes->TOTAL_LIKES }}</span>
+                                        @endif
+                                        
                                     </div>
                                     <div class="flex justify-between">
                                         <span class="text-gray-600">Followers</span>
@@ -105,15 +114,15 @@
 
                             <!-- Posts Section -->
                             <div class="bg-white p-4 rounded-lg shadow-lg mt-4">
-                                <h3 class="text-lg font-bold">Posts (BELUM BE)</h3>
+                                <h3 class="text-lg font-bold">Posts</h3>
                                 <div class="mt-4">
                                     <div class="flex items-start">
-                                        <img src="{{ asset('images/Assets/Community/Media/Photos/media 5.jpg') }}"
+                                        <img src="{{ asset($latestPost->PROFILE_IMAGE_PATH) }}"
                                             alt="Post profile picture" class="w-12 h-12 rounded-full object-cover">
                                         <div class="ml-4">
-                                            <h4 class="font-bold">Something4U</h4>
-                                            <p class="text-gray-600">I'll hibernate for a while :)</p>
-                                            <img src="{{ asset('images/Assets/Community/Media/Photos/media 6.jpg') }}"
+                                            <h4 class="font-bold">{{ $latestPost->USERNAME }}</h4>
+                                            <p class="text-gray-600">{{ $latestPost->CONTENT }}</p>
+                                            <img src="{{ asset($latestPost->POST_MEDIA_PATH) }}"
                                                 alt="Post image" class="mt-2 rounded-lg object-cover w-full h-32">
                                             <div class="flex justify-between items-center mt-2">
                                                 <div class="flex space-x-10">
@@ -170,15 +179,15 @@
                                 @if ($section === 'home')
                                     @include('artists.sections.home', ['homeLatestWork' => $homeLatestWork, 'homeLatestPortfolio' => $homeLatestPortfolio])
                                 @elseif($section === 'portfolio')
-                                    @include('artists.sections.portfolio',['artistPortfolio' => $artistPortfolio])
+                                    @include('artists.sections.portfolio',['artistPortfolio' => $artistPortfolio, 'artistUserId' => $artistUserId])
                                 @elseif($section === 'collection')
-                                    @include('artists.sections.collection',['listCollection' => $listCollection])
+                                    @include('artists.sections.collection',['listCollection' => $listCollection, 'artistUserId' => $artistUserId])
                                 @elseif($section === 'posts')
-                                    @include('artists.sections.posts')
+                                    @include('artists.sections.posts', ['artistUserId' => $artistUserId])
                                 @elseif($section === 'community')
                                     @include('artists.sections.community')
                                 @elseif($section === 'about')   
-                                    @include('artists.sections.about', ['countTotalRating' => $countTotalRating,'userRatingPercentage' => $userRatingPercentage,'rating' => $rating,'averageArtistRating' => $averageArtistRating, 'artistAbout' => $artistAbout])
+                                    @include('artists.sections.about', ['countTotalRating' => $countTotalRating,'userRatingPercentage' => $userRatingPercentage,'rating' => $rating,'averageArtistRating' => $averageArtistRating, 'artistAbout' => $artistAbout, 'artistUserId' => $artistUserId])
                                 @endif
                             </div>
                         </div>

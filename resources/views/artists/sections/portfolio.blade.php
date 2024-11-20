@@ -2,17 +2,21 @@
 <div class="bg-white p-6 rounded-lg shadow-lg mt-6">
     <div class="flex justify-between items-center">
         <h3 class="text-2xl font-bold text-gray-800">Portfolio</h3>
+        @if (Auth::user()->USER_ID == $artistUserId )
+            <button id="addPortfolioButton" class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-5 py-2 rounded-full shadow-md hover:from-blue-600 hover:to-indigo-700 transition duration-300 transform hover:scale-105">
+                + Add Portfolio
+            </button>    
+        @endif
         <!-- Add Portfolio Button -->
-        <button id="addPortfolioButton" class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-5 py-2 rounded-full shadow-md hover:from-blue-600 hover:to-indigo-700 transition duration-300 transform hover:scale-105">
-            + Add Portfolio
-        </button>
+        
     </div>
     <!-- Portfolio Grid -->
     <div id="portfolioContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
         <!-- Sample Portfolio Item -->
+        @foreach ($artistPortfolio as $portfolios )
         <div class="relative group bg-gray-50 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer"
-             onclick="showPortfolioDetail('Title of the Portfolio', 'Description of the Portfolio', '{{ asset('images/Assets/Category/Content/1.jpg') }}')">
-            <img src="{{ asset('images/Assets/Category/Content/1.jpg') }}" alt="Portfolio work 1" class="w-full h-56 object-cover rounded-t-lg">
+             onclick="showPortfolioDetail('{{ $portfolios->ART_TITLE }}', '{{ $portfolios->DESCRIPTION }}', '{{ asset($portfolios->IMAGE_PATH) }}')">
+            <img src="{{ asset($portfolios->IMAGE_PATH) }}" alt="Portfolio work {{ $portfolios->ART_ID }}" class="w-full h-56 object-cover rounded-t-lg">
             <button class="ellipsisButton absolute top-2 right-2 text-gray-600 hover:text-gray-800 focus:outline-none">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
@@ -24,6 +28,7 @@
                 <button class="block w-full text-left px-4 py-2 hover:bg-gray-100">Pin on Your Profile</button>
             </div>
         </div>
+        @endforeach
         <!-- More static portfolio items here -->
     </div>
 </div>

@@ -72,3 +72,9 @@ Route::get('/follows', [WebController::class, 'folloProfile'])->name('follo.prof
 Route::get('/followers', [WebController::class, 'followers'])->name('followers');
 
 Route::get('/following', [WebController::class, 'following'])->name('following');
+
+//get comment from artist post
+Route::get('/comments/{postId}', [ArtistProfileController::class, 'getComments']);
+
+//add comment from artist post
+Route::post('/comments/{postId}', [ArtistProfileController::class, 'addComment']);
