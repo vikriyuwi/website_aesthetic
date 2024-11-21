@@ -234,24 +234,24 @@ public function orderSummary()
     return view('layouts.order-summary');
 }
 
-public function orderHistory()
-{
-    return view('profile.order-history');
-}
-public function likeHistory()
-{
-    return view('profile.like-history');
-}
+    public function orderHistory()
+    {
+        return view('profile.order-history');
+    }
+    public function likeHistory()
+    {
+        return view('profile.like-history');
+    }
 
-public function folloProfile()
-{
-    return view('profile.follo-profile');
-}
+    public function folloProfile()
+    {
+        return view('profile.follo-profile');
+    }
 
-public function followers()
-{
-    return view('artists.followers-sidebar');
-}
+    public function followers()
+    {
+        return view('artists.followers-sidebar');
+    }
 
 public function following()
 {
@@ -290,6 +290,11 @@ public function blogDetail()
 public function contactUs()
 {
     return view('footer.contact-us');
+}
+
+public function collectionDetails()
+{
+    return view('artists.sections.all-artworks');
 }
 
 }

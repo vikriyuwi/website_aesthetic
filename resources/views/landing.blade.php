@@ -16,13 +16,12 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style> 
         body {
-            font-family: 'Roboto', sans-serif; /* Updated to Roboto */
+            font-family: 'Roboto', sans-serif; 
             background-color: #f7f8fa;
             color: #333;
         }
         h1, h2, h3 {
-            font-family: 'Roboto', sans-serif; /* Headings use the same font */
-            color: #fff;
+            font-family: 'Roboto', sans-serif; 
         }
         a {
             transition: color 0.3s ease, background-color 0.3s ease;
@@ -30,6 +29,29 @@
     </style>
 </head>
 <body>
+<!-- Navbar Start -->
+<nav class="bg-white shadow-lg sticky top-0 z-50">
+    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+        <div class="text-3xl font-semibold italic text-gray-800">
+            <a href="#" class="hover:no-underline">
+                <img src="images/aestheticlogo.png" alt="Aesthetic Logo" class="h-12">
+            </a>
+        </div>
+        <ul class="flex space-x-8 text-gray-700">
+            <li><a href="#" class="hover:text-indigo-600">Home</a></li>
+            <li><a href="{{ url('explore') }}" class="hover:text-indigo-600">Explore</a></li>
+            <li><a href="{{ url('artists') }}" class="hover:text-indigo-600">Artist</a></li>
+            <li><a href="#art-gallery" class="hover:text-indigo-600">Art Gallery</a></li>
+        </ul>           
+        <div>
+            <a href="#" class="mr-4 text-gray-700 hover:text-indigo-600">Sign In</a>
+            <a href="#" class="bg-indigo-600 text-white px-6 py-2 rounded-full hover:bg-indigo-700">Join</a>
+        </div>
+    </div>
+</nav>
+<!-- Navbar End -->
+
+
     <!-- Home Page Start -->
     <section id="artists" class="relative bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
         <div class="relative w-full h-[80vh] overflow-hidden flex items-center justify-center">
@@ -254,6 +276,70 @@
        </div>
     </section>
     <!-- CTA Section End -->
+<!-- Questions & Answers Section -->
+<section id="questions-answers" class="py-16 bg-gray-50">
+    <div class="container mx-auto px-6">
+        <div class="text-center mb-12">
+            <h2 class="text-lg text-indigo-600 mb-2">Most asked questions</h2>
+            <h1 class="text-3xl font-bold text-gray-800">Questions & Answers</h1>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="h-12 w-12 rounded-full bg-indigo-600 flex items-center justify-center">
+                        <i class="fas fa-question text-white text-xl"></i>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-indigo-600 mb-2">How can I contact customer support?</h3>
+                    <p class="text-gray-600">To contact customer support, look for a "Contact us" button or link on the website or platform. You may be able to email or chat with customer support for assistance.</p>
+                </div>
+            </div>
+            <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="h-12 w-12 rounded-full bg-indigo-600 flex items-center justify-center">
+                        <i class="fas fa-question text-white text-xl"></i>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-indigo-600 mb-2">How do I find my purchase history?</h3>
+                    <p class="text-gray-600">To find your purchase history, log in and go to the account or purchase history page. Look for a list of your past purchases or orders, and click on any item to see more details.</p>
+                </div>
+            </div>
+            <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="h-12 w-12 rounded-full bg-indigo-600 flex items-center justify-center">
+                        <i class="fas fa-question text-white text-xl"></i>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-indigo-600 mb-2">How to create an Account?</h3>
+                    <p class="text-gray-600">To create an account, find the 'Join' button, fill out the registration form with your personal information, and click 'Sign up.' Verify your email address if needed, and then log in to start using the platform.</p>
+                </div>
+            </div>
+            <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="h-12 w-12 rounded-full bg-indigo-600 flex items-center justify-center">
+                        <i class="fas fa-question text-white text-xl"></i>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-indigo-600 mb-2">How can I join as an artist?</h3>
+                    <p class="text-gray-600">To join as an artist, you need to sign up first. Once you have created an account, navigate to your profile and click on the 'Join Artist' option. You will be required to fill out a form with your details and portfolio. </p>
+                </div>
+            </div>
+        </div>
+        <div class="mt-12 text-center">
+            <div class="bg-indigo-400 rounded-2xl shadow-lg px-6 py-8 inline-block">
+                <p class="text-white">
+                    Didn’t find the answer you are looking for? 
+                    <a href="#" class="text-indigo-600 font-semibold hover:underline">CONTACT SUPPORT</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
 
 <!-- Footer Section -->
 <footer class="bg-indigo-600 text-slate-10 py-12 mt-16">
@@ -416,8 +502,6 @@
 
         handleScrollAnimation();
     </script>
-
 </body>
 </html>
 @endsection
-
