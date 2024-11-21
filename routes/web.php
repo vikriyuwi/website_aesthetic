@@ -71,13 +71,12 @@ Route::get('/followers', [WebController::class, 'followers'])->name('followers')
 
 Route::get('/following', [WebController::class, 'following'])->name('following');
 
-<<<<<<< HEAD
 //get comment from artist post
 Route::get('/comments/{postId}', [ArtistProfileController::class, 'getComments']);
 
 //add comment from artist post
 Route::post('/comments/{postId}', [ArtistProfileController::class, 'addComment']);
-=======
+
 Route::get('/favorites/cart', [WebController::class, 'cartProfile'])->name('cart.profile');
 
 Route::get('/about-us', [WebController::class, 'aboutUs'])->name('about-us');
@@ -91,4 +90,3 @@ Route::get('/blog', [WebController::class, 'blog'])->name('blog');
 Route::get('/blog-detail', [WebController::class, 'blogDetail'])->name('blog-detail');
 
 Route::get('/contact-us', [WebController::class, 'contactUs'])->name('contact-us');
->>>>>>> 1b86e6b (fix all fe)
