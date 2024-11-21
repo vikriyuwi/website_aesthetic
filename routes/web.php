@@ -53,11 +53,9 @@ Route::get('/favorites/follows', [WebController::class, 'follows'])->name('favor
 
 Route::get('/favorites/likes', [WebController::class, 'likes'])->name('favorites.likes');
 
-Route::get('/favorites/cart', [WebController::class, 'cart'])->name('favorites.cart');
-
 Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout');
 
-Route::get('/order-summary', [WebController::class, 'show'])->name('order-summary');
+Route::get('/order-summary', [WebController::class, 'orderSummary'])->name('order.summary');
 
 Route::get('/order-history', [WebController::class, 'orderHistory'])->name('order.history');
 
@@ -78,3 +76,17 @@ Route::get('/comments/{postId}', [ArtistProfileController::class, 'getComments']
 
 //add comment from artist post
 Route::post('/comments/{postId}', [ArtistProfileController::class, 'addComment']);
+
+Route::get('/favorites/cart', [WebController::class, 'cartProfile'])->name('cart.profile');
+
+Route::get('/about-us', [WebController::class, 'aboutUs'])->name('about-us');
+
+Route::get('/join-artist', [WebController::class, 'joinArtist'])->name('join-artist');
+
+Route::get('/insight-artist', [WebController::class, 'insightArtist'])->name('insight-artist');
+
+Route::get('/blog', [WebController::class, 'blog'])->name('blog');
+
+Route::get('/blog-detail', [WebController::class, 'blogDetail'])->name('blog-detail');
+
+Route::get('/contact-us', [WebController::class, 'contactUs'])->name('contact-us');

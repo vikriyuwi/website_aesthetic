@@ -37,8 +37,15 @@
     @include('layouts.navbar')
 
     <div class="container mx-auto p-6">
+        <!-- Description Section -->
+        <div class="mb-6">
+            <h2 class="text-2xl text-gray-600">
+                Exploring an easy-to-use medium with rich colors and deep textures.
+            </h2>
+        </div>
+
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-3xl font-bold mb-8">{{ $totalArtWorks }} Artworks</h1>
+            <h1 class="text-3xl font-bold">{{ count($artworks) }} Artworks</h1>
             <button id="addArtworkButton" class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-5 py-2 rounded-full shadow-md hover:from-blue-600 hover:to-indigo-700 transition duration-300 transform hover:scale-105">
                 + Add Artwork
             </button>
@@ -57,7 +64,7 @@
                 <!-- Options Menu -->
                 <div class="optionsMenu">
                     <button class="block w-full text-left px-4 py-2 hover:bg-gray-100">Edit Art</button>
-                    <button class="block w-full text-left px-4 py-2 hover:bg-gray-100" onclick="confirmDeleteArtwork(event)">Delete Art</button>
+                    <button class="block w-full text-left px-4 py-2 hover:bg-gray-100" onclick="confirmDeleteArtwork()">Delete Art</button>
                 </div>
 
                 <!-- Artwork Image with Hover Effect -->
@@ -141,19 +148,6 @@
             </form>
         </div>
     </div>
-    
-  <!-- Delete Confirmation Modal -->
-  <div id="deleteConfirmationModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden modal-overlay">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
-      <h2 class="text-2xl font-semibold text-gray-800 mb-4">Delete Artwork</h2>
-      <p class="text-gray-600 mb-6">Are you sure you want to delete this artwork?</p>
-      <div class="flex justify-end space-x-3">
-        <button type="button" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition" onclick="closeDeleteModal()">Cancel</button>
-        <button type="button" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition" onclick="deleteArtwork()">Delete</button>
-      </div>
-    </div>
-  </div>
-
 
     <!-- JavaScript -->
     <script>
@@ -178,21 +172,12 @@
             optionsMenu.style.display = optionsMenu.style.display === 'block' ? 'none' : 'block';
         }
 
-        // Show delete confirmation modal
-        function confirmDeleteArtwork(event) {
-        event.stopPropagation();
-        document.getElementById('deleteConfirmationModal').classList.remove('hidden');
-        }
-
-        // Hide delete confirmation modal
-        function closeDeleteModal() {
-        document.getElementById('deleteConfirmationModal').classList.add('hidden');
-        }
-
-        // Perform delete action
-        function deleteArtwork() {
-        alert('Artwork deleted!');
-        closeDeleteModal();
+        // Show delete confirmation (simple alert for demonstration)
+        function confirmDeleteArtwork() {
+            if (confirm("Are you sure you want to delete this artwork?")) {
+                alert("Artwork deleted!");
+                // Additional delete logic can be added here
+            }
         }
 
         // Hide options menu when clicking outside

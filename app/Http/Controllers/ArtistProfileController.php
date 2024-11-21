@@ -218,6 +218,7 @@ class ArtistProfileController extends Controller
         }
 
     }
+    
     public function showCollection($ARTIST_COLLECTION_ID)
     {
         // Example data for the artworks

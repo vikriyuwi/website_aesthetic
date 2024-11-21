@@ -73,8 +73,8 @@
     </div>
   </div>
 
-  <!-- Add Collection Modal -->
-  <div id="addCollectionModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden modal-overlay">
+ <!-- Add Collection Modal -->
+ <div id="addCollectionModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden modal-overlay">
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-xl">
       <h2 class="text-3xl font-semibold text-gray-800 mb-6">Add New Collection</h2>
       <form id="addCollectionForm" class="space-y-6">
@@ -86,11 +86,30 @@
           <label for="collectionDescription" class="block text-gray-700 font-semibold mb-2">Description</label>
           <textarea id="collectionDescription" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition" placeholder="Enter collection description"></textarea>
         </div>
+
+        <!-- Image Upload Option -->
         <div>
-          <label for="collectionImage" class="block text-gray-700 font-semibold mb-2">Image URL or Upload</label>
-          <input type="text" id="collectionImage" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition mb-2" placeholder="Enter image URL">
+          <label class="block text-gray-700 font-semibold mb-2">Select Image Upload Option</label>
+          <div class="flex items-center mb-4">
+            <input type="radio" id="linkOption" name="imageOption" value="link" class="mr-2" onclick="toggleImageUploadOption('link')" checked>
+            <label for="linkOption" class="text-gray-700">Upload by Link</label>
+          </div>
+          <div class="flex items-center mb-4">
+            <input type="radio" id="fileOption" name="imageOption" value="file" class="mr-2" onclick="toggleImageUploadOption('file')">
+            <label for="fileOption" class="text-gray-700">Upload from File</label>
+          </div>
+        </div>
+
+        <!-- Conditional Fields Based on Selected Option -->
+        <div id="linkField" class="mb-4">
+          <label for="collectionImageLink" class="block text-gray-700 font-semibold mb-2">Image URL</label>
+          <input type="text" id="collectionImageLink" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition" placeholder="Enter image URL">
+        </div>
+        <div id="fileField" class="mb-4 hidden">
+          <label for="collectionImageUpload" class="block text-gray-700 font-semibold mb-2">Upload Image</label>
           <input type="file" id="collectionImageUpload" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
         </div>
+
         <div class="flex justify-end space-x-3">
           <button type="button" id="cancelAddCollectionButton" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition duration-200">Cancel</button>
           <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 shadow-md transition duration-300 transform hover:scale-105">Add Collection</button>
@@ -122,7 +141,12 @@
     document.getElementById('cancelAddCollectionButton').addEventListener('click', () => {
       document.getElementById('addCollectionModal').classList.add('hidden');
     });
-
+      // Toggle visibility of link or file upload field based on radio selection
+      function toggleImageUploadOption(option) {
+      document.getElementById('linkField').classList.toggle('hidden', option !== 'link');
+      document.getElementById('fileField').classList.toggle('hidden', option !== 'file');
+    }
+    
     // Toggle options menu visibility for each ellipsis button
     function toggleOptionsMenu(event, button) {
       event.stopPropagation();

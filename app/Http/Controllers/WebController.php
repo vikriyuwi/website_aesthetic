@@ -143,33 +143,85 @@ class WebController extends Controller
     }
 
     public function showArtwork($id)
-{
-    $artworks = [
-        1 => [
-            'id' => 1,
-            'artist' => 'Something4U',
-            'title' => 'Romantic Evening',
-            'medium' => 'Oil',
-            'price' => '£3,290.00',
-            'year' => '2024',
-            'gallery' => 'Lilienthal Gallery',
-            'image' => 'paintingart.jpg',
-            'description' => 'In this painting, I sought to capture an intimate moment of affection amidst the quiet calm of a serene evening. The richness of oil paints enhances the contrast between the deep shadows and the gentle light on their faces, emphasizing both their allure and the warmth of their closeness. This piece brings a sense of love and timeless elegance to any space, evoking the beauty of a heartfelt connection.',
-            'dimensions' => 'W 20" x H 16" x D 0.75"',
-            'style' => 'Impressionistic',
-            'subject' => 'People',
-            'category' => 'Oil'  // Add the category here
-        ],
-    ];
-
-    if (!isset($artworks[$id])) {
-        abort(404, 'Artwork not found.');
-    }
-
-    $artwork = $artworks[$id];
-
-    return view('artists.sections.artwork-detail', compact('artwork'));
-}
+    {
+        $artworks = [
+            1 => [
+                'id' => 1,
+                'artist' => 'Something4U',
+                'title' => 'Romantic Evening',
+                'medium' => 'Oil',
+                'price' => 'Rp. 454.000',
+                'year' => '2024',
+                'gallery' => 'Lilienthal Gallery',
+                'image' => 'paintingart3.png',
+                'image_width' => 1200, // Add width
+                'image_height' => 1600, // Add height
+                'description' => 'In this painting, I sought to capture an intimate moment of affection...',
+                'dimensions' => 'W 20" x H 16" x D 0.75"',
+                'style' => 'Impressionistic',
+                'subject' => 'People',
+                'category' => 'Oil',
+            ],
+            2 => [
+                'id' => 2,
+                'artist' => 'Something4U',
+                'title' => 'Romantic Evening',
+                'medium' => 'Oil',
+                'price' => 'Rp. 1.300.000',
+                'year' => '2024',
+                'gallery' => 'Lilienthal Gallery',
+                'image' => 'homepage3.jpeg',
+                'image_width' => 1600,
+                'image_height' => 1200,
+                'description' => 'In this painting, I sought to capture an intimate moment of affection...',
+                'dimensions' => 'W 20" x H 16" x D 0.75"',
+                'style' => 'Impressionistic',
+                'subject' => 'People',
+                'category' => 'Oil',
+            ],
+            3 => [
+                'id' => 3,
+                'artist' => 'Something4U',
+                'title' => 'Romantic Evening',
+                'medium' => 'Oil',
+                'price' => 'Rp. 1.300.000',
+                'year' => '2024',
+                'gallery' => 'Lilienthal Gallery',
+                'image' => 'paintingart.jpg',
+                'image_width' => 1600,
+                'image_height' => 1200,
+                'description' => 'In this painting, I sought to capture an intimate moment of affection...',
+                'dimensions' => 'W 20" x H 16" x D 0.75"',
+                'style' => 'Impressionistic',
+                'subject' => 'People',
+                'category' => 'Oil',
+            ],
+            // Add more artworks as needed
+        ];
+    
+        if (!isset($artworks[$id])) {
+            abort(404, 'Artwork not found.');
+        }
+    
+        $artwork = $artworks[$id];
+    
+        // Calculate the aspect ratio
+        $aspectRatio = $artwork['image_height'] / $artwork['image_width'];
+        $imageClass = '';
+    
+        if ($aspectRatio > 1) {
+            // Vertical image
+            $imageClass = 'h-auto w-full object-contain';
+        } elseif ($aspectRatio < 1) {
+            // Horizontal image
+            $imageClass = 'h-auto w-full object-cover';
+        } else {
+            // Square image
+            $imageClass = 'h-full w-full object-cover';
+        }
+    
+        return view('artists.sections.artwork-detail', compact('artwork', 'imageClass'));
+    }    
 public function showCategory($category)
 {
     // Logic to fetch artworks based on the category
@@ -177,7 +229,7 @@ public function showCategory($category)
 
     return view('artists.sections.collection-detail', compact('artworks', 'category'));
 }
-public function show()
+public function orderSummary()
 {
     return view('layouts.order-summary');
 }
@@ -204,6 +256,40 @@ public function followers()
 public function following()
 {
     return view('artists.following-sidebar');
+}
+public function cartProfile()
+{
+    return view('profile.cart-profile');
+}
+
+public function aboutUs()
+{
+    return view('footer.about-us');
+}
+
+public function joinArtist()
+{
+    return view('profile.join-artist');
+}
+
+public function insightArtist()
+{
+    return view('profile.insight');
+}
+
+public function blog()
+{
+    return view('footer.blog');
+}
+
+public function blogDetail()
+{
+    return view('footer.blog-detail');
+}
+
+public function contactUs()
+{
+    return view('footer.contact-us');
 }
 
 }
