@@ -81,3 +81,5 @@ Route::get('/blog', [WebController::class, 'blog'])->name('blog');
 Route::get('/blog-detail', [WebController::class, 'blogDetail'])->name('blog-detail');
 
 Route::get('/contact-us', [WebController::class, 'contactUs'])->name('contact-us');
+
+Route::get('/colection/detail', [WebController::class, 'collectionDetails'])->name('collection-details');

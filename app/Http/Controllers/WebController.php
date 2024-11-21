@@ -292,4 +292,9 @@ public function contactUs()
     return view('footer.contact-us');
 }
 
+public function collectionDetails()
+{
+    return view('artists.sections.all-artworks');
+}
+
 }

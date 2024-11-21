@@ -37,13 +37,6 @@
     @include('layouts.navbar')
 
     <div class="container mx-auto p-6">
-    <!-- Description Section -->
-    <div class="mb-6">
-        <h2 class="text-2xl text-gray-600">
-            Exploring an easy-to-use medium with rich colors and deep textures.
-        </h2>
-    </div>
-
     <!-- Artworks Count and Add Button Section -->
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-3xl font-bold">{{ count($artworks) }} Artworks</h1>
