@@ -218,8 +218,8 @@
                                     class="text-gray-600 hover:text-gray-800">Collection</a>
                                 <a href="{{ route('artist.show', ['id' => $artistId, 'section' => 'posts']) }}"
                                     class="text-gray-600 hover:text-gray-800">Posts</a>
-                                <a href="{{ route('artist.show', ['id' => $artistId, 'section' => 'community']) }}"
-                                    class="text-gray-600 hover:text-gray-800">Community</a>
+                                <a href="{{ route('artist.show', ['id' => $artistId, 'section' => 'artwork']) }}"
+                                    class="text-gray-600 hover:text-gray-800">ArtWork</a>
                                 <a href="{{ route('artist.show', ['id' => $artistId, 'section' => 'about']) }}"
                                     class="text-gray-600 hover:text-gray-800">About</a>
                             </nav>
@@ -233,11 +233,11 @@
                                 @elseif($section === 'portfolio')
                                     @include('artists.sections.portfolio',['artistPortfolio' => $artistPortfolio, 'artistUserId' => $artistUserId])
                                 @elseif($section === 'collection')
-                                    @include('artists.sections.collection',['listCollection' => $listCollection, 'artistUserId' => $artistUserId])
+                                    @include('artists.sections.collection',['listCollection' => $listCollection, 'artistUserId' => $artistUserId, 'artistId' => $artistId])
                                 @elseif($section === 'posts')
                                     @include('artists.sections.posts', ['artistUserId' => $artistUserId])
-                                @elseif($section === 'community')
-                                    @include('artists.sections.community')
+                                @elseif($section === 'artwork')
+                                    @include('artists.sections.artwork', ['artistArtwork' => $artistArtwork, 'artistId' => $artistId])
                                 @elseif($section === 'about')   
                                     @include('artists.sections.about', ['countTotalRating' => $countTotalRating,'userRatingPercentage' => $userRatingPercentage,'rating' => $rating,'averageArtistRating' => $averageArtistRating, 'artistAbout' => $artistAbout, 'artistUserId' => $artistUserId])
                                 @endif

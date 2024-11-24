@@ -5,6 +5,9 @@ use App\Http\Controllers\ListArtistController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WebController;
 use App\Http\Controllers\ArtGalleryController;
+use App\Http\Controllers\ArtistCollectionController;
+use App\Http\Controllers\ArtistPortfolioController;
+use App\Http\Controllers\ArtistPostController;
 use App\Http\Controllers\ArtistProfileController;
 use App\Http\Controllers\CheckoutController;
 
@@ -33,7 +36,9 @@ Route::get('/artists',[App\Http\Controllers\ListArtistController::class, 'viewLi
 
 Route::get('/artists/{id}/{section?}', [ArtistProfileController::class, 'showArtist'])->name('artist.show');
 
-Route::get('/collection/{category}', [ArtistProfileController::class, 'showCollection'])->name('collection.show');
+Route::get('/artists/{artistId}/collection/{category}', [ArtistProfileController::class, 'showCollection'])->name('collection.show');
+
+Route::get('/artworks/{artistId}', [ArtistProfileController::class, 'showAllArtwork'])->name('all-artwork.show');
 
 Route::get('/category/{category}', [WebController::class, 'showCategory'])->name('category.show');
 
@@ -71,11 +76,20 @@ Route::get('/followers', [WebController::class, 'followers'])->name('followers')
 
 Route::get('/following', [WebController::class, 'following'])->name('following');
 
-//get comment from artist post
-Route::get('/comments/{postId}', [ArtistProfileController::class, 'getComments']);
+#REGION ARTIST PROFILE
 
+//Store the portfolio
+Route::post('/portfolio/add', [ArtistPortfolioController::class, 'store'])->name('portfolio.store');
+
+//Store the portfolio
+Route::post('/collection/add', [ArtistCollectionController::class, 'store'])->name('collection.store');
+
+//get comment from artist post
+Route::get('/comments/{postId}', [ArtistPostController::class, 'getPostComments']);
 //add comment from artist post
-Route::post('/comments/{postId}', [ArtistProfileController::class, 'addComment']);
+Route::post('/comments/{postId}', [ArtistPostController::class, 'addPostComment']);
+
+#ENDREGION
 
 Route::get('/favorites/cart', [WebController::class, 'cartProfile'])->name('cart.profile');
 

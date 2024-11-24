@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PostComment;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Support\Facades\DB;
 
 class ArtistProfileController extends Controller
@@ -100,24 +98,40 @@ class ArtistProfileController extends Controller
                             ->where('IS_SALE','=',0)
                             ->orderBy('ART.CREATED_AT','desc')
                             ->get();
+            $artCategoryMaster = DB::table('ART_CATEGORY_MASTER')
+                            ->select('*')
+                            ->get();
             
             //render collection
-            $listCollection = DB::table('ART_COLLECTION as ac')
+            $listCollection = DB::table('ARTIST_COLLECTION as artist')
                             ->select(
-                                'ai.IMAGE_PATH', 
-                                'artist.COLLECTION_NAME', 
-                                'ac.ARTIST_COLLECTION_ID', 
-                                DB::raw('(SELECT COUNT(*) FROM ART_COLLECTION WHERE ARTIST_COLLECTION_ID = ac.ARTIST_COLLECTION_ID) AS TOTAL_ARTWORKS')
+                                'ai.IMAGE_PATH',
+                                'artist.COLLECTION_NAME',
+                                'artist.ARTIST_COLLECTION_ID',
+                                DB::raw('ISNULL((SELECT COUNT(*) 
+                                                FROM ART_COLLECTION 
+                                                WHERE ARTIST_COLLECTION_ID = artist.ARTIST_COLLECTION_ID), 0) AS TOTAL_ARTWORKS')
                             )
-                            ->join(
-                                DB::raw('(SELECT ARTIST_COLLECTION_ID, MAX(created_at) as latest_created_at FROM ART_COLLECTION GROUP BY ARTIST_COLLECTION_ID) as latest'),
+                            ->leftJoin(
+                                DB::raw('(
+                                    SELECT 
+                                        ARTIST_COLLECTION_ID, 
+                                        created_at, 
+                                        ART_ID, 
+                                        ROW_NUMBER() OVER (PARTITION BY ARTIST_COLLECTION_ID ORDER BY created_at DESC, ART_ID DESC) AS row_num
+                                    FROM ART_COLLECTION
+                                ) as unique_art'),
                                 function ($join) {
-                                    $join->on('ac.ARTIST_COLLECTION_ID', '=', 'latest.ARTIST_COLLECTION_ID')
-                                        ->on('ac.created_at', '=', 'latest.latest_created_at');
+                                    $join->on('artist.ARTIST_COLLECTION_ID', '=', 'unique_art.ARTIST_COLLECTION_ID')
+                                        ->where('unique_art.row_num', '=', 1);
                                 }
                             )
-                            ->join('ART_IMAGE as ai', 'ai.ART_ID', '=', 'ac.ART_ID')
-                            ->join('ARTIST_COLLECTION as artist', 'ac.ARTIST_COLLECTION_ID', '=', 'artist.ARTIST_COLLECTION_ID')
+                            ->leftJoin('ART_COLLECTION as ac', function ($join) {
+                                $join->on('artist.ARTIST_COLLECTION_ID', '=', 'ac.ARTIST_COLLECTION_ID')
+                                    ->on('ac.ART_ID', '=', 'unique_art.ART_ID');
+                            })
+                            ->leftJoin('ART_IMAGE as ai', 'ai.ART_ID', '=', 'ac.ART_ID')
+                            ->orderBy('artist.CREATED_AT', 'desc')
                             ->get();
 
             //render post
@@ -172,6 +186,15 @@ class ArtistProfileController extends Controller
                         ->orderBy('P.created_at', 'desc')
                         ->get();
 
+            //render ArtWork
+            $artistArtwork =  DB::table('ART')
+                            ->select('ART.ART_ID', 'ART_IMAGE.IMAGE_PATH','ART.ART_TITLE','ART.DESCRIPTION')
+                            ->join('ART_IMAGE','ART_IMAGE.ART_ID','=','ART.ART_ID')
+                            ->where('ART.ARTIST_ID','=',$ARTIST_ID)
+                            ->limit(6)
+                            ->orderBy('ART.CREATED_AT','desc')
+                            ->get();
+
             //render about
             $countTotalRating = DB::table('ARTIST_RATING')
                             ->select('*')
@@ -198,9 +221,9 @@ class ArtistProfileController extends Controller
                         DB::raw("
                             CASE
                                 WHEN DATEDIFF(DAY, AR.CREATED_AT, GETDATE()) <= 0 THEN 'Today'
-                                WHEN DATEDIFF(YEAR, AR.CREATED_AT, GETDATE()) >= 1 THEN CAST(DATEDIFF(YEAR, AR.CREATED_AT, GETDATE()) AS VARCHAR) + ' year ago'
-                                WHEN DATEDIFF(MONTH, AR.CREATED_AT, GETDATE()) >= 1 THEN CAST(DATEDIFF(MONTH, AR.CREATED_AT, GETDATE()) AS VARCHAR) + ' month ago'
-                                ELSE CAST(DATEDIFF(DAY, AR.CREATED_AT, GETDATE()) AS VARCHAR) + ' day ago'
+                                WHEN DATEDIFF(YEAR, AR.CREATED_AT, GETDATE()) >= 1 THEN CAST(DATEDIFF(YEAR, AR.CREATED_AT, GETDATE()) AS VARCHAR) + ' Years ago'
+                                WHEN DATEDIFF(MONTH, AR.CREATED_AT, GETDATE()) >= 1 THEN CAST(DATEDIFF(MONTH, AR.CREATED_AT, GETDATE()) AS VARCHAR) + ' Months ago'
+                                ELSE CAST(DATEDIFF(DAY, AR.CREATED_AT, GETDATE()) AS VARCHAR) + ' Days ago'
                             END AS COMMENT_TIME
                         ")
                     )
@@ -210,8 +233,9 @@ class ArtistProfileController extends Controller
             return view('artists.show', compact('artist', 'countArtistView','countArtistLikes','countArtistFollowers','latestPost', //SIDE ARTIST PROFILE DATA
                                                 'countArtistFollowing','averageArtistRating','section', 'artistId','artistUserId',
                                                 'homeLatestWork','homeLatestPortfolio', //HOME RENDER
-                                                'artistPortfolio',// PORTFOLIO RENDER
+                                                'artistPortfolio','artCategoryMaster',// PORTFOLIO RENDER
                                                 'listCollection', // COLLECTION RENDER
+                                                'artistArtwork', // ARTWORK RENDER
                                                 'listPost',// POST RENDER
                                                 'countTotalRating','userRatingPercentage','rating')); //ABOUT RENDER
 
@@ -219,7 +243,7 @@ class ArtistProfileController extends Controller
 
     }
     
-    public function showCollection($ARTIST_COLLECTION_ID)
+    public function showCollection($artistId, $ARTIST_COLLECTION_ID)
     {
         // Example data for the artworks
         $artworks = DB::table('ART_COLLECTION')
@@ -238,6 +262,18 @@ class ArtistProfileController extends Controller
                     ->join('MASTER_USER', 'MASTER_USER.USER_ID', '=', 'ARTIST.USER_ID')
                     ->where('ART_COLLECTION.ARTIST_COLLECTION_ID', '=', $ARTIST_COLLECTION_ID)
                     ->get(); 
+        
+        $artworksNoCollection = DB::table('ART as A')
+                                ->select('A.ART_ID', 'A.ART_TITLE', 'A.DESCRIPTION', 'AI.IMAGE_PATH')
+                                ->join('ART_IMAGE as AI', 'A.ART_ID', '=', 'AI.ART_ID')
+                                ->where('A.ARTIST_ID', $artistId)
+                                ->whereNotExists(function ($query) {    
+                                    $query->select(DB::raw(1))
+                                        ->from('ART_COLLECTION')
+                                        ->whereColumn('ART_COLLECTION.ART_ID', 'A.ART_ID');
+                                })
+                                ->get();
+
 
         $artistCollectionId = $ARTIST_COLLECTION_ID;
         $totalArtWorks = DB::table('ART_COLLECTION')
@@ -245,82 +281,37 @@ class ArtistProfileController extends Controller
                         ->where('ARTIST_COLLECTION_ID','=',$ARTIST_COLLECTION_ID)
                         ->count();
 
-        return view('artists.sections.collection-detail', compact('artworks', 'artistCollectionId','totalArtWorks'));
+        return view('artists.sections.collection-detail', compact('artworks', 'artistCollectionId','totalArtWorks','artworksNoCollection'));
     }
 
-    public function getComments($postId)
+    public function showAllArtwork($ARTIST_ID)
     {
-        // Fetch comments associated with the specified post ID
-        $comments = DB::table('post_comment as PC')
-                    ->select([
-                        'PC.CONTENT',
-                        'MU.USERNAME',
-                        'MU.PROFILE_IMAGE_PATH',
-                        DB::raw("
-                            CASE
-                                WHEN DATEDIFF(DAY, PC.CREATED_AT, GETDATE()) <= 0 THEN 'Today'
-                                WHEN DATEDIFF(YEAR, PC.CREATED_AT, GETDATE()) >= 1 THEN CAST(DATEDIFF(YEAR, PC.CREATED_AT, GETDATE()) AS VARCHAR) + ' Years Ago'
-                                WHEN DATEDIFF(MONTH, PC.CREATED_AT, GETDATE()) >= 1 THEN CAST(DATEDIFF(MONTH, PC.CREATED_AT, GETDATE()) AS VARCHAR) + ' Months Ago'
-                                ELSE CAST(DATEDIFF(DAY, PC.CREATED_AT, GETDATE()) AS VARCHAR) + ' Days Ago'
-                            END AS COMMENT_TIME
-                        ")
-                    ])
-                    ->join('master_user as MU', 'MU.USER_ID', '=', 'PC.USER_ID')
-                    ->where('PC.POST_ID', $postId)
-                    ->get();
+        // Example data for the artworks
+        $artworks =  DB::table('ART')
+                    ->select(
+                        'ART.ART_ID', 
+                        'ART.ART_TITLE', 
+                        'ART_IMAGE.IMAGE_PATH', 
+                        'MASTER_USER.USERNAME',
+                        'ART.IS_SALE', 
+                        DB::raw("FORMAT(ART.PRICE, 'N0') as ART_PRICE"), 
+                        DB::raw("YEAR(ART.CREATED_AT) as ART_YEAR")
+                    )
+                    ->join('ART_IMAGE', 'ART.ART_ID', '=', 'ART_IMAGE.ART_ID')
+                    ->join('ARTIST', 'ARTIST.ARTIST_ID', '=', 'ART.ARTIST_ID')
+                    ->join('MASTER_USER', 'MASTER_USER.USER_ID', '=', 'ARTIST.USER_ID')
+                    ->where('ART.ARTIST_ID', '=', $ARTIST_ID)
+                    ->orderBy('ART.CREATED_AT', 'desc')
+                    ->get(); 
+                            
+        $artistId = $ARTIST_ID;
+        $totalArtWorks = DB::table('ART')
+                        ->select('*')
+                        ->where('ARTIST_ID','=',$ARTIST_ID)
+                        ->count();
 
-        // Return comments as a JSON response
-        return response()->json($comments);
+        return view('artists.sections.all-artworks', compact('artworks', 'artistId','totalArtWorks'));
     }
 
-    // PostController.php
-    // public function addComment(Request $request, $postId)
-    // {
-    //     // Validate the request
-    //     $request->validate([
-    //         'content' => 'required|string|max:255',
-    //     ]);
-
-    //     // Save the new comment in the database
-    //     $postComment = new PostComment();
-    //     $postComment->POST_ID = $postId;
-    //     $postComment->USER_ID = Auth::id(); // Gets the currently authenticated user's ID
-    //     $postComment->CONTENT = $request->content;
-    //     $postComment->created_at = now();
-    //     $postComment->save();
-
-    //     // Retrieve the username of the authenticated user
-    //     $postCommentUsername = Auth::user()->USERNAME;    
-    //     $userImagePath = Auth::user()->PROFILE_IMAGE_PATH;
-
-    //     // Return the new comment data to the frontend
-    //     return response()->json([
-    //         'name' => $postCommentUsername,
-    //         'date' => $postComment->created_at->diffForHumans(),
-    //         'text' => $postComment->CONTENT,
-    //         'image_path' => $userImagePath,
-    //     ]);
-    // }
-
-    public function addComment(Request $request, $postId)
-    {
-        $request->validate([
-            'content' => 'required|string|max:255',
-        ]);
-
-        $postComment = new PostComment();
-        $postComment->POST_ID = $postId;
-        $postComment->USER_ID = Auth::id(); // Assuming the user is authenticated
-        $postComment->CONTENT = $request->content;
-        $postComment->created_at = now()->setTimezone('Asia/Jakarta');;
-        $postComment->save();
-
-        // Return a consistent structure for the comment
-        return response()->json([
-            'USERNAME' => Auth::user()->USERNAME, // Assuming USERNAME is the field for the user's name
-            'COMMENT_TIME' => $postComment->created_at->diffForHumans(),
-            'CONTENT' => $postComment->CONTENT,
-            'PROFILE_IMAGE_PATH' => Auth::user()->PROFILE_IMAGE_PATH
-        ]);
-    }
+    
 }
