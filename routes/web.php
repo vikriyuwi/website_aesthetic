@@ -119,7 +119,7 @@ Route::post('/comments/{postId}', [ArtistPostController::class, 'addPostComment'
 
 //------------------------------------------------------------------ARTWORK------------------------------------------------------------------
 //VIEW ALL ARTWORK
-Route::get('/artworks/{artistId}', [ArtistArtWorkController::class, 'showAllArtwork'])->name('all-artwork.show');
+Route::get('/artworks/{artistId}/', [ArtistArtWorkController::class, 'showAllArtwork'])->name('all-artwork.show');
 
 //ADD ARTWORK
 Route::post('artworks/add',[ArtistArtWorkController::class,'addArtWork'])->name('artwork.store');

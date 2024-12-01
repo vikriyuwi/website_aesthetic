@@ -36,6 +36,14 @@ class ArtistArtWorkController extends Controller
                     ->get(); 
                             
         $artistId = $ARTIST_ID;
+
+        $artistUser = DB::table('ARTIST')
+                    ->select('USER_ID')
+                    ->where('ARTIST_ID', '=', $artistId)
+                    ->first();
+                
+        $artistUserId = $artistUser ? $artistUser->USER_ID : null;
+        
         $totalArtWorks = DB::table('ART')
                         ->select('*')
                         ->where('ARTIST_ID','=',$ARTIST_ID)
@@ -45,7 +53,7 @@ class ArtistArtWorkController extends Controller
                             ->select('*')
                             ->get();
 
-        return view('artists.sections.all-artworks', compact('artworks', 'artistId','totalArtWorks','artCategoryMaster'));
+        return view('artists.sections.all-artworks', compact('artworks', 'artistId','totalArtWorks','artCategoryMaster', 'artistUserId'));
     }
 
     public function addArtWork(Request $request){

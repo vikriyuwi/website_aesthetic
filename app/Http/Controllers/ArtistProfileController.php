@@ -293,7 +293,13 @@ class ArtistProfileController extends Controller
                                         ->where('ART_COLLECTION.ARTIST_COLLECTION_ID', $ARTIST_COLLECTION_ID);
                                 })
                                 ->get();
-
+                            
+        $artistUser = DB::table('ARTIST')
+                    ->select('USER_ID')
+                    ->where('ARTIST_ID', '=', $artistId)
+                    ->first();
+                
+        $artistUserId = $artistUser ? $artistUser->USER_ID : null;
 
         $artistCollectionId = $ARTIST_COLLECTION_ID;
         $totalArtWorks = DB::table('ART_COLLECTION')
@@ -301,7 +307,7 @@ class ArtistProfileController extends Controller
                         ->where('ARTIST_COLLECTION_ID','=',$ARTIST_COLLECTION_ID)
                         ->count();
 
-        return view('artists.sections.collection-detail', compact('artworks', 'artistCollectionId','totalArtWorks','artworksNoCollection'));
+        return view('artists.sections.collection-detail', compact('artworks', 'artistCollectionId','totalArtWorks','artworksNoCollection', 'artistUserId'));
     }
 
     

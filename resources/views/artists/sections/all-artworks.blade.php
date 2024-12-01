@@ -42,9 +42,13 @@
 
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-3xl font-bold">{{ count($artworks) }} Artworks</h1>
-            <button id="addArtworkButton" class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-5 py-2 rounded-full shadow-md hover:from-blue-600 hover:to-indigo-700 transition duration-300 transform hover:scale-105">
-                + Add Artwork
-            </button>
+            @if(Auth::check())
+                @if (Auth::user()->USER_ID == $artistUserId )
+                <button id="addArtworkButton" class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-5 py-2 rounded-full shadow-md hover:from-blue-600 hover:to-indigo-700 transition duration-300 transform hover:scale-105">
+                    + Add Artwork
+                </button>
+                @endif
+            @endif
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -83,7 +87,12 @@
                     @if ($listArtWorks->IS_SALE == 1)
                     <p class="text-indigo-600 text-lg font-semibold mt-2">Rp.{{ $listArtWorks->ART_PRICE }}</p>
                     @else
-                    <p class="text-indigo-600 text-lg font-semibold mt-2">Not For Sale</p>
+                    <!-- Portfolio Badge -->
+                    <p class="mt-2">
+                        <span class="absolute top-2 left-2 bg-indigo-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md">
+                            Portfolio
+                        </span>
+                    </p>
                     @endif
                 </div>
 

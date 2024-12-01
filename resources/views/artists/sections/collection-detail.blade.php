@@ -44,9 +44,13 @@
     <!-- Button to Trigger Modal -->
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-3xl font-bold">{{ $totalArtWorks }} Artworks</h1>
-        <button onclick="openAddArtModal()" class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-5 py-2 rounded-full shadow-md hover:from-blue-600 hover:to-indigo-700 transition duration-300 transform hover:scale-105">
-            Add Artwork Collection
-        </button>
+        @if(Auth::check())
+            @if (Auth::user()->USER_ID == $artistUserId )
+            <button onclick="openAddArtModal()" class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-5 py-2 rounded-full shadow-md hover:from-blue-600 hover:to-indigo-700 transition duration-300 transform hover:scale-105">
+                Add Artwork Collection
+            </button>
+            @endif
+        @endif
     </div>
     
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -54,17 +58,21 @@
         @foreach($artworks as $artwork)
         <div class="group relative bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 border-2 border-gray-300 overflow-hidden">
             <!-- Ellipsis Button -->
-            <button class="ellipsisButton text-gray-600 hover:text-gray-800 focus:outline-none" onclick="toggleOptionsMenu(event, this)">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 0 1.5ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 0 1.5ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 0 1.5Z" />
-                </svg>
-            </button>
-            <!-- Options Menu -->
-            <div class="optionsMenu">
-                <button class="block w-full text-left px-4 py-2 hover:bg-gray-100">Edit Art</button>
-                <button class="block w-full text-left px-4 py-2 hover:bg-gray-100" onclick="confirmDeleteArtwork()">Delete Art</button>
-            </div>
-
+            @if(Auth::check())
+                @if (Auth::user()->USER_ID == $artistUserId )
+                <button class="ellipsisButton text-gray-600 hover:text-gray-800 focus:outline-none" onclick="toggleOptionsMenu(event, this)">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 0 1.5ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 0 1.5ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 0 1.5Z" />
+                    </svg>
+                </button>
+                
+                <!-- Options Menu -->
+                <div class="optionsMenu">
+                    <button class="block w-full text-left px-4 py-2 hover:bg-gray-100">Edit Art</button>
+                    <button class="block w-full text-left px-4 py-2 hover:bg-gray-100" onclick="confirmDeleteArtwork()">Delete Art</button>
+                </div>
+                @endif
+            @endif
             <!-- Artwork Image with Hover Effect -->
             <a href="{{ route('artwork.show', $artwork->ART_ID) }}">
                 <img src="{{ asset($artwork->IMAGE_PATH) }}" alt="{{ $artwork->ART_TITLE }}"
