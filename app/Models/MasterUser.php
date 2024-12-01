@@ -30,10 +30,17 @@ class MasterUser extends Authenticatable
         return $this->hasOne(Buyer::class);
     }
 
+    public function Artist()
+    {
+        return $this->hasOne(Artist::class, 'USER_ID', 'USER_ID');
+    }
+
     public function getAuthPassword()
     {
         return $this->PASSWORD;
     }
+
+    
 
     // public function Artists()
     // {

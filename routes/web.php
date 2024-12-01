@@ -77,7 +77,26 @@ Route::get('/followers', [WebController::class, 'followers'])->name('followers')
 
 Route::get('/following', [WebController::class, 'following'])->name('following');
 
+
+#REGION BUYER
+//------------------------------------------------------------------BUYER------------------------------------------------------------------
+
+Route::get('buyer/profile',[WebController::class,'buyerProfile'])->name('buyer.showProfile');
+
+//---------------------------------------------------------------ENDBUYER------------------------------------------------------------------
+
+#ENDREGION
+
 #REGION ARTIST PROFILE
+
+//------------------------------------------------------------------ARTIST PROFILE SIDE BAR------------------------------------------------------------------
+//GET ARTIST PROFILE
+Route::get('/artist/profile/{artistId}', [ArtistProfileController::class, 'getArtistProfile'])->name('artist.getArtistProfile');
+
+//UPDATE ARTIST PROFILE
+Route::post('/artist/profile/update/{artistId}', [ArtistProfileController::class,'updateArtistProfile'])->name('artist.updateArtistProfile');
+
+//--------------------------------------------------------------END ARTIST PROFILE SIDE BAR------------------------------------------------------------------
 
 //Portfolio
 //Store the portfolio

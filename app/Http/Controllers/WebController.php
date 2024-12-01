@@ -297,4 +297,9 @@ public function collectionDetails()
     return view('artists.sections.all-artworks');
 }
 
+
+public function buyerProfile(){
+    return view('buyer.profile');
+}
+
 }
