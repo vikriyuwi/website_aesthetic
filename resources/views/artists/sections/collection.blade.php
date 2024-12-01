@@ -52,7 +52,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
       <!-- Collection Item Example -->
       @foreach($listCollection as $listCollection => $collections)
-      <div class="relative bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 overflow-hidden border border-gray-200 collection-card">
+      <div class="relative bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 overflow-hidden border border-gray-200 collection-card" id="artistCollection" data-collection-id="{{ $collections->ARTIST_COLLECTION_ID}}" data-delete-route="{{ route('collection.delete', $collections->ARTIST_COLLECTION_ID) }}">
         <button class="ellipsisButton text-gray-600 hover:text-gray-800 focus:outline-none" onclick="toggleOptionsMenu(event, this)">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 0 1.5ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 0 1.5ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 0 1.5Z" />
@@ -61,7 +61,7 @@
         <!-- Options Menu -->
         <div class="optionsMenu">
           <button class="block w-full text-left px-4 py-2 hover:bg-gray-100">Edit Collection</button>
-          <button class="block w-full text-left px-4 py-2 hover:bg-gray-100" onclick="confirmDeleteCollection(event)">Delete Collection</button>
+          <button class="block w-full text-left px-4 py-2 hover:bg-gray-100" onclick="confirmDeleteCollection(event,{{ $collections->ARTIST_COLLECTION_ID }})">Delete Collection</button>
         </div>
         @if($collections->IMAGE_PATH != null)
         <img alt="Collection Image 1" class="w-full h-48 object-cover transform hover:scale-110 transition-transform duration-500" src="{{ asset($collections->IMAGE_PATH) }}">
@@ -71,7 +71,7 @@
         <div class="p-6">
           <h4 class="text-xl font-semibold text-gray-900 mb-2">{{ $collections->COLLECTION_NAME }}</h4>
           <p class="text-gray-600 mb-4">{{ $collections->TOTAL_ARTWORKS }} Arts</p>
-          <a href="{{ route('collection.show', ['artistId' => $artistId, 'category' => $collections->ARTIST_COLLECTION_ID]) }}" class=" text-indigo-600 font-bold hover:underline">View Collection &rarr;</a>
+          <a href="{{ route('collection.show', ['artistId' => $artistId, 'collectionId' => $collections->ARTIST_COLLECTION_ID]) }}" class=" text-indigo-600 font-bold hover:underline">View Collection &rarr;</a>
         </div>
       </div>
       @endforeach
@@ -156,11 +156,66 @@
       const optionsMenu = button.nextElementSibling;
       optionsMenu.style.display = optionsMenu.style.display === 'block' ? 'none' : 'block';
     }
-    // Show delete confirmation modal
-    function confirmDeleteCollection(event) {
-      event.stopPropagation();
-      document.getElementById('deleteConfirmationModal').classList.remove('hidden');
+
+    let collectionToDelete = null;
+
+    // Function to open the delete confirmation modal
+    function confirmDeleteCollection(event, collectionId) {
+        event.stopPropagation(); // Prevent triggering other events (e.g., opening the post)
+        collectionToDelete = collectionId; // Set the ID of the post to delete
+        document.getElementById('deleteConfirmationModal').classList.remove('hidden'); // Show modal
     }
+
+    // Function to close the delete confirmation modal
+    function closeDeleteModal() {
+        document.getElementById('deleteConfirmationModal').classList.add('hidden'); // Hide modal
+        collectionToDelete = null; // Clear the stored post ID
+    }
+
+    // Function to delete the post via AJAX
+    function deleteCollection() {
+        if (!collectionToDelete) return; // Ensure there's a post to delete
+
+        // Get the delete route from the data attribute
+        const collectionElement = document.querySelector(`#artistCollection[data-collection-id="${collectionToDelete}"]`);
+        const url = collectionElement.dataset.deleteRoute; // Get the route from the data attribute
+
+        console.log('Delete URL:', url); // Log the URL to verify it's correct
+
+        // Send AJAX request
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to delete the collection.');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                collectionElement.remove(); // Remove the post from the DOM
+                closeDeleteModal(); // Close the modal
+                alert('Collection deleted successfully.');
+            } else {
+                alert('Failed to delete the collection.');
+            }
+        })
+        .catch(error => {
+            console.error('Error deleting collection:', error);
+            alert('An error occurred while deleting the collection.');
+        });
+    }
+
+    // // Show delete confirmation modal
+    // function confirmDeleteCollection(event) {
+    //   event.stopPropagation();
+    //   document.getElementById('deleteConfirmationModal').classList.remove('hidden');
+    // }
 
     function submitCollection() {
         // Prevent the form from submitting traditionally
@@ -224,11 +279,7 @@
       document.getElementById('deleteConfirmationModal').classList.add('hidden');
     }
 
-    // Perform delete action
-    function deleteCollection() {
-      alert('Collection deleted!');
-      closeDeleteModal();
-    }
+    
 
     // Hide options menu when clicking outside
     document.addEventListener('click', () => {

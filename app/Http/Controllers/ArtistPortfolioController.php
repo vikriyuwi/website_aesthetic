@@ -23,14 +23,14 @@ class ArtistPortfolioController extends Controller
                 'category_art' => 'required|array|min:1|max:6',
                 'category_art.*' => 'integer|exists:ART_CATEGORY_MASTER,ART_CATEGORY_MASTER_ID',
                 'imageOption' => 'required|string|in:file,link',
-                'collectionImageUpload' => 'nullable|required_if:imageOption,file|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'collectionImageLink' => 'nullable|required_if:imageOption,link|url',
+                'portfolioImageUpload' => 'nullable|required_if:imageOption,file|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'portfolioImageLink' => 'nullable|required_if:imageOption,link|url',
             ], [
                 'portfolioTitle.required' => '* The portfolio title is required.',
                 'portfolioDescription.required' => '* The portfolio description is required.',
                 'category_art.required' => '* Please select at least one category.',
-                'collectionImageUpload.required_if' => '* Please upload an image file when "Upload from File" is selected.',
-                'collectionImageLink.required_if' => '* Please provide a valid URL when "Upload by Link" is selected.',
+                'portfolioUpload.required_if' => '* Please upload an image file when "Upload from File" is selected.',
+                'portfolioImageLink.required_if' => '* Please provide a valid URL when "Upload by Link" is selected.',
             ]);
 
             if ($validated->fails()) {
@@ -42,10 +42,10 @@ class ArtistPortfolioController extends Controller
             $imagePath = null;
 
             if ($request->imageOption === 'file') {
-                $imagePath = $request->file('collectionImageUpload')->store('uploads', ['disk' => 'public']);
+                $imagePath = $request->file('portfolioImageUpload')->store('uploads', ['disk' => 'public']);
                 $imagePath = '/storage/' . $imagePath;
             } elseif ($request->imageOption === 'link') {
-                $imagePath = $request->collectionImageLink;
+                $imagePath = $request->portfolioImageLink;
             }
 
             // Fetch artist ID

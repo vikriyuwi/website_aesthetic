@@ -3,6 +3,7 @@
 <head>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <style>
         .modal-overlay {
             z-index: 50;
@@ -111,20 +112,29 @@
             </div>
 
             <!-- Modal Description -->
-            <p class="text-gray-600 mb-4">Select the art pieces you want to include in this collection.</p>
+            <p class="text-gray-600 mb-4">Select the art pieces you want t  o include in this collection.</p>
+
+
+            <!-- Hidden Field for Collection ID -->
+            <input type="hidden" id="collectionId" value="{{ $artistCollectionId }}">
 
             <!-- Art Selection Grid with Scroll -->
             <div class="scrollable-content grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Art Item Example -->
-                @foreach ($artworksNoCollection as $artworksNoCollection => $listArtworksNoCollection)
-                <div class="relative group border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
-                    <img src="{{ asset($listArtworksNoCollection->IMAGE_PATH) }}" alt="Artwork 1" class="w-full h-48 object-cover">
+                @foreach ($artworksNoCollection as $listArtworksNoCollection)
+                <div class="relative group border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300" data-artwork-id="{{ $listArtworksNoCollection->ART_ID }}">
+                    <img src="{{ asset($listArtworksNoCollection->IMAGE_PATH) }}" alt="Artwork {{ $listArtworksNoCollection->ART_ID }}" class="w-full h-48 object-cover">
                     <div class="absolute top-2 left-2">
-                        <input type="checkbox" class="w-6 h-6 text-indigo-500 focus:ring focus:ring-indigo-300">
+                        <!-- Add a meaningful ID or name if necessary -->
+                        <input 
+                            type="checkbox" 
+                            class="w-6 h-6 text-indigo-500 focus:ring focus:ring-indigo-300" 
+                            value="{{ $listArtworksNoCollection->ART_ID }}" 
+                            name="artworks[]"
+                        >
                     </div>
                 </div>
                 @endforeach
-                <!-- Add more images as needed -->
             </div>
 
             <!-- Modal Actions -->
@@ -132,7 +142,7 @@
                 <button onclick="closeAddArtModal()" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition duration-200">
                     Cancel
                 </button>
-                <button class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 shadow-md transition duration-300 transform hover:scale-105">
+                <button onclick="submitSelectedArtworks()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 shadow-md transition duration-300 transform hover:scale-105">
                     Add Selected Art
                 </button>
             </div>
@@ -149,6 +159,7 @@
         // Close Add Art Modal
         function closeAddArtModal() {
             document.getElementById('addArtModal').classList.add('hidden');
+            clearSelection();
         }
 
         // Toggle options menu visibility for each ellipsis button
@@ -169,6 +180,80 @@
                 alert("Artwork deleted!");
                 // Additional delete logic can be added here
             }
+        }
+
+        // Declare selectedArtworks globally
+        let selectedArtworks = []; // To keep track of selected artworks
+
+        // Handle artwork selection
+        document.querySelectorAll('#addArtModal .scrollable-content input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                const artworkCard = this.closest('.relative'); // Find the parent artwork card
+                const artworkId = artworkCard.getAttribute('data-artwork-id'); // Assuming artwork ID is in the data attribute
+
+                if (this.checked) {
+                    // Add artwork to the selected list if checked
+                    if (!selectedArtworks.includes(artworkId)) {
+                        selectedArtworks.push(artworkId);
+                    }
+                } else {
+                    // Remove artwork from the selected list if unchecked
+                    selectedArtworks = selectedArtworks.filter(id => id !== artworkId);
+                }
+            });
+        });
+
+        // Clear all selections
+        function clearSelection() {
+            document.querySelectorAll('#addArtModal .scrollable-content input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = false; // Uncheck all checkboxes
+            });
+            selectedArtworks = []; // Clear the selected artworks array
+        }
+
+        // Function to close the modal
+        function closeAddArtModal() {
+            document.getElementById('addArtModal').classList.add('hidden');
+            clearSelection(); // Clear selections when closing the modal
+        }
+
+        // Function to submit selected artworks
+        function submitSelectedArtworks() {
+            if (selectedArtworks.length === 0) {
+                alert('No artworks selected.');
+                return;
+            }
+
+            const collectionId = document.getElementById('collectionId').value; // Retrieve the collection ID
+            if (!collectionId) {
+                alert('Collection ID is missing. Please try again.');
+                return;
+            }
+
+            // Example AJAX request to send selected artworks to the server
+            fetch('{{ route('collection.addArt') }}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ artworks: selectedArtworks, collection_id: collectionId }), // Include collection_id
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Server response:', data); // Debugging response
+                    if (data.success) {
+                        alert('Artworks successfully added to the collection.');
+                        closeAddArtModal();
+                        location.reload(); // Reload the page to reflect changes
+                    } else {
+                        alert(data.message || 'Failed to add artworks. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while adding artworks.');
+                });
         }
 
         // Hide options menu when clicking outside

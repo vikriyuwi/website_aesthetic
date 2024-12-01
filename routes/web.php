@@ -5,6 +5,7 @@ use App\Http\Controllers\ListArtistController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WebController;
 use App\Http\Controllers\ArtGalleryController;
+use App\Http\Controllers\ArtistArtWorkController;
 use App\Http\Controllers\ArtistCollectionController;
 use App\Http\Controllers\ArtistPortfolioController;
 use App\Http\Controllers\ArtistPostController;
@@ -36,9 +37,9 @@ Route::get('/artists',[App\Http\Controllers\ListArtistController::class, 'viewLi
 
 Route::get('/artists/{id}/{section?}', [ArtistProfileController::class, 'showArtist'])->name('artist.show');
 
-Route::get('/artists/{artistId}/collection/{category}', [ArtistProfileController::class, 'showCollection'])->name('collection.show');
 
-Route::get('/artworks/{artistId}', [ArtistProfileController::class, 'showAllArtwork'])->name('all-artwork.show');
+
+
 
 Route::get('/category/{category}', [WebController::class, 'showCategory'])->name('category.show');
 
@@ -78,16 +79,55 @@ Route::get('/following', [WebController::class, 'following'])->name('following')
 
 #REGION ARTIST PROFILE
 
+//Portfolio
 //Store the portfolio
 Route::post('/portfolio/add', [ArtistPortfolioController::class, 'store'])->name('portfolio.store');
 
-//Store the portfolio
+//------------------------------------------------------------------COLLECTION------------------------------------------------------------------
+
+//VIEW ART INSIDE COLLECTION
+Route::get('/artists/{artistId}/collection/{collectionId}', [ArtistProfileController::class, 'showCollection'])->name('collection.show');
+
+//ADD COLLECTION
 Route::post('/collection/add', [ArtistCollectionController::class, 'store'])->name('collection.store');
 
-//get comment from artist post
+//DELETE COLLECTION
+Route::post('/collection/delete/{collectionId}', [ArtistCollectionController::class, 'destroy'])->name('collection.delete');
+
+//ADD ART INTO COLLECTION
+Route::post('/collection/addArt',[ArtistCollectionController::class, 'addArtToCollection'])->name('collection.addArt');
+
+//---------------------------------------------------------------ENDCOLLECTION------------------------------------------------------------------
+
+//------------------------------------------------------------------POST------------------------------------------------------------------
+//ADD POST
+Route::post('post/add',[ArtistPostController::class,'addPost'])->name('post.store');
+
+//DELETE POST
+Route::post('post/delete/{postId}',[ArtistPostController::class,'deletePost'])->name('post.destroy');
+
+//LIKE POST TOGGLE
+Route::post('post/like/{postId}', [ArtistPostController::class, 'togglePostLike'])->name('post.likeToggle');
+
+//GET COMMENT FROM ARTIST POST
 Route::get('/comments/{postId}', [ArtistPostController::class, 'getPostComments']);
-//add comment from artist post
+
+//ADD COMMENT FROM ARTIST POST
 Route::post('/comments/{postId}', [ArtistPostController::class, 'addPostComment']);
+//------------------------------------------------------------------ENDPOST----------------------------------------------------------------
+
+
+//------------------------------------------------------------------ARTWORK------------------------------------------------------------------
+//VIEW ALL ARTWORK
+Route::get('/artworks/{artistId}', [ArtistArtWorkController::class, 'showAllArtwork'])->name('all-artwork.show');
+
+//ADD ARTWORK
+Route::post('artworks/add',[ArtistArtWorkController::class,'addArtWork'])->name('artwork.store');
+
+//DELETE ARTWORK
+Route::post('artworks/delete/{artworkId}',[ArtistArtWorkController::class,'deleteArtWork'])->name('artwork.destroy');
+
+//---------------------------------------------------------------ENDARTWORK------------------------------------------------------------------
 
 #ENDREGION
 

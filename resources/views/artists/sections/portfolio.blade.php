@@ -166,13 +166,13 @@
 
                 <!-- Image Upload Fields -->
                 <div id="linkField" class="mb-4">
-                    <label for="collectionImageLink" class="block text-lg font-semibold text-gray-700">Image URL</label>
-                    <input type="text" id="collectionImageLink" name="collectionImageLink" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                    <label for="portfolioImageLink" class="block text-lg font-semibold text-gray-700">Image URL</label>
+                    <input type="text" id="portfolioImageLink" name="portfolioImageLink" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
                     <span id="portfolioImageLinkError" class="text-red-600"></span>
                 </div>
                 <div id="fileField" class="mb-4 hidden">
-                    <label for="collectionImageUpload" class="block text-lg font-semibold text-gray-700">Upload Image</label>
-                    <input type="file" id="collectionImageUpload" name="collectionImageUpload" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                    <label for="portfolioImageUpload" class="block text-lg font-semibold text-gray-700">Upload Image</label>
+                    <input type="file" id="portfolioImageUpload" name="portfolioImageUpload" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
                     <span id="portfolioImageUploadError" class="text-red-600"></span>
                 </div>
             </div>
@@ -279,11 +279,11 @@
                     if (error.errors.category_art) {
                         document.getElementById('portfolioCategoryError').textContent = error.errors.category_art[0];
                     }
-                    if (error.errors.collectionImageUpload && imageOption === 'file') {
-                        document.getElementById('portfolioImageUploadError').textContent = error.errors.collectionImageUpload[0];
+                    if (error.errors.portfolioImageUpload && imageOption === 'file') {
+                        document.getElementById('portfolioImageUploadError').textContent = error.errors.portfolioImageUpload[0];
                     }
-                    if (error.errors.collectionImageLink && imageOption === 'link') {
-                        document.getElementById('portfolioImageLinkError').textContent = error.errors.collectionImageLink[0];
+                    if (error.errors.portfolioImageLink && imageOption === 'link') {
+                        document.getElementById('portfolioImageLinkError').textContent = error.errors.portfolioImageLink[0];
                     }
                 } else {
                     alert('An unexpected error occurred. Please try again later.');

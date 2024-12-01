@@ -195,7 +195,7 @@
                 \_- [Cyber Demon] -_/
         </div>
         <div class="text-gray-400">
-                PAFF
+                KAFF
         </di>
     </div>
   </div>
@@ -211,11 +211,11 @@
         <div class="flex flex-col items-center">
             <!-- Name and More Button -->
             <div class="flex justify-between w-full px-2 mb-2">
-                <p class="text-black font-bold">Yuzutei</p>
+                <p class="text-black font-bold">Sosaku</p>
             </div>
             <!-- Image Border -->
             <div class="relative w-full">
-                <img src="/images/assets/1.jpg" alt="Yuzutei Artwork" class="w-full h-40 object-cover rounded-lg">
+                <img src="/images/assets/1.jpg" alt="Sosaku Artwork" class="w-full h-40 object-cover rounded-lg">
             </div>
         </div>
 

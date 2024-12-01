@@ -165,6 +165,7 @@
                             </div>
 
                             <!-- Posts Section -->
+                            @if(Request::url() === 'http://aestheticproject.test/artists/1/home')
                             <div class="bg-white p-4 rounded-lg shadow-lg mt-4">
                                 <h3 class="text-lg font-bold">Posts</h3>
                                 <div class="mt-4">
@@ -202,7 +203,9 @@
                                     </div>
                                 </div>
                             </div>
+                            @endif
                         </div>
+                        
 
 
 
@@ -237,7 +240,7 @@
                                 @elseif($section === 'posts')
                                     @include('artists.sections.posts', ['artistUserId' => $artistUserId])
                                 @elseif($section === 'artwork')
-                                    @include('artists.sections.artwork', ['artistArtwork' => $artistArtwork, 'artistId' => $artistId])
+                                    @include('artists.sections.artwork', ['artistArtwork' => $artistArtwork, 'artistId' => $artistId, 'artCategoryMaster' => $artCategoryMaster])
                                 @elseif($section === 'about')   
                                     @include('artists.sections.about', ['countTotalRating' => $countTotalRating,'userRatingPercentage' => $userRatingPercentage,'rating' => $rating,'averageArtistRating' => $averageArtistRating, 'artistAbout' => $artistAbout, 'artistUserId' => $artistUserId])
                                 @endif

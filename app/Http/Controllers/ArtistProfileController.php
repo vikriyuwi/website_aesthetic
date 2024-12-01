@@ -67,7 +67,8 @@ class ArtistProfileController extends Controller
                             'PM.POST_MEDIA_PATH',
                         ])
                         ->join('post_media as PM', 'PM.POST_ID', '=', 'P.POST_ID')
-                        ->join('master_user as MU', 'MU.USER_ID', '=', 'P.USER_ID')
+                        ->join('artist as A', 'A.ARTIST_ID', '=', 'P.ARTIST_ID')
+                        ->join('master_user as MU', 'A.USER_ID', '=', 'MU.USER_ID')
                         ->orderBy('P.CREATED_AT', 'desc')
                         ->first();
 
@@ -98,6 +99,7 @@ class ArtistProfileController extends Controller
                             ->where('IS_SALE','=',0)
                             ->orderBy('ART.CREATED_AT','desc')
                             ->get();
+
             $artCategoryMaster = DB::table('ART_CATEGORY_MASTER')
                             ->select('*')
                             ->get();
@@ -162,8 +164,10 @@ class ArtistProfileController extends Controller
                                     '0'
                                 ) AS TOTAL_LIKE
                             "),
+                            DB::raw('COUNT(PL.USER_ID) as IS_LIKED')
                         ])
-                        ->join('MASTER_USER as MU', 'P.USER_ID', '=', 'MU.USER_ID')
+                        ->join('ARTIST as A','P.ARTIST_ID', '=', 'A.ARTIST_ID')
+                        ->join('MASTER_USER as MU', 'A.USER_ID', '=', 'MU.USER_ID')
                         ->join('POST_MEDIA as PM', 'P.POST_ID', '=', 'PM.POST_ID')
                         ->leftJoinSub(
                             DB::table('POST_COMMENT')
@@ -183,7 +187,22 @@ class ArtistProfileController extends Controller
                             '=',
                             'TOTAL_LIKE.POST_ID'
                         )
+                        ->leftJoin('POST_LIKE as PL', function($join) {
+                            $join->on('P.POST_ID', '=', 'PL.POST_ID')
+                                ->where('PL.USER_ID', '=', auth()->id()); // This checks if the current user has liked the post
+                        })
                         ->orderBy('P.created_at', 'desc')
+                        ->groupBy(
+                            'P.POST_ID', 
+                            'MU.USER_ID', 
+                            'MU.PROFILE_IMAGE_PATH', 
+                            'MU.USERNAME', 
+                            'P.CONTENT', 
+                            'PM.POST_MEDIA_PATH', 
+                            'TOTAL_COMMENT.CNT_CMMT', 
+                            'TOTAL_LIKE.CNT_LIKE', 
+                            'P.created_at' // Add created_at to the GROUP BY clause
+                        )
                         ->get();
 
             //render ArtWork
@@ -267,10 +286,11 @@ class ArtistProfileController extends Controller
                                 ->select('A.ART_ID', 'A.ART_TITLE', 'A.DESCRIPTION', 'AI.IMAGE_PATH')
                                 ->join('ART_IMAGE as AI', 'A.ART_ID', '=', 'AI.ART_ID')
                                 ->where('A.ARTIST_ID', $artistId)
-                                ->whereNotExists(function ($query) {    
+                                ->whereNotExists(function ($query) use ($ARTIST_COLLECTION_ID) {
                                     $query->select(DB::raw(1))
                                         ->from('ART_COLLECTION')
-                                        ->whereColumn('ART_COLLECTION.ART_ID', 'A.ART_ID');
+                                        ->whereColumn('ART_COLLECTION.ART_ID', 'A.ART_ID')
+                                        ->where('ART_COLLECTION.ARTIST_COLLECTION_ID', $ARTIST_COLLECTION_ID);
                                 })
                                 ->get();
 
@@ -284,34 +304,7 @@ class ArtistProfileController extends Controller
         return view('artists.sections.collection-detail', compact('artworks', 'artistCollectionId','totalArtWorks','artworksNoCollection'));
     }
 
-    public function showAllArtwork($ARTIST_ID)
-    {
-        // Example data for the artworks
-        $artworks =  DB::table('ART')
-                    ->select(
-                        'ART.ART_ID', 
-                        'ART.ART_TITLE', 
-                        'ART_IMAGE.IMAGE_PATH', 
-                        'MASTER_USER.USERNAME',
-                        'ART.IS_SALE', 
-                        DB::raw("FORMAT(ART.PRICE, 'N0') as ART_PRICE"), 
-                        DB::raw("YEAR(ART.CREATED_AT) as ART_YEAR")
-                    )
-                    ->join('ART_IMAGE', 'ART.ART_ID', '=', 'ART_IMAGE.ART_ID')
-                    ->join('ARTIST', 'ARTIST.ARTIST_ID', '=', 'ART.ARTIST_ID')
-                    ->join('MASTER_USER', 'MASTER_USER.USER_ID', '=', 'ARTIST.USER_ID')
-                    ->where('ART.ARTIST_ID', '=', $ARTIST_ID)
-                    ->orderBy('ART.CREATED_AT', 'desc')
-                    ->get(); 
-                            
-        $artistId = $ARTIST_ID;
-        $totalArtWorks = DB::table('ART')
-                        ->select('*')
-                        ->where('ARTIST_ID','=',$ARTIST_ID)
-                        ->count();
-
-        return view('artists.sections.all-artworks', compact('artworks', 'artistId','totalArtWorks'));
-    }
+    
 
     
 }

@@ -34,7 +34,7 @@
         <!-- Username -->
         <div class="mb-4">
           <label class="block text-gray-700">Phone Number</label>
-          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600" placeholder="+XX-XXXXXXXXXXX" type="text" name="phone" required/>
+          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600" placeholder="+62-XXXXXXXXXXX" type="text" name="phone" required/>
         </div>
         <!-- Username -->
         <div class="mb-4">
