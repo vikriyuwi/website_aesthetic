@@ -42,6 +42,50 @@
         .ellipsis-button {
             @apply p-2 border rounded-lg flex items-center justify-center text-gray-600 hover:bg-gray-200 transition-all;
         }
+        /* Modal Background */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 50;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal.active {
+            display: flex;
+        }
+
+        /* Zoom Slider */
+        .zoom-controls {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .zoom-controls button {
+            background-color: rgba(255, 255, 255, 0.8);
+            border: none;
+            width: 40px; /* Adjust for consistent width */
+            height: 40px; /* Ensure width equals height for round shape */
+            border-radius: 50%; /* Makes the button perfectly round */
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem; /* Ensures the font is properly centered */
+        }
+
+        .zoom-controls button:hover {
+            background-color: rgba(255, 255, 255, 1);
+        }
     </style>
 </head>
 
@@ -60,12 +104,14 @@
             <span class="text-gray-800">{{ $artwork['title'] }}</span>
         </nav>
 
-        <!-- Artwork Image Container -->
+        <!-- Clickable Artwork Image -->
         <div class="flex justify-center items-center max-w-screen-lg p-4">
-            <img src="{{ asset('images/' . $artwork['image']) }}" 
-                 alt="{{ $artwork['title'] }}"
+            <img id="artworkImage" 
+                 src="{{ asset('images/' . $artwork['image']) }}" 
+                 alt="{{ $artwork['title'] }}" 
                  class="max-h-[85vh] w-auto object-contain rounded-lg transition-transform duration-300 transform hover:scale-105 cursor-pointer" />
         </div>
+
 
 <!-- Artwork Info Section (Redesigned) -->
 <div class="mt-8 lg:flex lg:space-x-4 lg:justify-between">
@@ -228,8 +274,91 @@
         </a>
     </div>
 </div>
+    <!-- Modal for Zoomed Image -->
+    <div id="imageModal" class="modal">
+        <button id="closeModal" class="absolute top-4 right-4 text-white text-3xl">&times;</button>
+        <img id="modalImage" src="" alt="" class="max-w-full max-h-full object-contain transition-transform duration-300 transform">
+        <div class="zoom-controls">
+            <button id="zoomOut">-</button>
+            <button id="zoomIn">+</button>
+        </div>
+    </div>
+    <script>
+// Get elements
+const artworkImage = document.getElementById('artworkImage');
+    const imageModal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+    const closeModal = document.getElementById('closeModal');
+    const zoomIn = document.getElementById('zoomIn');
+    const zoomOut = document.getElementById('zoomOut');
 
+    // Zoom and Pan variables
+    let zoomScale = 1;
+    let isDragging = false;
+    let startX, startY, translateX = 0, translateY = 0;
 
+    // Open modal
+    artworkImage.addEventListener('click', () => {
+        modalImage.src = artworkImage.src;
+        imageModal.classList.add('active');
+    });
+
+    // Close modal
+    closeModal.addEventListener('click', () => {
+        imageModal.classList.remove('active');
+        resetImage(); // Reset zoom and pan
+    });
+
+    // Zoom in
+    zoomIn.addEventListener('click', () => {
+        zoomScale += 0.1;
+        applyTransform();
+    });
+
+    // Zoom out
+    zoomOut.addEventListener('click', () => {
+        if (zoomScale > 0.5) { // Prevent zooming out too much
+            zoomScale -= 0.1;
+            applyTransform();
+        }
+    });
+
+    // Pan Image (Mouse Down)
+    modalImage.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.clientX - translateX;
+        startY = e.clientY - translateY;
+        modalImage.style.cursor = "grabbing";
+    });
+
+    // Stop Pan (Mouse Up)
+    window.addEventListener('mouseup', () => {
+        isDragging = false;
+        modalImage.style.cursor = "grab";
+    });
+
+    // Move Image (Mouse Move)
+    window.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+            translateX = e.clientX - startX;
+            translateY = e.clientY - startY;
+            applyTransform();
+        }
+    });
+
+    // Reset Image
+    function resetImage() {
+        zoomScale = 1;
+        translateX = 0;
+        translateY = 0;
+        applyTransform();
+    }
+
+    // Apply Transform (Zoom and Pan)
+    function applyTransform() {
+        modalImage.style.transform = `translate(${translateX}px, ${translateY}px) scale(${zoomScale})`;
+    }
+    </script>
 </body>
 
 </html>

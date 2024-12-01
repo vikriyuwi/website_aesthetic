@@ -13,6 +13,46 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"> 
     <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+  <style>
+     .custom-search {
+      border-radius: 9999px;
+      display: flex;
+      background-color: white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .custom-input {
+      flex-grow: 1;
+      padding-left: 20px;
+      border: none;
+      border-radius: 9999px 0 0 9999px;
+      background-color: white;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+    .custom-button {
+      background-color: #6366f1;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 0 9999px 9999px 0;
+      cursor: pointer;
+      display: inline-block;
+      font-size: 16px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    .custom-button:hover {
+      background-color: #4f46e5;
+      transform: scale(1.05);
+    }
+    .artist-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    }
+    .custom-input:focus {
+      outline: none;
+      box-shadow: 0 0 8px rgba(99, 102, 241, 0.5);
+    }
+  </style>
 </head>
 <body class="bg-gray-100 font-roboto text-gray-700">
 
@@ -22,9 +62,15 @@
     <div class="absolute inset-0 flex flex-col items-center justify-center text-center text-white">
         <h1 class="text-5xl font-bold">Discover Inspiring Design Ideas</h1>
         <p class="text-lg mt-4">Find The Perfect Design For Your Next Project</p>
-        <div class="mt-8">
-            <a href="#explore" class="px-6 py-3 bg-indigo-600 text-white rounded-full text-lg font-semibold hover:bg-indigo-700 transform hover:scale-105 transition duration-300">Explore Now</a>
+        
+        <!-- Search Bar -->
+      <div class="mt-8 w-full flex justify-center">
+        <div class="relative w-full max-w-xl custom-search">
+          <input class="custom-input" placeholder="Search for assets..." type="text" id="searchInput">
+          <button class="custom-button" onclick="">Search</button>
         </div>
+      </div>
+    </div>
     </div>
 </section>
 <!-- Hero Section End -->

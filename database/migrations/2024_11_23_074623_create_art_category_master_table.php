@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('POST', function (Blueprint $table) {
-            $table->id('POST_ID');
-            $table->unsignedBigInteger('ARTIST_ID');
-            $table->foreign('ARTIST_ID')->references('ARTIST_ID')->on('ARTIST');
-            $table->text('CONTENT');
+        Schema::create('ART_CATEGORY_MASTER', function (Blueprint $table) {
+            $table->id('ART_CATEGORY_MASTER_ID');
+            $table->string('DESCR');
             $table->timestamps();
         });
     }
@@ -25,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('POST');
+        Schema::dropIfExists('ART_CATEGORY_MASTER');
     }
 };

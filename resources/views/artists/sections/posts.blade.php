@@ -4,6 +4,7 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <style>
     .post-card {
       max-width: 600px;
@@ -41,57 +42,58 @@
     <!-- Add Post Button -->
     <div class="flex justify-between items-center mt-8">
       <h2 class="text-2xl font-bold">Posts</h2>
-      @if (Auth::user()->USER_ID == $artistUserId )
-        <button id="addPostButton" class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-5 py-2 rounded-full shadow-md hover:from-blue-600 hover:to-indigo-700 transition duration-300 transform hover:scale-105">
-          + Add Post 
-        </button>
+      @if(Auth::check())
+        @if (Auth::user()->USER_ID == $artistUserId )
+          <button id="addPostButton" class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-5 py-2 rounded-full shadow-md hover:from-blue-600 hover:to-indigo-700 transition duration-300 transform hover:scale-105">
+            + Add Post 
+          </button>
+        @endif
       @endif
     </div>
 
-    <!-- Post Section -->
-    
-    <div class="mt-8">
-      @foreach ($listPost as $posts )
-      <!-- Post Example -->
-      <div class="bg-white p-4 rounded-lg shadow-md mb-4 border border-gray-300 post-card relative cursor-pointer" onclick="showPostDetail({{ $posts->POST_ID }})">
-        <!-- Options Menu and Profile Section Omitted for Brevity -->
-        <button class="ellipsisButton text-gray-600 hover:text-gray-800 focus:outline-none" onclick="toggleOptionsMenu(event, this)">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 0 1.5ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-          </svg>
-        </button>
-        <!-- Options Menu -->
-        <div class="optionsMenu">
-          <button class="block w-full text-left px-4 py-2 hover:bg-gray-100">Edit Post</button>
-          <button class="block w-full text-left px-4 py-2 hover:bg-gray-100" onclick="confirmDeletePost(event)">Delete Post</button>
-        </div>
+ <!-- Post Section -->
+ <div class="mt-8">
+  @foreach ($listPost as $posts )
+  <!-- Post Example -->
+  <div class="bg-white p-4 rounded-lg shadow-md mb-4 border border-gray-300 post-card relative cursor-pointer" id="artistPost" data-post-id="{{ $posts->POST_ID }}" data-delete-route="{{ route('post.destroy', $posts->POST_ID) }}" onclick="showPostDetail({{ $posts->POST_ID }})">
+    <!-- Options Menu and Profile Section Omitted for Brevity -->
+    <button class="ellipsisButton text-gray-600 hover:text-gray-800 focus:outline-none" onclick="toggleOptionsMenu(event, this)">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 0 1.5ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+      </svg>
+    </button>
+    <!-- Options Menu -->
+    <div class="optionsMenu">
+      <button class="block w-full text-left px-4 py-2 hover:bg-gray-100">Edit Post</button>
+      <button class="block w-full text-left px-4 py-2 hover:bg-gray-100" onclick="confirmDeletePost(event,{{ $posts->POST_ID }})">Delete Post</button>
+    </div>
 
-        <div class="flex items-center space-x-4">
-          <img alt="Profile picture of the user" class="w-10 h-10 rounded-full" src="{{ asset($posts->PROFILE_IMAGE_PATH) }}">
-          <div>
-            <h2 class="text-lg font-bold">{{ $posts->USERNAME }}</h2>
-            <p class="text-sm text-gray-600">{{ $posts->CREATED_DATE }}</p>
-          </div>
-        </div>
-        <p class="mt-4 text-sm">{{ $posts->CONTENT }}</p>
-
-        <!-- Image Container -->
-        <div class="aspect-w-2 aspect-h-1 mt-4 rounded-lg overflow-hidden">
-          <img alt="Anime character with pink hair" class="aspect-inner object-cover" src="{{ asset($posts->POST_MEDIA_PATH) }}">
-        </div>
-
-        <div class="mt-2 flex space-x-4 text-gray-600 text-sm">
-          <button class="flex items-center space-x-1"><i class="far fa-heart"></i><span>{{ $posts->TOTAL_LIKE }}</span></button>
-          <button class="flex items-center space-x-1"><i class="far fa-comment"></i><span id="postTotalComments-{{ $posts->POST_ID }}">{{ $posts->TOTAL_COMMENT }}</span></button>
-          <button class="flex items-center space-x-1"><i class="far fa-share-square"></i><span>Share</span></button>
-        </div>
+    <div class="flex items-center space-x-4">
+      <img alt="Profile picture of the user" class="w-10 h-10 rounded-full" src="{{ asset($posts->PROFILE_IMAGE_PATH) }}">
+      <div>
+        <h2 class="text-lg font-bold">{{ $posts->USERNAME }}</h2>
+        <p class="text-sm text-gray-600">{{ $posts->CREATED_DATE }}</p>
       </div>
     </div>
-    @endforeach
+    <p class="mt-4 text-sm">{{ $posts->CONTENT }}</p>
+
+    <!-- Image Container -->
+    <div class="aspect-w-2 aspect-h-1 mt-4 rounded-lg overflow-hidden">
+      <img alt="Anime character with pink hair" class="aspect-inner object-cover" src="{{ asset($posts->POST_MEDIA_PATH) }}">
+    </div>
+
+    <div class="mt-2 flex space-x-4 text-gray-600 text-sm">
+      <button class="flex items-center space-x-1"><i class="fas fa-heart {{ $posts->IS_LIKED ? 'text-red-500' : 'text-gray-400' }}"></i><span>{{ $posts->TOTAL_LIKE }}</span></button>
+      <button class="flex items-center space-x-1"><i class="far fa-comment"></i><span id="postTotalComments-{{ $posts->POST_ID }}">{{ $posts->TOTAL_COMMENT }}</span></button>
+      <button class="flex items-center space-x-1"><i class="far fa-share-square"></i><span>Share</span></button>
+    </div>
   </div>
+</div>
+@endforeach
+</div>
   
   <!-- Post Detail Modal -->
-  <div id="postDetailModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden modal-overlay">
+  <div id="postDetailModal" data-post_id="" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden modal-overlay">
     <div class="bg-white p-8 rounded-lg shadow-lg w-10/12 max-w-4xl flex space-x-8 relative">
         <button class="absolute top-4 right-4 text-gray-600 hover:text-gray-800" onclick="closePostDetail()">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -103,7 +105,7 @@
         <div class="flex-shrink-0 w-1/2">
             <img id="postDetailImage" class="w-full h-auto rounded-lg shadow-lg" src="" alt="Post Image">
             <div class="flex space-x-4 mt-4 text-gray-600">
-                <button class="flex items-center space-x-2 hover:text-gray-800"><i class="far fa-heart"></i><span id="postDetailLikes"></span></button>
+                <button class="flex items-center space-x-2 hover:text-gray-800 like-button" data-route=""><i class="fas fa-heart {{ $posts->IS_LIKED ? 'text-red-500' : 'text-gray-400' }}"></i><span id="postDetailLikes"></span></button>
                 <button class="flex items-center space-x-2 hover:text-gray-800"><i class="far fa-comment"></i><span id="postDetailComments"></span></button>
                 <button class="flex items-center space-x-2 hover:text-gray-800"><i class="far fa-share-square"></i><span>Share</span></button>
             </div>
@@ -145,19 +147,41 @@
 <div id="addPostModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden modal-overlay">
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl">
       <h3 class="text-2xl font-semibold text-gray-800 mb-2">Add New Post ✉️ </h3>
-      <form id="addPostForm" class="space-y-6">
+      <form method="POST" action="{{ route('portfolio.store') }}" enctype="multipart/form-data" id="addPostForm" class="space-y-6">
+        @csrf
         <div>
           <label for="postContent" class="block text-gray-700 font-semibold mb-2">Post Content</label>
-          <textarea id="postContent" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition" placeholder="Write something..."></textarea>
+          <textarea id="postContent" name="postContent"class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition" placeholder="Write something..."></textarea>
+          <span id="postContentError" class="text-red-600"></span>
         </div>
+        <!-- Image Upload Options -->
         <div>
-          <label for="postImage" class="block text-gray-700 font-semibold mb-2">Image URL or Upload</label>
-          <input type="text" id="postImage" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition mb-2" placeholder="Enter image URL">
-          <input type="file" id="postImageUpload" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
+          <label class="block text-lg font-semibold text-gray-700 mb-2">Select Image Upload Option</label>
+          <div class="flex items-center mb-4">
+              <input type="radio" id="linkOption" name="imageOption" value="link" class="mr-3" onclick="toggleImageUploadOption('link')" checked>
+              <label for="linkOption" class="text-gray-700">Upload by Link</label>
+          </div>
+          <div class="flex items-center mb-4">
+              <input type="radio" id="fileOption" name="imageOption" value="file" class="mr-3" onclick="toggleImageUploadOption('file')">
+              <label for="fileOption" class="text-gray-700">Upload from File</label>
+          </div>
         </div>
+
+        <!-- Image Upload Fields -->
+        <div id="linkField" class="mb-4">
+            <label for="postImageLink" class="block text-lg font-semibold text-gray-700">Image URL</label>
+            <input type="text" id="postImageLink" name="postImageLink" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+            <span id="postImageLinkError" class="text-red-600"></span>
+        </div>
+        <div id="fileField" class="mb-4 hidden">
+            <label for="postImageUpload" class="block text-lg font-semibold text-gray-700">Upload Image</label>
+            <input type="file" id="postImageUpload" name="postImageUpload" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+            <span id="postImageUploadError" class="text-red-600"></span>
+        </div>
+
         <div class="flex justify-end space-x-3">
           <button type="button" id="cancelAddPostButton" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition duration-200" onclick="closeAddPostModal()">Cancel</button>
-          <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 shadow-md transition duration-300 transform hover:scale-105">Add Post</button>
+          <button type="submit" onclick="submitPost(event)" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 shadow-md transition duration-300 transform hover:scale-105">Add Post</button>
         </div>
       </form>
     </div>
@@ -318,6 +342,11 @@ function addComment() {
     }
 }
 
+    function toggleImageUploadOption(option) {
+        document.getElementById('linkField').classList.toggle('hidden', option !== 'link');
+        document.getElementById('fileField').classList.toggle('hidden', option !== 'file');
+    }
+
     // function addComment() {
     //   const newCommentText = document.getElementById('newComment').value;
     //   if (newCommentText) {
@@ -343,22 +372,58 @@ function addComment() {
       optionsMenu.style.display = optionsMenu.style.display === 'block' ? 'none' : 'block';
     }
 
-    // Show delete confirmation modal
-    function confirmDeletePost(event) {
-      event.stopPropagation();
-      document.getElementById('deleteConfirmationModal').classList.remove('hidden');
+    let postToDelete = null; // Holds the ID of the post to delete
+
+    // Function to open the delete confirmation modal
+    function confirmDeletePost(event, postId) {
+        event.stopPropagation(); // Prevent triggering other events (e.g., opening the post)
+        postToDelete = postId; // Set the ID of the post to delete
+        document.getElementById('deleteConfirmationModal').classList.remove('hidden'); // Show modal
     }
 
-    // Hide delete confirmation modal
+    // Function to close the delete confirmation modal
     function closeDeleteModal() {
-      document.getElementById('deleteConfirmationModal').classList.add('hidden');
+        document.getElementById('deleteConfirmationModal').classList.add('hidden'); // Hide modal
+        postToDelete = null; // Clear the stored post ID
     }
 
-    // Perform delete action
+    // Function to delete the post via AJAX
     function deletePost() {
-      alert('Post deleted!');
-      closeDeleteModal();
-      // Additional delete logic can be added here
+        if (!postToDelete) return; // Ensure there's a post to delete
+
+        // Get the delete route from the data attribute
+        const postElement = document.querySelector(`#artistPost[data-post-id="${postToDelete}"]`);
+        const url = postElement.dataset.deleteRoute; // Get the route from the data attribute
+
+        console.log('Delete URL:', url); // Log the URL to verify it's correct
+
+        // Send AJAX request
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to delete the post.');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                postElement.remove(); // Remove the post from the DOM
+                closeDeleteModal(); // Close the modal
+                alert('Post deleted successfully.');
+            } else {
+                alert('Failed to delete the post.');
+            }
+        })
+        .catch(error => {
+            console.error('Error deleting post:', error);
+            alert('An error occurred while deleting the post.');
+        });
     }
 
     // Hide options menu when clicking outside
@@ -371,9 +436,130 @@ function addComment() {
       document.getElementById('addPostModal').classList.remove('hidden');
     });
 
-    document.getElementById('cancelAddPostButton').addEventListener('click', () => {
+    function closeAddPostModal() {
       document.getElementById('addPostModal').classList.add('hidden');
+      clearErrorsAndForm();
+    }
+
+    function clearErrorsAndForm() {
+        // Clear error messages
+        document.getElementById('postContentError').textContent = '';
+        document.getElementById('postImageLinkError').textContent = '';
+        document.getElementById('postImageUploadError').textContent = '';
+
+        // Reset the form
+        document.getElementById('addPostForm').reset();
+    }
+
+    function submitPost(event) {
+        event.preventDefault(); // Prevent traditional form submission
+
+        // Clear previous error messages
+        document.getElementById('postContentError').textContent = '';
+        document.getElementById('postImageLinkError').textContent = '';
+        document.getElementById('postImageUploadError').textContent = '';
+
+        // Get the form and form data
+        const form = document.getElementById('addPostForm');
+        const formData = new FormData(form);
+
+        // Get the selected image option
+        const imageOption = formData.get('imageOption'); // "file" or "link"
+
+        // Send AJAX request
+        fetch('{{ route('post.store') }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            },
+            body: formData,
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => {
+                        throw err; // Throw JSON error
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Success handling
+                if (data.success) {
+                    location.reload(); // Reload the page to reflect changes
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                if (error.errors) {
+                    // Display validation errors dynamically
+                    if (error.errors.postContent) {
+                        document.getElementById('postContentError').textContent = error.errors.postContent[0];
+                    }
+                    if (error.errors.postImageUpload && imageOption === 'file') {
+                        document.getElementById('postImageUploadError').textContent = error.errors.postImageUpload[0];
+                    }
+                    if (error.errors.postImageLink && imageOption === 'link') {
+                        document.getElementById('postImageLinkError').textContent = error.errors.postImageLink[0];
+                    }
+                } else {
+                    alert('An unexpected error occurred. Please try again later.');
+                }
+            });
+    }
+
+    // Like Toggle Script
+    // POST LIKE TOGGLE (Modal Only)
+    document.getElementById('postDetailModal').addEventListener('click', function (event) {
+        const likeButton = event.target.closest('.like-button'); // Check if the clicked element is or is inside a like-button
+        if (!likeButton) return; // Exit if the click is not on a like-button
+
+        const url = likeButton.getAttribute('data-route'); // Backend route for like toggle
+        const postId = this.getAttribute('data-post-id'); // Get the post ID from the modal's data attribute
+
+        // Debugging to ensure the right post ID is being used
+        console.log(`Toggling like for post ID: ${postId}`);
+
+        // Ensure postId and url exist before proceeding
+        if (!postId || !url) {
+            console.error('Missing post ID or like toggle route.');
+            return;
+        }
+
+        const likeIcon = likeButton.querySelector('i'); // The heart icon in the modal
+        const likeCount = likeButton.querySelector('span'); // The like count span in the modal
+
+        // Ensure the necessary elements exist
+        if (!likeIcon || !likeCount) {
+            console.error('Like icon or count span not found.');
+            return;
+        }
+
+        // Send the AJAX request to the backend
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update the like state in the modal
+                    likeIcon.classList.toggle('text-red-500', data.isLiked); // Add/remove red heart
+                    likeIcon.classList.toggle('text-gray-400', !data.isLiked); // Add/remove gray heart
+                    likeCount.textContent = data.total_likes; // Update the like count
+                } else {
+                    console.error('Backend Error:', data.message || 'Unexpected response from server.');
+                    alert('Failed to toggle like.');
+                }
+            })
+            .catch(error => {
+                console.error('Network Error:', error);
+                alert('An error occurred while toggling like. Please try again.');
+            });
     });
+
   </script>
 </body>
 </html>

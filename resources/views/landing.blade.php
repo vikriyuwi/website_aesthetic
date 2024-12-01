@@ -16,13 +16,12 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style> 
         body {
-            font-family: 'Roboto', sans-serif; /* Updated to Roboto */
+            font-family: 'Roboto', sans-serif; 
             background-color: #f7f8fa;
             color: #333;
         }
         h1, h2, h3 {
-            font-family: 'Roboto', sans-serif; /* Headings use the same font */
-            color: #fff;
+            font-family: 'Roboto', sans-serif; 
         }
         a {
             transition: color 0.3s ease, background-color 0.3s ease;
@@ -30,6 +29,8 @@
     </style>
 </head>
 <body>
+
+
     <!-- Home Page Start -->
     <section id="artists" class="relative bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
         <div class="relative w-full h-[80vh] overflow-hidden flex items-center justify-center">
@@ -84,7 +85,7 @@
                     Crafting Inspiring Designs is Our Expertise. We elevate your vision with captivating Poster Designs, Distinctive Logo Creations, and Custom Commissions. <span class="font-bold">Your satisfaction and creative vision are our top priorities</span>.
                 </p>
                 <p class="text-gray-600 mb-6">
-                    We provide a variety of <span class="font-bold">professional services</span> including Animation Work, 3D Art Design, and Custom Art Commissions.
+                    We provide a variety of <span class="font-bold">professional services</span> including Contemporary Art, 3D Art Design, and Custom Art Commissions.
                 </p>
                 <a href="#" class="bg-indigo-600 text-white px-6 py-3 rounded-full hover:bg-indigo-700">See All Services</a>
             </div>
@@ -102,7 +103,7 @@
                         <div class="p-4">
                             <h3 class="text-xl font-bold text-gray-800">Poster Design</h3>
                             <p class="text-gray-600 mb-4">
-                                Our poster design service is curated by seasoned professionals, ensuring every detail is meticulously crafted to convey your message effectively and leave a lasting impression on your audience.
+                                Our poster design service is curated by seasoned professionals, to leave a lasting impression on your audience.
                             </p>
                         </div>
                         <img src="images/poster-design.PNG" alt="Poster Design" class="w-full h-70 object-cover">
@@ -112,36 +113,36 @@
                 <div class="w-full md:w-1/2 lg:w-1/5 p-4">
                     <a href="#" class="block bg-white shadow-lg rounded-lg overflow-hidden transform hover:scale-105">
                         <div class="p-4">
-                            <h3 class="text-xl font-bold text-gray-800">3D Art Design</h3>
+                            <h3 class="text-xl font-bold text-gray-800">Abstract Art</h3>
                             <p class="text-gray-600 mb-4">
-                                Our 3D art service brings ideas to life with captivating visuals, offering immersive experiences that elevate your brand or project to new heights.
+                                Focused on non-representational and experimental works, playing with colors, shapes, and textures.
                             </p>
                         </div>
-                        <img src="images/3d-art.jpeg" alt="3D Art Design" class="w-full h-70 object-cover">
+                        <img src="images/3d-art.jpeg" alt="Abstract Art" class="w-full h-70 object-cover">
                     </a>
                 </div>
                 <!-- Card 3 -->
                 <div class="w-full md:w-1/2 lg:w-1/5 p-4">
                     <a href="#" class="block bg-white shadow-lg rounded-lg overflow-hidden transform hover:scale-105">
                         <div class="p-4">
-                            <h3 class="text-xl font-bold text-gray-800">Animation Work</h3>
+                            <h3 class="text-xl font-bold text-gray-800">Contemporary Art</h3>
                             <p class="text-gray-600 mb-4">
-                                Our animation service breathes life into your ideas, delivering captivating visuals that engage and inspire, elevating your brand or project with dynamic storytelling.
+                                Reflects modern-day themes, concepts, and innovations in art, often blending traditional and digital media.
                             </p>
                         </div>
-                        <img src="images/animate-art.jpeg" alt="Animation Work" class="w-full h-90 object-cover">
+                        <img src="images/animate-art.jpeg" alt="Contemporary Art" class="w-full h-90 object-cover">
                     </a>
                 </div>
                 <!-- Card 4 -->
                 <div class="w-full md:w-1/2 lg:w-1/5 p-4">
                     <a href="#" class="block bg-white shadow-lg rounded-lg overflow-hidden transform hover:scale-105">
                         <div class="p-4">
-                            <h3 class="text-xl font-bold text-gray-800">Custom Art Commission</h3>
+                            <h3 class="text-xl font-bold text-gray-800">Illustration</h3>
                             <p class="text-gray-600 mb-4">
-                                Our custom art commission service brings your vision to life, with personalized creations tailored to your style and preferences.
+                                Covers hand-drawn and digital illustrations used for storytelling, design, or personal expression.
                             </p>
                         </div>
-                        <img src="images/custom-art.jpeg" alt="Custom Art Commission" class="w-full h-90 object-cover">
+                        <img src="images/custom-art.jpeg" alt="Illustration" class="w-full h-90 object-cover">
                     </a>
                 </div>
                 <!-- Card 5 -->
@@ -150,7 +151,7 @@
                         <div class="p-4">
                             <h3 class="text-xl font-bold text-gray-800">Logo Creation</h3>
                             <p class="text-gray-600 mb-4">
-                                Our logo creation service delivers distinctive designs that embody your brand identity, crafted with precision to leave a lasting impression and elevate your business presence.
+                                Our logo creation service is curated by seasoned professionals, to leave a lasting impression on your audience.
                             </p>
                         </div>
                         <img src="images/logo-art.png" alt="Logo Creation" class="w-full h-70 object-cover">
@@ -164,23 +165,12 @@
     <!-- Featured Section Start -->
     <section id="home" class="py-16 bg-white scroll-animation">
         <div class="container mx-auto">
-            <!-- First Row: Large Image with Text Overlay -->
             <div class="relative mb-16">
                 <img src="images/art-gallery.jpeg" alt="Art Gallery" class="w-full h-96 object-cover rounded-lg">
                 <div class="absolute inset-0 flex flex-col justify-center items-start text-white p-8 bg-black bg-opacity-50 rounded-lg">
                     <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Dive Into The Exquisite Realm of Imagination and Discover The Boundless Beauty of Creativity In Our Art Gallery</h2>
                     <p class="text-lg mb-6">Your Journey through the Masterpieces Begins Here.</p>
                     <a href="#" class="bg-indigo-600 text-white px-6 py-3 rounded-full hover:bg-indigo-700">Discover Now</a>
-                </div>
-            </div>
-
-            <!-- Second Row: Image with Text Beside It -->
-            <div class="flex flex-wrap md:flex-nowrap items-center space-y-4 md:space-y-0 md:space-x-4">
-                <img src="images/acution.jpeg" alt="Art Auction" class="w-full md:w-1/2 h-80 object-cover rounded-lg hover:scale-105 transition">
-                <div class="w-full md:w-1/2">
-                    <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-4">Embrace Elegance, Own Excellence: The Irresistible Allure of Art Auctions</h2>
-                    <p class="text-gray-600 mb-6">Unlock the Thrill of Art Acquisition: Why Art Auctions Are Your Gateway to Rare Finds, Investment Opportunities, and Immersive Cultural Experiences.</p>
-                    <a href="#" class="bg-indigo-600 text-white px-6 py-3 rounded-full hover:bg-indigo-700">Explore More</a>
                 </div>
             </div>
         </div>
@@ -193,12 +183,11 @@
        <div class="flex flex-wrap md:flex-nowrap space-y-6 md:space-y-0 md:space-x-12">
            <!-- Community Board Section -->
            <div class="w-full md:w-2/3">
-               <h2 class="text-3xl font-bold text-indigo-800 mb-6">Join Our Community Board</h2>
+               <h2 class="text-3xl font-bold text-indigo-800 mb-6">Join Our Community Board ~ (COMING SOON!!!)</h2>
                <p class="text-gray-600 mb-6">
                    Connect, collaborate, and create on our Community Board—a vibrant space for artists to ask questions, exchange ideas, seek collaborations, and share their artistic journeys with a community that shares their passion.
                </p>
-               <img src="images/Assets/Homepage & Explore/Interested to be a designer.jpeg" alt="Community Board" class="w-full h-48 object-cover rounded-xl shadow-lg mb-6 transform hover:scale-105 transition">
-               <a href="#" class="inline-block bg-indigo-600 text-white px-5 py-3 rounded-full hover:bg-indigo-700 transition">Learn More →</a>
+               <img src="images/Assets/Homepage & Explore/Interested to be a designer.jpeg" alt="Community Board" class="w-full h-56 object-cover rounded-xl shadow-lg mb-6 transform hover:scale-105 transition">
            </div>
            <!-- Separator Line -->
            <div class="hidden md:block w-px bg-gray-300"></div>
@@ -254,77 +243,69 @@
        </div>
     </section>
     <!-- CTA Section End -->
-
-<!-- Footer Section -->
-<footer class="bg-indigo-600 text-slate-10 py-12 mt-16">
-<div class="container mx-auto px-6">
-            <div class="flex flex-wrap justify-between items-start">
-                <!-- About Section -->
-                <div class="w-full md:w-1/3 mb-6 md:mb-0">
-                    <div class="flex items-center mb-4">
-                        <span class="text-2xl font-semibold text-yellow-300">Aesthetic</span>
-                    </div>
-                    <p class="text-white mb-4">
-                        Aesthetic connects artists and art enthusiasts across Indonesia. Join us in building a thriving artistic community that celebrates creativity and local talent.
-                    </p>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-slate-100 hover:text-gray-900 transition">
-                            <i class="fab fa-facebook-f" style="color: #FFD43B; font-size: 1.5rem"></i>
-                        </a>
-                        <a href="#" class="text-gray-500 hover:text-gray-900 transition">
-                            <i class="fa-brands fa-instagram" style="color: #FFD43B; font-size: 1.5rem"></i>
-                        </a>
-                        <a href="#" class="text-gray-500 hover:text-gray-900 transition">
-                            <i class="fab fa-twitter" style="color: #FFD43B; font-size: 1.5rem"></i>
-                        </a>
-                        <a href="#" class="text-gray-500 hover:text-gray-900 transition">
-                            <i class="fab fa-github" style="color: #FFD43B; font-size: 1.5rem"></i>
-                        </a>
+<!-- Questions & Answers Section -->
+<section id="questions-answers" class="py-16 bg-gray-50">
+    <div class="container mx-auto px-6">
+        <div class="text-center mb-12">
+            <h2 class="text-lg text-indigo-600 mb-2">Most asked questions</h2>
+            <h1 class="text-3xl font-bold text-gray-800">Questions & Answers</h1>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="h-12 w-12 rounded-full bg-indigo-600 flex items-center justify-center">
+                        <i class="fas fa-question text-white text-xl"></i>
                     </div>
                 </div>
-                
-                <!-- Links Sections -->
-                <div class="w-full md:w-2/3 flex flex-wrap justify-between">
-                    <!-- Company Links -->
-                    <div class="w-1/2 md:w-1/3 mb-6 md:mb-0">
-                        <h3 class="text-yellow-300 font-semibold mb-4">Company</h3>
-                        <ul class="text-white space-y-4">
-                            <li><a href="{{ route('about-us') }}" class="hover:underline">About</a></li>
-                            <li><a href="{{ route('join-artist') }}" class="hover:underline">Careers</a></li>
-                            <li><a href="#" class="hover:underline">Brand Center</a></li>
-                            <li><a href="{{ route('blog') }}" class="hover:underline">Blog</a></li>
-                        </ul>
-                    </div>
-
-                    <!-- Help Center Links -->
-                    <div class="w-1/2 md:w-1/3 mb-6 md:mb-0">
-                        <h3 class="text-yellow-300 font-semibold mb-4">Help Center</h3>
-                        <ul class="text-white space-y-4">
-                            <li><a href="#" class="hover:underline">Discord Server</a></li>
-                            <li><a href="#" class="hover:underline">Twitter</a></li>
-                            <li><a href="#" class="hover:underline">Facebook</a></li>
-                            <li><a href="{{ route('contact-us') }}" class="hover:underline">Contact Us</a></li>
-                        </ul>
-                    </div>
-
-                    <!-- Legal Links -->
-                    <div class="w-1/2 md:w-1/3 mb-6 md:mb-0">
-                        <h3 class="text-yellow-300 font-semibold mb-4">Legal</h3>
-                        <ul class="text-white space-y-4">
-                            <li><a href="#" class="hover:underline">Privacy Policy</a></li>
-                            <li><a href="#" class="hover:underline">Licensing</a></li>
-                            <li><a href="#" class="hover:underline">Terms</a></li>
-                        </ul>
-                    </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-indigo-600 mb-2">How can I contact customer support?</h3>
+                    <p class="text-gray-600">To contact customer support, look for a "Contact us" button or link on the website or platform. You may be able to email or chat with customer support for assistance.</p>
                 </div>
             </div>
-
-            <!-- Footer Bottom Section -->
-            <div class="mt-8 text-center text-yellow-300 border-t border-gray-200 pt-6">
-                © 2024 Aesthetic. All Rights Reserved.
+            <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="h-12 w-12 rounded-full bg-indigo-600 flex items-center justify-center">
+                        <i class="fas fa-question text-white text-xl"></i>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-indigo-600 mb-2">How do I find my purchase history?</h3>
+                    <p class="text-gray-600">To find your purchase history, log in and go to the account or purchase history page. Look for a list of your past purchases or orders, and click on any item to see more details.</p>
+                </div>
+            </div>
+            <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="h-12 w-12 rounded-full bg-indigo-600 flex items-center justify-center">
+                        <i class="fas fa-question text-white text-xl"></i>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-indigo-600 mb-2">How to create an Account?</h3>
+                    <p class="text-gray-600">To create an account, find the 'Join' button, fill out the registration form with your personal information, and click 'Sign up.' Verify your email address if needed, and then log in to start using the platform.</p>
+                </div>
+            </div>
+            <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="h-12 w-12 rounded-full bg-indigo-600 flex items-center justify-center">
+                        <i class="fas fa-question text-white text-xl"></i>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-indigo-600 mb-2">How can I join as an artist?</h3>
+                    <p class="text-gray-600">To join as an artist, you need to sign up first. Once you have created an account, navigate to your profile and click on the 'Join Artist' option. You will be required to fill out a form with your details and portfolio. </p>
+                </div>
             </div>
         </div>
-    </footer>
+        <div class="mt-12 text-center">
+            <div class="bg-indigo-400 rounded-2xl shadow-lg px-6 py-8 inline-block">
+                <p class="text-white">
+                    Didn’t find the answer you are looking for? 
+                    <a href="#" class="text-indigo-600 font-semibold hover:underline">CONTACT SUPPORT</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
 
     <script>
         // Smooth Scrolling for Anchor Links
@@ -416,8 +397,6 @@
 
         handleScrollAnimation();
     </script>
-
 </body>
 </html>
 @endsection
-
