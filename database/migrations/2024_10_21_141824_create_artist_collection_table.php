@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ARTIST_RATING', function (Blueprint $table) {
-            $table->id('ARTIST_RATING_ID');
-            $table->unsignedBigInteger('USER_ID');
-            $table->foreign('USER_ID')->references('USER_ID')->on('MASTER_USER');
+        Schema::create('ARTIST_COLLECTION', function (Blueprint $table) {
+            $table->id('ARTIST_COLLECTION_ID');
             $table->unsignedBigInteger('ARTIST_ID');
             $table->foreign('ARTIST_ID')->references('ARTIST_ID')->on('ARTIST');
-            $table->longText('CONTENT');
-            $table->integer('USER_RATING');
+            $table->string('COLLECTION_NAME');
+            $table->string('COLLECTION_DESCR');
             $table->timestamps();
         });
     }
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ARTIST_RATING');
+        Schema::dropIfExists('ARTIST_COLLECTION');
     }
 };

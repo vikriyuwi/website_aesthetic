@@ -10,6 +10,7 @@ class Buyer extends Model
 {
     use HasFactory;
     protected $table = 'BUYER';
+    protected $primaryKey = 'BUYER_ID';
     protected $fillable=[
         'USER_ID',
         'FULLNAME',

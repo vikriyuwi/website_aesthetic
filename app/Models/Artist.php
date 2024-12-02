@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Artist extends Model
 {
@@ -15,5 +16,10 @@ class Artist extends Model
     public function MasterUser()
     {
         return $this->belongsTo(MasterUser::class, 'USER_ID', 'USER_ID');
+    }
+
+    public function ArtistRattings(): HasMany
+    {
+        return $this->hasMany(Artist::class, 'ARTIST_ID', 'ARTIST_ID');
     }
 }
