@@ -53,9 +53,27 @@ class AuthController extends Controller
 
     public function loginPost(Request $request)
     {
-        // Use the correct guard and pass the correct password field
-        if (Auth::guard('MasterUser')->attempt(['email' => $request->email, 'password' => $request->password])) {
-            $request->session()->regenerate();
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::guard('MasterUser')->attempt($credentials)) {
+            $user = Auth::guard('MasterUser')->user();
+
+            // Load related models
+            $buyer = $user->Buyers()->first();
+            $artist = $user->Artist()->first();
+
+            // Determine the role
+            $role;
+            if ($buyer) $role = 'BUYER';
+            if ($artist) $role = 'ARTIST';
+
+            // Store roles and related data in the session
+            session([
+                'ROLE' => $role,
+                'BUYER_DATA' => $buyer,
+                'ARTIST_SATA' => $artist,
+            ]);
+
             return redirect()->route('landing');
         } else {
             return back()->with('fail','Wrong Email or Password');
@@ -64,7 +82,18 @@ class AuthController extends Controller
 
     public function logout()
     {
-        Auth::guard('MasterUser')->logout();
+        if (Auth::guard('MasterUser')->check()) {
+            Auth::guard('MasterUser')->logout();
+        }
+
+        if (Auth::guard('BuyerUser')->check()) {
+            Auth::guard('BuyerUser')->logout();
+        }
+        
+        if (Auth::guard('ArtistUser')->check()) {
+            Auth::guard('ArtistUser')->logout();
+        }
+        
         return redirect()->route('landing');
     }
 }

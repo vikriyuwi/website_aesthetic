@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\Buyer;
+use App\Models\MasterUser;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 
 class WebController extends Controller
 {
@@ -269,7 +273,14 @@ public function aboutUs()
 
 public function joinArtist()
 {
-    return view('profile.join-artist');
+    $user = Auth::guard('MasterUser')->user();
+
+    return view('profile.join-artist', [
+        'USER' => $user,
+        'ROLE' => session('ROLE'),
+        'BUYER_DATA' => session('BUYER_DATA'),
+        'ARTIST_DATA' => session('ARTIST_DATA')
+    ]);
 }
 
 public function insightArtist()

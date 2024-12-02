@@ -171,18 +171,18 @@
             <form class="mt-6 space-y-6">
                 <div>
                     <label for="name" class="block text-gray-700 font-medium">Full Name</label>
-                    <input type="text" id="name" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary" placeholder="Your Full Name" required>
+                    <input type="text" id="name" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary" placeholder="Your Full Name" value="{{ $BUYER_DATA->FULLNAME }}" disabled>
                 </div>
                 <div>
                     <label for="email" class="block text-gray-700 font-medium">Email Address</label>
-                    <input type="email" id="email" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary" placeholder="Your Email" required>
+                    <input type="email" id="email" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary" placeholder="Your Email" value="{{ $USER->EMAIL }}" disabled>
                 </div>
-                <div>
+                <!-- <div>
                     <label for="dob" class="block text-gray-700 font-medium">Date of Birth</label>
-                    <input type="date" id="dob" name="dob" class="w-full px-4 py-3 border border-2 rounded-lg focus:ring-2 focus:ring-primary" placeholder="Select your date of birth">
-                </div>
+                    <input type="date" id="dob" name="dob" class="w-full px-4 py-3 border border-2 rounded-lg focus:ring-2 focus:ring-primary" placeholder="Select your date of birth" >
+                </div> -->
 
-                <div>
+                <!-- <div>
                 <label for="gender" class="block text-gray-700 font-medium">Gender</label>
                 <select id="gender" name="gender" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary" onchange="toggleOtherInput(this)">
                         <option value="">Select your gender</option>
@@ -191,12 +191,11 @@
                         <option value="prefer_not_to_say">Prefer not to say</option>
                         <option value="other">Other</option>
                 </select>
-                <!-- Conditional "Other" input field -->
                 <input type="text" id="otherGender" name="otherGender" class="w-full px-4 py-3 mt-4 border rounded-lg focus:ring-2 focus:ring-primary hidden" placeholder="Please specify" disabled>
-                </div>
+                </div> -->
                 <div>
-                    <label for="portfolio" class="block text-gray-700 font-medium">Mobile Number</label>
-                    <input type="url" id="portfolio" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary" placeholder="Your number">
+                    <label for="mobile_number" class="block text-gray-700 font-medium">Mobile Number</label>
+                    <input type="url" id="mobile_number" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary" placeholder="Your number" value="{{ $USER->EMAIL }}">
                 </div>
                 <div>
                     <label for="portfolio" class="block text-gray-700 font-medium">Portfolio Link</label>

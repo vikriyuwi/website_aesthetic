@@ -27,7 +27,7 @@ class MasterUser extends Authenticatable
 
     public function Buyers():HasOne
     {
-        return $this->hasOne(Buyer::class);
+        return $this->hasOne(Buyer::class, 'USER_ID', 'USER_ID');
     }
 
     public function Artist()
