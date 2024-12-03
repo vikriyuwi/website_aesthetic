@@ -167,8 +167,8 @@
                 <div class="w-1/4 relative">
                     <div class="bg-white p-4 rounded-lg shadow-lg relative">
                         <!-- Ellipsis Button -->
+                        
                         @if(Auth::check())
-                            
                         <button
                             class="ellipsisButton absolute top-2 right-2 text-gray-600 hover:text-gray-800 focus:outline-none">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -180,9 +180,9 @@
                             
                         <!-- Options Menu -->
                         <div class="optionsMenu bg-white rounded-lg shadow-lg py-2 w-48">
-                            @if (Auth::user()->USER_ID == $artistUserId )
+                            @if (Auth::user()->USER_ID == $artist->USER_ID)
                             <!-- Edit Profile Button -->
-                            <button onclick="openEditProfileModal({{ $artistId }})"
+                            <button onclick="openEditProfileModal({{ $artist->ARTIST_ID }})"
                                 class="block w-full text-left px-4 py-3 hover:bg-indigo-100 hover:text-indigo-600 transition-colors duration-200 font-medium text-gray-700 flex items-center">
                                 <i class="fas fa-user-edit mr-3 text-indigo-500"></i>
                                 Edit Profile
@@ -190,7 +190,7 @@
                             @endif
                             
                             <!-- Review Artist Button -->
-                            @if (Auth::user()->USER_ID != $artistUserId )
+                            @if (Auth::user()->USER_ID != $artist->USER_ID )
                             <button onclick="openReviewModal()"
                                 class="block w-full text-left px-4 py-3 hover:bg-green-100 hover:text-green-600 transition-colors duration-200 font-medium text-gray-700 flex items-center">
                                 <i class="fas fa-star mr-3 text-green-500"></i>
@@ -199,7 +199,7 @@
                             @endif
 
                             <!-- Hire Freelance Button -->
-                            @if (Auth::user()->USER_ID == $artistUserId )
+                            @if (Auth::user()->USER_ID == $artist->USER_ID )
                             <button onclick="openFormModal()"
                                 class="block w-full text-left px-4 py-3 hover:bg-green-100 hover:text-green-600 transition-colors duration-200 font-medium text-gray-700 flex items-center">
                                 <i class="fas fa-file mr-3 text-blue-500"></i>
@@ -208,7 +208,7 @@
                             @endif
 
                             <!-- Report Artist Button (styled in red) -->
-                            @if (Auth::user()->USER_ID != $artistUserId )
+                            @if (Auth::user()->USER_ID != $artist->USER_ID )
                             <button onclick="openReportModal()"
                                 class="block w-full text-left px-4 py-3 hover:bg-red-100 hover:bg-red-100 text-red-600 hover:text-red-700 transition-colors duration-200 font-medium flex items-center">
                                 <i class="fa fa-flag mr-3 text-red-600"></i>
@@ -217,17 +217,14 @@
                             @endif
                         </div>
                         @endif
+
                         <div class="text-center">
-                            @foreach ($artist as $artist => $artistDetail )
-                            @php
-                                $artistAbout = $artistDetail->ABOUT
-                            @endphp
-                            <img src="{{ asset($artistDetail->PROFILE_IMAGE_PATH) }}" alt="Profile picture"
+                            <img src="{{ asset($artist->PROFILE_IMAGE_PATH) }}" alt="Profile picture"
                                 class="w-24 h-24 rounded-full mx-auto object-cover">
-                            <h2 class="text-xl font-bold mt-4">{{ $artistDetail->USERNAME }}</h2>
-                            <p class="text-gray-600">{{ $artistDetail->ROLE }}</p>
-                            <p class="text-gray-600">{{ $artistDetail->BIO }}</p>
-                            <p class="text-gray-600"><i class="fas fa-map-marker-alt"></i> {{ $artistDetail->LOCATION }}</p>
+                            <h2 class="text-xl font-bold mt-4">{{ $artist->USERNAME }}</h2>
+                            <p class="text-gray-600">{{ $artist->ROLE }}</p>
+                            <p class="text-gray-600">{{ $artist->BIO }}</p>
+                            <p class="text-gray-600"><i class="fas fa-map-marker-alt"></i> {{ $artist->LOCATION }}</p>
 
                             <button onclick="toggleFollow()" id="followButton" class="bg-green-500 text-white px-4 py-2 rounded-full w-full mt-4">
                                 <i id="followIcon" class="fas fa-user-plus mr-2"></i>
@@ -240,7 +237,7 @@
 
                         <div class="mt-4 flex justify-center items-center">
                             <button onclick="openHireModal()" class="bg-white border border-indigo-500 rounded-lg p-2 px-4 shadow-md">
-                                <h1 class="text-sm font-semibold text-center">Hire {{ $artistDetail->USERNAME }}</h1>
+                                <h1 class="text-sm font-semibold text-center">Hire {{ $artist->USERNAME }}</h1>
                                 <div class="flex items-center mt-1">
                                     <i class="fas fa-clipboard-list text-indigo-500 mr-2"></i>
                                     <div>
@@ -248,38 +245,28 @@
                                         <p class="text-gray-500 text-xs">Available</p>
                                     </div>
                                 </div>
+                            </button>
                         </div>
-                        </button>
-                        @endforeach
                         <div class="mt-4 space-y-2">
                             <div class="flex justify-between">
                                 <span class="text-gray-600">Project Views</span>
-                                @if (is_null($countArtistView)|| is_null($countArtistView->TOTAL_VIEWS))
                                 <span class="text-gray-800">0</span>
-                                @else
-                                <span class="text-gray-800">{{ $countArtistView->TOTAL_VIEWS }}</span>
-                                @endif
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-gray-600">Likes</span>
-                                @if (is_null($countArtistLikes) || is_null($countArtistLikes->TOTAL_LIKES))
                                 <span class="text-gray-800">0</span>
-                                @else
-                                <span class="text-gray-800">{{ $countArtistLikes->TOTAL_LIKES }}</span>
-                                @endif
-                                
                             </div>
                             <div class="flex justify-between">
                                 <a href="{{ route('followers') }}" class="text-gray-600 hover:underline">Followers</a>
-                                <a href="{{ route('followers') }}" class="text-gray-800">{{ $countArtistFollowers->TOTAL_FOLLOWERS }}</a>
+                                <a href="{{ route('followers') }}" class="text-gray-800">0</a>
                             </div>
                             <div class="flex justify-between">
                                 <a href="{{ route('following') }}" class="text-gray-600 hover:underline">Following</a>
-                                <a href="{{ route('following') }}" class="text-gray-800">{{ $countArtistFollowing->TOTAL_FOLLOWING }}</a>
+                                <a href="{{ route('following') }}" class="text-gray-800">0</a>
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-gray-600">Artist Overall Rating</span>
-                                <span class="text-gray-800">{{ $averageArtistRating }}</span>
+                                <span class="text-gray-800">0</span>
                             </div>
                         </div>
 
@@ -293,17 +280,17 @@
                     </div>
 
                     <!-- Posts Section -->
-                    @if($section == "home")
+                    @if ($section == 'home')
                     <div class="bg-white p-4 rounded-lg shadow-lg mt-4">
                         <h3 class="text-lg font-bold">Posts</h3>
                         <div class="mt-4">
                             <div class="flex items-start">
-                                <img src="{{ asset($latestPost->PROFILE_IMAGE_PATH) }}"
+                                <img src="{{ asset('') }}"
                                     alt="Post profile picture" class="w-12 h-12 rounded-full object-cover">
                                 <div class="ml-4">
-                                    <h4 class="font-bold">{{ $latestPost->USERNAME }}</h4>
-                                    <p class="text-gray-600">{{ $latestPost->CONTENT }}</p>
-                                    <img src="{{ asset($latestPost->POST_MEDIA_PATH) }}"
+                                    <h4 class="font-bold">username</h4>
+                                    <p class="text-gray-600">content</p>
+                                    <img src="{{ asset('') }}"
                                         alt="Post image" class="mt-2 rounded-lg object-cover w-full h-32">
                                     <div class="flex justify-between items-center mt-2">
                                         <div class="flex space-x-10">
@@ -331,8 +318,8 @@
                             </div>
                         </div>
                     </div>
-                    @endif
                 </div>
+                @endif
             
                 
 
@@ -342,17 +329,17 @@
                 <div class="w-3/4 ml-4">
                     <!-- Navigation Tabs -->
                     <nav class="flex space-x-4">
-                        <a href="{{ route('artist.show', ['id' => $artistId, 'section' => 'home']) }}"
+                        <a href="{{ route('artist.show', ['id' => $artist->ARTIST_ID, 'section' => 'home']) }}"
                             class="text-gray-600 hover:text-gray-800">Home</a>
-                        <a href="{{ route('artist.show', ['id' => $artistId, 'section' => 'portfolio']) }}"
+                        <a href="{{ route('artist.show', ['id' => $artist->ARTIST_ID, 'section' => 'portfolio']) }}"
                             class="text-gray-600 hover:text-gray-800">Portfolio</a>
-                        <a href="{{ route('artist.show', ['id' => $artistId, 'section' => 'collection']) }}"
+                        <a href="{{ route('artist.show', ['id' => $artist->ARTIST_ID, 'section' => 'collection']) }}"
                             class="text-gray-600 hover:text-gray-800">Collection</a>
-                        <a href="{{ route('artist.show', ['id' => $artistId, 'section' => 'posts']) }}"
+                        <a href="{{ route('artist.show', ['id' => $artist->ARTIST_ID, 'section' => 'posts']) }}"
                             class="text-gray-600 hover:text-gray-800">Posts</a>
-                        <a href="{{ route('artist.show', ['id' => $artistId, 'section' => 'artwork']) }}"
+                        <a href="{{ route('artist.show', ['id' => $artist->ARTIST_ID, 'section' => 'artwork']) }}"
                             class="text-gray-600 hover:text-gray-800">ArtWork</a>
-                        <a href="{{ route('artist.show', ['id' => $artistId, 'section' => 'about']) }}"
+                        <a href="{{ route('artist.show', ['id' => $artist->ARTIST_ID, 'section' => 'about']) }}"
                             class="text-gray-600 hover:text-gray-800">About</a>
                     </nav>
 
@@ -361,17 +348,17 @@
                     <!-- Section Rendering -->
                     <div class="mt-4">
                         @if ($section === 'home')
-                            @include('artists.sections.home', ['homeLatestWork' => $homeLatestWork, 'homeLatestPortfolio' => $homeLatestPortfolio, 'artistId' => $artistId])
+                            @include('artists.sections.home', ['artist' => $artist])
                         @elseif($section === 'portfolio')
-                            @include('artists.sections.portfolio',['artistPortfolio' => $artistPortfolio, 'artistUserId' => $artistUserId])
+                            @include('artists.sections.portfolio',['artist' => $artistD])
                         @elseif($section === 'collection')
-                            @include('artists.sections.collection',['listCollection' => $listCollection, 'artistUserId' => $artistUserId, 'artistId' => $artistId])
+                            @include('artists.sections.collection',['artist' => $artist])
                         @elseif($section === 'posts')
-                            @include('artists.sections.posts', ['artistUserId' => $artistUserId])
+                            @include('artists.sections.posts', ['artist' => $artist])
                         @elseif($section === 'artwork')
-                            @include('artists.sections.artwork', ['artistArtwork' => $artistArtwork, 'artistId' => $artistId, 'artCategoryMaster' => $artCategoryMaster,'artistUserId' =>$artistUserId])
+                            @include('artists.sections.artwork', ['artist' => $artist])
                         @elseif($section === 'about')   
-                            @include('artists.sections.about', ['countTotalRating' => $countTotalRating,'userRatingPercentage' => $userRatingPercentage,'rating' => $rating,'averageArtistRating' => $averageArtistRating, 'artistAbout' => $artistAbout, 'artistUserId' => $artistUserId])
+                            @include('artists.sections.about', ['artist' => $artist])
                         @endif
                     </div>
                 </div>
@@ -561,7 +548,7 @@
 
                         <!-- Save Button -->
                         <div class="flex justify-end mt-6">
-                            <button onclick="saveProfileChanges({{ $artistId }})"
+                            <button onclick="saveProfileChanges({{ $artist->ARTIST_ID }})"
                                 class="bg-indigo-600 text-white px-6 py-2 rounded-full hover:bg-indigo-700 transition duration-200 flex items-center">
                                 Save Changes
                             </button>

@@ -12,13 +12,11 @@
     <div class="bg-white p-4 rounded-lg shadow-lg mt-4">
         <div class="flex justify-between items-center">
             <h3 class="text-lg font-bold">Latest Works</h3>
-            <a href="{{ route('all-artwork.show', ['artistId' => $artistId, 'artistUserId' => $artistUserId]) }}" class="text-gray-600 hover:text-gray-800">See all</a>
+            <a href="{{ route('all-artwork.show', ['artistId' => $artist->ARTIST_ID]) }}" class="text-gray-600 hover:text-gray-800">See all</a>
         </div>
         <div class="grid grid-cols-3 gap-4 mt-4">
-            @foreach ($homeLatestWork as $homeLatestWork => $listHomeLatestWork)
-                <img src="{{ asset($listHomeLatestWork->IMAGE_PATH) }}"
-                    alt="Latest work {{ $listHomeLatestWork->ART_ID }}" class="rounded-lg object-cover">
-            @endforeach
+            <img src="{{ asset('') }}"
+            alt="Latest work 1" class="rounded-lg object-cover">
         </div>
     </div>
 
@@ -26,13 +24,11 @@
     <div class="bg-white p-4 rounded-lg shadow-lg mt-4">
         <div class="flex justify-between items-center">
             <h3 class="text-lg font-bold">Portfolio</h3>
-            <a href="{{ route('artist.show', ['id' => $artistId, 'section' => $section = 'portfolio']) }}" class="text-gray-600 hover:text-gray-800">See all</a>
+            <a href="{{ route('artist.show', ['id' => $artist->ARTIST_ID, 'section' => $section = 'portfolio']) }}" class="text-gray-600 hover:text-gray-800">See all</a>
         </div>
         <div class="grid grid-cols-3 gap-4 mt-4">
-            @foreach ($homeLatestPortfolio as $homeLatestPortfolio => $listHomeLatestPortfolio)
-                <img src="{{ asset($listHomeLatestPortfolio->IMAGE_PATH) }}"
-                    alt="Portfolio work  {{ $listHomeLatestPortfolio->ART_ID }}" class="rounded-lg object-cover">
-            @endforeach
+            <img src="{{ asset('') }}"
+            alt="Portfolio work 1" class="rounded-lg object-cover">
         </div>
     </div>
 
