@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('LOCATION');
             $table->string('ROLE');
             $table->string('BIO');
-            $table->date('JOIN_DATE');
             $table->text('ABOUT');
             $table->timestamps();
         });

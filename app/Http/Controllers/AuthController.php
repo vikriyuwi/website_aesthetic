@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -22,6 +23,20 @@ class AuthController extends Controller
 
     public function registerPost(Request $request)
     {
+
+        $validator = Validator::make($request->all(), [
+            'userName' => 'required|unique:MASTER_USER,USERNAME|max:255',
+            'password' => 'required|confirmed|min:6',
+            'email' => 'required|email:rfc,dns|unique:MASTER_USER,EMAIL',
+            'firstName' => 'required',
+            'lastName' => 'required',
+            'phone' => 'required|integer'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
+
         $MasterUser = new MasterUser();
         $Buyer = new Buyer();
 
@@ -35,7 +50,6 @@ class AuthController extends Controller
         $Buyer->FULLNAME = $request->firstName.' '.$request->lastName;
         $Buyer->PHONE_NUMBER = $request->phone;
         $Buyer->ADDRESS = "Dummy";
-        $Buyer->ACCOUNT_CREATION_DATE = date('Y-m-d');
         $Buyer->save();
 
         return redirect()->route('login');
@@ -76,7 +90,9 @@ class AuthController extends Controller
 
             return redirect()->route('landing');
         } else {
-            return back()->with('fail','Wrong Email or Password');
+            return redirect()->back()->withErrors([
+                'authorization' => 'Account not authorized!'
+            ]);
         }
     }
 

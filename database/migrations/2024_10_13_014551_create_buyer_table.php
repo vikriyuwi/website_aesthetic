@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('FULLNAME',255);
             $table->string('PHONE_NUMBER');
             $table->string('ADDRESS',255);
-            $table->date('ACCOUNT_CREATION_DATE');
             $table->string('PROFILE_IMAGE_URL')->nullable();
             $table->timestamps();
         });
