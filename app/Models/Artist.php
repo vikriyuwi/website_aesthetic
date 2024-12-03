@@ -22,4 +22,9 @@ class Artist extends Model
     {
         return $this->hasMany(Artist::class, 'ARTIST_ID', 'ARTIST_ID');
     }
+
+    public function Collections(): HasMany
+    {
+        return $this->hasMany(ArtistCollection::class, 'ARTIST_ID', 'ARTIST_ID');
+    }
 }

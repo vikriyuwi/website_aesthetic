@@ -48,6 +48,7 @@
       @endif
     </div>
 
+    @forEach($artist->Collections as $collection)
     <!-- Collections Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
       <!-- Collection Item Example -->
@@ -68,21 +69,22 @@
         </div>
         <img alt="Collection Image 1" class="w-full h-48 object-cover transform hover:scale-110 transition-transform duration-500" src="{{ asset('/storage/uploads/collection_default.jpg') }}">
         <div class="p-6">
-          <h4 class="text-xl font-semibold text-gray-900 mb-2">Collection name</h4>
-          <p class="text-gray-600 mb-4">Total collection</p>
+          <h4 class="text-xl font-semibold text-gray-900 mb-2">{{ $collection->COLLECTION_NAME }}</h4>
+          <p class="text-gray-600 mb-4">{{ count($collection->Arts) }}</p>
           <a href="{{ route('collection.show', ['artistId' => $artist->ARTIST_ID, 'collectionId' => 0]) }}" class=" text-indigo-600 font-bold hover:underline">View Collection &rarr;</a>
         </div>
       </div>
-      
       <!-- More collection items can be added similarly -->
     </div>
+    @endforeach
+    {{-- End collection grod --}}
   </div>
 
   <!-- Add Collection Modal -->
   <div id="addCollectionModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden modal-overlay">
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-xl">
       <h2 class="text-3xl font-semibold text-gray-800 mb-6">Add New Collection</h2>
-      <form id="addCollectionForm" method="POST" action="{{ route('collection.store') }}" enctype="multipart/form-data" class="space-y-6">
+      <form id="addCollectionForm" method="POST" action="{{ route('collection.store') }}" class="space-y-6">
         @csrf
         <div>
             <label for="collectionTitle" class="block text-gray-700 font-semibold mb-2">Collection Title</label>
@@ -94,10 +96,9 @@
             <textarea id="collectionDescription" name="collectionDescription" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition" placeholder="Enter collection description" required></textarea>
             <span id="collectionDescriptionError" class="text-red-600"></span>
         </div>
-    
         <div class="flex justify-end space-x-3">
             <button type="button" id="cancelAddCollectionButton" onclick="closeModal()" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition duration-200">Cancel</button>
-            <button type="button" id="addCollectionButton" onclick="submitCollection()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 shadow-md transition duration-300 transform hover:scale-105">Add Collection</button>
+            <button type="submit" id="addCollectionButton" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 shadow-md transition duration-300 transform hover:scale-105">Add Collection</button>
         </div>
     </form>
     </div>

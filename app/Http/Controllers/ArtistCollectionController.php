@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Artist;
 use App\Models\ArtCollection;
 use App\Models\ArtistCollection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -14,6 +15,9 @@ class ArtistCollectionController extends Controller
 {
     public function store(Request $request)
     {
+        $user = Auth::guard('MasterUser')->user();
+        $artist = Artist::where('ARTIST_ID','=',$user->Artist->ARTIST_ID)->first();
+
         $validated = Validator::make($request->all(), [
             'collectionTitle' => 'required',
             'collectionDescription' => 'required',
@@ -23,20 +27,15 @@ class ArtistCollectionController extends Controller
         ]);
 
         if ($validated->fails()) {
-            // Return validation errors as JSON
-            return response()->json(['errors' => $validated->errors()], 422);
+            return redirect()->back()->withError($validated->error());
         }
 
-        ArtistCollection::create([
+        $artist->Collections()->create([
             'COLLECTION_NAME' => $request->collectionTitle,
-            'COLLECTION_DESCR'=> $request->collectionDescription,
-            'USER_ID'=> Auth::id(),
-            ]);
+            'COLLECTION_DESCR'=> $request->collectionDescription
+        ]);
 
-        // Save the collection (replace this with actual save logic)
-        // Collection::create([...]);
-
-        return response()->json(['success' => 'Collection added successfully!']);
+        return redirect()->back()->with('status','New collection has been added!');
     }
 
     public function destroy($collectionId){
