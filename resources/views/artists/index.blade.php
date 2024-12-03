@@ -155,10 +155,10 @@
                       <!-- Artist Image -->
                       <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-indigo-500">
                           {{-- <img src="{{ asset('images/' . $artist['image']) }}" alt="{{ $artist['name'] }}" class="w-full h-full object-cover"> --}}
-                          <img src="{{ asset($artist->PROFILE_IMAGE_PATH) }}" alt="{{ $artist->USERNAME }}" class="w-full h-full object-cover">
+                          <img src="{{ asset($artist->PROFILE_IMAGE_PATH) }}" alt="{{ $artist->MasterUser->Buyer->FULLNAME }}" class="w-full h-full object-cover">
                       </div>
                       <div class="ml-4">
-                          <h2 class="text-xl font-semibold text-gray-900">{{ $artist->USERNAME }}</h2>
+                          <h2 class="text-xl font-semibold text-gray-900">{{ $artist->MasterUser->Buyer->FULLNAME }}</h2>
                           <p class="text-sm text-gray-500">{{ $artist->ROLE}}</p>
                           <p class="text-xs text-gray-400">{{ $artist->LOCATION }}</p>
                       </div>

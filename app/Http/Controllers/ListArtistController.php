@@ -10,9 +10,10 @@ class ListArtistController extends Controller
 {
     public function viewListArtist()
     {
-        $countArtist = Artist::all()->count();
+        $countArtist = Artist::where('IS_ACTIVE',true)->count();
 
-        $listArtist = Artist::all();
+        $listArtist = Artist::where('IS_ACTIVE',true)->get();
+
         // DB::table('ARTIST')
         //             ->select('ARTIST.ARTIST_ID', DB::raw('DATEDIFF(day, ARTIST.JOIN_DATE, GETDATE()) AS JOINED'), 'MASTER_USER.USERNAME', 'ARTIST.LOCATION', 'ARTIST.ROLE','ARTIST.BIO', 'MASTER_USER.PROFILE_IMAGE_PATH')
         //             ->join('MASTER_USER', 'ARTIST.USER_ID', '=', 'MASTER_USER.USER_ID')

@@ -221,7 +221,7 @@
                         <div class="text-center">
                             <img src="{{ asset($artist->PROFILE_IMAGE_PATH) }}" alt="Profile picture"
                                 class="w-24 h-24 rounded-full mx-auto object-cover">
-                            <h2 class="text-xl font-bold mt-4">{{ $artist->USERNAME }}</h2>
+                            <h2 class="text-xl font-bold mt-4">{{ $artist->MasterUser->Buyer->FULLNAME }}</h2>
                             <p class="text-gray-600">{{ $artist->ROLE }}</p>
                             <p class="text-gray-600">{{ $artist->BIO }}</p>
                             <p class="text-gray-600"><i class="fas fa-map-marker-alt"></i> {{ $artist->LOCATION }}</p>
