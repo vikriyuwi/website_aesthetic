@@ -23,10 +23,11 @@ class MasterUser extends Authenticatable
         'USERNAME',
         'EMAIL',
         'PASSWORD',
-        'USER_LEVEL'
+        'USER_LEVEL',
+        'IS_ACTIVE'
     ];
 
-    public function Buyers():HasOne
+    public function Buyer():HasOne
     {
         return $this->hasOne(Buyer::class, 'USER_ID', 'USER_ID');
     }

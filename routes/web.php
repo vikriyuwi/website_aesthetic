@@ -13,15 +13,24 @@ use App\Http\Controllers\ArtistProfileController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Middleware\Authorization;
 use App\Http\Middleware\Role;
+use App\Http\Middleware\ActiveBuyer;
+use App\Http\Middleware\ActiveArtist;
 
-Route::get('/', function () {
-    return redirect('/login');
+// Route::get('/', function () {
+//     return redirect('/login');
+// });
+
+Route::middleware(ActiveBuyer::class)->group(function() {
+    Route::get('/', function() {
+        return "hai";
+    });
 });
 
 // Auth user not allowed to open this
 Route::middleware(Authorization::class.':false')->group(function() {
     Route::get('/login', [App\Http\Controllers\AuthController::class, 'login']);
     Route::post('/login', [App\Http\Controllers\AuthController::class, 'loginPost'])->name('login');
+    Route::get('/register', [App\Http\Controllers\AuthController::class, 'register']);
     Route::post('/register', [App\Http\Controllers\AuthController::class, 'registerPost'])->name('register');
 });
 

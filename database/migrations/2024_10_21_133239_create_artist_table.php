@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('ROLE');
             $table->string('BIO');
             $table->text('ABOUT');
+            $table->boolean('IS_ACTIVE')->default(false);
             $table->timestamps();
         });
     }

@@ -7,26 +7,16 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 
-class Role
+class ActiveBuyer
 {
     /**
      * Handle an incoming request.
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, string $role): Response
+    public function handle(Request $request, Closure $next): Response
     {
-        $raw;
-
-        if ($role == "ADMIN") {
-            $raw = 3;
-        } else if ($role == "ARTIST") {
-            $raw = 2;
-        } else {
-            $raw = 1;
-        }
-
-        if (Auth::guard('MasterUser')->user()->USER_LEVEL == $raw) {
+        if(Auth::guard('MasterUser')->user()->Buyer->IS_ACTIVE) {
             return $next($request);
         }
         return redirect()->back();

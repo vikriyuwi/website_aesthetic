@@ -78,8 +78,8 @@ class AuthController extends Controller
 
             // Determine the role
             $role;
-            if ($buyer) $role = 'BUYER';
-            if ($artist) $role = 'ARTIST';
+            if ($user->USER_LEVEL == 1) $role = 'BUYER';
+            if ($user->USER_LEVEL == 2) $role = 'ARTIST';
 
             // Store roles and related data in the session
             session([

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('PHONE_NUMBER');
             $table->string('ADDRESS',255);
             $table->string('PROFILE_IMAGE_URL')->nullable();
+            $table->boolean('IS_ACTIVE')->default(true);
             $table->timestamps();
         });
     }

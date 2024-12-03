@@ -17,7 +17,8 @@ class Buyer extends Model
         'PHONE_NUMBER',
         'WISHLIST',
         'FOLLOWEDARTIST',
-        'ADDRESS'
+        'ADDRESS',
+        'IS_ACTIVE'
     ];
 
     public function MasterUser():BelongsTo
