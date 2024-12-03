@@ -43,7 +43,7 @@ Route::middleware([Authorization::class.':true'])->group(function() {
     Route::prefix('collection')->name('collection.')->group(function () {
         Route::post('/add', [ArtistCollectionController::class, 'store'])->name('store');
         Route::put('/{collectionId}/update', [ArtistCollectionController::class, 'update'])->name('update');
-        Route::post('/delete/{collectionId}', [ArtistCollectionController::class, 'destroy'])->name('delete');
+        Route::get('/delete/{collectionId}', [ArtistCollectionController::class, 'destroy'])->name('delete');
     });
 });
 

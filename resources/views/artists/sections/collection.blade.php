@@ -65,7 +65,7 @@
         <!-- Options Menu -->
         <div class="optionsMenu">
           <button class="block w-full text-left px-4 py-2 hover:bg-gray-100 editCollectionButton" data-collection-id="{{ $collection->ARTIST_COLLECTION_ID }}" data-collection-title="{{ $collection->COLLECTION_NAME }}" data-collection-descr="{{ $collection->COLLECTION_DESCR }}">Edit Collection</button>
-          <button class="block w-full text-left px-4 py-2 hover:bg-gray-100" onclick="confirmDeleteCollection(event,0)">Delete Collection</button>
+          <button class="block w-full text-left px-4 py-2 hover:bg-gray-100 deleteCollectionButton" data-collection-id="{{ $collection->ARTIST_COLLECTION_ID }}" data-collection-title="{{ $collection->COLLECTION_NAME }}">Delete Collection</button>
         </div>
         <img alt="Collection Image 1" class="w-full h-48 object-cover transform hover:scale-110 transition-transform duration-500" src="{{ asset('/storage/uploads/collection_default.jpg') }}">
         <div class="p-6">
@@ -134,7 +134,7 @@
       <p class="text-gray-600 mb-6">Are you sure you want to delete <span id="collectionNameSpan"></span>?</p>
       <div class="flex justify-end space-x-3">
         <button type="button" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition" onclick="closeDeleteModal()">Cancel</button>
-        <button type="button" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition" onclick="deleteCollection()">Delete</button>
+        <a type="button" id="deleteCollectionButton" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">Delete</a>
       </div>
     </div>
   </div>
@@ -163,10 +163,17 @@
         form.action = updateCollectionRoute.replace('COLLECTION_ID', collectionId);
 
         document.getElementById('editCollectionModal').classList.remove('hidden');
-        
-        console.log('Collection ID:', this.getAttribute('data-collection-id'));
-        console.log('Collection Title:', this.getAttribute('data-collection-title'));
-        console.log('Collection Description:', this.getAttribute('data-collection-descr'));
+      });
+    });
+
+    const deleteButtons = document.querySelectorAll('.deleteCollectionButton');
+
+    deleteButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        document.getElementById('collectionNameSpan').innerHTML = '"'+this.getAttribute('data-collection-title')+'"';
+        let deleteCollectionRoute = "{{ route('collection.delete', ['collectionId' => 'COLLECTION_ID']) }}";
+        document.getElementById('deleteCollectionButton').href = deleteCollectionRoute.replace('COLLECTION_ID', this.getAttribute('data-collection-id'))
+        document.getElementById('deleteConfirmationModal').classList.remove('hidden');
       });
     });
 
