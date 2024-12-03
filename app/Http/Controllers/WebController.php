@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Artist;
 use App\Models\Buyer;
 use App\Models\MasterUser;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class WebController extends Controller
 {
@@ -280,6 +282,31 @@ public function joinArtist()
         'ROLE' => $user->USER_LEVEL,
         'BUYER_DATA' => session('BUYER_DATA'),
     ]);
+}
+
+public function registerArtist(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'location' => 'required',
+        'role' => 'required',
+        'bio' => 'required',
+    ]);
+
+    if ($validator->fails()) {
+        return redirect()->back()->withErrors($validator);
+    }
+
+    $user = Auth::guard('MasterUser')->user();
+
+    $artist = new Artist();
+    $artist->USER_ID = $user->USER_ID;
+    $artist->LOCATION = $request->location;
+    $artist->ROLE = $request->role;
+    $artist->BIO = $request->bio;
+    $artist->ABOUT = $request->bio;
+    $artist->save();
+
+    return redirect()->back()->with('status','success');
 }
 
 public function insightArtist()

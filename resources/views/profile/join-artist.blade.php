@@ -168,7 +168,8 @@
             <p class="mt-3 text-gray-600">
                 Fill out the form below to apply as an artist on Aesthetic.
             </p>
-            <form class="mt-6 space-y-6">
+            <form class="mt-6 space-y-6" method="POST" action="{{ route('register-artist') }}">
+                @csrf
                 <div>
                     <label for="name" class="block text-gray-700 font-medium">Full Name</label>
                     <input type="text" id="name" class="w-full px-4 py-3 border rounded-lg disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200" placeholder="Your Full Name" value="{{ $BUYER_DATA->FULLNAME }}" disabled>
@@ -195,7 +196,7 @@
                 </div> -->
                 <div>
                     <label for="mobile_number" class="block text-gray-700 font-medium">Mobile Number</label>
-                    <input type="url" id="mobile_number" class="w-full px-4 py-3 border rounded-lg disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200" placeholder="Your number" value="{{ $BUYER_DATA->PHONE_NUMBER }}" disabled>
+                    <input type="text" id="mobile_number" class="w-full px-4 py-3 border rounded-lg disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200" placeholder="Your number" value="{{ $BUYER_DATA->PHONE_NUMBER }}" disabled>
                 </div>
                 {{-- <div>
                     <label for="portfolio" class="block text-gray-700 font-medium">Portfolio Link</label>
@@ -203,22 +204,22 @@
                 </div> --}}
                 <div>
                     <label for="location" class="block text-gray-700 font-medium">Location <Style></Style></label>
-                    <input type="url" id="location" name="location" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary" placeholder="Your working location (e.g., Jakarta, Indonesia)">
+                    <input type="text" id="location" name="location" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary" placeholder="Your working location (e.g., Jakarta, Indonesia)" required>
                 </div>
                 <div>
                     <label for="role" class="block text-gray-700 font-medium">Type of Art <Style></Style></label>
-                    <input type="url" id="role" name="role" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary" placeholder="What type of art do you create? (e.g., digital art, painting, sculpture, etc.)">
+                    <input type="text" id="role" name="role" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary" placeholder="What type of art do you create? (e.g., digital art, painting, sculpture, etc.)" required>
                 </div>
                 <div>
                     <label for="bio" class="block text-gray-700 font-medium">Biography</label>
-                    <textarea id="bio" name="bio" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary" rows="4" placeholder="Tell us about yourself"></textarea>
+                    <textarea id="bio" name="bio" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary" rows="4" placeholder="Tell us about yourself" required></textarea>
                 </div>
                 <div class="flex justify-between items-center mt-6">
                     <label class="block text-gray-700 font-medium">
                         <input type="checkbox" id="terms" class="mr-2">
                         I agree to the <span onclick="openTermsModal()" class="text-primary underline cursor-pointer">Terms and Conditions</span>.
                     </label>
-                    <button type="button" onclick="submitJoinForm()" class="bg-primary text-white px-6 py-3 rounded-lg shadow-lg hover:bg-indigo-700 transition">
+                    <button type="submit"class="bg-primary text-white px-6 py-3 rounded-lg shadow-lg hover:bg-indigo-700 transition">
                         Submit
                     </button>
                 </div>
@@ -265,6 +266,15 @@
             </button>
         </div>
     </div>
+
+    {{-- submitJoinForm() --}}
+    @if(session('status'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            submitJoinForm();
+        });
+    </script>
+    @endif
 
     <!-- JavaScript for Animations -->
     <script>

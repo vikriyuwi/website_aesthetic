@@ -37,6 +37,7 @@ Route::middleware(Authorization::class.':false')->group(function() {
 Route::middleware([Authorization::class.':true'])->group(function() {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/join-artist', [WebController::class, 'joinArtist'])->name('join-artist');
+    Route::post('/join-artist', [WebController::class, 'registerArtist'])->name('register-artist');
 });
 
 Route::get('/landing', [App\Http\Controllers\WebController::class, 'landing'])->name('landing');
