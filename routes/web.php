@@ -11,21 +11,26 @@ use App\Http\Controllers\ArtistPortfolioController;
 use App\Http\Controllers\ArtistPostController;
 use App\Http\Controllers\ArtistProfileController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Middleware\Authorization;
+use App\Http\Middleware\Role;
 
 Route::get('/', function () {
     return redirect('/login');
 });
 
+// Auth user not allowed to open this
+Route::middleware(Authorization::class.':false')->group(function() {
+    Route::get('/login', [App\Http\Controllers\AuthController::class, 'login']);
+    Route::post('/login', [App\Http\Controllers\AuthController::class, 'loginPost'])->name('login');
+    Route::post('/register', [App\Http\Controllers\AuthController::class, 'registerPost'])->name('register');
+});
 
-Route::get('login', [AuthController::class, 'login'])->name('login');
-Route::get('register', [AuthController::class, 'register'])->name('register');
+Route::middleware([Authorization::class.':true'])->group(function() {
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/join-artist', [WebController::class, 'joinArtist'])->name('join-artist');
+});
 
 Route::get('/landing', [App\Http\Controllers\WebController::class, 'landing'])->name('landing');
-
-Route::post('/login', [App\Http\Controllers\AuthController::class, 'loginPost'])->name('login');
-Route::post('/register', [App\Http\Controllers\AuthController::class, 'registerPost'])->name('register');
-
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/home', [App\Http\Controllers\WebController::class, 'home'])->name('home');
 
@@ -36,10 +41,6 @@ Route::get('/artists',[App\Http\Controllers\ListArtistController::class, 'viewLi
 
 
 Route::get('/artists/{id}/{section?}', [ArtistProfileController::class, 'showArtist'])->name('artist.show');
-
-
-
-
 
 Route::get('/category/{category}', [WebController::class, 'showCategory'])->name('category.show');
 
@@ -153,8 +154,6 @@ Route::post('artworks/delete/{artworkId}',[ArtistArtWorkController::class,'delet
 Route::get('/favorites/cart', [WebController::class, 'cartProfile'])->name('cart.profile');
 
 Route::get('/about-us', [WebController::class, 'aboutUs'])->name('about-us');
-
-Route::get('/join-artist', [WebController::class, 'joinArtist'])->name('join-artist');
 
 Route::get('/insight-artist', [WebController::class, 'insightArtist'])->name('insight-artist');
 
