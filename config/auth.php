@@ -44,6 +44,14 @@ return [
             'driver' => 'session',
             'provider' => 'MASTER_USER',
         ],
+        'BuyerUser' => [
+            'driver' => 'session',
+            'provider' => 'BUYER_USER',
+        ],
+        'ArtistUser' => [
+            'driver' => 'session',
+            'provider' => 'ARTIST_USER',
+        ],
     ],
 
     /*
@@ -72,6 +80,16 @@ return [
         'MASTER_USER' => [
             'driver' => 'eloquent',
             'model' => App\Models\MasterUser::class,
+        ],
+
+        'BUYER_USER' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Buyer::class,
+        ],
+
+        'ARTIST_USER' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Artist::class,
         ],
 
         // 'users' => [

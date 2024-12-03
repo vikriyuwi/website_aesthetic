@@ -125,6 +125,7 @@
               <div class="relative">
                   <select class="appearance-none pl-4 pr-10 py-2 bg-white border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500" id="locationFilter">
                       <option value="Anywhere">Anywhere</option>
+                      <option value="Indonesia">Indonesia</option>
                   </select>
                   <i class="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
               </div>
@@ -162,7 +163,7 @@
                           <p class="text-xs text-gray-400">{{ $artist->LOCATION }}</p>
                       </div>
                   </div>
-                  {{-- <p class="text-gray-600 mb-4">{{ $artist['bio'] ?? 'No bio available' }}</p> --}}
+                  <p class="text-gray-600 mb-4">{{ $artist->BIO ?? 'No bio available' }}</p>
                   <div class="flex justify-between items-center">
                       <a href="{{ route('artist.show', $artist->ARTIST_ID) }}" class="text-indigo-600 hover:text-indigo-800 font-medium">View Profile</a>
                       @if($artist->JOINED <= 0 )

@@ -168,21 +168,22 @@
             <p class="mt-3 text-gray-600">
                 Fill out the form below to apply as an artist on Aesthetic.
             </p>
-            <form class="mt-6 space-y-6">
+            <form class="mt-6 space-y-6" method="POST" action="{{ route('register-artist') }}">
+                @csrf
                 <div>
                     <label for="name" class="block text-gray-700 font-medium">Full Name</label>
-                    <input type="text" id="name" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary" placeholder="Your Full Name" required>
+                    <input type="text" id="name" class="w-full px-4 py-3 border rounded-lg disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200" placeholder="Your Full Name" value="{{ $BUYER_DATA->FULLNAME }}" disabled>
                 </div>
                 <div>
                     <label for="email" class="block text-gray-700 font-medium">Email Address</label>
-                    <input type="email" id="email" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary" placeholder="Your Email" required>
+                    <input type="email" id="email" class="w-full px-4 py-3 border rounded-lg disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200" placeholder="Your Email" value="{{ $USER->EMAIL }}" disabled>
                 </div>
-                <div>
+                <!-- <div>
                     <label for="dob" class="block text-gray-700 font-medium">Date of Birth</label>
-                    <input type="date" id="dob" name="dob" class="w-full px-4 py-3 border border-2 rounded-lg focus:ring-2 focus:ring-primary" placeholder="Select your date of birth">
-                </div>
+                    <input type="date" id="dob" name="dob" class="w-full px-4 py-3 border border-2 rounded-lg focus:ring-2 focus:ring-primary" placeholder="Select your date of birth" >
+                </div> -->
 
-                <div>
+                <!-- <div>
                 <label for="gender" class="block text-gray-700 font-medium">Gender</label>
                 <select id="gender" name="gender" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary" onchange="toggleOtherInput(this)">
                         <option value="">Select your gender</option>
@@ -191,31 +192,34 @@
                         <option value="prefer_not_to_say">Prefer not to say</option>
                         <option value="other">Other</option>
                 </select>
-                <!-- Conditional "Other" input field -->
                 <input type="text" id="otherGender" name="otherGender" class="w-full px-4 py-3 mt-4 border rounded-lg focus:ring-2 focus:ring-primary hidden" placeholder="Please specify" disabled>
-                </div>
+                </div> -->
                 <div>
-                    <label for="portfolio" class="block text-gray-700 font-medium">Mobile Number</label>
-                    <input type="url" id="portfolio" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary" placeholder="Your number">
+                    <label for="mobile_number" class="block text-gray-700 font-medium">Mobile Number</label>
+                    <input type="text" id="mobile_number" class="w-full px-4 py-3 border rounded-lg disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200" placeholder="Your number" value="{{ $BUYER_DATA->PHONE_NUMBER }}" disabled>
                 </div>
-                <div>
+                {{-- <div>
                     <label for="portfolio" class="block text-gray-700 font-medium">Portfolio Link</label>
                     <input type="url" id="portfolio" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary" placeholder="Portfolio or Social Media Link">
+                </div> --}}
+                <div>
+                    <label for="location" class="block text-gray-700 font-medium">Location <Style></Style></label>
+                    <input type="text" id="location" name="location" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary" placeholder="Your working location (e.g., Jakarta, Indonesia)" required>
                 </div>
                 <div>
-                    <label for="portfolio" class="block text-gray-700 font-medium">Type of Art <Style></Style></label>
-                    <input type="url" id="portfolio" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary" placeholder="What type of art do you create? (e.g., digital art, painting, sculpture, etc.)">
+                    <label for="role" class="block text-gray-700 font-medium">Type of Art <Style></Style></label>
+                    <input type="text" id="role" name="role" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary" placeholder="What type of art do you create? (e.g., digital art, painting, sculpture, etc.)" required>
                 </div>
                 <div>
-                    <label for="biography" class="block text-gray-700 font-medium">Biography</label>
-                    <textarea id="biography" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary" rows="4" placeholder="Tell us about yourself"></textarea>
+                    <label for="bio" class="block text-gray-700 font-medium">Biography</label>
+                    <textarea id="bio" name="bio" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary" rows="4" placeholder="Tell us about yourself" required></textarea>
                 </div>
                 <div class="flex justify-between items-center mt-6">
                     <label class="block text-gray-700 font-medium">
                         <input type="checkbox" id="terms" class="mr-2">
                         I agree to the <span onclick="openTermsModal()" class="text-primary underline cursor-pointer">Terms and Conditions</span>.
                     </label>
-                    <button type="button" onclick="submitJoinForm()" class="bg-primary text-white px-6 py-3 rounded-lg shadow-lg hover:bg-indigo-700 transition">
+                    <button type="submit"class="bg-primary text-white px-6 py-3 rounded-lg shadow-lg hover:bg-indigo-700 transition">
                         Submit
                     </button>
                 </div>
@@ -262,6 +266,15 @@
             </button>
         </div>
     </div>
+
+    {{-- submitJoinForm() --}}
+    @if(session('status'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            submitJoinForm();
+        });
+    </script>
+    @endif
 
     <!-- JavaScript for Animations -->
     <script>

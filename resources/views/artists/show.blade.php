@@ -13,6 +13,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 <style>
     /* Chat Container */
     #chatContainer {
@@ -154,10 +155,9 @@
     <div class="bg-white">
         <!-- Profile Banner Section -->
         <div class="relative">
-            <img src="{{ asset('images/Assets/hompage.jpg') }}" alt="Profile banner" class="w-full h-48 object-cover">
+            <img src="" alt="" class="w-full h-48 object-cover">
             <div class="absolute top-0 left-0 w-full h-full bg-lime-500 opacity-50"></div>
         </div>
-
 
         <!-- Sidebar: Profile Information -->
         {{-- @include('artists.artist-profile-sidebar') --}}
@@ -167,6 +167,8 @@
                 <div class="w-1/4 relative">
                     <div class="bg-white p-4 rounded-lg shadow-lg relative">
                         <!-- Ellipsis Button -->
+                        @if(Auth::check())
+                            
                         <button
                             class="ellipsisButton absolute top-2 right-2 text-gray-600 hover:text-gray-800 focus:outline-none">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -175,36 +177,46 @@
                                     d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
                             </svg>
                         </button>
+                            
                         <!-- Options Menu -->
                         <div class="optionsMenu bg-white rounded-lg shadow-lg py-2 w-48">
+                            @if (Auth::user()->USER_ID == $artistUserId )
                             <!-- Edit Profile Button -->
-                            <button onclick="openEditModal()"
+                            <button onclick="openEditProfileModal({{ $artistId }})"
                                 class="block w-full text-left px-4 py-3 hover:bg-indigo-100 hover:text-indigo-600 transition-colors duration-200 font-medium text-gray-700 flex items-center">
                                 <i class="fas fa-user-edit mr-3 text-indigo-500"></i>
                                 Edit Profile
                             </button>
-
+                            @endif
+                            
                             <!-- Review Artist Button -->
+                            @if (Auth::user()->USER_ID != $artistUserId )
                             <button onclick="openReviewModal()"
                                 class="block w-full text-left px-4 py-3 hover:bg-green-100 hover:text-green-600 transition-colors duration-200 font-medium text-gray-700 flex items-center">
                                 <i class="fas fa-star mr-3 text-green-500"></i>
                                 Review Artist
                             </button>
+                            @endif
 
                             <!-- Hire Freelance Button -->
+                            @if (Auth::user()->USER_ID == $artistUserId )
                             <button onclick="openFormModal()"
                                 class="block w-full text-left px-4 py-3 hover:bg-green-100 hover:text-green-600 transition-colors duration-200 font-medium text-gray-700 flex items-center">
                                 <i class="fas fa-file mr-3 text-blue-500"></i>
                                 Hire Freelance
                             </button>
+                            @endif
 
                             <!-- Report Artist Button (styled in red) -->
+                            @if (Auth::user()->USER_ID != $artistUserId )
                             <button onclick="openReportModal()"
                                 class="block w-full text-left px-4 py-3 hover:bg-red-100 hover:bg-red-100 text-red-600 hover:text-red-700 transition-colors duration-200 font-medium flex items-center">
                                 <i class="fa fa-flag mr-3 text-red-600"></i>
                                 Report / Block
                             </button>
+                            @endif
                         </div>
+                        @endif
                         <div class="text-center">
                             @foreach ($artist as $artist => $artistDetail )
                             @php
@@ -214,7 +226,7 @@
                                 class="w-24 h-24 rounded-full mx-auto object-cover">
                             <h2 class="text-xl font-bold mt-4">{{ $artistDetail->USERNAME }}</h2>
                             <p class="text-gray-600">{{ $artistDetail->ROLE }}</p>
-                            <p class="text-gray-600">{{ $artistDetail->ROLE }} (BELUM BE)</p>
+                            <p class="text-gray-600">{{ $artistDetail->BIO }}</p>
                             <p class="text-gray-600"><i class="fas fa-map-marker-alt"></i> {{ $artistDetail->LOCATION }}</p>
 
                             <button onclick="toggleFollow()" id="followButton" class="bg-green-500 text-white px-4 py-2 rounded-full w-full mt-4">
@@ -437,26 +449,34 @@
                 <!-- Make the content area scrollable by setting a fixed height -->
                 <div class="relative max-h-[70vh] overflow-y-auto p-6 space-y-5">
                     <!-- Profile Cover Image -->
-                    <div class="relative">
-                        <img src="https://via.placeholder.com/600x200" alt="Background image"
+                    {{-- <div class="relative">
+                        <img id="bannerPicturePreview   " src="https://via.placeholder.com/600x200" alt="Background image"
                             class="w-full h-48 object-cover">
                         <button
                             class="absolute top-4 right-4 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-70 transition duration-200">
                             <i class="fas fa-camera"></i>
                         </button>
-                    </div>
+                    </div> --}}
 
                     <!-- Profile Avatar Image -->
-                    <div class="relative -mt-12 flex justify-center">
+                    <label class="block text-gray-700 font-medium">📸 Profile Pics</label>
+                    <div class="relative mt-12 flex justify-center">
+                        
                         <div class="relative">
-                            <img src="https://via.placeholder.com/100" alt="Profile picture"
+                            
+                            <img id="profilePicturePreview" src="https://via.placeholder.com/100" alt="Profile picture"
                                 class="w-28 h-28 rounded-full border-4 border-white object-cover shadow-lg">
-                            <button
-                                class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white rounded-full hover:bg-opacity-70 transition duration-200">
-                                <i class="fas fa-camera"></i>
-                            </button>
+
+                            <!-- Image Upload Button -->
+                            
+                            <label for="profilePictureUpload" 
+                                class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white rounded-full hover:bg-opacity-70 transition duration-200 cursor-pointer">
+                                <i class="fas fa-camera" id="cameraIcon"></i>
+                            </label>
+                            <input type="file" id="profilePictureUpload" accept="image/*" class="hidden">
                         </div>
                     </div>
+                    <span id="profilePictureUploadError" class="text-red-600"></span>
 
                     <!-- Form Section -->
                     <div class="space-y-6">
@@ -466,14 +486,20 @@
                             <input type="text" id="name"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
                                 placeholder="Enter your name" required>
+                            <span id="usernameExistError" class="text-red-600"></span>
                         </div>
 
                         <!-- Headline Field -->
                         <div>
                             <label for="headline" class="block text-gray-700 font-medium">📋 Headline</label>
-                            <input type="text" id="headline"
+                            <select id="headline"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
-                                placeholder="Your headline (e.g., Freelance Illustrator)" required>
+                                required>
+                                <option value="" disabled selected>Select Country</option>
+                                <option value="Graphic Designer">Graphic Designer</option>
+                                <option value="Illustrator">Illustrator</option>
+                                <option value="Web Designer">Web Designer</option>
+                            </select>
                         </div>
 
                         <!-- Bio Field -->
@@ -481,28 +507,21 @@
                             <label for="bio" class="block text-gray-700 font-medium">📝 Bio</label>
                             <textarea id="bio" rows="3"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
-                                placeholder="Write a short bio..." required></textarea>
+                                placeholder="Write a short bio..." maxlength="30" required></textarea>
                         </div>
 
-                        <!-- Location Fields -->
                         <div>
-                            <label class="block text-gray-700 font-medium">📍 Location</label>
-                            <div class="flex space-x-4 mt-2">
-                                <!-- Country Field (Negara) -->
-                                <input type="text" id="country"
-                                    class="w-1/3 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
-                                    placeholder="Country" required>
-
-                                <!-- Province Field (Provinsi) -->
-                                <input type="text" id="province"
-                                    class="w-1/3 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
-                                    placeholder="Provience" required>
-
-                                <!-- City Field (Kota) -->
-                                <input type="text" id="city"
-                                    class="w-1/3 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
-                                    placeholder="City" required>
-                            </div>
+                            <label for="location" class="block text-gray-700 font-medium">📍 Location
+                                Level</label>
+                            <select id="location"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
+                                required>
+                                <option value="" disabled selected>Select Country</option>
+                                <option value="Indonesia">Indonesia</option>
+                                <option value="USA">USA</option>
+                                <option value="Russia">Russia</option>
+                                <option value="Singapore">Singapore</option>
+                            </select>
                         </div>
 
                         <!-- Social Media Links -->
@@ -542,7 +561,7 @@
 
                         <!-- Save Button -->
                         <div class="flex justify-end mt-6">
-                            <button onclick="closeEditModal()"
+                            <button onclick="saveProfileChanges({{ $artistId }})"
                                 class="bg-indigo-600 text-white px-6 py-2 rounded-full hover:bg-indigo-700 transition duration-200 flex items-center">
                                 Save Changes
                             </button>
@@ -937,6 +956,27 @@
 
 
 <script>
+    document.getElementById('profilePictureUpload').addEventListener('change', function (event) {
+        const file = event.target.files[0]; // Get the selected file
+        const labelElement = document.querySelector('label[for="profilePictureUpload"]'); // Select the label
+
+        if (file) {
+            const reader = new FileReader(); // Create a FileReader to read the file
+            reader.onload = function (e) {
+                // Update the image preview with the uploaded picture
+                document.getElementById('profilePicturePreview').src = e.target.result;
+
+                // Change the bg-opacity class
+                labelElement.classList.remove('bg-opacity-50');
+                labelElement.classList.add('bg-opacity-30'); // Adjust as needed
+
+                labelElement.classList.remove('hover:bg-opacity-70');
+                labelElement.classList.add('hover:bg-opacity-50');
+            };
+            reader.readAsDataURL(file); // Read the file as a Data URL
+        }
+    });
+
     // Open chat window
     function openChatWindow() {
         const chatContainer = document.getElementById('chatContainer');
@@ -1136,6 +1176,99 @@
 
     function editCommission() {
         alert("Mike benerin ya!");
+    }
+
+    async function saveProfileChanges(artistId) {
+        const formData = new FormData();
+
+        const name = document.getElementById('name').value;
+        const headline = document.getElementById('headline').value;
+        const bio = document.getElementById('bio').value;
+        const locationValue = document.getElementById('location').value;
+        const profilePicture = document.getElementById('profilePictureUpload').files[0];
+
+        formData.append('artistId', artistId);
+        formData.append('name', name);
+        formData.append('headline', headline);
+        formData.append('bio', bio);
+        formData.append('location', locationValue);
+        if (profilePicture) {
+            formData.append('profile_picture', profilePicture);
+        }
+
+        try {
+            const response = await fetch(`/artist/profile/update/${artistId}`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: formData
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                alert(result.message || 'Profile updated successfully!');
+                closeEditModal();
+                window.location.reload();
+            } else if (response.status === 422) {
+                const errorData = await response.json();
+                displayValidationErrors(errorData.errors); // Call error display function
+            } else {
+                const error = await response.json();
+                alert('Error updating profile: ' + (error.error || 'Unexpected error occurred'));
+            }
+        } catch (err) {
+            console.error('Error:', err);
+            alert('An unexpected error occurred. Please try again.');
+        }
+    }
+
+    // Display Validation Errors
+    function displayValidationErrors(errors) {
+        if (errors.name) {
+            document.getElementById('usernameExistError').innerText = errors.name[0];
+        }
+        if (errors.bio) {
+            alert(errors.bio[0]); // Example for bio error
+        }
+        if (errors.headline) {
+            alert(errors.headline[0]); // Example for headline error
+        }
+        if (errors.location) {
+            alert(errors.location[0]); // Example for location error
+        }
+        if (errors.profile_picture) {
+            document.getElementById('profilePictureUploadError').innerText = errors.profile_picture[0]; // Example for profile picture error
+        }
+    }
+
+    async function openEditProfileModal(artistId) {
+        // Show the modal
+        const modal = document.getElementById('editModal');
+        modal.style.display = 'flex';
+
+        try {
+            // Fetch artist profile data from the server
+            const response = await fetch(`/artist/profile/${artistId}`);
+            if (!response.ok) throw new Error('Failed to fetch artist profile');
+
+            const data = await response.json();
+
+            // Populate the modal fields with the fetched data
+            document.getElementById('name').value = data.name || '';
+            document.getElementById('headline').value = data.role || '';
+            document.getElementById('bio').value = data.bio || '';
+            document.getElementById('location').value = data.location || '';
+            // document.getElementById('twitter').value = data.social_media.twitter || '';
+            // document.getElementById('pinterest').value = data.social_media.pinterest || '';
+            // document.getElementById('instagram').value = data.social_media.instagram || '';
+            // document.getElementById('linkedin').value = data.social_media.linkedin || '';
+
+        } catch (error) {
+            console.error('Error fetching profile data:', error);
+            alert('Could not load profile data. Please try again.');
+            modal.style.display = 'none'; // Hide modal if fetching data fails
+        }
     }
 </script>
 

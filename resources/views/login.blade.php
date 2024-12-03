@@ -19,6 +19,11 @@
         Start your website in seconds. Don't have an account?
         <a class="text-indigo-600" href="{{ url('register') }}">Sign up.</a>
       </p>
+      @error('authorization')
+      <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+        <span class="font-medium">{{ $message }}</span> Use your valid account authorization
+      </div>
+      @enderror
       <form action="{{ route('login') }}" method="POST">
         @csrf
         <div class="mb-4">
@@ -40,10 +45,6 @@
           Sign in to your account
         </button>
       </form>
-      @if (session('fail'))
-      <p class="text-danger">{{ session('fail') }}</p>
-        
-      @endif
     </div>
 
     <!-- Image Section (Right Side) -->

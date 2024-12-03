@@ -10,6 +10,7 @@ class Buyer extends Model
 {
     use HasFactory;
     protected $table = 'BUYER';
+    protected $primaryKey = 'BUYER_ID';
     protected $fillable=[
         'USER_ID',
         'FULLNAME',
@@ -17,7 +18,7 @@ class Buyer extends Model
         'WISHLIST',
         'FOLLOWEDARTIST',
         'ADDRESS',
-        'ACCOUNT_CREATION_DATE'
+        'IS_ACTIVE'
     ];
 
     public function MasterUser():BelongsTo

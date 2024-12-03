@@ -23,37 +23,76 @@
         @csrf
         <!-- Full Name -->
         <div class="mb-4">
-          <label class="block text-gray-700">Full Name</label>
-          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600" placeholder="Enter your full name" type="text" name="firstName" required/>
+          <label class="block text-gray-700">First Name</label>
+          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600 @error('firstName') is-invalid @else is-valid @enderror" placeholder="Enter your first name" type="text" name="firstName" value="{{old('firstName')}}" required/>
+          @error('firstName')
+            <div class="text-red-500">
+              {{ $message }}
+            </div>
+          @enderror
         </div>
         <!-- Last Name -->
         <div class="mb-4">
           <label class="block text-gray-700">Last Name</label>
-          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600" placeholder="Enter your last name" type="text" name="lastName" required/>
+          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600 @error('lastName') is-invalid @else is-valid @enderror" placeholder="Enter your last name" type="text" name="lastName" value="{{old('lastName')}}" required/>
+          @error('lastName')
+            <div class="text-red-500">
+              {{ $message }}
+            </div>
+          @enderror
         </div>
         <!-- Username -->
         <div class="mb-4">
           <label class="block text-gray-700">Phone Number</label>
-          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600" placeholder="+62-XXXXXXXXXXX" type="text" name="phone" required/>
+          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600 @error('phone') is-invalid @else is-valid @enderror" placeholder="+62-XXXXXXXXXXX" type="text" name="phone" value="{{old('phone')}}" required/>
+          @error('phone')
+            <div class="text-red-500">
+              {{ $message }}
+            </div>
+          @enderror
         </div>
         <!-- Username -->
         <div class="mb-4">
           <label class="block text-gray-700">Username</label>
-          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600" placeholder="Username" type="text" name="userName" required/>
+          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600 @error('username') is-invalid @else is-valid @enderror" placeholder="Username" type="text" name="userName" value="{{old('userName')}}" required/>
+          @error('username')
+            <div class="text-red-500">
+              {{ $message }}
+            </div>
+          @enderror
         </div>
         <!-- Email -->
         <div class="mb-4">
           <label class="block text-gray-700">Email</label>
-          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600" placeholder="name@company.com" type="email" name="email" required/>
+          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600 @error('email') is-invalid @else is-valid @enderror" placeholder="name@company.com" type="email" name="email" value="{{old('email')}}" required/>
+          @error('email')
+            <div class="text-red-500">
+              {{ $message }}
+            </div>
+          @enderror
         </div>
         <!-- Password -->
         <div class="mb-4">
           <label class="block text-gray-700">Password</label>
-          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600" placeholder="••••••••" type="password" name="password" required/>
+          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600 @error('password') is-invalid @else is-valid @enderror" placeholder="••••••••" type="password" name="password" required/>
+          @error('password')
+            <div class="text-red-500">
+              {{ $message }}
+            </div>
+          @enderror
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700">Password Confirmation</label>
+          <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600 @error('password_confirmation') is-invalid @else is-valid @enderror" placeholder="••••••••" type="password" name="password_confirmation" required/>
+          @error('password')
+            <div class="text-red-500">
+              {{ $message }}
+            </div>
+          @enderror
         </div>
         <!-- Terms Checkbox -->
         <div class="flex items-center mb-6">
-          <input class="mr-2" type="checkbox" required/>
+          <input class="mr-2" type="checkbox"/>
           <label class="text-gray-600">
             By signing up, you agree to the
             <a class="text-indigo-600" href="#">Terms of Use</a> and
