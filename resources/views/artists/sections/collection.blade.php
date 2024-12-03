@@ -64,7 +64,7 @@
         @endif
         <!-- Options Menu -->
         <div class="optionsMenu">
-          <button class="block w-full text-left px-4 py-2 hover:bg-gray-100">Edit Collection</button>
+          <button class="block w-full text-left px-4 py-2 hover:bg-gray-100 editCollectionButton" data-collection-id="{{ $collection->ARTIST_COLLECTION_ID }}" data-collection-title="{{ $collection->COLLECTION_NAME }}" data-collection-descr="{{ $collection->COLLECTION_DESCR }}">Edit Collection</button>
           <button class="block w-full text-left px-4 py-2 hover:bg-gray-100" onclick="confirmDeleteCollection(event,0)">Delete Collection</button>
         </div>
         <img alt="Collection Image 1" class="w-full h-48 object-cover transform hover:scale-110 transition-transform duration-500" src="{{ asset('/storage/uploads/collection_default.jpg') }}">
@@ -81,7 +81,7 @@
   </div>
 
   <!-- Add Collection Modal -->
-  <div id="addCollectionModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden modal-overlay">
+  <div id="addCollectionModal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden modal-overlay">
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-xl">
       <h2 class="text-3xl font-semibold text-gray-800 mb-6">Add New Collection</h2>
       <form id="addCollectionForm" method="POST" action="{{ route('collection.store') }}" class="space-y-6">
@@ -104,11 +104,34 @@
     </div>
   </div>
 
+  <div id="editCollectionModal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden modal-overlay">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-xl">
+      <h2 class="text-3xl font-semibold text-gray-800 mb-6">Edit Collection</h2>
+      <form id="editCollectionForm" method="POST" action="" class="space-y-6">
+        @csrf
+        @method('PUT')
+        <div>
+            <label for="collectionTitle" class="block text-gray-700 font-semibold mb-2">Collection Title</label>
+            <input type="text" id="collectionIdEdit" name="collectionId" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition" placeholder="Enter collection title" required>
+            <input type="text" id="collectionTitleEdit" name="collectionTitle" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition" placeholder="Enter collection title" required>
+        </div>
+        <div>
+            <label for="collectionDescription" class="block text-gray-700 font-semibold mb-2">Description</label>
+            <textarea id="collectionDescriptionEdit" name="collectionDescription" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition" placeholder="Enter collection description" required></textarea>
+        </div>
+        <div class="flex justify-end space-x-3">
+            <button type="button" id="cancelEditCollectionButton" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition duration-200">Cancel</button>
+            <button type="submit" id="editCollectionButton" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 shadow-md transition duration-300 transform hover:scale-105">Update Collection</button>
+        </div>
+    </form>
+    </div>
+  </div>
+
   <!-- Delete Confirmation Modal -->
   <div id="deleteConfirmationModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden modal-overlay">
     <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
       <h2 class="text-2xl font-semibold text-gray-800 mb-4">Delete Collection</h2>
-      <p class="text-gray-600 mb-6">Are you sure you want to delete this collection?</p>
+      <p class="text-gray-600 mb-6">Are you sure you want to delete <span id="collectionNameSpan"></span>?</p>
       <div class="flex justify-end space-x-3">
         <button type="button" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition" onclick="closeDeleteModal()">Cancel</button>
         <button type="button" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition" onclick="deleteCollection()">Delete</button>
@@ -119,14 +142,53 @@
 
   <!-- JavaScript -->
   <script>
+
     // Show and hide the Add Collection modal
     document.getElementById('addCollectionButton').addEventListener('click', () => {
       document.getElementById('addCollectionModal').classList.remove('hidden');
     });
 
+    const editButtons = document.querySelectorAll('.editCollectionButton');
+
+    // Add event listener to each button
+    editButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        document.getElementById('collectionIdEdit').value = this.getAttribute('data-collection-id');
+        document.getElementById('collectionTitleEdit').value = this.getAttribute('data-collection-title');
+        document.getElementById('collectionDescriptionEdit').value = this.getAttribute('data-collection-descr');
+
+        let collectionId = this.getAttribute('data-collection-id');
+        const form = document.getElementById("editCollectionForm");
+        let updateCollectionRoute = "{{ route('collection.update', ['collectionId' => 'COLLECTION_ID']) }}";
+        form.action = updateCollectionRoute.replace('COLLECTION_ID', collectionId);
+
+        document.getElementById('editCollectionModal').classList.remove('hidden');
+        
+        console.log('Collection ID:', this.getAttribute('data-collection-id'));
+        console.log('Collection Title:', this.getAttribute('data-collection-title'));
+        console.log('Collection Description:', this.getAttribute('data-collection-descr'));
+      });
+    });
+
+    // document.getElementById('editCollectionButton').addEventListener('click', (event) => {
+    //   const button = event.target;
+    //   console.log('Collection ID:', button.dataset.collectionId);
+      
+    //   console.log('Collection Name:', button.dataset.collectionTitle);
+      
+    //   console.log('Collection Description:', button.dataset.collectionDescr);
+      
+
+    //   document.getElementById('editCollectionModal').classList.remove('hidden');
+    // });
+
+    document.getElementById('cancelEditCollectionButton').addEventListener('click', () => {
+      document.getElementById('editCollectionModal').classList.add('hidden');
+    });
+
     function closeModal() {
-        document.getElementById('addCollectionModal').classList.add('hidden'); // Hide the modal
-        clearErrorsAndForm(); // Clear errors and reset the form
+      document.getElementById('addCollectionModal').classList.add('hidden'); // Hide the modal
+      clearErrorsAndForm(); // Clear errors and reset the form
     }
 
     function clearErrorsAndForm() {
@@ -159,9 +221,9 @@
     let collectionToDelete = null;
 
     // Function to open the delete confirmation modal
-    function confirmDeleteCollection(event, collectionId) {
+    function confirmDeleteCollection(event, collectionName) {
         event.stopPropagation(); // Prevent triggering other events (e.g., opening the post)
-        collectionToDelete = collectionId; // Set the ID of the post to delete
+        collectionToDelete = collectionName; // Set the ID of the post to delete
         document.getElementById('deleteConfirmationModal').classList.remove('hidden'); // Show modal
     }
 
@@ -215,63 +277,6 @@
     //   event.stopPropagation();
     //   document.getElementById('deleteConfirmationModal').classList.remove('hidden');
     // }
-
-    function submitCollection() {
-        // Prevent the form from submitting traditionally
-        event.preventDefault();
-
-        // Clear previous error messages
-        document.getElementById('collectionTitleError').textContent = '';
-        document.getElementById('collectionDescriptionError').textContent = '';
-
-        // Get form data
-        const formData = new FormData(document.getElementById('addCollectionForm'));
-
-        // Send AJAX request
-        fetch('{{ route('collection.store') }}', {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-        },
-        body: formData,
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw response;
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.errors) {
-                    // Display validation errors
-                    if (data.errors.collectionTitle) {
-                        document.getElementById('collectionTitleError').textContent = data.errors.collectionTitle[0];
-                    }
-                    if (data.errors.collectionDescription) {
-                        document.getElementById('collectionDescriptionError').textContent = data.errors.collectionDescription[0];
-                    }
-                } else {
-                    // Display success message or close the modal
-                    alert('Collection added successfully!');
-                    document.getElementById('addCollectionModal').classList.add('hidden'); // Close modal
-                    document.getElementById('addCollectionForm').reset(); // Clear form
-                    location.reload();
-                }
-            })
-            .catch(async error => {
-                const errorResponse = await error.json();
-                if (errorResponse.errors) {
-                    if (errorResponse.errors.collectionTitle) {
-                        document.getElementById('collectionTitleError').textContent = errorResponse.errors.collectionTitle[0];
-                    }
-                    if (errorResponse.errors.collectionDescription) {
-                        document.getElementById('collectionDescriptionError').textContent = errorResponse.errors.collectionDescription[0];
-                    }
-                } else {
-                    console.error('Unexpected Error:', error);
-                }
-            });
-    }
 
     // Hide delete confirmation modal
     function closeDeleteModal() {

@@ -38,6 +38,13 @@ Route::middleware([Authorization::class.':true'])->group(function() {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/join-artist', [WebController::class, 'joinArtist'])->name('join-artist');
     Route::post('/join-artist', [WebController::class, 'registerArtist'])->name('register-artist');
+
+    // COLLECTION
+    Route::prefix('collection')->name('collection.')->group(function () {
+        Route::post('/add', [ArtistCollectionController::class, 'store'])->name('store');
+        Route::put('/{collectionId}/update', [ArtistCollectionController::class, 'update'])->name('update');
+        Route::post('/delete/{collectionId}', [ArtistCollectionController::class, 'destroy'])->name('delete');
+    });
 });
 
 Route::get('/landing', [App\Http\Controllers\WebController::class, 'landing'])->name('landing');
@@ -117,12 +124,6 @@ Route::post('/portfolio/add', [ArtistPortfolioController::class, 'store'])->name
 
 //VIEW ART INSIDE COLLECTION
 Route::get('/artists/{artistId}/collection/{collectionId}', [ArtistProfileController::class, 'showCollection'])->name('collection.show');
-
-//ADD COLLECTION
-Route::post('/collection/add', [ArtistCollectionController::class, 'store'])->name('collection.store');
-
-//DELETE COLLECTION
-Route::post('/collection/delete/{collectionId}', [ArtistCollectionController::class, 'destroy'])->name('collection.delete');
 
 //ADD ART INTO COLLECTION
 Route::post('/collection/addArt',[ArtistCollectionController::class, 'addArtToCollection'])->name('collection.addArt');

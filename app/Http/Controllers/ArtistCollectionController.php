@@ -38,26 +38,52 @@ class ArtistCollectionController extends Controller
         return redirect()->back()->with('status','New collection has been added!');
     }
 
-    public function destroy($collectionId){
-        try {
-            // Fetch the associated media for the post
-            $artCollection = ArtCollection::where('ARTIST_COLLECTION_ID', $collectionId)->get();
-            
-            // Delete all associated post media
-            foreach ($artCollection as $artColl) {
-                $artColl->delete();
-            }
-    
-            // Now delete the post itself
-            $artistCollection = ArtistCollection::findOrFail($collectionId);
-            $artistCollection->delete();
-    
-            return response()->json(['success' => 'Collection deleted successfully.']);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Collection not found.'], 404);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'An unexpected error occurred.'], 500);
+    public function update(Request $request, $id)
+    {
+        $user = Auth::guard('MasterUser')->user();
+        $artist = Artist::where('ARTIST_ID', '=', $user->Artist->ARTIST_ID)->first();
+
+        // Validate the input
+        $validated = Validator::make($request->all(), [
+            'collectionTitle' => 'required',
+            'collectionDescription' => 'required',
+        ], [
+            'collectionTitle.required' => '* The Collection title is required.',
+            'collectionDescription.required' => '* The Collection description is required.',
+        ]);
+
+        if ($validated->fails()) {
+            return redirect()->back()->withErrors($validated->errors());
         }
+
+        // Find the specific collection by its ID
+        $collection = ArtistCollection::where('ARTIST_COLLECTION_ID', $id)->first();
+
+        if (!$collection) {
+            return redirect()->back()->withErrors(['error' => 'Collection not found.']);
+        }
+
+        // Update the collection details
+        $collection->update([
+            'COLLECTION_NAME' => $request->collectionTitle,
+            'COLLECTION_DESCR' => $request->collectionDescription,
+        ]);
+
+        return redirect()->back()->with('status', 'Collection has been updated successfully!');
+    }
+
+    public function destroy($collectionId){
+
+        // Find the specific collection by its ID
+        $collection = ArtistCollection::where('ARTIST_COLLECTION_ID', $id)->first();
+
+        if (!$collection) {
+            return redirect()->back()->withErrors(['error' => 'Collection not found.']);
+        }
+        
+        $collection->delete();
+
+        return redirect()->route('artists.show', ['id' => $id, 'section' => 'collection'])->with('status', 'Collection has been updated successfully!');
     }
 
     public function addArtToCollection(Request $request)
