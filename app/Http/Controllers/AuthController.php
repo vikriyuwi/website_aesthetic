@@ -72,8 +72,8 @@ class AuthController extends Controller
             $user = Auth::guard('MasterUser')->user();
 
             // Load related models
-            $buyer = $user->Buyers()->first();
-            $artist = $user->Artist()->first();
+            $buyer = $user->Buyer;
+            $artist = $user->Artist;
 
             // Determine the role
             $role;
