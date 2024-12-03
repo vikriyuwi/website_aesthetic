@@ -13,21 +13,16 @@ class ArtistProfileController extends Controller
 {
     public function showArtist($ARTIST_ID, $section = 'home')
     {
-        $artistCheck = DB::table('ARTIST')
-                ->select('*')
-                ->where('ARTIST_ID','=',$ARTIST_ID)
-                ->get();
+        $user = Auth::guard('MasterUser')->user();
+        $artist = Artist::where('ARTIST_ID','=',$ARTIST_ID)->first();
 
-        if (!(count($artistCheck))) {
+        if ($artist == null) {
             abort(404, 'Artist not found.');
         }
         else{
-            $artist = Artist::where('ARTIST_ID','=',$ARTIST_ID)->first();
-
-            return view('artists.show', compact('artist','section')); //ABOUT RENDER
-
+            $artistItSelf = $user == $artist->MasterUser;
+            return view('artists.show', compact('artist','section','artistItSelf')); //ABOUT RENDER
         }
-
     }
     
     public function showCollection($artistId, $ARTIST_COLLECTION_ID)

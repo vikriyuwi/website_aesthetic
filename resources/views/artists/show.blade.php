@@ -226,6 +226,12 @@
                             <p class="text-gray-600">{{ $artist->BIO }}</p>
                             <p class="text-gray-600"><i class="fas fa-map-marker-alt"></i> {{ $artist->LOCATION }}</p>
 
+                            @if($artistItSelf)
+                            <button id="followButton" class="bg-green-500 text-white px-4 py-2 rounded-full w-full mt-4">
+                                <i id="followIcon" class="fas fa-pen mr-2"></i>
+                                <span id="followText">Edit</span>
+                            </button>
+                            @else
                             <button onclick="toggleFollow()" id="followButton" class="bg-green-500 text-white px-4 py-2 rounded-full w-full mt-4">
                                 <i id="followIcon" class="fas fa-user-plus mr-2"></i>
                                 <span id="followText">Follow</span>
@@ -233,8 +239,10 @@
                             <button onclick="openChatWindow()" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-full w-full mt-1">
                                 <i class="fas fa-envelope mr-2"></i> Message
                             </button>
+                            @endif
                         </div>
 
+                        @if(!$artistItSelf)
                         <div class="mt-4 flex justify-center items-center">
                             <button onclick="openHireModal()" class="bg-white border border-indigo-500 rounded-lg p-2 px-4 shadow-md">
                                 <h1 class="text-sm font-semibold text-center">Hire {{ $artist->USERNAME }}</h1>
@@ -247,6 +255,8 @@
                                 </div>
                             </button>
                         </div>
+                        @endif
+
                         <div class="mt-4 space-y-2">
                             <div class="flex justify-between">
                                 <span class="text-gray-600">Project Views</span>
@@ -280,7 +290,6 @@
                     </div>
 
                     <!-- Posts Section -->
-                    @if ($section == 'home')
                     <div class="bg-white p-4 rounded-lg shadow-lg mt-4">
                         <h3 class="text-lg font-bold">Posts</h3>
                         <div class="mt-4">
@@ -319,11 +328,6 @@
                         </div>
                     </div>
                 </div>
-                @endif
-            
-                
-
-
 
                 <!-- Main Content Area -->
                 <div class="w-3/4 ml-4">
@@ -342,8 +346,6 @@
                         <a href="{{ route('artist.show', ['id' => $artist->ARTIST_ID, 'section' => 'about']) }}"
                             class="text-gray-600 hover:text-gray-800">About</a>
                     </nav>
-
-
 
                     <!-- Section Rendering -->
                     <div class="mt-4">
@@ -421,8 +423,7 @@
 
                     
             <!-- Edit Profile Modal -->
-            <div id="editModal"
-            class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 hidden overflow-y-auto">
+        <div id="editModal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 hidden overflow-y-auto">
             <div
                 class="bg-white rounded-lg shadow-lg max-w-4xl w-full p-8 fade-in overflow-y-auto max-h-[80vh] relative">
                 <div class="flex justify-between items-center mb-4">

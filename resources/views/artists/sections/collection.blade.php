@@ -35,12 +35,12 @@
     }
   </style>
 </head>
-<body class="bg-gray-100">
-  <div class="max-w-screen-lg mx-auto mt-8">
+<body>
+  <div class="bg-white p-4 rounded-lg shadow-lg mt-4">
     <div class="flex justify-between items-center mb-6">
       <h3 class="text-3xl font-extrabold text-gray-800">Collections</h3>
       @if(Auth::check())
-        @if (Auth::user()->USER_ID == $artistUserId )
+        @if (Auth::user()->USER_ID == $artist->USER_ID )
           <button id="addCollectionButton" class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-5 py-2 rounded-full shadow-md hover:from-blue-600 hover:to-indigo-700 transition duration-300 transform hover:scale-105">
             + Add Collection
           </button>
@@ -51,10 +51,9 @@
     <!-- Collections Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
       <!-- Collection Item Example -->
-      @foreach($listCollection as $listCollection => $collections)
-      <div class="relative bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 overflow-hidden border border-gray-200 collection-card" id="artistCollection" data-collection-id="{{ $collections->ARTIST_COLLECTION_ID}}" data-delete-route="{{ route('collection.delete', $collections->ARTIST_COLLECTION_ID) }}">
+      <div class="relative bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 overflow-hidden border border-gray-200 collection-card" id="artistCollection" data-collection-id="collection id" data-delete-route="route delete">
         @if(Auth::check())
-            @if (Auth::user()->USER_ID == $artistUserId )
+          @if ($artistItSelf)
           <button class="ellipsisButton text-gray-600 hover:text-gray-800 focus:outline-none" onclick="toggleOptionsMenu(event, this)">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 0 1.5ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 0 1.5ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 0 1.5Z" />
@@ -65,27 +64,22 @@
         <!-- Options Menu -->
         <div class="optionsMenu">
           <button class="block w-full text-left px-4 py-2 hover:bg-gray-100">Edit Collection</button>
-          <button class="block w-full text-left px-4 py-2 hover:bg-gray-100" onclick="confirmDeleteCollection(event,{{ $collections->ARTIST_COLLECTION_ID }})">Delete Collection</button>
+          <button class="block w-full text-left px-4 py-2 hover:bg-gray-100" onclick="confirmDeleteCollection(event,0)">Delete Collection</button>
         </div>
-        @if($collections->IMAGE_PATH != null)
-        <img alt="Collection Image 1" class="w-full h-48 object-cover transform hover:scale-110 transition-transform duration-500" src="{{ asset($collections->IMAGE_PATH) }}">
-        @else
         <img alt="Collection Image 1" class="w-full h-48 object-cover transform hover:scale-110 transition-transform duration-500" src="{{ asset('/storage/uploads/collection_default.jpg') }}">
-        @endif
         <div class="p-6">
-          <h4 class="text-xl font-semibold text-gray-900 mb-2">{{ $collections->COLLECTION_NAME }}</h4>
-          <p class="text-gray-600 mb-4">{{ $collections->TOTAL_ARTWORKS }} Arts</p>
-          <a href="{{ route('collection.show', ['artistId' => $artistId, 'collectionId' => $collections->ARTIST_COLLECTION_ID]) }}" class=" text-indigo-600 font-bold hover:underline">View Collection &rarr;</a>
+          <h4 class="text-xl font-semibold text-gray-900 mb-2">Collection name</h4>
+          <p class="text-gray-600 mb-4">Total collection</p>
+          <a href="{{ route('collection.show', ['artistId' => $artist->ARTIST_ID, 'collectionId' => 0]) }}" class=" text-indigo-600 font-bold hover:underline">View Collection &rarr;</a>
         </div>
       </div>
-      @endforeach
       
       <!-- More collection items can be added similarly -->
     </div>
   </div>
 
- <!-- Add Collection Modal -->
- <div id="addCollectionModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden modal-overlay">
+  <!-- Add Collection Modal -->
+  <div id="addCollectionModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden modal-overlay">
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-xl">
       <h2 class="text-3xl font-semibold text-gray-800 mb-6">Add New Collection</h2>
       <form id="addCollectionForm" method="POST" action="{{ route('collection.store') }}" enctype="multipart/form-data" class="space-y-6">
