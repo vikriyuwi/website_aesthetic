@@ -67,10 +67,10 @@
           <button class="block w-full text-left px-4 py-2 hover:bg-gray-100 editCollectionButton" data-collection-id="{{ $collection->ARTIST_COLLECTION_ID }}" data-collection-title="{{ $collection->COLLECTION_NAME }}" data-collection-descr="{{ $collection->COLLECTION_DESCR }}">Edit Collection</button>
           <button class="block w-full text-left px-4 py-2 hover:bg-gray-100 deleteCollectionButton" data-collection-id="{{ $collection->ARTIST_COLLECTION_ID }}" data-collection-title="{{ $collection->COLLECTION_NAME }}">Delete Collection</button>
         </div>
-        <img alt="Collection Image 1" class="w-full h-48 object-cover transform hover:scale-110 transition-transform duration-500" src="{{ asset('/storage/uploads/collection_default.jpg') }}">
+        <img alt="Collection Image 1" class="w-full h-48 object-cover transform hover:scale-110 transition-transform duration-500" src="{{ $collection->ArtistCollections->first() != null ? Str::startsWith($collection->ArtistCollections->first()->Art->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($collection->ArtistCollections->first()->art->ArtImages()->first()->IMAGE_PATH) : $collection->ArtistCollections->first()->art->ArtImages()->first()->IMAGE_PATH : "https://ionicframework.com/docs/img/demos/thumbnail.svg"}}">
         <div class="p-6">
           <h4 class="text-xl font-semibold text-gray-900 mb-2">{{ $collection->COLLECTION_NAME }}</h4>
-          <p class="text-gray-600 mb-4">{{ count($collection->ArtCollections) }}</p>
+          <p class="text-gray-600 mb-4">{{ count($collection->ArtistCollections) }}</p>
           <a href="{{ route('collection.show', ['artistId' => $artist->ARTIST_ID, 'collectionId' => $collection->ARTIST_COLLECTION_ID]) }}" class=" text-indigo-600 font-bold hover:underline">View Collection &rarr;</a>
         </div>
       </div>

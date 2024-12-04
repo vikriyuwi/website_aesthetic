@@ -13,7 +13,7 @@ class ArtCollection extends Model
     protected $primaryKey = 'ART_COLLECTION_ID';
     protected $fillable = ['ARTIST_COLLECTION_ID', 'ART_ID'];
 
-    public function Arts(): BelongsTo
+    public function Art(): BelongsTo
     {
         return $this->belongsTo(Art::class, 'ART_ID', 'ART_ID');
     }

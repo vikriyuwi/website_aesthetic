@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Artist;
 use App\Models\Art;
 use App\Models\MasterUser;
+use App\Models\ArtCollection;
 use App\Models\ArtistCollection;
 use App\Models\ArtCategoryMaster;
 use Illuminate\Http\Request;
@@ -34,10 +35,10 @@ class ArtistProfileController extends Controller
     public function showCollection($artistId, $ARTIST_COLLECTION_ID)
     {
         $collection = ArtistCollection::where('ARTIST_COLLECTION_ID',$ARTIST_COLLECTION_ID)->first();
-        $artsCount = $collection->ArtCollections->count();
+        $artsCount = $collection->ArtistCollections->count();
 
         $artist = Artist::where('ARTIST_ID',$artistId)->first();
-        $artsWithoutCollections = $artist->MasterUser->Arts()->where('IS_SALE',true)->doesntHave('ArtCollection')->get();
+        $artsWithoutCollections = $artist->MasterUser->Arts()->doesntHave('ArtCollection')->get();
 
         return view('artists.sections.collection-detail', compact('collection', 'artsCount', 'artist','artsWithoutCollections'));
     }

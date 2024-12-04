@@ -55,7 +55,7 @@
     
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         <!-- Loop through the artworks -->
-        @foreach($collection->ArtCollections as $artwork)
+        @foreach($collection->ArtistCollections as $artwork)
         <div class="group relative bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 border-2 border-gray-300 overflow-hidden">
             <!-- Ellipsis Button -->
             @if(Auth::check())
@@ -75,7 +75,7 @@
             @endif
             <!-- Artwork Image with Hover Effect -->
             <a href="{{ route('artwork.show', $artwork->ART_ID) }}">
-                <img src="{{ asset($artwork->Art->IMAGE_PATH) }}" alt="{{ $artwork->Art->ART_TITLE }}"
+                <img src="{{ Str::startsWith($artwork->Art->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($artwork->Art->ArtImages()->first()->IMAGE_PATH) : $artwork->Art->ArtImages()->first()->IMAGE_PATH }}" alt="{{ $artwork->Art->ART_TITLE }}"
                     class="w-full h-64 object-cover rounded-t-lg transition-transform duration-300 transform group-hover:scale-105">
             </a>
             
@@ -87,11 +87,11 @@
                 </span>
                 @endif --}}
                 <!-- Artwork Info -->
-                <h2 class="text-lg font-bold mt-2 text-gray-900">{{ $artwork->USERNAME }}</h2>
-                <p class="text-gray-600 text-sm">{{ $artwork->ART_TITLE }}, {{ $artwork->ART_YEAR }}</p>
+                <h2 class="text-lg font-bold mt-2 text-gray-900">{{ $artwork->Art->ART_TITLE }}</h2>
+                <p class="text-gray-600 text-sm">{{ $artwork->Art->MasterUser->USERNAME }}</p>
                 {{-- <p class="text-gray-500 text-sm">{{ $artwork['gallery'] }}</p> --}}
-                @if ($artwork->IS_SALE == 1)
-                <p class="text-indigo-600 text-lg font-semibold mt-2">Rp.{{ $artwork->ART_PRICE }}</p>
+                @if ($artwork->Art->IS_SALE == 1)
+                <p class="text-indigo-600 text-lg font-semibold mt-2">Rp.{{ $artwork->Art->PRICE }}</p>
                 @else
                 <p class="text-indigo-600 text-lg font-semibold mt-2">Not For Sale</p>
                 @endif
