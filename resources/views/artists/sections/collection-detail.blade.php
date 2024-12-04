@@ -43,9 +43,9 @@
 <body class="container mx-auto p-6">
     <!-- Button to Trigger Modal -->
     <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold">{{ $totalArtWorks }} Artworks</h1>
+        <h1 class="text-3xl font-bold">{{ $artsCount }} Artworks</h1>
         @if(Auth::check())
-            @if (Auth::user()->USER_ID == $artistUserId )
+            @if (Auth::user()->USER_ID == $artist->USER_ID )
             <button onclick="openAddArtModal()" class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-5 py-2 rounded-full shadow-md hover:from-blue-600 hover:to-indigo-700 transition duration-300 transform hover:scale-105">
                 Add Artwork Collection
             </button>
@@ -55,11 +55,11 @@
     
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         <!-- Loop through the artworks -->
-        @foreach($artworks as $artwork)
+        @foreach($collection->arts as $artwork)
         <div class="group relative bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 border-2 border-gray-300 overflow-hidden">
             <!-- Ellipsis Button -->
             @if(Auth::check())
-                @if (Auth::user()->USER_ID == $artistUserId )
+                @if (Auth::user()->USER_ID == $artist->USER_ID )
                 <button class="ellipsisButton text-gray-600 hover:text-gray-800 focus:outline-none" onclick="toggleOptionsMenu(event, this)">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 0 1.5ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 0 1.5ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 0 1.5Z" />
@@ -124,10 +124,10 @@
 
 
             <!-- Hidden Field for Collection ID -->
-            <input type="hidden" id="collectionId" value="{{ $artistCollectionId }}">
+            <input type="hidden" id="collectionId" value="{{ $collection->ARTIST_COLLECTION_ID }}">
 
             <!-- Art Selection Grid with Scroll -->
-            <div class="scrollable-content grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {{-- <div class="scrollable-content grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Art Item Example -->
                 @foreach ($artworksNoCollection as $listArtworksNoCollection)
                 <div class="relative group border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300" data-artwork-id="{{ $listArtworksNoCollection->ART_ID }}">
@@ -143,7 +143,7 @@
                     </div>
                 </div>
                 @endforeach
-            </div>
+            </div> --}}
 
             <!-- Modal Actions -->
             <div class="flex justify-end mt-6 space-x-4">

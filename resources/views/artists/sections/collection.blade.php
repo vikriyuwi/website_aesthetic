@@ -71,7 +71,7 @@
         <div class="p-6">
           <h4 class="text-xl font-semibold text-gray-900 mb-2">{{ $collection->COLLECTION_NAME }}</h4>
           <p class="text-gray-600 mb-4">{{ count($collection->Arts) }}</p>
-          <a href="{{ route('collection.show', ['artistId' => $artist->ARTIST_ID, 'collectionId' => 0]) }}" class=" text-indigo-600 font-bold hover:underline">View Collection &rarr;</a>
+          <a href="{{ route('collection.show', ['artistId' => $artist->ARTIST_ID, 'collectionId' => $collection->ARTIST_COLLECTION_ID]) }}" class=" text-indigo-600 font-bold hover:underline">View Collection &rarr;</a>
         </div>
       </div>
       <!-- More collection items can be added similarly -->

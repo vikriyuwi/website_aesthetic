@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Artist;
 use App\Models\MasterUser;
+use App\Models\ArtistCollection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -27,50 +28,54 @@ class ArtistProfileController extends Controller
     
     public function showCollection($artistId, $ARTIST_COLLECTION_ID)
     {
+        $collection = ArtistCollection::where('ARTIST_COLLECTION_ID',$ARTIST_COLLECTION_ID)->first();
+        $artsCount = $collection->Arts->count();
+        $artist = Artist::where('ARTIST_ID',$artistId)->first();
+
         // Example data for the artworks
-        $artworks = DB::table('ART_COLLECTION')
-                    ->select(
-                        'ART.ART_ID', 
-                        'ART.ART_TITLE', 
-                        'ART_IMAGE.IMAGE_PATH', 
-                        'MASTER_USER.USERNAME',
-                        'ART.IS_SALE', 
-                        DB::raw("FORMAT(ART.PRICE, 'N0') as ART_PRICE"), 
-                        DB::raw("YEAR(ART.CREATED_AT) as ART_YEAR")
-                    )
-                    ->join('ART', 'ART.ART_ID', '=', 'ART_COLLECTION.ART_ID')
-                    ->join('ART_IMAGE', 'ART.ART_ID', '=', 'ART_IMAGE.ART_ID')
-                    ->join('ARTIST', 'ARTIST.ARTIST_ID', '=', 'ART.ARTIST_ID')
-                    ->join('MASTER_USER', 'MASTER_USER.USER_ID', '=', 'ARTIST.USER_ID')
-                    ->where('ART_COLLECTION.ARTIST_COLLECTION_ID', '=', $ARTIST_COLLECTION_ID)
-                    ->get(); 
+        // $artworks = DB::table('ART_COLLECTION')
+        //             ->select(
+        //                 'ART.ART_ID', 
+        //                 'ART.ART_TITLE', 
+        //                 'ART_IMAGE.IMAGE_PATH', 
+        //                 'MASTER_USER.USERNAME',
+        //                 'ART.IS_SALE', 
+        //                 DB::raw("FORMAT(ART.PRICE, 'N0') as ART_PRICE"), 
+        //                 DB::raw("YEAR(ART.CREATED_AT) as ART_YEAR")
+        //             )
+        //             ->join('ART', 'ART.ART_ID', '=', 'ART_COLLECTION.ART_ID')
+        //             ->join('ART_IMAGE', 'ART.ART_ID', '=', 'ART_IMAGE.ART_ID')
+        //             ->join('ARTIST', 'ARTIST.ARTIST_ID', '=', 'ART.ARTIST_ID')
+        //             ->join('MASTER_USER', 'MASTER_USER.USER_ID', '=', 'ARTIST.USER_ID')
+        //             ->where('ART_COLLECTION.ARTIST_COLLECTION_ID', '=', $ARTIST_COLLECTION_ID)
+        //             ->get(); 
         
-        $artworksNoCollection = DB::table('ART as A')
-                                ->select('A.ART_ID', 'A.ART_TITLE', 'A.DESCRIPTION', 'AI.IMAGE_PATH')
-                                ->join('ART_IMAGE as AI', 'A.ART_ID', '=', 'AI.ART_ID')
-                                ->where('A.ARTIST_ID', $artistId)
-                                ->whereNotExists(function ($query) use ($ARTIST_COLLECTION_ID) {
-                                    $query->select(DB::raw(1))
-                                        ->from('ART_COLLECTION')
-                                        ->whereColumn('ART_COLLECTION.ART_ID', 'A.ART_ID')
-                                        ->where('ART_COLLECTION.ARTIST_COLLECTION_ID', $ARTIST_COLLECTION_ID);
-                                })
-                                ->get();
+        // $artworksNoCollection = DB::table('ART as A')
+        //                         ->select('A.ART_ID', 'A.ART_TITLE', 'A.DESCRIPTION', 'AI.IMAGE_PATH')
+        //                         ->join('ART_IMAGE as AI', 'A.ART_ID', '=', 'AI.ART_ID')
+        //                         ->where('A.ARTIST_ID', $artistId)
+        //                         ->whereNotExists(function ($query) use ($ARTIST_COLLECTION_ID) {
+        //                             $query->select(DB::raw(1))
+        //                                 ->from('ART_COLLECTION')
+        //                                 ->whereColumn('ART_COLLECTION.ART_ID', 'A.ART_ID')
+        //                                 ->where('ART_COLLECTION.ARTIST_COLLECTION_ID', $ARTIST_COLLECTION_ID);
+        //                         })
+        //                         ->get();
                             
-        $artistUser = DB::table('ARTIST')
-                    ->select('USER_ID')
-                    ->where('ARTIST_ID', '=', $artistId)
-                    ->first();
+        // $artistUser = DB::table('ARTIST')
+        //             ->select('USER_ID')
+        //             ->where('ARTIST_ID', '=', $artistId)
+        //             ->first();
                 
-        $artistUserId = $artistUser ? $artistUser->USER_ID : null;
+        // $artistUserId = $artistUser ? $artistUser->USER_ID : null;
 
-        $artistCollectionId = $ARTIST_COLLECTION_ID;
-        $totalArtWorks = DB::table('ART_COLLECTION')
-                        ->select('*')
-                        ->where('ARTIST_COLLECTION_ID','=',$ARTIST_COLLECTION_ID)
-                        ->count();
+        // $artistCollectionId = $ARTIST_COLLECTION_ID;
+        // $totalArtWorks = DB::table('ART_COLLECTION')
+        //                 ->select('*')
+        //                 ->where('ARTIST_COLLECTION_ID','=',$ARTIST_COLLECTION_ID)
+        //                 ->count();
 
-        return view('artists.sections.collection-detail', compact('artworks', 'artistCollectionId','totalArtWorks','artworksNoCollection', 'artistUserId'));
+        return view('artists.sections.collection-detail', compact('collection', 'artsCount', 'artist'));
     }
 
     public function getArtistProfile($artistId){
