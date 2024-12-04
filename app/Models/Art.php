@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Art extends Model
 {
@@ -33,5 +34,10 @@ class Art extends Model
     public function ArtImages(): HasMany
     {
         return $this->hasMany(ArtImage::class, 'ART_ID', 'ART_ID');
+    }
+
+    public function ArtCollection(): HasOne
+    {
+        return $this->hasOne(ArtCollection::class, 'ART_ID', 'ART_ID');
     }
 }

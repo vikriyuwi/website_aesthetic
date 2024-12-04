@@ -111,54 +111,60 @@
     <!-- Add Artwork Collection Modal -->
     <div id="addArtModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
         <div class="bg-white rounded-lg shadow-lg max-w-4xl w-full p-6">
+            
             <!-- Modal Header -->
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-2xl font-bold text-gray-800">Add Artwork Collection</h2>
-                <button class="text-gray-600 hover:text-gray-800 focus:outline-none" onclick="closeAddArtModal()">
+                <button class="text-gray-600 hover:text-gray-800 focus:outline-none" id="x-button">
                     <i class="fas fa-times text-2xl"></i>
                 </button>
             </div>
 
             <!-- Modal Description -->
-            <p class="text-gray-600 mb-4">Select the art pieces you want t  o include in this collection.</p>
+            <p class="text-gray-600 mb-4">Select the art pieces you want to include in this collection.</p>
 
-
-            <!-- Hidden Field for Collection ID -->
-            <input type="hidden" id="collectionId" value="{{ $collection->ARTIST_COLLECTION_ID }}">
-
-            <!-- Art Selection Grid with Scroll -->
-            {{-- <div class="scrollable-content grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Art Item Example -->
-                @foreach ($artworksNoCollection as $listArtworksNoCollection)
-                <div class="relative group border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300" data-artwork-id="{{ $listArtworksNoCollection->ART_ID }}">
-                    <img src="{{ asset($listArtworksNoCollection->IMAGE_PATH) }}" alt="Artwork {{ $listArtworksNoCollection->ART_ID }}" class="w-full h-48 object-cover">
-                    <div class="absolute top-2 left-2">
-                        <!-- Add a meaningful ID or name if necessary -->
-                        <input 
-                            type="checkbox" 
-                            class="w-6 h-6 text-indigo-500 focus:ring focus:ring-indigo-300" 
-                            value="{{ $listArtworksNoCollection->ART_ID }}" 
-                            name="artworks[]"
-                        >
+            <form id="addArtToCollection" method="POST" action="{{ route('collection.addArt',['collectionId' => $collection->ARTIST_COLLECTION_ID]) }}">
+            @csrf
+            @method('PUT')
+                <!-- Art Selection Grid with Scroll -->
+                <div class="scrollable-content grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Art Item Example -->
+                    @foreach ($artsWithoutCollections as $artwork)
+                    <div class="relative group border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300" data-artwork-id="{{ $artwork->ART_ID }}">
+                        <img src="{{ Str::startsWith($artwork->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($artwork->ArtImages()->first()->IMAGE_PATH) : $artwork->ArtImages()->first()->IMAGE_PATH }}" alt="Artwork {{ $artwork->ART_TITLE }}" class="w-full h-48 object-cover">
+                        <div class="absolute top-2 left-2">
+                            <!-- Add a meaningful ID or name if necessary -->
+                            <input 
+                                    type="checkbox" 
+                                    class="w-6 h-6 text-indigo-500 focus:ring focus:ring-indigo-300" 
+                                    value="{{ $artwork->ART_ID }}" 
+                                    name="artworks[]"
+                                >
+                        </div>
                     </div>
+                    @endforeach
                 </div>
-                @endforeach
-            </div> --}}
 
-            <!-- Modal Actions -->
-            <div class="flex justify-end mt-6 space-x-4">
-                <button onclick="closeAddArtModal()" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition duration-200">
-                    Cancel
-                </button>
-                <button onclick="submitSelectedArtworks()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 shadow-md transition duration-300 transform hover:scale-105">
-                    Add Selected Art
-                </button>
-            </div>
+                <!-- Modal Actions -->
+                <div class="flex justify-end mt-6 space-x-4">
+                    <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 shadow-md transition duration-300 transform hover:scale-105">
+                        Add Selected Art
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
     <!-- JavaScript -->
     <script>
+        document.getElementById('x-button').addEventListener('click', () => {
+            document.getElementById('addArtModal').classList.add('hidden');
+        });
+
+        document.getElementById('cancel-add-art-button').addEventListener('click', () => {
+            document.getElementById('addArtModal').classList.add('hidden');
+        });
+
         // Open Add Art Modal
         function openAddArtModal() {
             document.getElementById('addArtModal').classList.remove('hidden');
@@ -223,45 +229,6 @@
         function closeAddArtModal() {
             document.getElementById('addArtModal').classList.add('hidden');
             clearSelection(); // Clear selections when closing the modal
-        }
-
-        // Function to submit selected artworks
-        function submitSelectedArtworks() {
-            if (selectedArtworks.length === 0) {
-                alert('No artworks selected.');
-                return;
-            }
-
-            const collectionId = document.getElementById('collectionId').value; // Retrieve the collection ID
-            if (!collectionId) {
-                alert('Collection ID is missing. Please try again.');
-                return;
-            }
-
-            // Example AJAX request to send selected artworks to the server
-            fetch('{{ route('collection.addArt') }}', {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ artworks: selectedArtworks, collection_id: collectionId }), // Include collection_id
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Server response:', data); // Debugging response
-                    if (data.success) {
-                        alert('Artworks successfully added to the collection.');
-                        closeAddArtModal();
-                        location.reload(); // Reload the page to reflect changes
-                    } else {
-                        alert(data.message || 'Failed to add artworks. Please try again.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('An error occurred while adding artworks.');
-                });
         }
 
         // Hide options menu when clicking outside

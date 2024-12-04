@@ -86,36 +86,31 @@ class ArtistCollectionController extends Controller
         return redirect()->route('artist.show', ['id' => $collectionId, 'section' => 'collection'])->with('status', 'Collection has been updated successfully!');
     }
 
-    public function addArtToCollection(Request $request)
+    public function addArtToCollection(Request $request, $collectionId)
     {
-        try {
-            // Validate request
-            $request->validate([
-                'artworks' => 'required|array',
-                'artworks.*' => 'exists:art,ART_ID',
-                'collection_id' => 'required|exists:ART_COLLECTION,ARTIST_COLLECTION_ID'
-            ]);
+        $request->validate([
+            'artworks' => 'array',
+            'artworks.*' => 'exists:art,ART_ID',
+        ]);
 
-            $collectionId = $request->input('collection_id');
+        $collection = ArtistCollection::where('ARTIST_COLLECTION_ID',$collectionId)->first();
 
+        if($request->artworks != null) {
             foreach ($request->artworks as $artId) {
-                ArtCollection::updateOrCreate(
-                    ['ART_ID' => $artId, 'ARTIST_COLLECTION_ID' => $collectionId],
-                    []
+                ArtCollection::create(
+                    [
+                        'ART_ID' => $artId,
+                        'ARTIST_COLLECTION_ID' => $collection->ARTIST_COLLECTION_ID
+                    ]
                 );
             }
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Artworks successfully added to the collection.'
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Error adding artworks to collection:', ['error' => $e->getMessage()]);
-
-            return response()->json([
-                'success' => false,
-                'message' => 'An error occurred while adding artworks to the collection.'
-            ], 500);
         }
+
+        return redirect()
+        ->route('collection.show', [
+            'artistId' => $collection->Artist->ARTIST_ID,
+            'collectionId' => $collection->ARTIST_COLLECTION_ID,
+        ])
+        ->with('status', 'Art has been added to the collection successfully!');
     }
 }

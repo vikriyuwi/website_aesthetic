@@ -43,6 +43,7 @@ Route::middleware([Authorization::class.':true'])->group(function() {
     Route::prefix('collection')->name('collection.')->group(function () {
         Route::post('/add', [ArtistCollectionController::class, 'store'])->name('store');
         Route::put('/{collectionId}/update', [ArtistCollectionController::class, 'update'])->name('update');
+        Route::put('/{collectionId}/addArt', [ArtistCollectionController::class, 'addArtToCollection'])->name('addArt');
         Route::get('/delete/{collectionId}', [ArtistCollectionController::class, 'destroy'])->name('delete');
     });
 
@@ -132,9 +133,6 @@ Route::post('/artist/profile/update/{artistId}', [ArtistProfileController::class
 
 //VIEW ART INSIDE COLLECTION
 Route::get('/artists/{artistId}/collection/{collectionId}', [ArtistProfileController::class, 'showCollection'])->name('collection.show');
-
-//ADD ART INTO COLLECTION
-Route::post('/collection/addArt',[ArtistCollectionController::class, 'addArtToCollection'])->name('collection.addArt');
 
 //---------------------------------------------------------------ENDCOLLECTION------------------------------------------------------------------
 
