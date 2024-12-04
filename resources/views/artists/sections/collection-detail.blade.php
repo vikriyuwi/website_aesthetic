@@ -68,8 +68,7 @@
                 
                 <!-- Options Menu -->
                 <div class="optionsMenu">
-                    <button class="block w-full text-left px-4 py-2 hover:bg-gray-100">Edit Art</button>
-                    <button class="block w-full text-left px-4 py-2 hover:bg-gray-100" onclick="confirmDeleteArtwork()">Delete Art</button>
+                    <button class="block w-full text-left px-4 py-2 hover:bg-gray-100" onclick="confirmDeleteArtwork({{ $artwork->ART_COLLECTION_ID }},'{{ $artwork->Art->ART_TITLE }}')" >Delete from this collection</button>
                 </div>
                 @endif
             @endif
@@ -155,8 +154,25 @@
         </div>
     </div>
 
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteConfirmationModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center modal-overlay hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Delete</h2>
+        <p class="text-gray-600 mb-6">Are you sure you want to delete "<span id="artNameSpan"></span>" from this collection?</p>
+        <div class="flex justify-end space-x-3">
+            <button type="button" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition" onclick="closeDeleteModal()">Cancel</button>
+            <a id="deleteFromCollectionButton" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">Delete</a>
+        </div>
+        </div>
+    </div>
+
     <!-- JavaScript -->
     <script>
+        // Function to close the delete confirmation modal
+        function closeDeleteModal() {
+            document.getElementById('deleteConfirmationModal').classList.add('hidden'); // Hide modal
+        }
+
         document.getElementById('x-button').addEventListener('click', () => {
             document.getElementById('addArtModal').classList.add('hidden');
         });
@@ -189,11 +205,12 @@
         }
 
         // Show delete confirmation (simple alert for demonstration)
-        function confirmDeleteArtwork() {
-            if (confirm("Are you sure you want to delete this artwork?")) {
-                alert("Artwork deleted!");
-                // Additional delete logic can be added here
-            }
+        function confirmDeleteArtwork($id, $name) {
+            document.getElementById('deleteConfirmationModal').classList.remove('hidden');
+            document.getElementById('artNameSpan').innerHTML = $name;
+
+            let deleteCollectionRoute = "{{ route('artCollection.delete', ['artCollectionId' => 'COLLECTION_ID']) }}";
+            document.getElementById('deleteFromCollectionButton').href = deleteCollectionRoute.replace('COLLECTION_ID', $id);
         }
 
         // Declare selectedArtworks globally

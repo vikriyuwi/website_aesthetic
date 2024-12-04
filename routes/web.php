@@ -7,6 +7,7 @@ use App\Http\Controllers\WebController;
 use App\Http\Controllers\ArtGalleryController;
 use App\Http\Controllers\ArtistArtWorkController;
 use App\Http\Controllers\ArtistCollectionController;
+use App\Http\Controllers\ArtCollectionController;
 use App\Http\Controllers\ArtistPortfolioController;
 use App\Http\Controllers\ArtistPostController;
 use App\Http\Controllers\ArtistProfileController;
@@ -16,22 +17,22 @@ use App\Http\Middleware\Role;
 use App\Http\Middleware\ActiveBuyer;
 use App\Http\Middleware\ActiveArtist;
 
-// Route::get('/', function () {
-//     return redirect('/login');
-// });
-
-Route::middleware(ActiveBuyer::class)->group(function() {
-    Route::get('/', function() {
-        return "hai";
-    });
+Route::get('/', function () {
+    return redirect('/login');
 });
+
+// Route::middleware(ActiveBuyer::class)->group(function() {
+//     Route::get('/', function() {
+//         return "hai";
+//     });
+// });
 
 // Auth user not allowed to open this
 Route::middleware(Authorization::class.':false')->group(function() {
-    Route::get('/login', [App\Http\Controllers\AuthController::class, 'login']);
-    Route::post('/login', [App\Http\Controllers\AuthController::class, 'loginPost'])->name('login');
-    Route::get('/register', [App\Http\Controllers\AuthController::class, 'register']);
-    Route::post('/register', [App\Http\Controllers\AuthController::class, 'registerPost'])->name('register');
+    Route::get('/login', [AuthController::class, 'login']);
+    Route::post('/login', [AuthController::class, 'loginPost'])->name('login');
+    Route::get('/register', [AuthController::class, 'register']);
+    Route::post('/register', [AuthController::class, 'registerPost'])->name('register');
 });
 
 Route::middleware([Authorization::class.':true'])->group(function() {
@@ -53,6 +54,10 @@ Route::middleware([Authorization::class.':true'])->group(function() {
 
     Route::prefix('artwork')->name('artwork.')->group(function () {
         Route::post('/add',[ArtistArtWorkController::class,'addArtWork'])->name('store');
+    });
+
+    Route::prefix('art-collection')->name('artCollection.')->group(function () {
+        Route::get('/{artCollectionId}/delete',[ArtCollectionController::class,'destroy'])->name('delete');
     });
 });
 

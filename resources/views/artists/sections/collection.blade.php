@@ -241,43 +241,6 @@
     }
 
     // Function to delete the post via AJAX
-    function deleteCollection() {
-        if (!collectionToDelete) return; // Ensure there's a post to delete
-
-        // Get the delete route from the data attribute
-        const collectionElement = document.querySelector(`#artistCollection[data-collection-id="${collectionToDelete}"]`);
-        const url = collectionElement.dataset.deleteRoute; // Get the route from the data attribute
-
-        console.log('Delete URL:', url); // Log the URL to verify it's correct
-
-        // Send AJAX request
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                'Content-Type': 'application/json',
-            },
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to delete the collection.');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                collectionElement.remove(); // Remove the post from the DOM
-                closeDeleteModal(); // Close the modal
-                alert('Collection deleted successfully.');
-            } else {
-                alert('Failed to delete the collection.');
-            }
-        })
-        .catch(error => {
-            console.error('Error deleting collection:', error);
-            alert('An error occurred while deleting the collection.');
-        });
-    }
 
     // // Show delete confirmation modal
     // function confirmDeleteCollection(event) {
