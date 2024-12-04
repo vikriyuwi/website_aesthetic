@@ -19,7 +19,7 @@ class ArtistProfileController extends Controller
         $user = Auth::guard('MasterUser')->user();
         $artist = Artist::where('ARTIST_ID','=',$ARTIST_ID)->first();
         $portfolios = Art::where('USER_ID',$artist->USER_ID)->where('IS_SALE',false)->get();
-        $arts = Art::where('USER_ID',$artist->USER_ID)->where('IS_SALE',true)->get();
+        $artWorks = Art::where('USER_ID',$artist->USER_ID)->where('IS_SALE',true)->get();
         $artCategoriesMaster = ArtCategoryMaster::all();
 
         if ($artist == null) {
@@ -27,7 +27,7 @@ class ArtistProfileController extends Controller
         }
         else{
             $artistItSelf = $user == $artist->MasterUser;
-            return view('artists.show', compact('artist','section','artistItSelf','portfolios','arts','artCategoriesMaster')); //ABOUT RENDER
+            return view('artists.show', compact('artist','section','artistItSelf','portfolios','artWorks','artCategoriesMaster')); //ABOUT RENDER
         }
     }
     

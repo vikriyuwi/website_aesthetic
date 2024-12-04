@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreign('USER_ID')->references('USER_ID')->on('MASTER_USER');
             $table->string('ART_TITLE');
             $table->text('DESCRIPTION');
-            $table->integer('VIEW');
+            $table->integer('VIEW')->default(0);
             $table->boolean('IS_SALE');
             $table->decimal('PRICE', 15, 2)->default(0);
             $table->timestamps();

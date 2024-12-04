@@ -45,6 +45,14 @@ Route::middleware([Authorization::class.':true'])->group(function() {
         Route::put('/{collectionId}/update', [ArtistCollectionController::class, 'update'])->name('update');
         Route::get('/delete/{collectionId}', [ArtistCollectionController::class, 'destroy'])->name('delete');
     });
+
+    Route::prefix('portfolio')->name('portfolio.')->group(function () {
+        Route::post('/add', [ArtistPortfolioController::class, 'store'])->name('store');
+    });
+
+    Route::prefix('artwork')->name('artwork.')->group(function () {
+        Route::post('/add',[ArtistArtWorkController::class,'addArtWork'])->name('store');
+    });
 });
 
 Route::get('/landing', [App\Http\Controllers\WebController::class, 'landing'])->name('landing');
@@ -118,7 +126,7 @@ Route::post('/artist/profile/update/{artistId}', [ArtistProfileController::class
 
 //Portfolio
 //Store the portfolio
-Route::post('/portfolio/add', [ArtistPortfolioController::class, 'store'])->name('portfolio.store');
+
 
 //------------------------------------------------------------------COLLECTION------------------------------------------------------------------
 
@@ -151,9 +159,6 @@ Route::post('/comments/{postId}', [ArtistPostController::class, 'addPostComment'
 //------------------------------------------------------------------ARTWORK------------------------------------------------------------------
 //VIEW ALL ARTWORK
 Route::get('/artworks/{artistId}/', [ArtistArtWorkController::class, 'showAllArtwork'])->name('all-artwork.show');
-
-//ADD ARTWORK
-Route::post('artworks/add',[ArtistArtWorkController::class,'addArtWork'])->name('artwork.store');
 
 //DELETE ARTWORK
 Route::post('artworks/delete/{artworkId}',[ArtistArtWorkController::class,'deleteArtWork'])->name('artwork.destroy');

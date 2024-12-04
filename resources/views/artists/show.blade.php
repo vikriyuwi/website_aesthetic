@@ -358,7 +358,7 @@
                         @elseif($section === 'posts')
                             @include('artists.sections.posts', ['artist' => $artist])
                         @elseif($section === 'artwork')
-                            @include('artists.sections.artwork', ['artist' => $artist,'arts' => $arts])
+                            @include('artists.sections.artwork', ['artist' => $artist,'artWorks' => $artWorks])
                         @elseif($section === 'about')   
                             @include('artists.sections.about', ['artist' => $artist])
                         @endif
@@ -368,60 +368,58 @@
                
           
 
-                    <!-- Chat Container -->
-                    <div id="chatContainer" class="hidden fixed bottom-5 right-5 w-80 h-96 bg-white shadow-lg rounded-lg overflow-hidden z-50">
-                        <!-- Chat Header with Expand and Close Buttons -->
-                        <div class="flex justify-between items-center p-4 bg-gray-100 border-b border-gray-300">
-                            <h3 class="text-gray-800 text-lg font-semibold">Chat with Shanay Cruz</h3>
-                            <div class="flex space-x-2">
-                                <!-- Expand Button -->
-                                <button onclick="toggleChatSize()" class="text-gray-500 hover:text-gray-700">
-                                    <i class="fas fa-expand"></i>
-                                </button>
-                                <!-- Close Button -->
-                                <button onclick="closeChatWindow()" class="text-gray-500 hover:text-gray-700">
-                                    &times;
-                                </button>
+            <!-- Chat Container -->
+            <div id="chatContainer" class="hidden fixed bottom-5 right-5 w-80 h-96 bg-white shadow-lg rounded-lg overflow-hidden z-50">
+                <!-- Chat Header with Expand and Close Buttons -->
+                <div class="flex justify-between items-center p-4 bg-gray-100 border-b border-gray-300">
+                    <h3 class="text-gray-800 text-lg font-semibold">Chat with Shanay Cruz</h3>
+                    <div class="flex space-x-2">
+                        <!-- Expand Button -->
+                        <button onclick="toggleChatSize()" class="text-gray-500 hover:text-gray-700">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                        <!-- Close Button -->
+                        <button onclick="closeChatWindow()" class="text-gray-500 hover:text-gray-700">
+                            &times;
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Chat Messages Area with scrolling -->
+                <div class="chat-messages">
+                    <div class="grid pb-11">
+                        <!-- Message from the artist -->
+                        <div class="flex gap-2.5 mb-4">
+                            <img src="https://pagedone.io/asset/uploads/1710412177.png" alt="Shanay image" class="w-10 h-11">
+                            <div class="grid">
+                                <h5 class="text-gray-900 text-sm font-semibold leading-snug pb-1">Shanay Cruz</h5>
+                                <div class="px-3.5 py-2 bg-gray-100 rounded-lg inline-flex">
+                                    <h5 class="text-gray-900 text-sm font-normal leading-snug">Guts, I need a review of work. Are you ready?</h5>
+                                </div>
+                                <div class="text-gray-500 text-xs font-normal leading-4 py-1 text-right">05:14 PM</div>
                             </div>
                         </div>
-                        
-                        <!-- Chat Messages Area with scrolling -->
-                        <div class="chat-messages">
-                            <div class="grid pb-11">
-                                <!-- Message from the artist -->
-                                <div class="flex gap-2.5 mb-4">
-                                    <img src="https://pagedone.io/asset/uploads/1710412177.png" alt="Shanay image" class="w-10 h-11">
-                                    <div class="grid">
-                                        <h5 class="text-gray-900 text-sm font-semibold leading-snug pb-1">Shanay Cruz</h5>
-                                        <div class="px-3.5 py-2 bg-gray-100 rounded-lg inline-flex">
-                                            <h5 class="text-gray-900 text-sm font-normal leading-snug">Guts, I need a review of work. Are you ready?</h5>
-                                        </div>
-                                        <div class="text-gray-500 text-xs font-normal leading-4 py-1 text-right">05:14 PM</div>
-                                    </div>
+                        <!-- Your message -->
+                        <div class="flex gap-2.5 justify-end mb-4">
+                            <div>
+                                <div class="px-3 py-2 bg-indigo-600 text-white rounded-lg">
+                                    <h2 class="text-sm font-normal leading-snug">Yes, let’s see, send your work here</h2>
                                 </div>
-                                <!-- Your message -->
-                                <div class="flex gap-2.5 justify-end mb-4">
-                                    <div>
-                                        <div class="px-3 py-2 bg-indigo-600 text-white rounded-lg">
-                                            <h2 class="text-sm font-normal leading-snug">Yes, let’s see, send your work here</h2>
-                                        </div>
-                                        <div class="text-gray-500 text-xs font-normal leading-4 py-1">05:14 PM</div>
-                                    </div>
-                                    <img src="https://pagedone.io/asset/uploads/1704091591.png" alt="Your image" class="w-10 h-11">
-                                </div>
+                                <div class="text-gray-500 text-xs font-normal leading-4 py-1">05:14 PM</div>
                             </div>
-                        </div>
-                        
-                        <!-- Chat Input Area -->
-                        <div class="chat-input">
-                            <input type="text" placeholder="Type here..." class="w-full text-gray-700 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-600" />
-                            <button class="bg-indigo-600 text-white p-2 rounded-full">
-                                <i class="fas fa-paper-plane"></i>
-                            </button>
+                            <img src="https://pagedone.io/asset/uploads/1704091591.png" alt="Your image" class="w-10 h-11">
                         </div>
                     </div>
+                </div>
 
-                    
+                <!-- Chat Input Area -->
+                <div class="chat-input">
+                    <input type="text" placeholder="Type here..." class="w-full text-gray-700 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-600" />
+                    <button class="bg-indigo-600 text-white p-2 rounded-full">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
             <!-- Edit Profile Modal -->
         <div id="editModal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 hidden overflow-y-auto">
             <div

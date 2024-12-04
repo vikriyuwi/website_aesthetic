@@ -97,7 +97,7 @@
             <!-- Example Artwork Items -->
             @foreach($portfolios as $portfolio)
             <div class="masonry-item group relative">
-                <img src="{{ asset($portfolio->IMAGE_PATH) }}" 
+                <img src="{{ Str::startsWith($portfolio->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($portfolio->ArtImages()->first()->IMAGE_PATH) : $portfolio->ArtImages()->first()->IMAGE_PATH }}" 
                      alt="{{ $portfolio->ART_TITLE }}" 
                      class="w-full h-auto object-cover transition-transform duration-500 transform group-hover:scale-105">
             </div>
@@ -118,14 +118,14 @@
                 <!-- Title Field -->
                 <div>
                     <label for="portfolioTitle" class="block text-lg font-semibold text-gray-700">Title</label>
-                    <input type="text" id="portfolioTitle" name="portfolioTitle" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                    <input type="text" id="portfolioTitle" name="portfolioTitle" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500" required>
                     <span id="portfolioTitleError" class="text-red-600"></span>
                 </div>
 
                 <!-- Description Field -->
                 <div>
                     <label for="portfolioDescription" class="block text-lg font-semibold text-gray-700">Description</label>
-                    <textarea id="portfolioDescription" name="portfolioDescription" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"></textarea>
+                    <textarea id="portfolioDescription" name="portfolioDescription" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500" required></textarea>
                     <span id="portfolioDescriptionError" class="text-red-600"></span>
                 </div>
 
@@ -176,23 +176,27 @@
                     <span id="portfolioImageUploadError" class="text-red-600"></span>
                 </div>
             </div>
-        </form>
             <!-- Modal Footer -->
             <div class="mt-6 flex justify-end space-x-4">
                 <button onclick="closeModal()" class="bg-gray-300 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-400 transition duration-200">Cancel</button>
-                <button type="submit" onclick="submitPortfolio(event)" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 shadow-md transition duration-300 transform hover:scale-105">Add Portfolio</button>
+                <button type="submit" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 shadow-md transition duration-300 transform hover:scale-105">Add Portfolio</button>
             </div>
+        </form>
     </div>
 </div>
 
 <!-- Success Modal -->
-<div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+@if(session('status'))
+<div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
     <div class="bg-white p-6 rounded-lg shadow-lg text-center success-modal">
         <i class="fas fa-check-circle text-indigo-600 text-5xl mb-4"></i>
         <h2 class="text-2xl font-bold text-gray-800">Portfolio Added!</h2>
         <p class="text-gray-600 mt-2">Your portfolio has been successfully added.</p>
+        <div class="mt-6 flex justify-center space-x-4">
+            <button onclick="closeSuccessModal()" class="bg-gray-300 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-400 transition duration-200">Cancel</button>
     </div>
 </div>
+@endif
 
 
 <script>
@@ -202,6 +206,11 @@
 
     function closeModal() {
         document.getElementById('addPortfolioModal').classList.add('hidden'); // Hide the modal
+        clearErrorsAndForm(); // Clear errors and reset the form
+    }
+
+    function closeSuccessModal() {
+        document.getElementById('successModal').classList.add('hidden'); // Hide the modal
         clearErrorsAndForm(); // Clear errors and reset the form
     }
 
@@ -223,72 +232,28 @@
     }
 
     function toggleImageUploadOption(option) {
-        document.getElementById('linkField').classList.toggle('hidden', option !== 'link');
-        document.getElementById('fileField').classList.toggle('hidden', option !== 'file');
-    }
+        const linkField = document.getElementById('linkField');
+        const fileField = document.getElementById('fileField');
+        const portfolioImageLink = document.getElementById('portfolioImageLink');
+        const portfolioImageUpload = document.getElementById('portfolioImageUpload');
 
-    function submitPortfolio(event) {
-        event.preventDefault(); // Prevent traditional form submission
+        if (option === 'link') {
+            // Show link field and hide file field
+            linkField.classList.remove('hidden');
+            fileField.classList.add('hidden');
 
-        // Clear previous error messages
-        document.getElementById('portfolioTitleError').textContent = '';
-        document.getElementById('portfolioDescriptionError').textContent = '';
-        document.getElementById('portfolioCategoryError').textContent = '';
-        document.getElementById('portfolioImageLinkError').textContent = '';
-        document.getElementById('portfolioImageUploadError').textContent = '';
+            // Add required to link input and remove from file input
+            portfolioImageLink.setAttribute('required', 'true');
+            portfolioImageUpload.removeAttribute('required');
+        } else if (option === 'file') {
+            // Show file field and hide link field
+            fileField.classList.remove('hidden');
+            linkField.classList.add('hidden');
 
-        // Get the form and form data
-        const form = document.getElementById('addPortfolioForm');
-        const formData = new FormData(form);
-
-        // Get the selected image option
-        const imageOption = formData.get('imageOption'); // "file" or "link"
-
-        // Send AJAX request
-        fetch('{{ route('portfolio.store') }}', {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-            },
-            body: formData,
-        })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(err => {
-                        throw err; // Throw JSON error
-                    });
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Success handling
-                if (data.success) {
-                    location.reload(); // Reload the page to reflect changes
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                if (error.errors) {
-                    // Display validation errors dynamically
-                    if (error.errors.portfolioTitle) {
-                        document.getElementById('portfolioTitleError').textContent = error.errors.portfolioTitle[0];
-                    }
-                    if (error.errors.portfolioDescription) {
-                        document.getElementById('portfolioDescriptionError').textContent = error.errors.portfolioDescription[0];
-                    }
-                    if (error.errors.category_art) {
-                        document.getElementById('portfolioCategoryError').textContent = error.errors.category_art[0];
-                    }
-                    if (error.errors.portfolioImageUpload && imageOption === 'file') {
-                        document.getElementById('portfolioImageUploadError').textContent = error.errors.portfolioImageUpload[0];
-                    }
-                    if (error.errors.portfolioImageLink && imageOption === 'link') {
-                        document.getElementById('portfolioImageLinkError').textContent = error.errors.portfolioImageLink[0];
-                    }
-                } else {
-                    alert('An unexpected error occurred. Please try again later.');
-                }
-            });
+            // Add required to file input and remove from link input
+            portfolioImageUpload.setAttribute('required', 'true');
+            portfolioImageLink.removeAttribute('required');
+        }
     }
 
     // Update the selected categories display

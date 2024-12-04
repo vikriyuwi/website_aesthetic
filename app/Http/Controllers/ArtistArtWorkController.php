@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Art;
+use App\Models\Artist;
 use App\Models\ArtCategory;
 use App\Models\ArtCollection;
 use App\Models\ArtImage;
@@ -56,83 +57,57 @@ class ArtistArtWorkController extends Controller
         return view('artists.sections.all-artworks', compact('artworks', 'artistId','totalArtWorks','artCategoryMaster', 'artistUserId'));
     }
 
-    public function addArtWork(Request $request){
+    public function addArtWork(Request $request)
+    {
+        $user = Auth::guard('MasterUser')->user();
+        $artist = Artist::where('ARTIST_ID','=',$user->Artist->ARTIST_ID)->first();
 
-        try {
-            // Validate request
-            $validated = Validator::make($request->all(), [
-                'artWorkTitle' => 'required|string|max:255',
-                'artWorkDescription' => 'required|string',
-                'artWorkPrice' => 'required|numeric',
-                'category_art' => 'required|array|min:1|max:6',
-                'category_art.*' => 'integer|exists:ART_CATEGORY_MASTER,ART_CATEGORY_MASTER_ID',
-                'imageOption' => 'required|string|in:file,link',
-                'artWorkImageUpload' => 'nullable|required_if:imageOption,file|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'artWorkImageLink' => 'nullable|required_if:imageOption,link|url',
-            ], [
-                'artWorkTitle.required' => '* The ArtWork title is required.',
-                'artWorkDescription.required' => '* The ArtWork description is required.',
-                'artWorkPrice'=> '* Please Enter the correct input for the price',
-                'category_art.required' => '* Please select at least one category.',
-                'artWorkImageUpload.required_if' => '* Please upload an image file when "Upload from File" is selected.',
-                'artWorkImageLink.required_if' => '* Please provide a valid URL when "Upload by Link" is selected.',
-            ]);
+        $validated = Validator::make($request->all(), [
+            'artworkTitle' => 'required',
+            'artworkDescription' => 'required',
+            'artworkPrice' => 'required',
+        ], [
+            'collectionTitle.required' => '* The Artwork title is required.',
+            'collectionDescription.required' => '* The Artwork description is required.',
+        ]);
 
-            if ($validated->fails()) {
-                return response()->json(['errors' => $validated->errors()], 422);
-            }
-
-             // Process the data (insert into database)
-             $categories = $request->category_art;
-             $imagePath = null;
- 
-             if ($request->imageOption === 'file') {
-                 $imagePath = $request->file('artWorkImageUpload')->store('uploads', ['disk' => 'public']);
-                 $imagePath = '/storage/' . $imagePath;
-             } elseif ($request->imageOption === 'link') {
-                 $imagePath = $request->artWorkImageLink;
-             }
- 
-             // Fetch artist ID
-             $artist = DB::table('ARTIST')
-                 ->select('ARTIST_ID')
-                 ->where('USER_ID', Auth::id())
-                 ->first();
- 
-             if (!$artist) {
-                 return response()->json(['errors' => ['error' => 'Artist not found.']], 422);
-             }
- 
-             $artistId = $artist->ARTIST_ID;
- 
-             // Insert data
-             $art = Art::create([
-                 'ARTIST_ID' => $artistId,
-                 'ART_TITLE' => $request->artWorkTitle,
-                 'DESCRIPTION' => $request->artWorkDescription,
-                 'VIEW' => 0,
-                 'IS_SALE' => true,
-                 'PRICE' => $request->artWorkPrice,
-             ]);
- 
-             ArtImage::create([
-                 'ART_ID' => $art->ART_ID,
-                 'IMAGE_PATH' => $imagePath,
-             ]);
- 
-             foreach ($categories as $categoryMasterId) {
-                 ArtCategory::create([
-                     'ART_ID' => $art->ART_ID,
-                     'ART_CATEGORY_MASTER_ID' => $categoryMasterId,
-                 ]);
-             }
-
-            // Return a success response
-            return response()->json(['success' => 'Portfolio added successfully!'], 200);
-        } catch (\Exception $e) {
-            // Log exception and return error
-            return response()->json(['errors' => ['error' => 'An unexpected error occurred.']], 500);
+        if ($validated->fails()) {
+            return redirect()->back()->withError($validated->error());
         }
+
+        $art = $user->Arts()->create([
+            'ART_TITLE' => $request->artworkTitle,
+            'DESCRIPTION' => $request->artworkDescription,
+            'IS_SALE' => true,
+            'PRICE' => $request->artworkPrice
+        ]);
+
+        if($request->category_art != null) {
+            foreach ($request->category_art as $categoryId) {
+                $art->ArtCategories()->create([
+                    'ART_CATEGORY_MASTER_ID' => $categoryId,
+                ]);
+            }
+        }
+
+        $imagePath = null;
+
+        // If URL is provided
+        if ($request->filled('artworkImageLink')) {
+            $imagePath = $request->input('artworkImageLink');
+        }
+
+        // If file is uploaded
+        if ($request->hasFile('artworkImageUpload')) {
+            $uploadedFile = $request->file('artworkImageUpload');
+            $imagePath = $uploadedFile->store('images/art', 'public'); // Save file in the `storage/app/public/images/art` directory
+        }
+
+        $art->ArtImages()->create([
+            'IMAGE_PATH' => $imagePath
+        ]);
+        
+        return redirect()->back()->with('status','New artwork has been added!');
     }
 
     public function deleteArtWork($artworkId){
