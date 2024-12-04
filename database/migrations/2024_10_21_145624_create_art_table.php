@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('ART', function (Blueprint $table) {
             $table->id('ART_ID');
-            $table->unsignedBigInteger('ARTIST_COLLECTION_ID');
-            $table->foreign('ARTIST_COLLECTION_ID')->references('ARTIST_COLLECTION_ID')->on('ARTIST_COLLECTION');
+            $table->unsignedBigInteger('USER_ID');
+            $table->foreign('USER_ID')->references('USER_ID')->on('MASTER_USER');
             $table->string('ART_TITLE');
             $table->text('DESCRIPTION');
             $table->integer('VIEW');

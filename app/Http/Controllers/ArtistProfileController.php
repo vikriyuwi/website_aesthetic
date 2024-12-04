@@ -29,7 +29,8 @@ class ArtistProfileController extends Controller
     public function showCollection($artistId, $ARTIST_COLLECTION_ID)
     {
         $collection = ArtistCollection::where('ARTIST_COLLECTION_ID',$ARTIST_COLLECTION_ID)->first();
-        $artsCount = $collection->Arts->count();
+        $artsCount = $collection->ArtCollections->count();
+
         $artist = Artist::where('ARTIST_ID',$artistId)->first();
 
         // Example data for the artworks

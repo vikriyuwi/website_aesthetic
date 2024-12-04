@@ -55,7 +55,7 @@
     
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         <!-- Loop through the artworks -->
-        @foreach($collection->arts as $artwork)
+        @foreach($collection->ArtCollections as $artwork)
         <div class="group relative bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 border-2 border-gray-300 overflow-hidden">
             <!-- Ellipsis Button -->
             @if(Auth::check())
@@ -75,7 +75,7 @@
             @endif
             <!-- Artwork Image with Hover Effect -->
             <a href="{{ route('artwork.show', $artwork->ART_ID) }}">
-                <img src="{{ asset($artwork->IMAGE_PATH) }}" alt="{{ $artwork->ART_TITLE }}"
+                <img src="{{ asset($artwork->Art->IMAGE_PATH) }}" alt="{{ $artwork->Art->ART_TITLE }}"
                     class="w-full h-64 object-cover rounded-t-lg transition-transform duration-300 transform group-hover:scale-105">
             </a>
             

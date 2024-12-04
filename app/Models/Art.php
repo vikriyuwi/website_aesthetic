@@ -13,11 +13,11 @@ class Art extends Model
 
     protected $table = 'ART';
     protected $primaryKey = 'ART_ID';
-    protected $fillable = ['ARTIST_COLLECTION_ID', 'ART_TITLE', 'DESCRIPTION', 'VIEW', 'IS_SALE', 'PRICE'];
+    protected $fillable = ['USER_ID', 'ART_TITLE', 'DESCRIPTION', 'VIEW', 'IS_SALE', 'PRICE'];
 
-    public function ArtistCollection(): BelongsTo
+    public function MasterUser(): BelongsTo
     {
-        return $this->belongsTo(ArtistCollection::class, 'ARTIST_COLLECTION_ID', 'ARTIST_COLLECTION_ID');
+        return $this->belongsTo(MasterUser::class, 'USER_ID', 'USER_ID');
     }
 
     public function ArtCategories(): HasMany

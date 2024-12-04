@@ -19,8 +19,8 @@ class ArtistCollection extends Model
         return $this->belongsTo(Artist::class, 'ARTIST_ID', 'ARTIST_ID');
     }
 
-    public function Arts(): HasMany
+    public function ArtCollections(): HasMany
     {
-        return $this->hasMany(Art::class, 'ARTIST_COLLECTION_ID', 'ARTIST_COLLECTION_ID');
+        return $this->hasMany(ArtCollection::class, 'ARTIST_COLLECTION', 'ARTIST_COLLECTION');
     }
 }
