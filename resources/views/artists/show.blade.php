@@ -219,7 +219,7 @@
                         @endif
 
                         <div class="text-center">
-                            <img src="{{ asset($artist->PROFILE_IMAGE_PATH) }}" alt="Profile picture"
+                            <img src="{{ $artist->MasterUser->Buyer->PROFILE_IMAGE_URL != null ? asset($artist->MasterUser->Buyer->PROFILE_IMAGE_URL) : "https://placehold.co/100x100"}}" alt="Profile picture"
                                 class="w-24 h-24 rounded-full mx-auto object-cover">
                             <h2 class="text-xl font-bold mt-4">{{ $artist->MasterUser->Buyer->FULLNAME }}</h2>
                             <p class="text-gray-600">{{ $artist->ROLE }}</p>
@@ -294,12 +294,12 @@
                         <h3 class="text-lg font-bold">Posts</h3>
                         <div class="mt-4">
                             <div class="flex items-start">
-                                <img src="{{ asset('') }}"
+                                <img src="https://placehold.co/50x50"
                                     alt="Post profile picture" class="w-12 h-12 rounded-full object-cover">
                                 <div class="ml-4">
                                     <h4 class="font-bold">username</h4>
                                     <p class="text-gray-600">content</p>
-                                    <img src="{{ asset('') }}"
+                                    <img src="https://placehold.co/200x100"
                                         alt="Post image" class="mt-2 rounded-lg object-cover w-full h-32">
                                     <div class="flex justify-between items-center mt-2">
                                         <div class="flex space-x-10">

@@ -78,11 +78,13 @@
         <div class="masonry">
             <!-- Example Artwork Items -->
             @foreach($artWorks as $artWork)
-            <div class="masonry-item group relative">
-                <img src="{{ Str::startsWith($artWork->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($artWork->ArtImages()->first()->IMAGE_PATH) : $artWork->ArtImages()->first()->IMAGE_PATH }}" 
-                     alt="{{ $artWork->ART_TITLE }}" 
-                     class="w-full h-auto object-cover transition-transform duration-500 transform group-hover:scale-105">
-            </div>
+            <a href="{{ route('artwork.show', $artWork->ART_ID) }}">
+                <div class="masonry-item group relative">
+                    <img src="{{ Str::startsWith($artWork->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($artWork->ArtImages()->first()->IMAGE_PATH) : $artWork->ArtImages()->first()->IMAGE_PATH }}" 
+                         alt="{{ $artWork->ART_TITLE }}" 
+                         class="w-full h-auto object-cover transition-transform duration-500 transform group-hover:scale-105">
+                </div>
+            </a>
             @endforeach
         </div>
     </div>
@@ -166,7 +168,7 @@
             <!-- Modal Footer -->
             <div class="mt-6 flex justify-end space-x-4">
                 <button onclick="closeModal()" class="bg-gray-300 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-400 transition duration-200">Cancel</button>
-                <button type="submit" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 shadow-md transition duration-300 transform hover:scale-105">Add Portfolio</button>
+                <button type="submit" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 shadow-md transition duration-300 transform hover:scale-105">Add Artwork</button>
             </div>
         </form>
     </div>

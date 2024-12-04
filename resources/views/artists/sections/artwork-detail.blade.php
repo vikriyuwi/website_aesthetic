@@ -243,7 +243,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         <!-- Listing Card 1 -->
         @foreach($moreArtWorks as $otherArtwork)
-        <a href="listing-detail-sun-kissed-dreams.html" class="group bg-white rounded-lg border border-gray-200 overflow-hidden shadow hover:shadow-lg transition">
+        <a href="{{ route('artwork.show', $otherArtwork->ART_ID) }}" class="group bg-white rounded-lg border border-gray-200 overflow-hidden shadow hover:shadow-lg transition">
             <img src="{{ Str::startsWith($otherArtwork->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($otherArtwork->ArtImages()->first()->IMAGE_PATH) : $otherArtwork->ArtImages()->first()->IMAGE_PATH }}" 
                  alt="{{ $otherArtwork->ART_TITLE }}" 
                  class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105">
