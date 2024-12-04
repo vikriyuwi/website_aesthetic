@@ -20,6 +20,6 @@ class ArtCategory extends Model
 
     public function ArtCategoryMaster(): BelongsTo
     {
-        return $this->belongsTo(Art::class, 'ART_CATEGORY_MASTER_ID', 'ART_CATEGORY_MASTER_ID');
+        return $this->belongsTo(ArtCategoryMaster::class, 'ART_CATEGORY_MASTER_ID', 'ART_CATEGORY_MASTER_ID');
     }
 }

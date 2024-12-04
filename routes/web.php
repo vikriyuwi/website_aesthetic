@@ -36,6 +36,7 @@ Route::middleware(Authorization::class.':false')->group(function() {
 });
 
 Route::middleware([Authorization::class.':true'])->group(function() {
+    Route::get('/resetpassword', [WebController::class, 'resetpassword']);
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/join-artist', [WebController::class, 'joinArtist'])->name('join-artist');
     Route::post('/join-artist', [WebController::class, 'registerArtist'])->name('register-artist');
@@ -62,20 +63,16 @@ Route::middleware([Authorization::class.':true'])->group(function() {
 });
 
 Route::get('/landing', [App\Http\Controllers\WebController::class, 'landing'])->name('landing');
-
 Route::get('/home', [App\Http\Controllers\WebController::class, 'home'])->name('home');
-
-Route::get('/resetpassword', [WebController::class, 'resetpassword']);
 
 // Route::get('/artists', [App\Http\Controllers\WebController::class, 'listArtists'])->name('artist.list');
 Route::get('/artists',[App\Http\Controllers\ListArtistController::class, 'viewListArtist']);
-
-
 Route::get('/artists/{id}/{section?}', [ArtistProfileController::class, 'showArtist'])->name('artist.show');
-
 Route::get('/category/{category}', [WebController::class, 'showCategory'])->name('category.show');
 
-Route::get('/artwork/{id}', [WebController::class, 'showArtwork'])->name('artwork.show');
+Route::prefix('artwork')->name('artwork.')->group(function () {
+    Route::get('/{id}', [WebController::class, 'showArtwork'])->name('show');
+});
 
 Route::get('/explore', [App\Http\Controllers\WebController::class, 'explore']);
 

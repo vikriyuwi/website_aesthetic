@@ -101,68 +101,84 @@
             <span>/</span>
             <a href="/category" class="hover:underline">{{ $artwork['category'] }}</a>
             <span>/</span>
-            <span class="text-gray-800">{{ $artwork['title'] }}</span>
+            <span class="text-gray-800">{{ $artwork->ARTWORK_TITLE }}</span>
         </nav>
 
         <!-- Clickable Artwork Image -->
         <div class="flex justify-center items-center max-w-screen-lg p-4">
             <img id="artworkImage" 
-                 src="{{ asset('images/' . $artwork['image']) }}" 
-                 alt="{{ $artwork['title'] }}" 
+                 src="{{ Str::startsWith($artwork->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($artwork->ArtImages()->first()->IMAGE_PATH) : $artwork->ArtImages()->first()->IMAGE_PATH }}" 
+                 alt="{{ $artwork->ARTWORK_TITLE }}" 
                  class="max-h-[85vh] w-auto object-contain rounded-lg transition-transform duration-300 transform hover:scale-105 cursor-pointer" />
         </div>
 
 
-<!-- Artwork Info Section (Redesigned) -->
-<div class="mt-8 lg:flex lg:space-x-4 lg:justify-between">
+    <!-- Artwork Info Section (Redesigned) -->
+    <div class="mt-8 lg:flex lg:space-x-4 lg:justify-between">
             <!-- Basic Artwork Details -->
             <div class="lg:w-2/3 space-y-4">
                 <!-- Artist Info Above Title -->
                 <div class="flex items-center mb-2">
                     <img src="https://placehold.co/50x50" alt="Artist Name" class="w-12 h-12 rounded-full mr-4">
                     <div>
-                        <span class="block text-lg font-semibold text-gray-800">Artist Name</span>
+                        <span class="block text-lg font-semibold text-gray-800">{{ $artwork->MasterUser->Buyer->FULLNAME }}</span>
                     </div>
                 </div>
                 <!-- Artwork Title -->
-                <h2 class="text-3xl font-bold text-gray-900">Artwork Title</h2>
+                <h2 class="text-3xl font-bold text-gray-900">{{ $artwork->ART_TITLE }}</h2>
 
                 <!-- Category  -->
                 <div class="flex flex-wrap gap-2 mt-2">
+                    @foreach($artwork->ArtCategories as $category)
                     <button class="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-medium border border-gray-300 rounded-full hover:bg-gray-200 transition">
-                        Artwork
+                        {{ $category->ArtCategoryMaster->DESCR }}
                     </button>
-                    <button class="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-medium border border-gray-300 rounded-full hover:bg-gray-200 transition">
-                        Framed
-                    </button>
-                    <button class="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-medium border border-gray-300 rounded-full hover:bg-gray-200 transition">
-                        Painting
-                    </button>
-                    <button class="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-medium border border-gray-300 rounded-full hover:bg-gray-200 transition">
-                        Gallery
-                    </button>
-                    <button class="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-medium border border-gray-300 rounded-full hover:bg-gray-200 transition">
-                        Studio
-                    </button>
-                    <button class="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-medium border border-gray-300 rounded-full hover:bg-gray-200 transition">
-                        Creative Commons
-                    </button>
+                    @endforeach
                 </div>
 
-                <div class="text-xl font-semibold text-indigo-600 mt-4">$2500.00</div>
-                <p class="text-gray-600 leading-relaxed">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ac dui et diam pellentesque gravida. Suspendisse potenti.</p>
+                <div class="text-xl font-semibold text-indigo-600 mt-4">
+                    @if ($artwork->IS_SALE == 1)
+                    Rp.{{ number_format($artwork->PRICE, 2, ',', '.') }}
+                    @else
+                    Not For Sale
+                    @endif
+                </div>
                 <!-- Actions -->
                 <div class="flex space-x-4 mt-6">
-                    <button class="bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition btn">
-                        BUY NOW
-                    </button>
-                    <button class="border border-indigo-500 text-indigo-500 py-2 px-4 rounded-lg hover:bg-indigo-50 transition btn">
-                        CONTACT ARTIST
-                    </button>
-                    <button class="flex items-center space-x-2 text-gray-500 hover:text-indigo-500 transition btn">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span>Add to Cart</span>
-                    </button>
+                    @if(Auth::check())
+                        @if (Auth::user()->USER_ID == $artwork->USER_ID )
+                            <button id="editArtworkButton" class="bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition btn">
+                                <i class="fas fa-pen"></i>
+                                <span>EDIT</span>
+                            </button>
+                            <button class="border border-red-500 text-red-500 py-2 px-4 rounded-lg hover:bg-red-50 transition btn">
+                                <i class="fas fa-trash"></i>
+                                <span>DELETE</span>
+                            </button>
+                        @else
+                            <button class="bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition btn">
+                                BUY NOW
+                            </button>
+                            <button class="border border-indigo-500 text-indigo-500 py-2 px-4 rounded-lg hover:bg-indigo-50 transition btn">
+                                CONTACT ARTIST
+                            </button>
+                            <button class="border border-indigo-500 text-indigo-500 py-2 px-4 rounded-lg hover:bg-indigo-50 transition btn">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span>Add to Cart</span>
+                            </button>
+                        @endif
+                    @else
+                        <button class="bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition btn">
+                            BUY NOW
+                        </button>
+                        <button class="border border-indigo-500 text-indigo-500 py-2 px-4 rounded-lg hover:bg-indigo-50 transition btn">
+                            CONTACT ARTIST
+                        </button>
+                        <button class="border border-indigo-500 text-indigo-500 py-2 px-4 rounded-lg hover:bg-indigo-50 transition btn">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>Add to Cart</span>
+                        </button>
+                    @endif
                 </div>
             </div>
 
@@ -187,7 +203,7 @@
         <!-- Description Section -->
         <div class="mt-12">
             <h3 class="text-xl font-semibold mb-4">Description</h3>
-            <p class="text-gray-700 leading-relaxed">Detailed description of the artwork goes here. This section provides insights into the creative process, materials used, and any other relevant information that adds value to the artwork.</p>
+            <p class="text-gray-700 leading-relaxed">{{ $artwork->DESCRIPTION }}</p>
         </div>
 
         <!-- Additional Details -->
@@ -220,58 +236,30 @@
         <img alt="Profile picture of Ruslana Levandovska" class="rounded-full mx-auto mb-4 w-16 h-16 object-cover"
              src="https://storage.googleapis.com/a1aa/image/rDj0sQ4efjph6kC62n60n8eeiWc0wKvJvDwv9fiqG3VokCYcC.jpg" />
         <h2 class="text-2xl font-semibold text-gray-700 mt-2">
-            Other listings from Ruslana Levandovska
+            Other listings from {{ $artwork->MasterUser->Buyer->FULLNAME }}
         </h2>
     </div>
     
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         <!-- Listing Card 1 -->
+        @foreach($moreArtWorks as $otherArtwork)
         <a href="listing-detail-sun-kissed-dreams.html" class="group bg-white rounded-lg border border-gray-200 overflow-hidden shadow hover:shadow-lg transition">
-            <img src="https://storage.googleapis.com/a1aa/image/SRST1E7aaGIQDhYXyEwvVWVeWIm3pvJOe7gR5k3IfqBGpAGnA.jpg" 
-                 alt="Sun Kissed Dreams" 
+            <img src="{{ Str::startsWith($otherArtwork->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($otherArtwork->ArtImages()->first()->IMAGE_PATH) : $otherArtwork->ArtImages()->first()->IMAGE_PATH }}" 
+                 alt="{{ $otherArtwork->ART_TITLE }}" 
                  class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105">
             <div class="p-4">
-                <h3 class="text-lg font-semibold text-gray-800 mb-1 group-hover:text-indigo-600 transition-colors">Sun Kissed Dreams</h3>
-                <p class="text-gray-500">Ruslana Levandovska</p>
+                <h3 class="text-lg font-semibold text-gray-800 mb-1 group-hover:text-indigo-600 transition-colors">{{ $otherArtwork->ART_TITLE }}</h3>
+                <p class="text-gray-500">
+                    @if ($otherArtwork->IS_SALE == 1)
+                    Rp.{{ number_format($otherArtwork->PRICE, 2, ',', '.') }}
+                    @else
+                    Not For Sale
+                    @endif
+                </p>
                 <p class="text-gray-500 text-sm">Oil</p>
             </div>
         </a>
-        
-        <!-- Listing Card 2 -->
-        <a href="listing-detail-ocean-daydreaming.html" class="group bg-white rounded-lg border border-gray-200 overflow-hidden shadow hover:shadow-lg transition">
-            <img src="https://storage.googleapis.com/a1aa/image/YlH2tYHKJM7hGZJMHBXfV8VbWbX9OkcauycA8scB6gMUKgxJA.jpg" 
-                 alt="Ocean Daydreaming" 
-                 class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105">
-            <div class="p-4">
-                <h3 class="text-lg font-semibold text-gray-800 mb-1 group-hover:text-indigo-600 transition-colors">Ocean Daydreaming</h3>
-                <p class="text-gray-500">Ruslana Levandovska</p>
-                <p class="text-gray-500 text-sm">Oil</p>
-            </div>
-        </a>
-        
-        <!-- Listing Card 3 -->
-        <a href="listing-detail-endless-summer-sunset.html" class="group bg-white rounded-lg border border-gray-200 overflow-hidden shadow hover:shadow-lg transition">
-            <img src="https://storage.googleapis.com/a1aa/image/jNkgYgmmF7rxIZ3Ubh3nO9NMt2DWbAOt4DbdGAsF5QBJFw4E.jpg" 
-                 alt="Endless Summer Sunset" 
-                 class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105">
-            <div class="p-4">
-                <h3 class="text-lg font-semibold text-gray-800 mb-1 group-hover:text-indigo-600 transition-colors">Endless Summer Sunset</h3>
-                <p class="text-gray-500">Ruslana Levandovska</p>
-                <p class="text-gray-500 text-sm">Oil</p>
-            </div>
-        </a>
-        
-        <!-- Listing Card 4 -->
-        <a href="listing-detail-into-the-blue.html" class="group bg-white rounded-lg border border-gray-200 overflow-hidden shadow hover:shadow-lg transition">
-            <img src="https://storage.googleapis.com/a1aa/image/doVNvaOjVTbYPdVclXu41hlE8wFb4iCHjQWsD9QZyfgTKgxJA.jpg" 
-                 alt="Into the Blue" 
-                 class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105">
-            <div class="p-4">
-                <h3 class="text-lg font-semibold text-gray-800 mb-1 group-hover:text-indigo-600 transition-colors">Into the Blue</h3>
-                <p class="text-gray-500">Ruslana Levandovska</p>
-                <p class="text-gray-500 text-sm">Oil</p>
-            </div>
-        </a>
+        @endforeach
     </div>
 </div>
     <!-- Modal for Zoomed Image -->
