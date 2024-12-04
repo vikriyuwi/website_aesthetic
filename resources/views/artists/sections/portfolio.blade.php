@@ -83,7 +83,7 @@
     <div class="flex items-center justify-between mb-6">
         <h1 class="text-3xl font-bold">Portfolio</h1>
         @if(Auth::check())
-            @if (Auth::user()->USER_ID == $artistUserId )
+            @if (Auth::user()->USER_ID == $artist->USER_ID )
                 <button onclick="openModal()" class="flex items-center px-6 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition">
                 Add New 
                 </button>
@@ -95,10 +95,10 @@
     <div class="masonry-container">
         <div class="masonry">
             <!-- Example Artwork Items -->
-            @foreach($artistPortfolio as $artistPortfolio => $listArtistPortfolio)
+            @foreach($portfolios as $portfolio)
             <div class="masonry-item group relative">
-                <img src="{{ asset($listArtistPortfolio->IMAGE_PATH) }}" 
-                     alt="{{ $listArtistPortfolio->ART_TITLE }}" 
+                <img src="{{ asset($portfolio->IMAGE_PATH) }}" 
+                     alt="{{ $portfolio->ART_TITLE }}" 
                      class="w-full h-auto object-cover transition-transform duration-500 transform group-hover:scale-105">
             </div>
             @endforeach
@@ -144,8 +144,8 @@
                 <div id="categorySelection" class="hidden mt-4">
                     <h3 class="text-gray-700 font-semibold mb-2">Select Categories</h3>
                     <div class="grid grid-cols-2 gap-2">
-                        @foreach($artCategoryMaster as $artCategoryMaster => $listArtCategoryMaster)
-                        <label><input type="checkbox" class="category-checkbox" name="category_art[]" value="{{ $listArtCategoryMaster->ART_CATEGORY_MASTER_ID }}"> {{ $listArtCategoryMaster->DESCR }}</label>
+                        @foreach($artCategoriesMaster as $artCategorie)
+                        <label><input type="checkbox" class="category-checkbox" name="category_art[]" value="{{ $artCategorie->ART_CATEGORY_MASTER_ID }}"> {{ $artCategorie->DESCR }}</label>
                         @endforeach
                     </div>
                 </div>
@@ -172,7 +172,7 @@
                 </div>
                 <div id="fileField" class="mb-4 hidden">
                     <label for="portfolioImageUpload" class="block text-lg font-semibold text-gray-700">Upload Image</label>
-                    <input type="file" id="portfolioImageUpload" name="portfolioImageUpload" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                    <input type="file" id="portfolioImageUpload" name="portfolioImageUpload" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500" accept="image/*">
                     <span id="portfolioImageUploadError" class="text-red-600"></span>
                 </div>
             </div>

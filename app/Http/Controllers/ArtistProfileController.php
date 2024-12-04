@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Artist;
+use App\Models\Art;
 use App\Models\MasterUser;
 use App\Models\ArtistCollection;
+use App\Models\ArtCategoryMaster;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -16,13 +18,16 @@ class ArtistProfileController extends Controller
     {
         $user = Auth::guard('MasterUser')->user();
         $artist = Artist::where('ARTIST_ID','=',$ARTIST_ID)->first();
+        $portfolios = Art::where('USER_ID',$artist->USER_ID)->where('IS_SALE',false)->get();
+        $arts = Art::where('USER_ID',$artist->USER_ID)->where('IS_SALE',true)->get();
+        $artCategoriesMaster = ArtCategoryMaster::all();
 
         if ($artist == null) {
             abort(404, 'Artist not found.');
         }
         else{
             $artistItSelf = $user == $artist->MasterUser;
-            return view('artists.show', compact('artist','section','artistItSelf')); //ABOUT RENDER
+            return view('artists.show', compact('artist','section','artistItSelf','portfolios','arts','artCategoriesMaster')); //ABOUT RENDER
         }
     }
     
