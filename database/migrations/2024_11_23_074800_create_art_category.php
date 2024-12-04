@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('ART_CATEGORY', function (Blueprint $table) {
             $table->id('ART_CATEGORY_ID');
             $table->unsignedBigInteger('ART_ID');
-            $table->foreign('ART_ID')->references('ART_ID')->on('ART');
+            $table->foreign('ART_ID')->references('ART_ID')->on('ART')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('ART_CATEGORY_MASTER_ID');
-            $table->foreign('ART_CATEGORY_MASTER_ID')->references('ART_CATEGORY_MASTER_ID')->on('ART_CATEGORY_MASTER');
+            $table->foreign('ART_CATEGORY_MASTER_ID')->references('ART_CATEGORY_MASTER_ID')->on('ART_CATEGORY_MASTER')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

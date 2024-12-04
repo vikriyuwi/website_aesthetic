@@ -17,12 +17,12 @@ return new class extends Migration
             $table->unsignedBigInteger('FOLLOWED_USER_ID');
             $table->timestamps();
 
-            $table->unique(['FOLLOWER_USER_ID', 'FOLLOWED_USER_ID']);
+            // $table->unique(['FOLLOWER_USER_ID', 'FOLLOWED_USER_ID']);
             // Foreign key for FOLLOWER_ID with cascade delete
-            $table->foreign('FOLLOWER_USER_ID')->references('USER_ID')->on('MASTER_USER')->onDelete('cascade');
+            $table->foreign('FOLLOWER_USER_ID')->references('USER_ID')->on('MASTER_USER')->onUpdate('cascade')->onDelete('cascade');
 
             // Foreign key for FOLLOWED_ID without cascade delete
-            $table->foreign('FOLLOWED_USER_ID')->references('USER_ID')->on('MASTER_USER');
+            $table->foreign('FOLLOWED_USER_ID')->references('USER_ID')->on('MASTER_USER')->onUpdate('cascade')->onDelete('cascade');
         });
 
         

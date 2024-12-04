@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('ARTIST_COLLECTION', function (Blueprint $table) {
             $table->id('ARTIST_COLLECTION_ID');
             $table->unsignedBigInteger('ARTIST_ID');
-            $table->foreign('ARTIST_ID')->references('ARTIST_ID')->on('ARTIST');
+            $table->foreign('ARTIST_ID')->references('ARTIST_ID')->on('ARTIST')->onUpdate('cascade')->onDelete('cascade');
             $table->string('COLLECTION_NAME');
             $table->string('COLLECTION_DESCR');
             $table->timestamps();

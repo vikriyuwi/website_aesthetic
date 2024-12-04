@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('ART_LIKE', function (Blueprint $table) {
             $table->id('ART_LIKE_ID');
             $table->unsignedBigInteger('USER_ID');
-            $table->foreign('USER_ID')->references('USER_ID')->on('MASTER_USER');
+            $table->foreign('USER_ID')->references('USER_ID')->on('MASTER_USER')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('ART_ID');
-            $table->foreign('ART_ID')->references('ART_ID')->on('ART');
+            $table->foreign('ART_ID')->references('ART_ID')->on('ART')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

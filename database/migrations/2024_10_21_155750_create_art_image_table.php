@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('ART_IMAGE', function (Blueprint $table) {
             $table->id('ART_IMAGE_ID');
             $table->unsignedBigInteger('ART_ID');
-            $table->foreign('ART_ID')->references('ART_ID')->on('ART');
+            $table->foreign('ART_ID')->references('ART_ID')->on('ART')->onUpdate('cascade')->onDelete('cascade');
             $table->string('IMAGE_PATH')->nullable();
             $table->timestamps();
         });

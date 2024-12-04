@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('ARTIST_RATING', function (Blueprint $table) {
             $table->id('ARTIST_RATING_ID');
             $table->unsignedBigInteger('ARTIST_ID');
-            $table->foreign('ARTIST_ID')->references('ARTIST_ID')->on('ARTIST');
+            $table->foreign('ARTIST_ID')->references('ARTIST_ID')->on('ARTIST')->onUpdate('cascade')->onDelete('cascade');
             $table->longText('CONTENT');
             $table->integer('USER_RATING');
             $table->timestamps();

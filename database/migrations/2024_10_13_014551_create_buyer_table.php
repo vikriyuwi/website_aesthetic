@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('BUYER', function (Blueprint $table) {
             $table->id('BUYER_ID');
             $table->unsignedBigInteger('USER_ID');
-            $table->foreign('USER_ID')->references('USER_ID')->on('MASTER_USER');
+            $table->foreign('USER_ID')->references('USER_ID')->on('MASTER_USER')->onUpdate('cascade')->onDelete('cascade');
             $table->string('FULLNAME',255);
             $table->string('PHONE_NUMBER');
             $table->string('ADDRESS',255);

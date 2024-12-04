@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('POST', function (Blueprint $table) {
             $table->id('POST_ID');
             $table->unsignedBigInteger('ARTIST_ID');
-            $table->foreign('ARTIST_ID')->references('ARTIST_ID')->on('ARTIST');
+            $table->foreign('ARTIST_ID')->references('ARTIST_ID')->on('ARTIST')->onUpdate('cascade')->onDelete('cascade');
             $table->text('CONTENT');
             $table->timestamps();
         });

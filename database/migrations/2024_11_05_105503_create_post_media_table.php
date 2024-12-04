@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('POST_MEDIA', function (Blueprint $table) {
             $table->id('POST_MEDIA_ID');
             $table->unsignedBigInteger('POST_ID');
-            $table->foreign('POST_ID')->references('POST_ID')->on('POST');
+            $table->foreign('POST_ID')->references('POST_ID')->on('POST')->onUpdate('cascade')->onDelete('cascade');
             $table->char('POST_MEDIA_PATH')->nullable();
             $table->timestamps();
         });

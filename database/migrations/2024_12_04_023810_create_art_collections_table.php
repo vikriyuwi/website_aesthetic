@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('ART_COLLECTION', function (Blueprint $table) {
             $table->id('ART_COLLECTION_ID');
             $table->unsignedBigInteger('ARTIST_COLLECTION_ID');
-            $table->foreign('ARTIST_COLLECTION_ID')->references('ARTIST_COLLECTION_ID')->on('ARTIST_COLLECTION');
+            $table->foreign('ARTIST_COLLECTION_ID')->references('ARTIST_COLLECTION_ID')->on('ARTIST_COLLECTION')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('ART_ID');
-            $table->foreign('ART_ID')->references('ART_ID')->on('ART');
+            $table->foreign('ART_ID')->references('ART_ID')->on('ART')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }
