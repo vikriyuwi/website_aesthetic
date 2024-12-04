@@ -67,7 +67,7 @@
           <button class="block w-full text-left px-4 py-2 hover:bg-gray-100 editCollectionButton" data-collection-id="{{ $collection->ARTIST_COLLECTION_ID }}" data-collection-title="{{ $collection->COLLECTION_NAME }}" data-collection-descr="{{ $collection->COLLECTION_DESCR }}">Edit Collection</button>
           <button class="block w-full text-left px-4 py-2 hover:bg-gray-100 deleteCollectionButton" data-collection-id="{{ $collection->ARTIST_COLLECTION_ID }}" data-collection-title="{{ $collection->COLLECTION_NAME }}">Delete Collection</button>
         </div>
-        <img alt="Collection Image 1" class="w-full h-48 object-cover transform hover:scale-110 transition-transform duration-500" src="{{ $collection->ArtistCollections->first() != null ? Str::startsWith($collection->ArtistCollections->first()->Art->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($collection->ArtistCollections->first()->art->ArtImages()->first()->IMAGE_PATH) : $collection->ArtistCollections->first()->art->ArtImages()->first()->IMAGE_PATH : "https://ionicframework.com/docs/img/demos/thumbnail.svg"}}">
+        <img alt="Collection Image 1" class="w-full h-48 object-cover transform hover:scale-110 transition-transform duration-500" src="{{ $collection->ArtistCollections->first() != null ? Str::startsWith($collection->ArtistCollections->first()->Art->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($collection->ArtistCollections->first()->art->ArtImages()->first()->IMAGE_PATH) : $collection->ArtistCollections->first()->art->ArtImages()->first()->IMAGE_PATH : "https://placehold.co/300x300"}}">
         <div class="p-6">
           <h4 class="text-xl font-semibold text-gray-900 mb-2">{{ $collection->COLLECTION_NAME }}</h4>
           <p class="text-gray-600 mb-4">{{ count($collection->ArtistCollections) }}</p>
@@ -112,7 +112,6 @@
         @method('PUT')
         <div>
             <label for="collectionTitle" class="block text-gray-700 font-semibold mb-2">Collection Title</label>
-            <input type="text" id="collectionIdEdit" name="collectionId" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition" placeholder="Enter collection title" required>
             <input type="text" id="collectionTitleEdit" name="collectionTitle" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition" placeholder="Enter collection title" required>
         </div>
         <div>
@@ -153,7 +152,7 @@
     // Add event listener to each button
     editButtons.forEach(button => {
       button.addEventListener('click', function() {
-        document.getElementById('collectionIdEdit').value = this.getAttribute('data-collection-id');
+        // document.getElementById('collectionIdEdit').value = this.getAttribute('data-collection-id');
         document.getElementById('collectionTitleEdit').value = this.getAttribute('data-collection-title');
         document.getElementById('collectionDescriptionEdit').value = this.getAttribute('data-collection-descr');
 
