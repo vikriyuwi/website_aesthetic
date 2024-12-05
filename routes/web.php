@@ -60,6 +60,8 @@ Route::middleware([Authorization::class.':true'])->group(function() {
     Route::prefix('art-collection')->name('artCollection.')->group(function () {
         Route::get('/{artCollectionId}/delete',[ArtCollectionController::class,'destroy'])->name('delete');
     });
+
+    Route::put('/artist/{artistId}/update/', [ArtistProfileController::class,'updateArtistProfile'])->name('artist.update');
 });
 
 Route::get('/landing', [App\Http\Controllers\WebController::class, 'landing'])->name('landing');
@@ -123,7 +125,6 @@ Route::get('buyer/profile',[WebController::class,'buyerProfile'])->name('buyer.s
 Route::get('/artist/profile/{artistId}', [ArtistProfileController::class, 'getArtistProfile'])->name('artist.getArtistProfile');
 
 //UPDATE ARTIST PROFILE
-Route::post('/artist/profile/update/{artistId}', [ArtistProfileController::class,'updateArtistProfile'])->name('artist.updateArtistProfile');
 
 //--------------------------------------------------------------END ARTIST PROFILE SIDE BAR------------------------------------------------------------------
 

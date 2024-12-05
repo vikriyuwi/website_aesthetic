@@ -91,7 +91,11 @@
 
 <body class="bg-gray-100 text-gray-800">
     <!-- Navbar -->
+    @if(Auth::Check())
+    @include('layouts.navbar-login')
+    @else
     @include('layouts.navbar')
+    @endif
 
     <!-- Main Content -->
     <div class="max-w-6xl mx-auto p-4">

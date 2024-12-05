@@ -180,7 +180,7 @@
                             
                         <!-- Options Menu -->
                         <div class="optionsMenu bg-white rounded-lg shadow-lg py-2 w-48">
-                            @if (Auth::user()->USER_ID == $artist->USER_ID)
+                            @if ($artistItSelf)
                             <!-- Edit Profile Button -->
                             <button onclick="openEditProfileModal({{ $artist->ARTIST_ID }})"
                                 class="block w-full text-left px-4 py-3 hover:bg-indigo-100 hover:text-indigo-600 transition-colors duration-200 font-medium text-gray-700 flex items-center">
@@ -227,7 +227,7 @@
                             <p class="text-gray-600"><i class="fas fa-map-marker-alt"></i> {{ $artist->LOCATION }}</p>
 
                             @if($artistItSelf)
-                            <button id="followButton" class="bg-green-500 text-white px-4 py-2 rounded-full w-full mt-4">
+                            <button id="followButton" class="bg-green-500 text-white px-4 py-2 rounded-full w-full mt-4" onclick="openEditProfileModal({{ $artist->ARTIST_ID }})">
                                 <i id="followIcon" class="fas fa-pen mr-2"></i>
                                 <span id="followText">Edit</span>
                             </button>
@@ -420,6 +420,7 @@
                     </button>
                 </div>
             </div>
+            
             <!-- Edit Profile Modal -->
         <div id="editModal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 hidden overflow-y-auto">
             <div
@@ -434,125 +435,127 @@
 
                 <!-- Make the content area scrollable by setting a fixed height -->
                 <div class="relative max-h-[70vh] overflow-y-auto p-6 space-y-5">
-                    <!-- Profile Cover Image -->
-                    {{-- <div class="relative">
-                        <img id="bannerPicturePreview   " src="https://via.placeholder.com/600x200" alt="Background image"
-                            class="w-full h-48 object-cover">
-                        <button
-                            class="absolute top-4 right-4 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-70 transition duration-200">
-                            <i class="fas fa-camera"></i>
-                        </button>
-                    </div> --}}
+                    <form action="{{ route('artist.update',['artistId' => $artist->ARTIST_ID]) }}" method="post" enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
+                        <!-- Profile Cover Image -->
+                        {{-- <div class="relative">
+                            <img id="bannerPicturePreview   " src="https://via.placeholder.com/600x200" alt="Background image"
+                                class="w-full h-48 object-cover">
+                            <button
+                                class="absolute top-4 right-4 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-70 transition duration-200">
+                                <i class="fas fa-camera"></i>
+                            </button>
+                        </div> --}}
 
-                    <!-- Profile Avatar Image -->
-                    <label class="block text-gray-700 font-medium">📸 Profile Pics</label>
-                    <div class="relative mt-12 flex justify-center">
-                        
-                        <div class="relative">
+                        <!-- Profile Avatar Image -->
+                        <label class="block text-gray-700 font-medium">📸 Profile Pics</label>
+                        <div class="relative mt-12 flex justify-center">
                             
-                            <img id="profilePicturePreview" src="https://via.placeholder.com/100" alt="Profile picture"
-                                class="w-28 h-28 rounded-full border-4 border-white object-cover shadow-lg">
+                            <div class="relative">
+                                
+                                <img id="profilePicturePreview" src="{{ $artist->MasterUser->Buyer->PROFILE_IMAGE_URL != null ? asset($artist->MasterUser->Buyer->PROFILE_IMAGE_URL) : "https://placehold.co/100x100"}}" alt="Profile picture"
+                                    class="w-28 h-28 rounded-full border-4 border-white object-cover shadow-lg">
 
-                            <!-- Image Upload Button -->
-                            
-                            <label for="profilePictureUpload" 
-                                class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white rounded-full hover:bg-opacity-70 transition duration-200 cursor-pointer">
-                                <i class="fas fa-camera" id="cameraIcon"></i>
-                            </label>
-                            <input type="file" id="profilePictureUpload" accept="image/*" class="hidden">
-                        </div>
-                    </div>
-                    <span id="profilePictureUploadError" class="text-red-600"></span>
-
-                    <!-- Form Section -->
-                    <div class="space-y-6">
-                        <!-- Name Field -->
-                        <div>
-                            <label for="name" class="block text-gray-700 font-medium">📌 Name</label>
-                            <input type="text" id="name"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
-                                placeholder="Enter your name" required>
-                            <span id="usernameExistError" class="text-red-600"></span>
-                        </div>
-
-                        <!-- Headline Field -->
-                        <div>
-                            <label for="headline" class="block text-gray-700 font-medium">📋 Headline</label>
-                            <select id="headline"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
-                                required>
-                                <option value="" disabled selected>Select Country</option>
-                                <option value="Graphic Designer">Graphic Designer</option>
-                                <option value="Illustrator">Illustrator</option>
-                                <option value="Web Designer">Web Designer</option>
-                            </select>
-                        </div>
-
-                        <!-- Bio Field -->
-                        <div>
-                            <label for="bio" class="block text-gray-700 font-medium">📝 Bio</label>
-                            <textarea id="bio" rows="3"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
-                                placeholder="Write a short bio..." maxlength="30" required></textarea>
-                        </div>
-
-                        <div>
-                            <label for="location" class="block text-gray-700 font-medium">📍 Location
-                                Level</label>
-                            <select id="location"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
-                                required>
-                                <option value="" disabled selected>Select Country</option>
-                                <option value="Indonesia">Indonesia</option>
-                                <option value="USA">USA</option>
-                                <option value="Russia">Russia</option>
-                                <option value="Singapore">Singapore</option>
-                            </select>
-                        </div>
-
-                        <!-- Social Media Links -->
-                        <div>
-                            <label class="block text-gray-700 font-medium">🌐 Social Media</label>
-                            <div class="space-y-4 mt-2">
-                                <!-- Twitter Field -->
-                                <div class="flex items-center">
-                                    <i class="fab fa-twitter text-blue-400 mr-3 text-xl"></i>
-                                    <input type="url" id="twitter"
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
-                                        placeholder="Twitter Profile URL">
-                                </div>
-                                <!-- Pinterest Field -->
-                                <div class="flex items-center">
-                                    <i class="fab fa-pinterest text-red-600 mr-3 text-xl"></i>
-                                    <input type="url" id="pinterest"
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
-                                        placeholder="Pinterest Profile URL">
-                                </div>
-                                <!-- Instagram Field -->
-                                <div class="flex items-center">
-                                    <i class="fab fa-instagram text-pink-500 mr-3 text-xl"></i>
-                                    <input type="url" id="instagram"
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
-                                        placeholder="Instagram Profile URL">
-                                </div>
-                                <!-- LinkedIn Field -->
-                                <div class="flex items-center">
-                                    <i class="fab fa-linkedin text-blue-600 mr-3 text-xl"></i>
-                                    <input type="url" id="linkedin"
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
-                                        placeholder="LinkedIn Profile URL">
-                                </div>
+                                <!-- Image Upload Button -->
+                                
+                                <label for="profilePictureUpload" 
+                                    class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white rounded-full hover:bg-opacity-70 transition duration-200 cursor-pointer">
+                                    <i class="fas fa-camera" id="cameraIcon"></i>
+                                </label>
+                                <input type="file" id="profilePictureUpload" name="picture" accept="image/*" class="hidden">
                             </div>
                         </div>
+                        <span id="profilePictureUploadError" class="text-red-600"></span>
 
-                        <!-- Save Button -->
-                        <div class="flex justify-end mt-6">
-                            <button onclick="saveProfileChanges({{ $artist->ARTIST_ID }})"
-                                class="bg-indigo-600 text-white px-6 py-2 rounded-full hover:bg-indigo-700 transition duration-200 flex items-center">
-                                Save Changes
-                            </button>
+                        <!-- Form Section -->
+                        <div class="space-y-6">
+                            <!-- Name Field -->
+                            <div>
+                                <label for="name" class="block text-gray-700 font-medium">📌 Name</label>
+                                <input type="text" id="name" name="name"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
+                                    placeholder="Enter your name" required value="{{ $artist->MasterUser->Buyer->FULLNAME }}">
+                                <span id="usernameExistError" class="text-red-600"></span>
+                            </div>
+
+                            <!-- Headline Field -->
+                            <div>
+                                <label for="headline" class="block text-gray-700 font-medium">📋 Headline</label>
+                                <select id="headline" name="role"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
+                                    required>
+                                    <option value="Illustrator" @if($artist->ROLE == "Illustrator") selected @endif>Illustrator</option>
+                                    <option value="Graphic Designer" @if($artist->ROLE == "Graphic Designer") selected @endif>Graphic Designer</option>
+                                    <option value="Web Designer" @if($artist->ROLE == "Web Designer") selected @endif>Web Designer</option>
+                                </select>
+                            </div>
+                            <!-- Bio Field -->
+                            
+                            <div>
+                                <label for="bio" class="block text-gray-700 font-medium">📝 Bio</label>
+                                <textarea id="bio" rows="3" name="bio"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
+                                    placeholder="Write a short bio..." maxlength="30" required>{{ $artist->BIO }}</textarea>
+                            </div>
+
+                            <div>
+                                <label for="location" class="block text-gray-700 font-medium">📍 Location
+                                    Level</label>
+                                <select id="location" name="location"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
+                                    required>
+                                    <option value="USA" @if($artist->LOCATION == "USA") selected @endif>USA</option>
+                                    <option value="Indonesia" @if($artist->LOCATION == "Indonesia") selected @endif>Indonesia</option>
+                                    <option value="Russia" @if($artist->LOCATION == "Russia") selected @endif>Russia</option>
+                                    <option value="Singapore" @if($artist->LOCATION == "Singapore") selected @endif>Singapore</option>
+                                </select>
+                            </div>
+
+                            <!-- Social Media Links -->
+                            {{-- <div>
+                                <label class="block text-gray-700 font-medium">🌐 Social Media</label>
+                                <div class="space-y-4 mt-2">
+                                    <!-- Twitter Field -->
+                                    <div class="flex items-center">
+                                        <i class="fab fa-twitter text-blue-400 mr-3 text-xl"></i>
+                                        <input type="url" id="twitter"
+                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
+                                            placeholder="Twitter Profile URL">
+                                    </div>
+                                    <!-- Pinterest Field -->
+                                    <div class="flex items-center">
+                                        <i class="fab fa-pinterest text-red-600 mr-3 text-xl"></i>
+                                        <input type="url" id="pinterest"
+                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
+                                            placeholder="Pinterest Profile URL">
+                                    </div>
+                                    <!-- Instagram Field -->
+                                    <div class="flex items-center">
+                                        <i class="fab fa-instagram text-pink-500 mr-3 text-xl"></i>
+                                        <input type="url" id="instagram"
+                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
+                                            placeholder="Instagram Profile URL">
+                                    </div>
+                                    <!-- LinkedIn Field -->
+                                    <div class="flex items-center">
+                                        <i class="fab fa-linkedin text-blue-600 mr-3 text-xl"></i>
+                                        <input type="url" id="linkedin"
+                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
+                                            placeholder="LinkedIn Profile URL">
+                                    </div>
+                                </div>
+                            </div> --}}
+
+                            <!-- Save Button -->
+                            <div class="flex justify-end mt-6">
+                                <button type="submit"
+                                    class="bg-indigo-600 text-white px-6 py-2 rounded-full hover:bg-indigo-700 transition duration-200 flex items-center">
+                                    Save Changes
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -1233,28 +1236,28 @@
         const modal = document.getElementById('editModal');
         modal.style.display = 'flex';
 
-        try {
-            // Fetch artist profile data from the server
-            const response = await fetch(`/artist/profile/${artistId}`);
-            if (!response.ok) throw new Error('Failed to fetch artist profile');
+        // try {
+        //     // Fetch artist profile data from the server
+        //     const response = await fetch(`/artist/profile/${artistId}`);
+        //     if (!response.ok) throw new Error('Failed to fetch artist profile');
 
-            const data = await response.json();
+        //     const data = await response.json();
 
-            // Populate the modal fields with the fetched data
-            document.getElementById('name').value = data.name || '';
-            document.getElementById('headline').value = data.role || '';
-            document.getElementById('bio').value = data.bio || '';
-            document.getElementById('location').value = data.location || '';
-            // document.getElementById('twitter').value = data.social_media.twitter || '';
-            // document.getElementById('pinterest').value = data.social_media.pinterest || '';
-            // document.getElementById('instagram').value = data.social_media.instagram || '';
-            // document.getElementById('linkedin').value = data.social_media.linkedin || '';
+        //     // Populate the modal fields with the fetched data
+        //     // document.getElementById('name').value = data.name || '';
+        //     // document.getElementById('headline').value = data.role || '';
+        //     // document.getElementById('bio').value = data.bio || '';
+        //     // document.getElementById('location').value = data.location || '';
+        //     // document.getElementById('twitter').value = data.social_media.twitter || '';
+        //     // document.getElementById('pinterest').value = data.social_media.pinterest || '';
+        //     // document.getElementById('instagram').value = data.social_media.instagram || '';
+        //     // document.getElementById('linkedin').value = data.social_media.linkedin || '';
 
-        } catch (error) {
-            console.error('Error fetching profile data:', error);
-            alert('Could not load profile data. Please try again.');
-            modal.style.display = 'none'; // Hide modal if fetching data fails
-        }
+        // } catch (error) {
+        //     console.error('Error fetching profile data:', error);
+        //     alert('Could not load profile data. Please try again.');
+        //     modal.style.display = 'none'; // Hide modal if fetching data fails
+        // }
     }
 </script>
 

@@ -15,7 +15,7 @@
 
                 <!-- Ellipsis Button -->
                 @if (Auth::check())
-                    @if (Auth::user()->USER_ID == $artistUserId)
+                    @if (Auth::user()->USER_ID == $artist->USER_ID)
                         <button class="ellipsisButton text-gray-600 hover:text-gray-800 focus:outline-none">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="currentColor" class="size-6">
@@ -35,7 +35,7 @@
             </div>
 
             <div class="text-gray-700">
-                {{ $artistAbout }}
+                {{ $artist->BIO }}
             </div>
 
             <h2 class="mt-8 text-xl font-bold">Skills</h2>
@@ -58,46 +58,43 @@
         </div>
         <!-- Reviews Section -->
         <div class="bg-white rounded-lg shadow-lg p-6 mt-6">
-            <h2 class="text-xl font-bold mb-4">{{ $countTotalRating }} Reviews
-                <span class="text-gray-600 font-medium">{{ $averageArtistRating }}</span>
+            <h2 class="text-xl font-bold mb-4">total rating Reviews
+                <span class="text-gray-600 font-medium">Avarage rating</span>
             </h2>
 
             <!-- Star Ratings -->
             <div class="space-y-2">
-                @foreach ($userRatingPercentage as $userRatingPercentage => $percentage)
-                    <div class="flex items-center">
-                        <span class="w-1/5 text-right pr-2">{{ $percentage->USER_RATING }} Stars</span>
-                        <div class="w-4/5 bg-gray-300 h-2 rounded-full">
-                            <div class="bg-gray-500 h-2 rounded-full"
-                                style="width: {{ ($percentage->COUNT / $countTotalRating) * 100 }}%;"></div>
-                        </div>
+                <div class="flex items-center">
+                    <span class="w-1/5 text-right pr-2">5 Stars</span>
+                    <div class="w-4/5 bg-gray-300 h-2 rounded-full">
+                        <div class="bg-gray-500 h-2 rounded-full"
+                            style="width: 50%;"></div>
                     </div>
-                @endforeach
+                </div>
             </div>
 
             <!-- Review Comments -->
             <h3 class="text-lg font-bold mt-6">Recent Reviews</h3>
             <div class="mt-4 max-h-60 overflow-y-scroll">
                 <!-- Review 1 -->
-                @foreach ($rating as $rating => $artistRating )
                 <div class="flex items-start mb-4">
-                    <img class="w-12 h-12 rounded-full object-cover" src="{{ asset($artistRating->PROFILE_IMAGE_PATH) }}"
+                    <img class="w-12 h-12 rounded-full object-cover" src="https://placehold.co/100x100"
                         alt="Profile picture of Anya">
                     <div class="ml-3">
-                        <p class="font-bold">{{ $artistRating->USERNAME }}<span class="text-sm text-gray-600"> {{ $artistRating->COMMENT_TIME }}</span></p>
+                        <p class="font-bold">USERNAME<span class="text-sm text-gray-600"> Comment time</span></p>
                         <!-- Star Rating -->
                         <div class="flex space-x-1 text-yellow-500">
                           @php
-                            $totalRating = 5 - $artistRating->USER_RATING
+                            $totalRating = 5 - 4
                           @endphp
-                          @for($i = 1; $i <= $artistRating->USER_RATING; $i++)
+                          @for($i = 1; $i <= 4; $i++)
                             <i class="fas fa-star"></i>
                           @endfor
                           @for($i = 1; $i <= $totalRating; $i++)
                             <i class="far fa-star"></i>
                           @endfor
                         </div>
-                        <p class="text-gray-700 mt-1">{{ $artistRating->CONTENT }}</p>
+                        <p class="text-gray-700 mt-1">CONTENT</p>
                         <div class="flex space-x-4 text-sm mt-2">
                             <button class="text-gray-600 hover:text-gray-800"><i class="fas fa-thumbs-up mr-1"></i>
                                 Helpful?</button>
@@ -106,7 +103,6 @@
                         </div>
                     </div>
                 </div>
-                @endforeach
             </div>
 
             <!-- Edit About Me Modal -->
