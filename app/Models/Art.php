@@ -28,7 +28,7 @@ class Art extends Model
 
     public function ArtLikes(): HasMany
     {
-        return $this->hasMany(Art::class, 'ART_ID', 'ART_ID');
+        return $this->hasMany(ArtLike::class, 'ART_ID', 'ART_ID');
     }
 
     public function ArtImages(): HasMany
