@@ -96,7 +96,7 @@
         <div class="masonry">
             <!-- Example Artwork Items -->
             @foreach($portfolios as $portfolio)
-            <a href="{{ route('artwork.show', $portfolio->ART_ID) }}">
+            <a href="{{ route('artGallery.show', $portfolio->ART_ID) }}">
                 <div class="masonry-item group relative">
                     <img src="{{ Str::startsWith($portfolio->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($portfolio->ArtImages()->first()->IMAGE_PATH) : $portfolio->ArtImages()->first()->IMAGE_PATH }}" 
                         alt="{{ $portfolio->ART_TITLE }}" 

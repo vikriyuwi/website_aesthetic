@@ -45,63 +45,22 @@
     <!-- Masonry Grid Layout -->
     <div class="masonry">
         <!-- Example Artwork Items with Different Aspect Ratios -->
+        @foreach($portfolios as $portfolio)
+        <a href="{{ route('artGallery.show', $portfolio->ART_ID) }}">
         <div class="masonry-item group relative">
-            <img src="https://images.unsplash.com/photo-1688622781034-04141f4d3dd5?q=80&w=2160&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+            <img src="{{ Str::startsWith($portfolio->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($portfolio->ArtImages()->first()->IMAGE_PATH) : $portfolio->ArtImages()->first()->IMAGE_PATH }}" 
                  alt="Abstract Artwork 1" 
                  class="w-full h-auto object-cover">
         </div>
-        <div class="masonry-item group relative">
-            <img src="https://images.unsplash.com/photo-1653393337202-81b93e1e316c?q=80&w=3132&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-                 alt="Sculpt Artwork" 
-                 class="w-full h-auto object-cover">
-        </div>
-        <div class="masonry-item group relative">
-            <img src="https://images.unsplash.com/photo-1581345837712-414b9b6fb450?q=80&w=3176&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-                 alt="Sculpt Artwork" 
-                 class="w-full h-auto object-cover">
-        </div>
-        <div class="masonry-item group relative">
-            <img src="https://images.unsplash.com/photo-1622716669801-8012349a257f?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-                 alt="Sculpt Artwork" 
-                 class="w-full h-auto object-cover">
-        </div>
-        <div class="masonry-item group relative">
-            <img src="https://images.unsplash.com/photo-1582561612644-01026a1d8134?q=80&w=2040&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-                 alt="Sculpt Artwork" 
-                 class="w-full h-auto object-cover">
-        </div>
-        <div class="masonry-item group relative">
-            <img src="https://plus.unsplash.com/premium_photo-1669392157870-18a592a0876f?q=80&w=2938&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-                 alt="Sculpt Artwork" 
-                 class="w-full h-auto object-cover">
-        </div>
-        <div class="masonry-item group relative">
-            <img src="https://plus.unsplash.com/premium_photo-1664438942229-964e01b430be?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-                 alt="Sculpt Artwork" 
-                 class="w-full h-auto object-cover">
-        </div>
-        <div class="masonry-item group relative">
-            <img src="https://plus.unsplash.com/premium_photo-1663937462428-d503f642ff0d?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-                 alt="Sculpt Artwork" 
-                 class="w-full h-auto object-cover">
-        </div>
-        <div class="masonry-item group relative">
-            <img src="https://images.unsplash.com/photo-1583243535597-5e2db3a1683e?q=80&w=2883&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-                 alt="Sculpt Artwork" 
-                 class="w-full h-auto object-cover">
-        </div>
-        <div class="masonry-item group relative">
-            <img src="https://images.unsplash.com/photo-1578320743746-788d990bd318?q=80&w=3121&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-                 alt="Sculpt Artwork" 
-                 class="w-full h-auto object-cover">
-        </div>
+        </a>
+        @endforeach
     </div>
-        <!-- Load More Button -->
-        <div class="flex justify-center mt-8">
+    {{-- <!-- Load More Button -->
+    <div class="flex justify-center mt-8">
         <button class="w-full max-w-4xl mx-4 py-4 text-gray-500 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-200">
             Load more
         </button>
-    </div>
+    </div> --}}
 </div>
 
 <!-- Modal for viewing image in larger format -->

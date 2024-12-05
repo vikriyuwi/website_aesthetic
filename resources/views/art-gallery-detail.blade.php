@@ -13,23 +13,23 @@
       <!-- Main Content -->
       <div class="w-full lg:w-3/4 lg:pr-6">
         <!-- Artwork Image -->
-        <img src="/images/1.jpg" alt="Fantasy world with a castle, mountains, and a waterfall" class="w-full h-auto rounded-lg shadow-md"/>
+        <img src="{{ Str::startsWith($portfolio->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($portfolio->ArtImages()->first()->IMAGE_PATH) : $portfolio->ArtImages()->first()->IMAGE_PATH }}" alt="{{ $portfolio->ARTWORK_TITLE }}" class="w-full h-auto rounded-lg shadow-md"/>
         
         <!-- Title, Made by, and Meta Info Section -->
         <div class="flex justify-between items-center">
          <!-- Left Section: Title and Info -->
         <div class="flex items-center space-x-4 space-y-8">
-        <img alt="Profile picture of the creator" class="w-16 h-16 rounded-lg" height="64" src="https://storage.googleapis.com/a1aa/image/T6rAd7isJhrPH54aeuCTeDeizGKXe8yf79VedDgBD8l9tW65E.jpg" width="64"/>
+        <img alt="Profile picture of the creator" class="w-16 h-16 rounded-lg" height="64" src="{{ $portfolio->MasterUser->Buyer->PROFILE_IMAGE_URL != null ? asset($portfolio->MasterUser->Buyer->PROFILE_IMAGE_URL) : "https://placehold.co/100x100"}}" width="64"/>
         <div>
-        <h1 class="text-3xl font-bold">Fantasy World Creation</h1>
-        <p class="text-gray-400 mt-2">Made by <span class="text-black">Something4U</span></p>
+        <h1 class="text-3xl font-bold">{{ $portfolio->ART_TITLE }}</h1>
+        <p class="text-gray-400 mt-2">Made by <span class="text-black">{{ $portfolio->MasterUser->Buyer->FULLNAME }}</span></p>
         </div>
   </div>
 
   <!-- Right Section: Published, Likes, and Comments -->
   <div class="flex flex-col items-end">
     <!-- Published Date -->
-    <p class="text-gray-600 mb-1">Published: Dec 17, 2023</p>
+    <p class="text-gray-600 mb-1">Published: {{ (new \DateTime($portfolio->created_at))->format('M d, Y') }}</p>
 
     <!-- Likes and Comments -->
     <div class="flex items-center space-x-3">
@@ -72,18 +72,16 @@
           
           <!-- Tags -->
           <div class="flex flex-wrap mt-6 space-x-2">
-            <span class="px-3 py-1 border border-gray-600 rounded-lg">Fantasy</span>
-            <span class="px-3 py-1 border border-gray-600 rounded-lg">Kingdom</span>
-            <span class="px-3 py-1 border border-gray-600 rounded-lg">Nature</span>
-            <span class="px-3 py-1 border border-gray-600 rounded-lg">Mystic</span>
+            @foreach($portfolio->ArtCategories as $category)
+              <span class="px-3 py-1 border border-gray-600 rounded-lg">{{ $category->ArtCategoryMaster->DESCR }}</span>
+            @endforeach
           </div>
 
           <!-- Artwork Details -->
-          <p class="mt-6">Enjoy The Beauty of My Artwork, Deep into the Fantasy of The World</p>
+          <p class="mt-6">{{ $portfolio->DESCRIPTION }}</p>
           <p class="text-gray-600 mt-4">Image Size: 1920x1080px</p>
           <p class="text-gray-600">Total Size: 3.5 MB</p>
-          <p class="text-gray-600">© 2023 Something4U</p>
-        </>
+          <p class="text-gray-600">© {{ (new \DateTime($portfolio->created_at))->format('Y') }} {{ $portfolio->MasterUser->Buyer->FULLNAME }}</p>
 
         <!-- Divider Line Before Comments Section -->
         <hr class="my-8 border-gray-700"/>
@@ -170,16 +168,13 @@
       <!-- Sidebar Content -->
       <div class="w-1/4 ml-4">
         <div class="flex justify-between items-center">
-          <h2 class="text-xl">More by Something4U</h2>
-          <a href="#" class="text-black hover:text-indigo-500 transition">more →</a>
+          <h2 class="text-xl">More by {{ $portfolio->MasterUser->Buyer->FULLNAME }}</h2>
+          <a href="{{ route('artGallery.index') }}" class="text-black hover:text-indigo-500 transition">more →</a>
         </div>
         <div class="grid grid-cols-2 gap-4 mt-2">
-          <img src="/images/2.jpg" alt="Artwork thumbnail" class="w-full h-32 object-cover rounded-lg">
-          <img src="/images/3.jpg" alt="Artwork thumbnail" class="w-full h-32 object-cover rounded-lg">
-          <img src="/images/4.jpg" alt="Artwork thumbnail" class="w-full h-32 object-cover rounded-lg">
-          <img src="/images/5.jpg" alt="Artwork thumbnail" class="w-full h-32 object-cover rounded-lg">
-          <img src="/images/6.jpg" alt="Artwork thumbnail" class="w-full h-32 object-cover rounded-lg">
-          <img src="/images/indianart.webp" alt="Artwork thumbnail" class="w-full h-32 object-cover rounded-lg">
+          @foreach($morePortfolios as $item)
+          <img src="{{ Str::startsWith($item->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($item->ArtImages()->first()->IMAGE_PATH) : $item->ArtImages()->first()->IMAGE_PATH }}" alt="{{ $item->ARTWORK_TITLE }}" alt="Artwork thumbnail" class="w-full h-32 object-cover rounded-lg">
+          @endforeach
         </div>  
 
         <!-- New Content Section -->
@@ -189,13 +184,13 @@
   
         <!-- Profile Info Section -->
         <div class="p-4 flex items-center">
-                <img alt="Profile picture of the user" class="w-8 h-8 rounded-lg mr-4" src="https://storage.googleapis.com/a1aa/image/T6rAd7isJhrPH54aeuCTeDeizGKXe8yf79VedDgBD8l9tW65E.jpg"/>
+          <img alt="Profile picture of the user" class="w-8 h-8 rounded-lg mr-4" src="{{ $portfolio->MasterUser->Buyer->PROFILE_IMAGE_URL != null ? asset($portfolio->MasterUser->Buyer->PROFILE_IMAGE_URL) : "https://placehold.co/100x100"}}"/>
         <div>
         <div class="text-white text-lg">
-                \_- [Cyber Demon] -_/
+          {{ $portfolio->MasterUser->Buyer->FULLNAME }}
         </div>
         <div class="text-gray-400">
-                KAFF
+          {{ $portfolio->MasterUser->Artist->ROLE }}
         </di>
     </div>
   </div>

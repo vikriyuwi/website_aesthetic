@@ -72,19 +72,27 @@ Route::get('/artists',[App\Http\Controllers\ListArtistController::class, 'viewLi
 Route::get('/artists/{id}/{section?}', [ArtistProfileController::class, 'showArtist'])->name('artist.show');
 Route::get('/category/{category}', [WebController::class, 'showCategory'])->name('category.show');
 
+//VIEW ART INSIDE COLLECTION
+Route::get('/artists/{artistId}/collection/{collectionId}', [ArtistProfileController::class, 'showCollection'])->name('collection.show');
+
 Route::prefix('artwork')->name('artwork.')->group(function () {
     Route::get('/{id}', [WebController::class, 'showArtwork'])->name('show');
 });
+
+Route::prefix('art-gallery')->name('artGallery.')->group(function () {
+    Route::get('/', [ArtGalleryController::class, 'index'])->name('index');
+    Route::get('/{id}', [ArtGalleryController::class, 'show'])->name('show');
+});
+
+
+
+
 
 Route::get('/explore', [App\Http\Controllers\WebController::class, 'explore']);
 
 // Route::get('/landing', [App\Http\Controllers\WebController::class, 'landing']);
 
-Route::get('/art-gallery', function () {
-    return view('art-gallery');
-});
 
-Route::get('/art-gallery/{id}', [ArtGalleryController::class, 'show'])->name('art-gallery.show');
 
 Route::get('/favorites/follows', [WebController::class, 'follows'])->name('favorites.follows');
 
@@ -134,8 +142,7 @@ Route::get('/artist/profile/{artistId}', [ArtistProfileController::class, 'getAr
 
 //------------------------------------------------------------------COLLECTION------------------------------------------------------------------
 
-//VIEW ART INSIDE COLLECTION
-Route::get('/artists/{artistId}/collection/{collectionId}', [ArtistProfileController::class, 'showCollection'])->name('collection.show');
+
 
 //---------------------------------------------------------------ENDCOLLECTION------------------------------------------------------------------
 

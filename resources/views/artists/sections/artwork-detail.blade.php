@@ -123,7 +123,7 @@
             <div class="lg:w-2/3 space-y-4">
                 <!-- Artist Info Above Title -->
                 <div class="flex items-center mb-2">
-                    <img src="https://placehold.co/50x50" alt="Artist Name" class="w-12 h-12 rounded-full mr-4">
+                    <img src="{{ $artwork->MasterUser->Buyer->PROFILE_IMAGE_URL != null ? asset($artwork->MasterUser->Buyer->PROFILE_IMAGE_URL) : "https://placehold.co/100x100"}}" alt="Artist Name" class="w-12 h-12 rounded-full mr-4">
                     <div>
                         <span class="block text-lg font-semibold text-gray-800">{{ $artwork->MasterUser->Buyer->FULLNAME }}</span>
                     </div>
@@ -238,7 +238,7 @@
 <div class="max-w-7xl mx-auto py-12 mt-12">
     <div class="text-center mb-8">
         <img alt="Profile picture of Ruslana Levandovska" class="rounded-full mx-auto mb-4 w-16 h-16 object-cover"
-             src="https://storage.googleapis.com/a1aa/image/rDj0sQ4efjph6kC62n60n8eeiWc0wKvJvDwv9fiqG3VokCYcC.jpg" />
+             src="{{ $artwork->MasterUser->Buyer->PROFILE_IMAGE_URL != null ? asset($artwork->MasterUser->Buyer->PROFILE_IMAGE_URL) : "https://placehold.co/100x100"}}" />
         <h2 class="text-2xl font-semibold text-gray-700 mt-2">
             Other listings from {{ $artwork->MasterUser->Buyer->FULLNAME }}
         </h2>
