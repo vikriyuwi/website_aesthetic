@@ -76,6 +76,7 @@ class ArtistCollectionController extends Controller
 
         // Find the specific collection by its ID
         $collection = ArtistCollection::where('ARTIST_COLLECTION_ID', $collectionId)->first();
+        $artistId = $collection->ARTIST_ID;
 
         if (!$collection) {
             return redirect()->back()->withErrors(['error' => 'Collection not found.']);
@@ -83,7 +84,7 @@ class ArtistCollectionController extends Controller
         
         $collection->delete();
 
-        return redirect()->route('artist.show', ['id' => $collectionId, 'section' => 'collection'])->with('status', 'Collection has been updated successfully!');
+        return redirect()->route('artist.show', ['id' => $artistId, 'section' => 'collection'])->with('status', 'Collection has been updated successfully!');
     }
 
     public function addArtToCollection(Request $request, $collectionId)
