@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ArtistPostController extends Controller
 {
@@ -87,18 +89,18 @@ class ArtistPostController extends Controller
         // If URL is provided
         if ($request->filled('postImageLink')) {
             $imagePath = $request->input('postImageLink');
+            $post->PostMedias()->create([
+                'POST_MEDIA_PATH' => $imagePath
+            ]);
         }
 
         // If file is uploaded
         if ($request->hasFile('postImageUpload')) {
             $uploadedFile = $request->file('postImageUpload');
-
-            if ($uploadedFile = $request->file('postImageUpload') != null) {
-                $imagePath = $uploadedFile->store('images/post', 'public'); // Save file in the `storage/app/public/images/art` directory
-                $post->PostMedias()->create([
-                    'POST_MEDIA_PATH' => $imagePath
-                ]);
-            }
+            $imagePath = $uploadedFile->store('images/post', 'public'); // Save file in the `storage/app/public/images/art` directory
+            $post->PostMedias()->create([
+                'POST_MEDIA_PATH' => $imagePath
+            ]);
         }
         
         return redirect()->back()->with('status','New post has been created!');
@@ -107,41 +109,25 @@ class ArtistPostController extends Controller
     public function deletePost($postId)
     {
         $user = Auth::guard('MasterUser')->user();
-        $artist = Artist::where('ARTIST_ID','=',$user->Artist->ARTIST_ID)->first();
-        $post->delete();
+        $post = Post::find($postId);
 
-        return redirect()->back()->with('status','Post has been deleted!');
-        try {
-            // Fetch the associated media for the post
-            $postMedia = PostMedia::where('POST_ID', $postId)->get();
-            $postComment = PostComment::where('POST_ID', $postId)->get();
-            $postLike = PostLike::where('POST_ID', $postId)->get();
-            
-            // Delete all associated post media
-            foreach ($postMedia as $media) {
-                $media->delete();
-            }
-
-            // Delete all associated post media
-            foreach ($postComment as $comment) {
-                $comment->delete();
-            }
-
-            // Delete all associated post media
-            foreach ($postLike as $like) {
-                $like->delete();
-            }
-    
-            // Now delete the post itself
-            $post = Post::findOrFail($postId);
-            $post->delete();
-    
-            return response()->json(['success' => 'Post deleted successfully.']);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Post not found.'], 404);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'An unexpected error occurred.'], 500);
+        if($post == null) {
+            return redirect()->back()->with('error','Post not found!');
         }
+
+        if($post->PostMedias->count() > 0) {
+            foreach($post->PostMedias as $media) {
+                if ($media->POST_MEDIA_PATH != null) {
+                    if(Str::startsWith($media->POST_MEDIA_PATH, 'images/post/')) {
+                        $filePath = $media->POST_MEDIA_PATH;
+                        Storage::disk('public')->delete($filePath);
+                    }
+                }
+            }
+        }
+        
+        $post->delete();
+        return redirect()->back()->with('status','Post has been deleted!');
     }
 
     public function togglePostLike($postId, Request $request)

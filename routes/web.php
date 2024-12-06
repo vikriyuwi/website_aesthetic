@@ -66,6 +66,7 @@ Route::middleware([Authorization::class.':true'])->group(function() {
 
     Route::prefix('post')->name('post.')->group(function () {
         Route::post('/add',[ArtistPostController::class,'store'])->name('store');
+        Route::get('/{postId}/delete',[ArtistPostController::class,'deletePost'])->name('destroy');
     });
 });
 
@@ -154,7 +155,7 @@ Route::get('/artist/profile/{artistId}', [ArtistProfileController::class, 'getAr
 //------------------------------------------------------------------POST------------------------------------------------------------------
 
 //DELETE POST
-Route::post('post/delete/{postId}',[ArtistPostController::class,'deletePost'])->name('post.destroy');
+
 
 //LIKE POST TOGGLE
 Route::post('post/like/{postId}', [ArtistPostController::class, 'togglePostLike'])->name('post.likeToggle');

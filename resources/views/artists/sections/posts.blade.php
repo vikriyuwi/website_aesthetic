@@ -65,7 +65,7 @@
     <!-- Options Menu -->
     <div class="optionsMenu">
       <button class="block w-full text-left px-4 py-2 hover:bg-gray-100">Edit Post</button>
-      <button class="block w-full text-left px-4 py-2 hover:bg-gray-100" onclick="confirmDeletePost(event,{{ $post->POST_ID }})">Delete Post</button>
+      <button class="block w-full text-left px-4 py-2 hover:bg-gray-100" onclick="confirmDeletePost(event,{{ $post->POST_ID }})" data-post-id="{{ $post->POST_ID }}">Delete Post</button>
     </div>
 
     <div class="flex items-center space-x-4">
@@ -153,7 +153,7 @@
         @csrf
         <div>
           <label for="postContent" class="block text-gray-700 font-semibold mb-2">Post Content</label>
-          <textarea id="postContent" name="postContent"class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition" placeholder="Write something..."></textarea>
+          <textarea id="postContent" name="postContent"class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition" placeholder="Write something..." required></textarea>
           <span id="postContentError" class="text-red-600"></span>
         </div>
         <!-- Image Upload Options -->
@@ -195,7 +195,7 @@
       <p class="text-gray-600 mb-6">Are you sure you want to delete this post?</p>
       <div class="flex justify-end space-x-3">
         <button type="button" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition" onclick="closeDeleteModal()">Cancel</button>
-        <button type="button" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition" onclick="deletePost()">Delete</button>
+        <a href="" id="deleteButtonModal" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">Delete</a>
       </div>
     </div>
   </div>
@@ -377,17 +377,23 @@
     let postToDelete = null; // Holds the ID of the post to delete
 
     // Function to open the delete confirmation modal
-    // function confirmDeletePost(event, postId) {
-    //     event.stopPropagation(); // Prevent triggering other events (e.g., opening the post)
-    //     postToDelete = postId; // Set the ID of the post to delete
-    //     document.getElementById('deleteConfirmationModal').classList.remove('hidden'); // Show modal
-    // }
+    function confirmDeletePost(event, postId) {
+        event.stopPropagation(); // Prevent triggering other events (e.g., opening the post)
+        postToDelete = postId; // Set the ID of the post to delete
+
+        console.log(event.target.getAttribute('data-post-id'));
+
+        let deletePostRoute = "{{ route('post.destroy', ['postId' => 'POST_ID']) }}";
+        document.getElementById('deleteButtonModal').href = deletePostRoute.replace('POST_ID', event.target.getAttribute('data-post-id'))
+
+        document.getElementById('deleteConfirmationModal').classList.remove('hidden'); // Show modal
+    }
 
     // Function to close the delete confirmation modal
-    // function closeDeleteModal() {
-    //     document.getElementById('deleteConfirmationModal').classList.add('hidden'); // Hide modal
-    //     postToDelete = null; // Clear the stored post ID
-    // }
+    function closeDeleteModal() {
+        document.getElementById('deleteConfirmationModal').classList.add('hidden'); // Hide modal
+        postToDelete = null; // Clear the stored post ID
+    }
 
     // Function to delete the post via AJAX
     // function deletePost() {
