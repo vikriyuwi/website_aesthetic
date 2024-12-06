@@ -58,4 +58,39 @@ class ArtistHireController extends Controller
 
         return redirect()->back()->with('status', 'Hire has been deleted successfully!');
     }
+
+    public function update(Request $request, $id)
+    {
+        $user = Auth::guard('MasterUser')->user();
+        $artist = Artist::where('ARTIST_ID','=',$user->Artist->ARTIST_ID)->first();
+
+        $hire = ArtistHire::find($id);
+
+        if($hire->ARTIST_ID != $artist->ARTIST_ID) {
+            abort(404, 'You are not owner of this hiring');
+        }
+
+        $validated = Validator::make($request->all(), [
+            'projectTitle' => 'required',
+            'projectDescription' => 'required',
+            'timeline' => 'required',
+            'budget' => 'required',
+            'skills' => 'required',
+            'experienceLevel' => 'required',
+            'otherRequirements' => 'required'
+        ]);
+
+        $hire->PROJECT_TITLE = $request->projectTitle;
+        $hire->PROJECT_DESCR = $request->projectDescription;
+        $hire->PROJECT_TIMELINE = $request->timeline;
+        $hire->PROJECT_BUDGET = $request->budget;
+        $hire->PROJECT_SKILLS = $request->skills;
+        $hire->PROJECT_EXPERIENCE_LEVEL = $request->experienceLevel;
+        $hire->OTHER_REQUIREMENTS = $request->otherRequirements;
+        
+        $hire->save();
+
+
+        return redirect()->back()->with('status', 'Hire has been updated successfully!');
+    }
 }

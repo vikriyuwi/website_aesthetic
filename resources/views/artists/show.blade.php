@@ -808,7 +808,7 @@
                     <div class="flex space-x-4">
                         @if($artistItSelf)
                         <!-- Edit Button -->
-                        <button onclick="editCommission()"
+                        <button onclick="openUpdateFormModal()"
                             class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition">
                             Edit
                         </button>
@@ -911,9 +911,9 @@
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
                             required>
                             <option value="" disabled selected>Select experience level</option>
-                            <option value="beginner">Beginner</option>
-                            <option value="intermediate">Intermediate</option>
-                            <option value="advanced">Advanced</option>
+                            <option value="Beginner">Beginner</option>
+                            <option value="Intermediate">Intermediate</option>
+                            <option value="Advanced">Advanced</option>
                         </select>
                     </div>
                     <div>
@@ -934,6 +934,95 @@
                 </form>
             </div>
         </div>
+
+        @if(isset($hire))
+        <div id="hireFreelancerUpdateFormModal" class="modal">
+            <div class="bg-white rounded-lg shadow-lg max-w-4xl w-full p-8 overflow-y-auto max-h-[80vh] relative">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-3xl font-bold text-primary">🚀 Update Hire a Freelancer</h3>
+                    <button onclick="closeUpdateFormModal()"
+                        class="text-gray-500 hover:text-gray-700 text-2xl absolute top-4 right-4">
+                        &times;
+                    </button>
+                </div>
+
+                <form class="space-y-6" action="{{ route('hire.update',['hireId' => $hire->ARTIST_HIRE_ID]) }}" method="post">
+                    @csrf
+                    @method('PUT')
+                    <!-- Project Title -->
+                    <div>
+                        <label for="projectTitle" class="block text-gray-700 font-medium">📌 Project Title</label>
+                        <input type="text" id="projectTitle" name="projectTitle"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
+                            placeholder="Enter the project title" value="{{ $hire->PROJECT_TITLE }}" required>
+                    </div>
+
+                    <!-- Project Description -->
+                    <div>
+                        <label for="projectDescription" class="block text-gray-700 font-medium">📝 Project
+                            Description</label>
+                        <textarea id="projectDescription" name="projectDescription"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600" rows="4"
+                            placeholder="Provide a brief description of the project" required>{{ $hire->PROJECT_DESCR }}</textarea>
+                        <p class="text-gray-500 text-sm mt-2">Include goals, any unique requirements, and the
+                            estimated timeline or deadline for the project.</p>
+                    </div>
+
+                    <!-- Timeline -->
+                    <div class="mt-6">
+                        <label for="timeline" class="block text-gray-700 font-medium">⏳ Timeline</label>
+                        <input type="date" id="timeline" name="timeline"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary mt-2"
+                            placeholder="Specify estimated duration or deadline" value="{{ (new \DateTime($hire->PROJECT_TIMELINE))->format('Y-m-d') }}" required>
+                    </div>
+
+                    <!-- Budget/Salary -->
+                    <div>
+                        <label for="budget" class="block text-gray-700 font-medium">💰 Budget/Salary</label>
+                        <input type="text" id="budget" name="budget"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
+                            placeholder="Enter the budget range (e.g., $500 - $1000)" value="{{ $hire->PROJECT_BUDGET }}" required>
+                        <p class="text-gray-500 text-sm mt-2">Specify payment terms: milestone-based, per hour, or
+                            per project completion.</p>
+                    </div>
+
+                    <!-- Requirements -->
+                    <div>
+                        <label for="skills" class="block text-gray-700 font-medium">📋 Skills Needed</label>
+                        <input type="text" id="skills" name="skills"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
+                            placeholder="List essential skills (e.g., graphic design, HTML, JavaScript)" value="{{ $hire->PROJECT_SKILLS }}" required>
+                    </div>
+                    <div>
+                        <label for="experienceLevel" class="block text-gray-700 font-medium">📈 Experience
+                            Level</label>
+                        <select id="experienceLevel" name="experienceLevel"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
+                            required>
+                            <option value="Beginner" @if($hire->PROJECT_EXPERIENCE_LEVEL == "Beginer") selected @endif>Beginner</option>
+                            <option value="Intermediate" @if($hire->PROJECT_EXPERIENCE_LEVEL == "Intermediate") selected @endif>Intermediate</option>
+                            <option value="Advanced" @if($hire->PROJECT_EXPERIENCE_LEVEL == "Advanced") selected @endif>Advanced</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="otherRequirements" class="block text-gray-700 font-medium">🔍 Other
+                            Requirements</label>
+                        <textarea id="otherRequirements" name="otherRequirements"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600" rows="2"
+                            placeholder="Additional requirements, like language proficiency or certifications">{{ $hire->OTHER_REQUIREMENTS }}</textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="flex justify-end mt-8">
+                        <button type="submit"
+                            class="bg-indigo-600 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-indigo-700 transition">
+                            📲 Update Project
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        @endif
 
 
 <script>
@@ -1137,8 +1226,16 @@
         document.getElementById('hireFreelancerFormModal').classList.add('active');
     }
 
+    function openUpdateFormModal() {
+        document.getElementById('hireFreelancerUpdateFormModal').classList.add('active');
+    }
+
     function closeFormModal() {
         document.getElementById('hireFreelancerFormModal').classList.remove('active');
+    }
+
+    function closeUpdateFormModal() {
+        document.getElementById('hireFreelancerUpdateFormModal').classList.remove('active');
     }
 
     function openDeleteConfirmation() {

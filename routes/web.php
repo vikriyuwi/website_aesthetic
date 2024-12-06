@@ -73,6 +73,7 @@ Route::middleware([Authorization::class.':true'])->group(function() {
     Route::prefix('hire')->name('hire.')->group(function() {
         Route::post('/add', [ArtistHireController::class, 'store'])->name('store');
         Route::get('/{hireId}/delete', [ArtistHireController::class, 'destroy'])->name('destroy');
+        Route::put('/{hireId}/update', [ArtistHireController::class, 'update'])->name('update');
     });
 });
 
