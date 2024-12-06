@@ -155,10 +155,10 @@
                                 <i class="fas fa-pen"></i>
                                 <span>EDIT</span>
                             </button>
-                            <button class="border border-red-500 text-red-500 py-2 px-4 rounded-lg hover:bg-red-50 transition btn">
+                            <a href={{ route('artwork.destroy', ['artworkId' => $artwork->ART_ID]) }} class="border border-red-500 text-red-500 py-2 px-4 rounded-lg hover:bg-red-50 transition btn">
                                 <i class="fas fa-trash"></i>
                                 <span>DELETE</span>
-                            </button>
+                            </a>
                         @else
                             <button class="bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition btn">
                                 BUY NOW

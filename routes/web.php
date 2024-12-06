@@ -57,6 +57,7 @@ Route::middleware([Authorization::class.':true'])->group(function() {
 
     Route::prefix('artwork')->name('artwork.')->group(function () {
         Route::post('/add',[ArtistArtWorkController::class,'addArtWork'])->name('store');
+        Route::get('/{artworkId}/delete/',[ArtistArtWorkController::class,'deleteArtWork'])->name('destroy');
     });
 
     Route::prefix('art-collection')->name('artCollection.')->group(function () {
@@ -180,7 +181,7 @@ Route::post('/comments/{postId}', [ArtistPostController::class, 'addPostComment'
 Route::get('/artworks/{artistId}/', [ArtistArtWorkController::class, 'showAllArtwork'])->name('all-artwork.show');
 
 //DELETE ARTWORK
-Route::post('artworks/delete/{artworkId}',[ArtistArtWorkController::class,'deleteArtWork'])->name('artwork.destroy');
+
 
 //---------------------------------------------------------------ENDARTWORK------------------------------------------------------------------
 

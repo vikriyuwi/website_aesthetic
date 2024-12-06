@@ -47,7 +47,10 @@ class ArtistHireController extends Controller
     {
         $user = Auth::guard('MasterUser')->user();
         $artist = Artist::where('ARTIST_ID','=',$user->Artist->ARTIST_ID)->first();
-
+        if($artist == null) {
+            abort(404, 'You are not artist');
+        }
+        
         $hire = ArtistHire::find($id);
 
         if($hire->ARTIST_ID != $artist->ARTIST_ID) {

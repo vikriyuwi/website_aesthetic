@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ArtistArtWorkController extends Controller
 {
@@ -111,37 +113,32 @@ class ArtistArtWorkController extends Controller
     }
 
     public function deleteArtWork($artworkId){
-        try {
-            $artCollection = ArtCollection::where('ART_ID', $artworkId)->get();
+        $user = Auth::guard('MasterUser')->user();
 
-            $artLike = ArtLike::where('ART_ID', $artworkId)->get();
-
-            $artCategory = ArtCategory::where('ART_ID', $artworkId)->get();
-         
-            foreach ($artCollection as $artInCollection) {
-                $artInCollection->delete();
-            }
-
-            foreach ($artCategory as $artCategories) {
-                $artCategories->delete();
-            }
-
-            foreach ($artLike as $artLiked) {
-                $artLiked->delete();
-            }
-
-            $artImage = ArtImage::findOrFail($artworkId);
-            $artImage->delete();
-    
-            // Now delete the post itself
-            $art = Art::findOrFail($artworkId);
-            $art->delete();
-    
-            return response()->json(['success' => 'Collection deleted successfully.']);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(['error' => 'Collection not found.'], 404);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'An unexpected error occurred.'], 500);
+        $artist = Artist::where('ARTIST_ID','=',$user->Artist->ARTIST_ID)->first();
+        if($artist == null) {
+            abort(404, 'You are not artist');
         }
+
+        $artwork = Art::find($artworkId);
+
+        if($artwork->USER_ID != $user->USER_ID) {
+            abort(404, 'You are not owner of this hiring');
+        }
+
+        if($artwork->ArtImages->count() > 0) {
+            foreach($artwork->ArtImages as $image) {
+                if ($image->IMAGE_PATH != null) {
+                    if(Str::startsWith($image->IMAGE_PATH, 'images/art/')) {
+                        $filePath = $image->IMAGE_PATH;
+                        Storage::disk('public')->delete($filePath);
+                    }
+                }
+            }
+        }
+
+        $artwork->delete();
+
+        return redirect()->route('artist.show', ['id' => $artist->ARTIST_ID, 'section' => 'artwork'])->with('status', 'Artwork has been deleted successfully!');
     }
 }

@@ -179,8 +179,8 @@
 <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
     <div class="bg-white p-6 rounded-lg shadow-lg text-center success-modal">
         <i class="fas fa-check-circle text-indigo-600 text-5xl mb-4"></i>
-        <h2 class="text-2xl font-bold text-gray-800">Artwork Added!</h2>
-        <p class="text-gray-600 mt-2">Your arwork has been successfully added.</p>
+        <h2 class="text-2xl font-bold text-gray-800">Success!</h2>
+        <p class="text-gray-600 mt-2">{{ session('status') }}</p>
         <div class="mt-6 flex justify-center space-x-4">
             <button onclick="closeSuccessModal()" class="bg-gray-300 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-400 transition duration-200">Cancel</button>
     </div>
