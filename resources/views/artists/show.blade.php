@@ -168,10 +168,8 @@
                         <!-- Ellipsis Button -->
                         
                         @if(Auth::check())
-                        <button
-                            class="ellipsisButton absolute top-2 right-2 text-gray-600 hover:text-gray-800 focus:outline-none"
-                            onclick="openOptionMenu()"
-                            >
+                        <button id="optionMenuArtistToggle"
+                            class="ellipsisButton absolute top-2 right-2 text-gray-600 hover:text-gray-800 focus:outline-none">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="currentColor" class="w-6 h-6">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -180,41 +178,36 @@
                         </button>
                             
                         <!-- Options Menu -->
-                        <div id="optionMenu" class="optionsMenu bg-white rounded-lg shadow-lg py-2 w-48 hidden">
-                            @if ($artistItSelf)
+                        <div id="optionMenuArtist" class="optionsMenu bg-white rounded-lg shadow-lg py-2 w-48 hidden">
                             <!-- Edit Profile Button -->
-                            <button onclick="openEditProfileModal({{ $artist->ARTIST_ID }})"
-                                class="block w-full text-left px-4 py-3 hover:bg-indigo-100 hover:text-indigo-600 transition-colors duration-200 font-medium text-gray-700 flex items-center">
-                                <i class="fas fa-user-edit mr-3 text-indigo-500"></i>
-                                Edit Profile
-                            </button>
+                            @if($artistItSelf)
+                                <button onclick="openEditProfileModal()"
+                                    class="block w-full text-left px-4 py-3 hover:bg-indigo-100 hover:text-indigo-600 transition-colors duration-200 font-medium text-gray-700 flex items-center">
+                                    <i class="fas fa-user-edit mr-3 text-indigo-500"></i>
+                                    Edit Profile
+                                </button>
+                                @if(!isset($hire))
+                                <!-- Hire Freelance Button -->
+                                <button onclick="openHireFormModal()"
+                                    class="block w-full text-left px-4 py-3 hover:bg-green-100 hover:text-green-600 transition-colors duration-200 font-medium text-gray-700 flex items-center">
+                                    <i class="fas fa-file mr-3 text-blue-500"></i>
+                                    Hire Freelance
+                                </button>
+                                @endif
+                            @else
+                                <!-- Review Artist Button -->
+                                <button onclick="openReviewModal()"
+                                    class="block w-full text-left px-4 py-3 hover:bg-green-100 hover:text-green-600 transition-colors duration-200 font-medium text-gray-700 flex items-center">
+                                    <i class="fas fa-star mr-3 text-green-500"></i>
+                                    Review Artist
+                                </button>
 
-                            <!-- Hire Freelance Button -->
-                            @if(!isset($hire))
-                            <button onclick="openFormModal()"
-                                class="block w-full text-left px-4 py-3 hover:bg-green-100 hover:text-green-600 transition-colors duration-200 font-medium text-gray-700 flex items-center">
-                                <i class="fas fa-file mr-3 text-blue-500"></i>
-                                Hire Freelance
-                            </button>
-                            @endif
-                            @endif
-                            
-                            @if (!$artistItSelf)
-                            <!-- Review Artist Button -->
-                            <button onclick="openReviewModal()"
-                                class="block w-full text-left px-4 py-3 hover:bg-green-100 hover:text-green-600 transition-colors duration-200 font-medium text-gray-700 flex items-center">
-                                <i class="fas fa-star mr-3 text-green-500"></i>
-                                Review Artist
-                            </button>
-                            @endif
-
-                            <!-- Report Artist Button (styled in red) -->
-                            @if (Auth::user()->USER_ID != $artist->USER_ID )
-                            <button onclick="openReportModal()"
-                                class="block w-full text-left px-4 py-3 hover:bg-red-100 hover:bg-red-100 text-red-600 hover:text-red-700 transition-colors duration-200 font-medium flex items-center">
-                                <i class="fa fa-flag mr-3 text-red-600"></i>
-                                Report / Block
-                            </button>
+                                <!-- Report Artist Button (styled in red) -->
+                                <button onclick="openReportModal()"
+                                    class="block w-full text-left px-4 py-3 hover:bg-red-100 hover:bg-red-100 text-red-600 hover:text-red-700 transition-colors duration-200 font-medium flex items-center">
+                                    <i class="fa fa-flag mr-3 text-red-600"></i>
+                                    Report / Block
+                                </button>
                             @endif
                         </div>
                         @endif
@@ -767,17 +760,17 @@
                 <!-- Project Title -->
                 <div class="mt-6">
                     <h4 class="text-xl font-bold text-gray-700">📌 Project Title</h4>
-                    <p class="text-lg text-gray-600 mt-2">{{ $hire->PROJECT_TITLE ?? "" }}</p>
+                    <p class="text-lg text-gray-600 mt-2">{{ $hire->PROJECT_TITLE}}</p>
                 </div>
 
                 <!-- Project Description -->
                 <div class="mt-6">
                     <h4 class="text-xl font-bold text-gray-700">📝 Project Description</h4>
                     <p class="text-gray-700 mt-2">
-                        <strong>Overview:</strong> {{ $hire->PROJECT_DESCR ?? "" }}
+                        <strong>Overview:</strong> {{ $hire->PROJECT_DESCR }}
                     </p>
                     <p class="text-gray-700 mt-2">
-                        <strong>Timeline:</strong> {{ (new \DateTime($hire->PROJECT_TIMELINE ?? ""))->format('M d, Y') }}
+                        <strong>Timeline:</strong> {{ (new \DateTime($hire->PROJECT_TIMELINE))->format('M d, Y') }}
                     </p>
                 </div>
 
@@ -785,7 +778,7 @@
                 <div class="mt-6">
                     <h4 class="text-xl font-bold text-gray-700">💰 Budget/Salary</h4>
                     <p class="text-gray-700 mt-2">
-                        <strong>Compensation:</strong> {{ $hire->PROJECT_BUDGET ?? "" }}
+                        <strong>Compensation:</strong> {{ $hire->PROJECT_BUDGET }}
                     </p>
                 </div>
 
@@ -793,13 +786,13 @@
                 <div class="mt-6">
                     <h4 class="text-xl font-bold text-gray-700">📋 Requirements</h4>
                     <p class="text-gray-700 mt-2">
-                        <strong>Skills Needed:</strong> {{ $hire->PROJECT_SKILLS ?? "" }}
+                        <strong>Skills Needed:</strong> {{ $hire->PROJECT_SKILLS }}
                     </p>
                     <p class="text-gray-700 mt-2">
-                        <strong>Experience Level:</strong> {{ $hire->PROJECT_EXPERIENCE_LEVEL ?? "" }}
+                        <strong>Experience Level:</strong> {{ $hire->PROJECT_EXPERIENCE_LEVEL }}
                     </p>
                     <p class="text-gray-700 mt-2">
-                        <strong>Other Requirements:</strong> {{ $hire->OTHER_REQUIREMENTS ?? "" }}
+                        <strong>Other Requirements:</strong> {{ $hire->OTHER_REQUIREMENTS }}
                     </p>
                 </div>
 
@@ -808,12 +801,12 @@
                     <div class="flex space-x-4">
                         @if($artistItSelf)
                         <!-- Edit Button -->
-                        <button onclick="openUpdateFormModal()"
+                        <button onclick="openHireUpdateFormModal()"
                             class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition">
                             Edit
                         </button>
                         <!-- Delete Button -->
-                        <button onclick="openDeleteConfirmation()"
+                        <button onclick="openDeleteHireConfirmation()"
                             class="bg-red-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-red-700 transition">
                             Delete
                         </button>
@@ -829,30 +822,30 @@
         </div>
         @endif
 
-        @if($hire != null)
+        {{-- @if($hire != null) --}}
         <!-- Delete Confirmation Modal -->
-        <div id="deleteConfirmationModal"
-            class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div id="deleteHireConfirmationModal"
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
             <div class="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
                 <h3 class="text-xl font-semibold text-gray-800 mb-4">Confirm Deletion</h3>
                 <p class="text-gray-700 mb-6">Are you sure you want to delete this commission?</p>
                 <div class="flex justify-end space-x-4">
-                    <button onclick="closeDeleteConfirmation()"
+                    <button onclick="closeDeleteHireConfirmation()"
                         class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400">
                         Cancel
                     </button>
-                    <a href="{{ route('hire.destroy',['hireId'=>$hire->ARTIST_HIRE_ID]) }}" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">delete</a>
+                    <a href="{{ route('hire.destroy',['hireId'=>$hire->ARTIST_HIRE_ID ?? 0]) }}" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">delete</a>
                 </div>
             </div>
         </div>
-        @endif
+        {{-- @endif --}}
 
         <!-- Hire Freelancer Form Modal -->
         <div id="hireFreelancerFormModal" class="modal">
             <div class="bg-white rounded-lg shadow-lg max-w-4xl w-full p-8 overflow-y-auto max-h-[80vh] relative">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-3xl font-bold text-primary">🚀 Hire a Freelancer</h3>
-                    <button onclick="closeFormModal()"
+                    <button onclick="closeHireFormModal()"
                         class="text-gray-500 hover:text-gray-700 text-2xl absolute top-4 right-4">
                         &times;
                     </button>
@@ -921,7 +914,7 @@
                             Requirements</label>
                         <textarea id="otherRequirements" name="otherRequirements"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600" rows="2"
-                            placeholder="Additional requirements, like language proficiency or certifications"></textarea>
+                            placeholder="Additional requirements, like language proficiency or certifications" required></textarea>
                     </div>
 
                     <!-- Submit Button -->
@@ -935,12 +928,12 @@
             </div>
         </div>
 
-        @if(isset($hire))
+        @if($hire != null)
         <div id="hireFreelancerUpdateFormModal" class="modal">
             <div class="bg-white rounded-lg shadow-lg max-w-4xl w-full p-8 overflow-y-auto max-h-[80vh] relative">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-3xl font-bold text-primary">🚀 Update Hire a Freelancer</h3>
-                    <button onclick="closeUpdateFormModal()"
+                    <button onclick="closeHireUpdateFormModal()"
                         class="text-gray-500 hover:text-gray-700 text-2xl absolute top-4 right-4">
                         &times;
                     </button>
@@ -952,7 +945,7 @@
                     <!-- Project Title -->
                     <div>
                         <label for="projectTitle" class="block text-gray-700 font-medium">📌 Project Title</label>
-                        <input type="text" id="projectTitle" name="projectTitle"
+                        <input type="text" id="projectTitleUpdate" name="projectTitle"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
                             placeholder="Enter the project title" value="{{ $hire->PROJECT_TITLE }}" required>
                     </div>
@@ -961,7 +954,7 @@
                     <div>
                         <label for="projectDescription" class="block text-gray-700 font-medium">📝 Project
                             Description</label>
-                        <textarea id="projectDescription" name="projectDescription"
+                        <textarea id="projectDescriptionUpdate" name="projectDescription"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600" rows="4"
                             placeholder="Provide a brief description of the project" required>{{ $hire->PROJECT_DESCR }}</textarea>
                         <p class="text-gray-500 text-sm mt-2">Include goals, any unique requirements, and the
@@ -971,7 +964,7 @@
                     <!-- Timeline -->
                     <div class="mt-6">
                         <label for="timeline" class="block text-gray-700 font-medium">⏳ Timeline</label>
-                        <input type="date" id="timeline" name="timeline"
+                        <input type="date" id="timelineUpdate" name="timeline"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary mt-2"
                             placeholder="Specify estimated duration or deadline" value="{{ (new \DateTime($hire->PROJECT_TIMELINE))->format('Y-m-d') }}" required>
                     </div>
@@ -979,7 +972,7 @@
                     <!-- Budget/Salary -->
                     <div>
                         <label for="budget" class="block text-gray-700 font-medium">💰 Budget/Salary</label>
-                        <input type="text" id="budget" name="budget"
+                        <input type="text" id="budgetUpdate" name="budget"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
                             placeholder="Enter the budget range (e.g., $500 - $1000)" value="{{ $hire->PROJECT_BUDGET }}" required>
                         <p class="text-gray-500 text-sm mt-2">Specify payment terms: milestone-based, per hour, or
@@ -989,14 +982,14 @@
                     <!-- Requirements -->
                     <div>
                         <label for="skills" class="block text-gray-700 font-medium">📋 Skills Needed</label>
-                        <input type="text" id="skills" name="skills"
+                        <input type="text" id="skillsUpdate" name="skills"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
                             placeholder="List essential skills (e.g., graphic design, HTML, JavaScript)" value="{{ $hire->PROJECT_SKILLS }}" required>
                     </div>
                     <div>
                         <label for="experienceLevel" class="block text-gray-700 font-medium">📈 Experience
                             Level</label>
-                        <select id="experienceLevel" name="experienceLevel"
+                        <select id="experienceLevelUpdate" name="experienceLevel"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
                             required>
                             <option value="Beginner" @if($hire->PROJECT_EXPERIENCE_LEVEL == "Beginer") selected @endif>Beginner</option>
@@ -1007,9 +1000,9 @@
                     <div>
                         <label for="otherRequirements" class="block text-gray-700 font-medium">🔍 Other
                             Requirements</label>
-                        <textarea id="otherRequirements" name="otherRequirements"
+                        <textarea id="otherRequirementsUpdate" name="otherRequirements"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600" rows="2"
-                            placeholder="Additional requirements, like language proficiency or certifications">{{ $hire->OTHER_REQUIREMENTS }}</textarea>
+                            placeholder="Additional requirements, like language proficiency or certifications" required>{{ $hire->OTHER_REQUIREMENTS }}</textarea>
                     </div>
 
                     <!-- Submit Button -->
@@ -1222,28 +1215,31 @@
         closeHireModal();
     }
 
-    function openFormModal() {
+    function openHireFormModal() {
         document.getElementById('hireFreelancerFormModal').classList.add('active');
     }
 
-    function openUpdateFormModal() {
+    function openHireUpdateFormModal() {
+        closeHireModal()
         document.getElementById('hireFreelancerUpdateFormModal').classList.add('active');
     }
 
-    function closeFormModal() {
+    function closeHireFormModal() {
         document.getElementById('hireFreelancerFormModal').classList.remove('active');
+        console.log('close hire form')
     }
 
-    function closeUpdateFormModal() {
+    function closeHireUpdateFormModal() {
         document.getElementById('hireFreelancerUpdateFormModal').classList.remove('active');
     }
 
-    function openDeleteConfirmation() {
-        document.getElementById('deleteConfirmationModal').style.display = 'flex';
+    function openDeleteHireConfirmation() {
+        closeHireModal()
+        document.getElementById('deleteHireConfirmationModal').classList.remove('hidden');
     }
 
-    function closeDeleteConfirmation() {
-        document.getElementById('deleteConfirmationModal').style.display = 'none';
+    function closeDeleteHireConfirmation() {
+        document.getElementById('deleteHireConfirmationModal').classList.add('hidden');
     }
 
     function confirmDelete() {
@@ -1256,9 +1252,18 @@
         alert("Mike benerin ya!");
     }
 
-    function openOptionMenu() {
-        document.getElementById('optionMenu').classList.toggle('hidden');
-    }
+    document.getElementById('optionMenuArtistToggle').addEventListener('click', () => {
+        const optionMenuArtist = document.getElementById('optionMenuArtist');
+
+        // Check if the 'hidden' class is present
+        if (optionMenuArtist.classList.contains('hidden')) {
+            console.log('The hidden class exists!');
+            optionMenuArtist.classList.remove('hidden'); // Remove the hidden class
+        } else {
+            console.log('The hidden class does not exist.');
+            optionMenuArtist.classList.add('hidden'); // Add the hidden class if needed
+        }
+    });
 
     async function saveProfileChanges(artistId) {
         const formData = new FormData();
@@ -1324,7 +1329,7 @@
         }
     }
 
-    async function openEditProfileModal(artistId) {
+    async function openEditProfileModal() {
         // Show the modal
         const modal = document.getElementById('editModal');
         modal.style.display = 'flex';
