@@ -12,6 +12,7 @@ use App\Http\Controllers\ArtistPortfolioController;
 use App\Http\Controllers\ArtistPostController;
 use App\Http\Controllers\ArtistProfileController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\PostController;
 use App\Http\Middleware\Authorization;
 use App\Http\Middleware\Role;
 use App\Http\Middleware\ActiveBuyer;
@@ -62,6 +63,10 @@ Route::middleware([Authorization::class.':true'])->group(function() {
     });
 
     Route::put('/artist/{artistId}/update/', [ArtistProfileController::class,'updateArtistProfile'])->name('artist.update');
+
+    Route::prefix('post')->name('post.')->group(function () {
+        Route::post('/add',[ArtistPostController::class,'store'])->name('store');
+    });
 });
 
 Route::get('/landing', [App\Http\Controllers\WebController::class, 'landing'])->name('landing');
@@ -147,8 +152,6 @@ Route::get('/artist/profile/{artistId}', [ArtistProfileController::class, 'getAr
 //---------------------------------------------------------------ENDCOLLECTION------------------------------------------------------------------
 
 //------------------------------------------------------------------POST------------------------------------------------------------------
-//ADD POST
-Route::post('post/add',[ArtistPostController::class,'addPost'])->name('post.store');
 
 //DELETE POST
 Route::post('post/delete/{postId}',[ArtistPostController::class,'deletePost'])->name('post.destroy');

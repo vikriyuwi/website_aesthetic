@@ -43,7 +43,7 @@
     <div class="flex justify-between items-center mt-8">
       <h2 class="text-2xl font-bold">Posts</h2>
       @if(Auth::check())
-        @if (Auth::user()->USER_ID == $artistUserId )
+        @if (Auth::user()->USER_ID == $artist->ARTIST_ID )
           <button id="addPostButton" class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-5 py-2 rounded-full shadow-md hover:from-blue-600 hover:to-indigo-700 transition duration-300 transform hover:scale-105">
             + Add Post 
           </button>
@@ -53,9 +53,9 @@
 
  <!-- Post Section -->
  <div class="mt-8">
-  @foreach ($listPost as $posts )
+  @foreach ($posts as $post )
   <!-- Post Example -->
-  <div class="bg-white p-4 rounded-lg shadow-md mb-4 border border-gray-300 post-card relative cursor-pointer" id="artistPost" data-post-id="{{ $posts->POST_ID }}" data-delete-route="{{ route('post.destroy', $posts->POST_ID) }}" onclick="showPostDetail({{ $posts->POST_ID }})">
+  <div class="bg-white p-4 rounded-lg shadow-md mb-4 border border-gray-300 post-card relative cursor-pointer" id="artistPost" data-post-id="{{ $post->POST_ID }}" data-delete-route="{{ route('post.destroy', $post->POST_ID) }}" onclick="showPostDetail({{ $post->POST_ID }})">
     <!-- Options Menu and Profile Section Omitted for Brevity -->
     <button class="ellipsisButton text-gray-600 hover:text-gray-800 focus:outline-none" onclick="toggleOptionsMenu(event, this)">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -65,26 +65,28 @@
     <!-- Options Menu -->
     <div class="optionsMenu">
       <button class="block w-full text-left px-4 py-2 hover:bg-gray-100">Edit Post</button>
-      <button class="block w-full text-left px-4 py-2 hover:bg-gray-100" onclick="confirmDeletePost(event,{{ $posts->POST_ID }})">Delete Post</button>
+      <button class="block w-full text-left px-4 py-2 hover:bg-gray-100" onclick="confirmDeletePost(event,{{ $post->POST_ID }})">Delete Post</button>
     </div>
 
     <div class="flex items-center space-x-4">
-      <img alt="Profile picture of the user" class="w-10 h-10 rounded-full" src="{{ asset($posts->PROFILE_IMAGE_PATH) }}">
+      <img alt="Profile picture of the user" class="w-10 h-10 rounded-full" src="{{ $post->Artist->MasterUser->Buyer->PROFILE_IMAGE_URL != null ? asset($post->Artist->MasterUser->Buyer->PROFILE_IMAGE_URL) : "https://placehold.co/100x100"}}">
       <div>
-        <h2 class="text-lg font-bold">{{ $posts->USERNAME }}</h2>
-        <p class="text-sm text-gray-600">{{ $posts->CREATED_DATE }}</p>
+        <h2 class="text-lg font-bold">{{ $post->Artist->MasterUser->Buyer->FULLNAME }}</h2>
+        <p class="text-sm text-gray-600">{{ $post->created_at }}</p>
       </div>
     </div>
-    <p class="mt-4 text-sm">{{ $posts->CONTENT }}</p>
+    <p class="mt-4 text-sm">{{ $post->CONTENT }}</p>
 
     <!-- Image Container -->
+    @if($post->PostMedias->count() > 0)
     <div class="aspect-w-2 aspect-h-1 mt-4 rounded-lg overflow-hidden">
-      <img alt="Anime character with pink hair" class="aspect-inner object-cover" src="{{ asset($posts->POST_MEDIA_PATH) }}">
+      <img alt="Anime character with pink hair" class="aspect-inner object-cover" src="{{ Str::startsWith($post->PostMedias()->first()->POST_MEDIA_PATH, 'images/post/') ? asset($post->PostMedias()->first()->POST_MEDIA_PATH) : $post->PostMedias()->first()->POST_MEDIA_PATH }}">
     </div>
+    @endif
 
     <div class="mt-2 flex space-x-4 text-gray-600 text-sm">
-      <button class="flex items-center space-x-1"><i class="fas fa-heart {{ $posts->IS_LIKED ? 'text-red-500' : 'text-gray-400' }}"></i><span>{{ $posts->TOTAL_LIKE }}</span></button>
-      <button class="flex items-center space-x-1"><i class="far fa-comment"></i><span id="postTotalComments-{{ $posts->POST_ID }}">{{ $posts->TOTAL_COMMENT }}</span></button>
+      <button class="flex items-center space-x-1"><i class="fas fa-heart text-red-500"></i><span>100</span></button>
+      <button class="flex items-center space-x-1"><i class="far fa-comment"></i><span id="postTotalComments-9999">9999</span></button>
       <button class="flex items-center space-x-1"><i class="far fa-share-square"></i><span>Share</span></button>
     </div>
   </div>
@@ -105,7 +107,7 @@
         <div class="flex-shrink-0 w-1/2">
             <img id="postDetailImage" class="w-full h-auto rounded-lg shadow-lg" src="" alt="Post Image">
             <div class="flex space-x-4 mt-4 text-gray-600">
-                <button class="flex items-center space-x-2 hover:text-gray-800 like-button" data-route=""><i class="fas fa-heart {{ $posts->IS_LIKED ? 'text-red-500' : 'text-gray-400' }}"></i><span id="postDetailLikes"></span></button>
+                <button class="flex items-center space-x-2 hover:text-gray-800 like-button" data-route=""><i class="fas fa-heart text-red-500"></i><span id="postDetailLikes"></span></button>
                 <button class="flex items-center space-x-2 hover:text-gray-800"><i class="far fa-comment"></i><span id="postDetailComments"></span></button>
                 <button class="flex items-center space-x-2 hover:text-gray-800"><i class="far fa-share-square"></i><span>Share</span></button>
             </div>
@@ -147,7 +149,7 @@
 <div id="addPostModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden modal-overlay">
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl">
       <h3 class="text-2xl font-semibold text-gray-800 mb-2">Add New Post ✉️ </h3>
-      <form method="POST" action="{{ route('portfolio.store') }}" enctype="multipart/form-data" id="addPostForm" class="space-y-6">
+      <form method="POST" action="{{ route('post.store') }}" enctype="multipart/form-data" id="addPostForm" class="space-y-6">
         @csrf
         <div>
           <label for="postContent" class="block text-gray-700 font-semibold mb-2">Post Content</label>
@@ -181,7 +183,7 @@
 
         <div class="flex justify-end space-x-3">
           <button type="button" id="cancelAddPostButton" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition duration-200" onclick="closeAddPostModal()">Cancel</button>
-          <button type="submit" onclick="submitPost(event)" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 shadow-md transition duration-300 transform hover:scale-105">Add Post</button>
+          <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 shadow-md transition duration-300 transform hover:scale-105">Add Post</button>
         </div>
       </form>
     </div>
@@ -205,19 +207,19 @@
     //   { name: "Sam Jetstream", date: "3 months ago", text: "The neon-drenched streets are amazing!" }
     // };
 
-    const postsData = {
-          @foreach ($listPost as $posts)
-              "{{ $posts->POST_ID }}": {
-                  user: "{{ $posts->USERNAME }}",
-                  date: "{{ $posts->CREATED_DATE }}",
-                  content: "{{ $posts->CONTENT }}",
-                  likes: {{ $posts->TOTAL_LIKE }},
-                  comments: {{ $posts->TOTAL_COMMENT }},
-                  imageUrl: "{{ asset($posts->POST_MEDIA_PATH) }}",
-                  profileImageUrl: "{{ asset($posts->PROFILE_IMAGE_PATH) }}"
-              },
-          @endforeach
-      };
+    // const postsData = {
+    //       @foreach ($posts as $post)
+    //           "{{ $post->POST_ID }}": {
+    //               user: "{{ $post->USERNAME }}",
+    //               date: "{{ $post->CREATED_DATE }}",
+    //               content: "{{ $post->CONTENT }}",
+    //               likes: {{ $post->TOTAL_LIKE }},
+    //               comments: {{ $post->TOTAL_COMMENT }},
+    //               imageUrl: "{{ asset($post->POST_MEDIA_PATH) }}",
+    //               profileImageUrl: "{{ asset($post->PROFILE_IMAGE_PATH) }}"
+    //           },
+    //       @endforeach
+    //   };
 
   const cachedComments = {}; // Cache for comments by postId
 
@@ -227,120 +229,120 @@
       return textarea.value;
   }
 
-  function showPostDetail(postId) {
-      const post = postsData[postId];
-      if (post) {
-          document.getElementById('postDetailUser').textContent = post.user;
-          document.getElementById('postDetailDate').textContent = post.date;
-          document.getElementById('postDetailContent').textContent = decodeHtmlEntities(post.content);
-          document.getElementById('postDetailLikes').textContent = post.likes;
-          document.getElementById('postDetailComments').textContent = post.comments;
-          document.getElementById('postDetailImage').src = post.imageUrl;
-          document.getElementById('postDetailProfileImage').src = post.profileImageUrl;
+  // function showPostDetail(postId) {
+  //     const post = postsData[postId];
+  //     if (post) {
+  //         document.getElementById('postDetailUser').textContent = post.user;
+  //         document.getElementById('postDetailDate').textContent = post.date;
+  //         document.getElementById('postDetailContent').textContent = decodeHtmlEntities(post.content);
+  //         document.getElementById('postDetailLikes').textContent = post.likes;
+  //         document.getElementById('postDetailComments').textContent = post.comments;
+  //         document.getElementById('postDetailImage').src = post.imageUrl;
+  //         document.getElementById('postDetailProfileImage').src = post.profileImageUrl;
 
-          // Check if comments are cached
-          if (cachedComments[postId]) {
-              populateComments(cachedComments[postId]);
-          } else {
-              // Fetch comments for this post and cache them
-              fetch(`/comments/${postId}`)
-                  .then(response => response.json())
-                  .then(comments => {
-                      cachedComments[postId] = comments; // Cache the comments for this postId
-                      populateComments(comments);
-                  })
-                  .catch(error => console.error('Error fetching comments:', error));
-          }
+  //         // Check if comments are cached
+  //         if (cachedComments[postId]) {
+  //             populateComments(cachedComments[postId]);
+  //         } else {
+  //             // Fetch comments for this post and cache them
+  //             fetch(`/comments/${postId}`)
+  //                 .then(response => response.json())
+  //                 .then(comments => {
+  //                     cachedComments[postId] = comments; // Cache the comments for this postId
+  //                     populateComments(comments);
+  //                 })
+  //                 .catch(error => console.error('Error fetching comments:', error));
+  //         }
 
-          document.getElementById('commentsSection').setAttribute('data-post-id', postId);
-          document.getElementById('postDetailModal').classList.remove('hidden');
-      } else {
-          console.error('Post data not found for POST_ID:', postId);
-      }
-  }
+  //         document.getElementById('commentsSection').setAttribute('data-post-id', postId);
+  //         document.getElementById('postDetailModal').classList.remove('hidden');
+  //     } else {
+  //         console.error('Post data not found for POST_ID:', postId);
+  //     }
+  // }
 
-  function populateComments(comments) {
-    const commentsSection = document.getElementById('commentsSection');
-    commentsSection.innerHTML = ''; // Clear existing comments
+  // function populateComments(comments) {
+  //   const commentsSection = document.getElementById('commentsSection');
+  //   commentsSection.innerHTML = ''; // Clear existing comments
 
-    comments.forEach(comment => {
-        const name = comment.USERNAME || 'Anonymous';
-        const date = comment.COMMENT_TIME || 'Unknown date';
-        const text = comment.CONTENT || 'No content available';
-        const imagePath = comment.PROFILE_IMAGE_PATH || '/path/to/default_profile.png';
+  //   comments.forEach(comment => {
+  //       const name = comment.USERNAME || 'Anonymous';
+  //       const date = comment.COMMENT_TIME || 'Unknown date';
+  //       const text = comment.CONTENT || 'No content available';
+  //       const imagePath = comment.PROFILE_IMAGE_PATH || '/path/to/default_profile.png';
 
-        const commentElement = document.createElement('div');
-        commentElement.classList.add('flex', 'space-x-4', 'items-start');
-        commentElement.innerHTML = `
-            <img class="w-10 h-10 rounded-full object-cover" src="{{ asset('${imagePath}') }}" alt="${name}">
-            <div>
-                <p class="font-bold">${name} <span class="text-sm text-gray-600">${date}</span></p>
-                <p class="text-gray-700 mt-1">${text}</p>
-            </div>
-        `;
-        commentsSection.appendChild(commentElement);
-    });
-}
+  //       const commentElement = document.createElement('div');
+  //       commentElement.classList.add('flex', 'space-x-4', 'items-start');
+  //       commentElement.innerHTML = `
+  //           <img class="w-10 h-10 rounded-full object-cover" src="{{ asset('${imagePath}') }}" alt="${name}">
+  //           <div>
+  //               <p class="font-bold">${name} <span class="text-sm text-gray-600">${date}</span></p>
+  //               <p class="text-gray-700 mt-1">${text}</p>
+  //           </div>
+  //       `;
+  //       commentsSection.appendChild(commentElement);
+  //   });
+  // }
 
-function addComment() {
-    const newCommentText = document.getElementById('newComment').value;
-    const postId = document.getElementById('commentsSection').getAttribute('data-post-id');
+// function addComment() {
+//     const newCommentText = document.getElementById('newComment').value;
+//     const postId = document.getElementById('commentsSection').getAttribute('data-post-id');
     
-    if (newCommentText && postId) {
-        fetch(`/comments/${postId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({ content: newCommentText })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(newComment => {
-            console.log("New Comment Data:", newComment); // Check structure in console
+//     if (newCommentText && postId) {
+//         fetch(`/comments/${postId}`, {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+//             },
+//             body: JSON.stringify({ content: newCommentText })
+//         })
+//         .then(response => {
+//             if (!response.ok) {
+//                 throw new Error('Network response was not ok');
+//             }
+//             return response.json();
+//         })
+//         .then(newComment => {
+//             console.log("New Comment Data:", newComment); // Check structure in console
 
-            document.getElementById('newComment').value = '';
+//             document.getElementById('newComment').value = '';
 
-            const commentsSection = document.getElementById('commentsSection');
-            const commentElement = document.createElement('div');
-            commentElement.classList.add('flex', 'space-x-4', 'items-start');
-            commentElement.innerHTML = `
-                <img class="w-10 h-10 rounded-full object-cover" src="{{ asset('${newComment.PROFILE_IMAGE_PATH}') }}" alt="${newComment.USERNAME}">
-                <div>
-                    <p class="font-bold">${newComment.USERNAME} <span class="text-sm text-gray-600">${newComment.COMMENT_TIME}</span></p>
-                    <p class="text-gray-700 mt-1">${newComment.CONTENT}</p>
-                </div>
-            `;
-            commentsSection.appendChild(commentElement);
+//             const commentsSection = document.getElementById('commentsSection');
+//             const commentElement = document.createElement('div');
+//             commentElement.classList.add('flex', 'space-x-4', 'items-start');
+//             commentElement.innerHTML = `
+//                 <img class="w-10 h-10 rounded-full object-cover" src="{{ asset('${newComment.PROFILE_IMAGE_PATH}') }}" alt="${newComment.USERNAME}">
+//                 <div>
+//                     <p class="font-bold">${newComment.USERNAME} <span class="text-sm text-gray-600">${newComment.COMMENT_TIME}</span></p>
+//                     <p class="text-gray-700 mt-1">${newComment.CONTENT}</p>
+//                 </div>
+//             `;
+//             commentsSection.appendChild(commentElement);
 
-            // Cache the new comment
-            if (!cachedComments[postId]) {
-                cachedComments[postId] = [];
-            }
-            cachedComments[postId].push({
-                USERNAME: newComment.USERNAME,
-                COMMENT_TIME: newComment.COMMENT_TIME,
-                CONTENT: newComment.CONTENT,
-                PROFILE_IMAGE_PATH: newComment.PROFILE_IMAGE_PATH
-            });
+//             // Cache the new comment
+//             if (!cachedComments[postId]) {
+//                 cachedComments[postId] = [];
+//             }
+//             cachedComments[postId].push({
+//                 USERNAME: newComment.USERNAME,
+//                 COMMENT_TIME: newComment.COMMENT_TIME,
+//                 CONTENT: newComment.CONTENT,
+//                 PROFILE_IMAGE_PATH: newComment.PROFILE_IMAGE_PATH
+//             });
 
-            // Update the comment count in the post data and on the modal
-            postsData[postId].comments += 1;
-            document.getElementById('postDetailComments').textContent = postsData[postId].comments;
+//             // Update the comment count in the post data and on the modal
+//             postsData[postId].comments += 1;
+//             document.getElementById('postDetailComments').textContent = postsData[postId].comments;
 
-            const postCommentCount = document.getElementById(`postTotalComments-${postId}`);
-            if (postCommentCount) {
-                postCommentCount.textContent = postsData[postId].comments;
-            }
-        })
-        .catch(error => console.error('Error adding comment:', error));
-    }
-}
+//             const postCommentCount = document.getElementById(`postTotalComments-${postId}`);
+//             if (postCommentCount) {
+//                 postCommentCount.textContent = postsData[postId].comments;
+//             }
+//         })
+//         .catch(error => console.error('Error adding comment:', error));
+//     }
+// }
 
     function toggleImageUploadOption(option) {
         document.getElementById('linkField').classList.toggle('hidden', option !== 'link');
@@ -356,9 +358,9 @@ function addComment() {
     //   }
     // }
 
-    function closePostDetail() {
-      document.getElementById('postDetailModal').classList.add('hidden');
-    }
+    // function closePostDetail() {
+    //   document.getElementById('postDetailModal').classList.add('hidden');
+    // }
 
     // Toggle options menu visibility for each ellipsis button
     function toggleOptionsMenu(event, button) {
@@ -375,61 +377,61 @@ function addComment() {
     let postToDelete = null; // Holds the ID of the post to delete
 
     // Function to open the delete confirmation modal
-    function confirmDeletePost(event, postId) {
-        event.stopPropagation(); // Prevent triggering other events (e.g., opening the post)
-        postToDelete = postId; // Set the ID of the post to delete
-        document.getElementById('deleteConfirmationModal').classList.remove('hidden'); // Show modal
-    }
+    // function confirmDeletePost(event, postId) {
+    //     event.stopPropagation(); // Prevent triggering other events (e.g., opening the post)
+    //     postToDelete = postId; // Set the ID of the post to delete
+    //     document.getElementById('deleteConfirmationModal').classList.remove('hidden'); // Show modal
+    // }
 
     // Function to close the delete confirmation modal
-    function closeDeleteModal() {
-        document.getElementById('deleteConfirmationModal').classList.add('hidden'); // Hide modal
-        postToDelete = null; // Clear the stored post ID
-    }
+    // function closeDeleteModal() {
+    //     document.getElementById('deleteConfirmationModal').classList.add('hidden'); // Hide modal
+    //     postToDelete = null; // Clear the stored post ID
+    // }
 
     // Function to delete the post via AJAX
-    function deletePost() {
-        if (!postToDelete) return; // Ensure there's a post to delete
+    // function deletePost() {
+    //     if (!postToDelete) return; // Ensure there's a post to delete
 
-        // Get the delete route from the data attribute
-        const postElement = document.querySelector(`#artistPost[data-post-id="${postToDelete}"]`);
-        const url = postElement.dataset.deleteRoute; // Get the route from the data attribute
+    //     // Get the delete route from the data attribute
+    //     const postElement = document.querySelector(`#artistPost[data-post-id="${postToDelete}"]`);
+    //     const url = postElement.dataset.deleteRoute; // Get the route from the data attribute
 
-        console.log('Delete URL:', url); // Log the URL to verify it's correct
+    //     console.log('Delete URL:', url); // Log the URL to verify it's correct
 
-        // Send AJAX request
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                'Content-Type': 'application/json',
-            },
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to delete the post.');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                postElement.remove(); // Remove the post from the DOM
-                closeDeleteModal(); // Close the modal
-                alert('Post deleted successfully.');
-            } else {
-                alert('Failed to delete the post.');
-            }
-        })
-        .catch(error => {
-            console.error('Error deleting post:', error);
-            alert('An error occurred while deleting the post.');
-        });
-    }
+    //     // Send AJAX request
+    //     fetch(url, {
+    //         method: 'POST',
+    //         headers: {
+    //             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+    //             'Content-Type': 'application/json',
+    //         },
+    //     })
+    //     .then(response => {
+    //         if (!response.ok) {
+    //             throw new Error('Failed to delete the post.');
+    //         }
+    //         return response.json();
+    //     })
+    //     .then(data => {
+    //         if (data.success) {
+    //             postElement.remove(); // Remove the post from the DOM
+    //             closeDeleteModal(); // Close the modal
+    //             alert('Post deleted successfully.');
+    //         } else {
+    //             alert('Failed to delete the post.');
+    //         }
+    //     })
+    //     .catch(error => {
+    //         console.error('Error deleting post:', error);
+    //         alert('An error occurred while deleting the post.');
+    //     });
+    // }
 
     // Hide options menu when clicking outside
-    document.addEventListener('click', () => {
-      document.querySelectorAll('.optionsMenu').forEach(menu => menu.style.display = 'none');
-    });
+    // document.addEventListener('click', () => {
+    //   document.querySelectorAll('.optionsMenu').forEach(menu => menu.style.display = 'none');
+    // });
 
     // Show and hide the Add Post modal
     document.getElementById('addPostButton').addEventListener('click', () => {
@@ -451,61 +453,61 @@ function addComment() {
         document.getElementById('addPostForm').reset();
     }
 
-    function submitPost(event) {
-        event.preventDefault(); // Prevent traditional form submission
+    // function submitPost(event) {
+    //     event.preventDefault(); // Prevent traditional form submission
 
-        // Clear previous error messages
-        document.getElementById('postContentError').textContent = '';
-        document.getElementById('postImageLinkError').textContent = '';
-        document.getElementById('postImageUploadError').textContent = '';
+    //     // Clear previous error messages
+    //     document.getElementById('postContentError').textContent = '';
+    //     document.getElementById('postImageLinkError').textContent = '';
+    //     document.getElementById('postImageUploadError').textContent = '';
 
-        // Get the form and form data
-        const form = document.getElementById('addPostForm');
-        const formData = new FormData(form);
+    //     // Get the form and form data
+    //     const form = document.getElementById('addPostForm');
+    //     const formData = new FormData(form);
 
-        // Get the selected image option
-        const imageOption = formData.get('imageOption'); // "file" or "link"
+    //     // Get the selected image option
+    //     const imageOption = formData.get('imageOption'); // "file" or "link"
 
-        // Send AJAX request
-        fetch('{{ route('post.store') }}', {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-            },
-            body: formData,
-        })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(err => {
-                        throw err; // Throw JSON error
-                    });
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Success handling
-                if (data.success) {
-                    location.reload(); // Reload the page to reflect changes
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                if (error.errors) {
-                    // Display validation errors dynamically
-                    if (error.errors.postContent) {
-                        document.getElementById('postContentError').textContent = error.errors.postContent[0];
-                    }
-                    if (error.errors.postImageUpload && imageOption === 'file') {
-                        document.getElementById('postImageUploadError').textContent = error.errors.postImageUpload[0];
-                    }
-                    if (error.errors.postImageLink && imageOption === 'link') {
-                        document.getElementById('postImageLinkError').textContent = error.errors.postImageLink[0];
-                    }
-                } else {
-                    alert('An unexpected error occurred. Please try again later.');
-                }
-            });
-    }
+    //     // Send AJAX request
+    //     fetch('{{ route('post.store') }}', {
+    //         method: 'POST',
+    //         headers: {
+    //             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+    //         },
+    //         body: formData,
+    //     })
+    //         .then(response => {
+    //             if (!response.ok) {
+    //                 return response.json().then(err => {
+    //                     throw err; // Throw JSON error
+    //                 });
+    //             }
+    //             return response.json();
+    //         })
+    //         .then(data => {
+    //             // Success handling
+    //             if (data.success) {
+    //                 location.reload(); // Reload the page to reflect changes
+    //             }
+    //         })
+    //         .catch(error => {
+    //             console.error('Error:', error);
+    //             if (error.errors) {
+    //                 // Display validation errors dynamically
+    //                 if (error.errors.postContent) {
+    //                     document.getElementById('postContentError').textContent = error.errors.postContent[0];
+    //                 }
+    //                 if (error.errors.postImageUpload && imageOption === 'file') {
+    //                     document.getElementById('postImageUploadError').textContent = error.errors.postImageUpload[0];
+    //                 }
+    //                 if (error.errors.postImageLink && imageOption === 'link') {
+    //                     document.getElementById('postImageLinkError').textContent = error.errors.postImageLink[0];
+    //                 }
+    //             } else {
+    //                 alert('An unexpected error occurred. Please try again later.');
+    //             }
+    //         });
+    // }
 
     // Like Toggle Script
     // POST LIKE TOGGLE (Modal Only)

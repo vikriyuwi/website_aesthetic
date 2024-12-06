@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\PostComment;
 use App\Models\PostLike;
 use App\Models\PostMedia;
+use App\Models\Artist;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -62,64 +63,54 @@ class ArtistPostController extends Controller
         ]);
     }
 
-    public function addPost(Request $request)
+    public function store(Request $request)
     {
-        try {
-            $validated = Validator::make($request->all(),[
-                'postContent'=>'required|string',
-                'imageOption' => 'required|string|in:file,link',
-                'postImageUpload' => 'nullable|required_if:imageOption,file|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'postImageLink' => 'nullable|required_if:imageOption,link|url'
-            ],[
-                'postContent.required' => '* Please fill the post content',
-                'postImageUpload.required_if' => '* Please upload an image file when "Upload from File" is selected.',
-                'postImageLink.required_if' => '* Please provide a valid URL when "Upload by Link" is selected.',
-            ]);
+        $user = Auth::guard('MasterUser')->user();
+        $artist = Artist::where('ARTIST_ID','=',$user->Artist->ARTIST_ID)->first();
 
-            if ($validated->fails()) {
-                // Return validation errors as JSON
-                return response()->json(['errors' => $validated->errors()], 422);
-            }
+        $validated = Validator::make($request->all(), [
+            'postContent' => 'required'
+        ], [
+            'postContent.required' => '* The post content is required.'
+        ]);
 
-            if ($request->imageOption === 'file') {
-                $imagePath = $request->file('postImageUpload')->store('uploads', ['disk' => 'public']);
-                $imagePath = '/storage/' . $imagePath;
-            } elseif ($request->imageOption === 'link') {
-                $imagePath = $request->postImageLink;
-            }
-
-             // Fetch artist ID
-             $artist = DB::table('ARTIST')
-             ->select('ARTIST_ID')
-             ->where('USER_ID', Auth::id())
-             ->first();
-
-            if (!$artist) {
-                return response()->json(['errors' => ['error' => 'Artist not found.']], 422);
-            }
-
-            $artistId = $artist->ARTIST_ID;
-
-            $post = Post::create([
-                'ARTIST_ID' =>  $artistId,
-                'CONTENT' => $request->postContent,
-            ]);
-
-            PostMedia::create([
-                'POST_ID' => $post->POST_ID,
-                'POST_MEDIA_PATH' =>$imagePath,
-            ]);
-
-
-            return response()->json(['success' => 'Portfolio added successfully!'], 200);
+        if ($validated->fails()) {
+            return redirect()->back()->withError($validated->error());
         }
-        catch(\Exception $e) {
-            return response()->json(['errors' => ['error' => 'An unexpected error occurred.']], 500);
+
+        $post = $artist->Posts()->create([
+            'CONTENT' => $request->postContent
+        ]);
+
+        $imagePath = null;
+
+        // If URL is provided
+        if ($request->filled('postImageLink')) {
+            $imagePath = $request->input('postImageLink');
         }
+
+        // If file is uploaded
+        if ($request->hasFile('postImageUpload')) {
+            $uploadedFile = $request->file('postImageUpload');
+
+            if ($uploadedFile = $request->file('postImageUpload') != null) {
+                $imagePath = $uploadedFile->store('images/post', 'public'); // Save file in the `storage/app/public/images/art` directory
+                $post->PostMedias()->create([
+                    'POST_MEDIA_PATH' => $imagePath
+                ]);
+            }
+        }
+        
+        return redirect()->back()->with('status','New post has been created!');
     }
  
     public function deletePost($postId)
     {
+        $user = Auth::guard('MasterUser')->user();
+        $artist = Artist::where('ARTIST_ID','=',$user->Artist->ARTIST_ID)->first();
+        $post->delete();
+
+        return redirect()->back()->with('status','Post has been deleted!');
         try {
             // Fetch the associated media for the post
             $postMedia = PostMedia::where('POST_ID', $postId)->get();
