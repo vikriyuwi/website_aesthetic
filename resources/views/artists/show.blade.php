@@ -751,6 +751,7 @@
         </div>
 
         <!-- Hire Freelancer Modal -->
+        @if(isset($hire))
         <div id="hireFreelancerModal"
             class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 hidden overflow-y-auto">
             <div
@@ -766,17 +767,17 @@
                 <!-- Project Title -->
                 <div class="mt-6">
                     <h4 class="text-xl font-bold text-gray-700">📌 Project Title</h4>
-                    <p class="text-lg text-gray-600 mt-2">{{ $hire->PROJECT_TITLE }}</p>
+                    <p class="text-lg text-gray-600 mt-2">{{ $hire->PROJECT_TITLE ?? "" }}</p>
                 </div>
 
                 <!-- Project Description -->
                 <div class="mt-6">
                     <h4 class="text-xl font-bold text-gray-700">📝 Project Description</h4>
                     <p class="text-gray-700 mt-2">
-                        <strong>Overview:</strong> {{ $hire->PROJECT_DESCR }}
+                        <strong>Overview:</strong> {{ $hire->PROJECT_DESCR ?? "" }}
                     </p>
                     <p class="text-gray-700 mt-2">
-                        <strong>Timeline:</strong> {{ (new \DateTime($hire->PROJECT_TIMELINE))->format('M d, Y') }}
+                        <strong>Timeline:</strong> {{ (new \DateTime($hire->PROJECT_TIMELINE ?? ""))->format('M d, Y') }}
                     </p>
                 </div>
 
@@ -784,7 +785,7 @@
                 <div class="mt-6">
                     <h4 class="text-xl font-bold text-gray-700">💰 Budget/Salary</h4>
                     <p class="text-gray-700 mt-2">
-                        <strong>Compensation:</strong> {{ $hire->PROJECT_BUDGET }}
+                        <strong>Compensation:</strong> {{ $hire->PROJECT_BUDGET ?? "" }}
                     </p>
                 </div>
 
@@ -792,13 +793,13 @@
                 <div class="mt-6">
                     <h4 class="text-xl font-bold text-gray-700">📋 Requirements</h4>
                     <p class="text-gray-700 mt-2">
-                        <strong>Skills Needed:</strong> {{ $hire->PROJECT_SKILLS }}
+                        <strong>Skills Needed:</strong> {{ $hire->PROJECT_SKILLS ?? "" }}
                     </p>
                     <p class="text-gray-700 mt-2">
-                        <strong>Experience Level:</strong> {{ $hire->PROJECT_EXPERIENCE_LEVEL }}
+                        <strong>Experience Level:</strong> {{ $hire->PROJECT_EXPERIENCE_LEVEL ?? "" }}
                     </p>
                     <p class="text-gray-700 mt-2">
-                        <strong>Other Requirements:</strong> {{ $hire->OTHER_REQUIREMENTS }}
+                        <strong>Other Requirements:</strong> {{ $hire->OTHER_REQUIREMENTS ?? "" }}
                     </p>
                 </div>
 
@@ -826,7 +827,9 @@
                 </div>
             </div>
         </div>
+        @endif
 
+        @if($hire != null)
         <!-- Delete Confirmation Modal -->
         <div id="deleteConfirmationModal"
             class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
@@ -838,13 +841,11 @@
                         class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400">
                         Cancel
                     </button>
-                    <button onclick="confirmDelete()"
-                        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
-                        Delete
-                    </button>
+                    <a href="{{ route('hire.destroy',['hireId'=>$hire->ARTIST_HIRE_ID]) }}" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">delete</a>
                 </div>
             </div>
         </div>
+        @endif
 
         <!-- Hire Freelancer Form Modal -->
         <div id="hireFreelancerFormModal" class="modal">

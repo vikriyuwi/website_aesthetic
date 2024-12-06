@@ -42,4 +42,20 @@ class ArtistHireController extends Controller
 
         return redirect()->back()->with('status', 'Hire has been added successfully!');
     }
+
+    public function destroy($id)
+    {
+        $user = Auth::guard('MasterUser')->user();
+        $artist = Artist::where('ARTIST_ID','=',$user->Artist->ARTIST_ID)->first();
+
+        $hire = ArtistHire::find($id);
+
+        if($hire->ARTIST_ID != $artist->ARTIST_ID) {
+            abort(404, 'You are not owner of this hiring');
+        }
+
+        $hire->delete();
+
+        return redirect()->back()->with('status', 'Hire has been deleted successfully!');
+    }
 }
