@@ -43,7 +43,7 @@
     <div class="flex justify-between items-center mt-8">
       <h2 class="text-2xl font-bold">Posts</h2>
       @if(Auth::check())
-        @if (Auth::user()->USER_ID == $artist->ARTIST_ID )
+        @if (Auth::user()->USER_ID == $artist->USER_ID )
           <button id="addPostButton" class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-5 py-2 rounded-full shadow-md hover:from-blue-600 hover:to-indigo-700 transition duration-300 transform hover:scale-105">
             + Add Post 
           </button>
