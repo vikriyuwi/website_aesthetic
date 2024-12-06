@@ -11,6 +11,7 @@ use App\Http\Controllers\ArtCollectionController;
 use App\Http\Controllers\ArtistPortfolioController;
 use App\Http\Controllers\ArtistPostController;
 use App\Http\Controllers\ArtistProfileController;
+use App\Http\Controllers\ArtistHireController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\PostController;
 use App\Http\Middleware\Authorization;
@@ -67,6 +68,10 @@ Route::middleware([Authorization::class.':true'])->group(function() {
     Route::prefix('post')->name('post.')->group(function () {
         Route::post('/add',[ArtistPostController::class,'store'])->name('store');
         Route::get('/{postId}/delete',[ArtistPostController::class,'deletePost'])->name('destroy');
+    });
+
+    Route::prefix('hire')->name('hire.')->group(function() {
+        Route::post('/add', [ArtistHireController::class, 'store'])->name('store');
     });
 });
 

@@ -1,0 +1,45 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Artist;
+use App\Models\ArtistHire;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+
+class ArtistHireController extends Controller
+{
+    public function store(Request $request)
+    {
+        $user = Auth::guard('MasterUser')->user();
+        $artist = Artist::where('ARTIST_ID','=',$user->Artist->ARTIST_ID)->first();
+
+        $validated = Validator::make($request->all(), [
+            'projectTitle' => 'required',
+            'projectDescription' => 'required',
+            'timeline' => 'required',
+            'budget' => 'required',
+            'skills' => 'required',
+            'experienceLevel' => 'required',
+            'otherRequirements' => 'required'
+        ]);
+
+        if ($validated->fails()) {
+            return redirect()->back()->withError($validated->error());
+        }
+
+        ArtistHire::create([
+            'ARTIST_ID' => $artist->ARTIST_ID,
+            'PROJECT_TITLE' => $request->projectTitle,
+            'PROJECT_DESCR' => $request->projectDescription,
+            'PROJECT_TIMELINE' => $request->timeline,
+            'PROJECT_BUDGET' => $request->budget,
+            'PROJECT_SKILLS' => $request->skills,
+            'PROJECT_EXPERIENCE_LEVEL' => $request->experienceLevel,
+            'OTHER_REQUIREMENTS' => $request->otherRequirements
+        ]);
+
+        return redirect()->back()->with('status', 'Hire has been added successfully!');
+    }
+}

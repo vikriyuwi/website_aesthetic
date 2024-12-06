@@ -8,6 +8,7 @@ use App\Models\Art;
 use App\Models\MasterUser;
 use App\Models\ArtCollection;
 use App\Models\ArtistCollection;
+use App\Models\ArtistHire;
 use App\Models\ArtCategoryMaster;
 use App\Models\Post;
 use Illuminate\Http\Request;
@@ -27,13 +28,14 @@ class ArtistProfileController extends Controller
         $artWorks = Art::where('USER_ID',$artist->USER_ID)->where('IS_SALE',true)->get();
         $artCategoriesMaster = ArtCategoryMaster::all();
         $posts = Post::where('ARTIST_ID','=',$ARTIST_ID)->get();
+        $hire = ArtistHire::where('ARTIST_ID','=',$ARTIST_ID)->first();
 
         if ($artist == null) {
             abort(404, 'Artist not found.');
         }
         else{
             $artistItSelf = $user == $artist->MasterUser;
-            return view('artists.show', compact('artist','section','artistItSelf','portfolios','artWorks','artCategoriesMaster','posts')); //ABOUT RENDER
+            return view('artists.show', compact('artist','section','artistItSelf','portfolios','artWorks','artCategoriesMaster','posts', 'hire')); //ABOUT RENDER
         }
     }
     

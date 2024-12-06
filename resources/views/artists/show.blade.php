@@ -66,7 +66,6 @@
     }
     /* Options Menu styling */
     .optionsMenu {
-            display: none;
             position: absolute;
             top: 40px;
             right: 10px;
@@ -170,7 +169,9 @@
                         
                         @if(Auth::check())
                         <button
-                            class="ellipsisButton absolute top-2 right-2 text-gray-600 hover:text-gray-800 focus:outline-none">
+                            class="ellipsisButton absolute top-2 right-2 text-gray-600 hover:text-gray-800 focus:outline-none"
+                            onclick="openOptionMenu()"
+                            >
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="currentColor" class="w-6 h-6">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -179,7 +180,7 @@
                         </button>
                             
                         <!-- Options Menu -->
-                        <div class="optionsMenu bg-white rounded-lg shadow-lg py-2 w-48">
+                        <div id="optionMenu" class="optionsMenu bg-white rounded-lg shadow-lg py-2 w-48 hidden">
                             @if ($artistItSelf)
                             <!-- Edit Profile Button -->
                             <button onclick="openEditProfileModal({{ $artist->ARTIST_ID }})"
@@ -187,23 +188,23 @@
                                 <i class="fas fa-user-edit mr-3 text-indigo-500"></i>
                                 Edit Profile
                             </button>
-                            @endif
-                            
-                            <!-- Review Artist Button -->
-                            @if (Auth::user()->USER_ID != $artist->USER_ID )
-                            <button onclick="openReviewModal()"
-                                class="block w-full text-left px-4 py-3 hover:bg-green-100 hover:text-green-600 transition-colors duration-200 font-medium text-gray-700 flex items-center">
-                                <i class="fas fa-star mr-3 text-green-500"></i>
-                                Review Artist
-                            </button>
-                            @endif
 
                             <!-- Hire Freelance Button -->
-                            @if (Auth::user()->USER_ID == $artist->USER_ID )
+                            @if(!isset($hire))
                             <button onclick="openFormModal()"
                                 class="block w-full text-left px-4 py-3 hover:bg-green-100 hover:text-green-600 transition-colors duration-200 font-medium text-gray-700 flex items-center">
                                 <i class="fas fa-file mr-3 text-blue-500"></i>
                                 Hire Freelance
+                            </button>
+                            @endif
+                            @endif
+                            
+                            @if (!$artistItSelf)
+                            <!-- Review Artist Button -->
+                            <button onclick="openReviewModal()"
+                                class="block w-full text-left px-4 py-3 hover:bg-green-100 hover:text-green-600 transition-colors duration-200 font-medium text-gray-700 flex items-center">
+                                <i class="fas fa-star mr-3 text-green-500"></i>
+                                Review Artist
                             </button>
                             @endif
 
@@ -226,12 +227,7 @@
                             <p class="text-gray-600">{{ $artist->BIO }}</p>
                             <p class="text-gray-600"><i class="fas fa-map-marker-alt"></i> {{ $artist->LOCATION }}</p>
 
-                            @if($artistItSelf)
-                            <button id="followButton" class="bg-green-500 text-white px-4 py-2 rounded-full w-full mt-4" onclick="openEditProfileModal({{ $artist->ARTIST_ID }})">
-                                <i id="followIcon" class="fas fa-pen mr-2"></i>
-                                <span id="followText">Edit</span>
-                            </button>
-                            @else
+                            @if(!$artistItSelf)
                             <button onclick="toggleFollow()" id="followButton" class="bg-green-500 text-white px-4 py-2 rounded-full w-full mt-4">
                                 <i id="followIcon" class="fas fa-user-plus mr-2"></i>
                                 <span id="followText">Follow</span>
@@ -242,10 +238,10 @@
                             @endif
                         </div>
 
-                        @if(!$artistItSelf)
+                        @if($artist->ArtistHire != null)
                         <div class="mt-4 flex justify-center items-center">
                             <button onclick="openHireModal()" class="bg-white border border-indigo-500 rounded-lg p-2 px-4 shadow-md">
-                                <h1 class="text-sm font-semibold text-center">Hire {{ $artist->USERNAME }}</h1>
+                                <h1 class="text-sm font-semibold text-center">Hire {{ $artist->MasterUser->Buyer->FULLNAME }}</h1>
                                 <div class="flex items-center mt-1">
                                     <i class="fas fa-clipboard-list text-indigo-500 mr-2"></i>
                                     <div>
@@ -770,20 +766,17 @@
                 <!-- Project Title -->
                 <div class="mt-6">
                     <h4 class="text-xl font-bold text-gray-700">📌 Project Title</h4>
-                    <p class="text-lg text-gray-600 mt-2">Custom Portrait Illustration for Family Gift</p>
+                    <p class="text-lg text-gray-600 mt-2">{{ $hire->PROJECT_TITLE }}</p>
                 </div>
 
                 <!-- Project Description -->
                 <div class="mt-6">
                     <h4 class="text-xl font-bold text-gray-700">📝 Project Description</h4>
                     <p class="text-gray-700 mt-2">
-                        <strong>Overview:</strong> We are looking to hire an artist to create a custom digital
-                        portrait of a family of four. The portrait should have a warm, inviting style, capturing the
-                        family members' likeness and unique personalities. We aim to use this illustration as a
-                        holiday gift, so it should have a festive touch.
+                        <strong>Overview:</strong> {{ $hire->PROJECT_DESCR }}
                     </p>
                     <p class="text-gray-700 mt-2">
-                        <strong>Timeline:</strong> Completion needed within 3 weeks.
+                        <strong>Timeline:</strong> {{ (new \DateTime($hire->PROJECT_TIMELINE))->format('M d, Y') }}
                     </p>
                 </div>
 
@@ -791,10 +784,7 @@
                 <div class="mt-6">
                     <h4 class="text-xl font-bold text-gray-700">💰 Budget/Salary</h4>
                     <p class="text-gray-700 mt-2">
-                        <strong>Compensation:</strong> Rp.300.000 - Rp.500.000
-                    </p>
-                    <p class="text-gray-700 mt-2">
-                        <strong>Payment Terms:</strong> 50% upfront, 50% upon final approval of the artwork
+                        <strong>Compensation:</strong> {{ $hire->PROJECT_BUDGET }}
                     </p>
                 </div>
 
@@ -802,21 +792,20 @@
                 <div class="mt-6">
                     <h4 class="text-xl font-bold text-gray-700">📋 Requirements</h4>
                     <p class="text-gray-700 mt-2">
-                        <strong>Skills Needed:</strong> Proficiency in digital illustration, portrait artistry, and
-                        experience in custom family portraits.
+                        <strong>Skills Needed:</strong> {{ $hire->PROJECT_SKILLS }}
                     </p>
                     <p class="text-gray-700 mt-2">
-                        <strong>Experience Level:</strong> Intermediate
+                        <strong>Experience Level:</strong> {{ $hire->PROJECT_EXPERIENCE_LEVEL }}
                     </p>
                     <p class="text-gray-700 mt-2">
-                        <strong>Other Requirements:</strong> Ability to add a festive theme to the illustration
-                        (e.g., holiday background, seasonal colors).
+                        <strong>Other Requirements:</strong> {{ $hire->OTHER_REQUIREMENTS }}
                     </p>
                 </div>
 
                 <!-- Action Buttons -->
                 <div class="flex justify-between items-center mb-6 mt-12">
                     <div class="flex space-x-4">
+                        @if($artistItSelf)
                         <!-- Edit Button -->
                         <button onclick="editCommission()"
                             class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition">
@@ -827,6 +816,7 @@
                             class="bg-red-600 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-red-700 transition">
                             Delete
                         </button>
+                        @endif
                     </div>
                     <!-- Contact Button -->
                     <button onclick="openChatWindow()"
@@ -867,11 +857,12 @@
                     </button>
                 </div>
 
-                <form class="space-y-6">
+                <form class="space-y-6" action="{{ route('hire.store') }}" method="post">
+                    @csrf
                     <!-- Project Title -->
                     <div>
                         <label for="projectTitle" class="block text-gray-700 font-medium">📌 Project Title</label>
-                        <input type="text" id="projectTitle"
+                        <input type="text" id="projectTitle" name="projectTitle"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
                             placeholder="Enter the project title" required>
                     </div>
@@ -880,7 +871,7 @@
                     <div>
                         <label for="projectDescription" class="block text-gray-700 font-medium">📝 Project
                             Description</label>
-                        <textarea id="projectDescription"
+                        <textarea id="projectDescription" name="projectDescription"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600" rows="4"
                             placeholder="Provide a brief description of the project" required></textarea>
                         <p class="text-gray-500 text-sm mt-2">Include goals, any unique requirements, and the
@@ -890,7 +881,7 @@
                     <!-- Timeline -->
                     <div class="mt-6">
                         <label for="timeline" class="block text-gray-700 font-medium">⏳ Timeline</label>
-                        <input type="text" id="timeline"
+                        <input type="date" id="timeline" name="timeline"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary mt-2"
                             placeholder="Specify estimated duration or deadline" required>
                     </div>
@@ -898,7 +889,7 @@
                     <!-- Budget/Salary -->
                     <div>
                         <label for="budget" class="block text-gray-700 font-medium">💰 Budget/Salary</label>
-                        <input type="text" id="budget"
+                        <input type="text" id="budget" name="budget"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
                             placeholder="Enter the budget range (e.g., $500 - $1000)" required>
                         <p class="text-gray-500 text-sm mt-2">Specify payment terms: milestone-based, per hour, or
@@ -908,14 +899,14 @@
                     <!-- Requirements -->
                     <div>
                         <label for="skills" class="block text-gray-700 font-medium">📋 Skills Needed</label>
-                        <input type="text" id="skills"
+                        <input type="text" id="skills" name="skills"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
                             placeholder="List essential skills (e.g., graphic design, HTML, JavaScript)" required>
                     </div>
                     <div>
                         <label for="experienceLevel" class="block text-gray-700 font-medium">📈 Experience
                             Level</label>
-                        <select id="experienceLevel"
+                        <select id="experienceLevel" name="experienceLevel"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
                             required>
                             <option value="" disabled selected>Select experience level</option>
@@ -927,7 +918,7 @@
                     <div>
                         <label for="otherRequirements" class="block text-gray-700 font-medium">🔍 Other
                             Requirements</label>
-                        <textarea id="otherRequirements"
+                        <textarea id="otherRequirements" name="otherRequirements"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600" rows="2"
                             placeholder="Additional requirements, like language proficiency or certifications"></textarea>
                     </div>
@@ -1165,6 +1156,10 @@
 
     function editCommission() {
         alert("Mike benerin ya!");
+    }
+
+    function openOptionMenu() {
+        document.getElementById('optionMenu').classList.toggle('hidden');
     }
 
     async function saveProfileChanges(artistId) {
