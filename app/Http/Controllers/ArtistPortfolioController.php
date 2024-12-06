@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 
 class ArtistPortfolioController extends Controller
@@ -63,5 +65,35 @@ class ArtistPortfolioController extends Controller
         ]);
         
         return redirect()->back()->with('status','New portfolio has been added!');
+    }
+
+    public function deletePortfolio($portfolioId){
+        $user = Auth::guard('MasterUser')->user();
+
+        $artist = Artist::where('ARTIST_ID','=',$user->Artist->ARTIST_ID)->first();
+        if($artist == null) {
+            abort(404, 'You are not artist');
+        }
+
+        $portfolio = Art::find($portfolioId);
+
+        if($portfolio->USER_ID != $user->USER_ID) {
+            abort(404, 'You are not owner of this hiring');
+        }
+
+        if($portfolio->ArtImages->count() > 0) {
+            foreach($portfolio->ArtImages as $image) {
+                if ($image->IMAGE_PATH != null) {
+                    if(Str::startsWith($image->IMAGE_PATH, 'images/art/')) {
+                        $filePath = $image->IMAGE_PATH;
+                        Storage::disk('public')->delete($filePath);
+                    }
+                }
+            }
+        }
+
+        $portfolio->delete();
+
+        return redirect()->route('artist.show', ['id' => $artist->ARTIST_ID, 'section' => 'portfolio'])->with('status', 'Portfolio has been deleted successfully!');
     }
 }

@@ -53,6 +53,7 @@ Route::middleware([Authorization::class.':true'])->group(function() {
 
     Route::prefix('portfolio')->name('portfolio.')->group(function () {
         Route::post('/add', [ArtistPortfolioController::class, 'store'])->name('store');
+        Route::get('/{portfolioId}/delete/',[ArtistPortfolioController::class,'deletePortfolio'])->name('destroy');
     });
 
     Route::prefix('artwork')->name('artwork.')->group(function () {

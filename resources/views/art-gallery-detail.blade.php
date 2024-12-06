@@ -50,6 +50,18 @@
     </div>
   </div>
 </div>
+                    @if(Auth::check())
+                        @if (Auth::user()->USER_ID == $portfolio->USER_ID )
+                            <button id="editPortfolioButton" class="bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition btn">
+                                <i class="fas fa-pen"></i>
+                                <span>EDIT</span>
+                            </button>
+                            <a href={{ route('portfolio.destroy', ['portfolioId' => $portfolio->ART_ID]) }} class="border border-red-500 text-red-500 py-2 px-4 rounded-lg hover:bg-red-50 transition btn">
+                                <i class="fas fa-trash"></i>
+                                <span>DELETE</span>
+                            </a>
+                        @endif
+                    @endif
           <!-- Stats -->
           <div class="flex items-center space-x-6 mt-4">
             <div class="flex items-center space-x-2">
