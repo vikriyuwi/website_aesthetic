@@ -230,5 +230,9 @@ public function collectionDetails()
 public function buyerProfile(){
     return view('buyer.profile');
 }
+public function postDetails()
+{
+    return view('artists.sections.post-detail');
+}
 
 }
