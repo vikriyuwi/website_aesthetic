@@ -201,3 +201,5 @@ Route::get('/blog-detail', [WebController::class, 'blogDetail'])->name('blog-det
 Route::get('/contact-us', [WebController::class, 'contactUs'])->name('contact-us');
 
 Route::get('/colection/detail', [WebController::class, 'collectionDetails'])->name('collection-details');
+
+Route::get('/post/detail', [WebController::class, 'postDetails'])->name('post-details');
