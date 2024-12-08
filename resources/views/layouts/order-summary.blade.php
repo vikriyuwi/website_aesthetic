@@ -6,6 +6,7 @@
   <title>Order Summary</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <style>
     body {
         font-family: 'Inter', sans-serif;
@@ -39,7 +40,7 @@
                                   <svg class="mr-2 h-6 w-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                   </svg>
-                                  <span class="font-semibold text-gray-900">Order Summary</span>
+                                  <span class="font-semibold text-gray-900">Order Summary </span>
                                 </span>
                         </li>
                   </ol>
@@ -78,13 +79,25 @@
         </div>
 
         <!-- Delivery Address -->
-        <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
-          <h2 class="text-2xl font-semibold mb-4 text-gray-800">🚚 Alamat Pengiriman</h2>
-          <div>
-            <p class="font-bold text-lg text-gray-900">rival <span class="font-semibold">+62 83142822199</span></p>
-            <p class="text-gray-700 mt-1">Jalan Gunung Anyar Jaya III B No.8, Gunung Anyar, KOTA SURABAYA - GUNUNGANYAR, JAWA TIMUR, ID 60294</p>
+        <div class="bg-gray-50 p-6 rounded-lg shadow-sm space-y-4">
+          <!-- Title -->
+          <div class="flex items-center space-x-2">
+              <i class="fas fa-map-marker-alt text-indigo-500 text-xl"></i>
+              <h2 class="font-bold text-lg text-gray-800">Shipping Address</h2>
           </div>
-        </div>
+          <hr class="border-gray-300">
+
+          <!-- Address Details -->
+          <div class="space-y-2">
+              <p class="font-bold text-gray-800 text-lg">Chantikka Riffka</p>
+              <p class="text-gray-600">085246934487</p>
+              <p class="text-gray-700 leading-relaxed">
+                  Jl. Kemanaapun asal denganmu, gg gaming, no. 34A<br>
+                  Bintaro, Tangerang Selatan, 89678
+              </p>
+          </div>
+      </div>
+
 
         <!-- Payment Method -->
         <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
@@ -113,7 +126,10 @@
 
         <!-- Button to Go Back or View Receipt -->
         <div class="space-y-4 mt-6">
-          <button class="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition">View Receipt</button>
+        <a href="/order-history" 
+            class="w-full block text-center bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition">
+            View Your Order
+        </a>
           <button class="w-full bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-300 transition">Return to Shopping</button>
         </div>
       </div>

@@ -234,5 +234,13 @@ public function postDetails()
 {
     return view('artists.sections.post-detail');
 }
+public function chooseAddress()
+{
+    return view('layouts.choose-address');
+}
+public function newAddress()
+{
+    return view('layouts.new-address');
+}
 
 }

@@ -6,6 +6,7 @@
   <title>Checkout</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <style>
     body {
         font-family: 'Inter', sans-serif;
@@ -51,102 +52,25 @@
       <div class="lg:col-span-2 space-y-8">
         
         <!-- Delivery Address Section -->
-        <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
-              <h2 class="text-2xl font-semibold mb-4 text-gray-800">🚚 Alamat Pengiriman</h2>
-              
-              <!-- Address Info and Button -->
-              <div class="flex justify-between items-center">
-                <p class="text-gray-600">Alamat Pengiriman:</p>
-                <button class="text-indigo-600 hover:text-indigo-800 transition font-semibold" onclick="openSavedAddressModal()">Ubah</button>
-              </div>
-
-        <!-- Formatted Address Section -->
-        <div class="mt-2">
-                <p class="font-bold text-lg text-gray-900">
-                  rival <span class="font-semibold">+62 83142822199</span>
-                </p>
-                <p class="text-gray-700 mt-1">
-                  Jalan Gunung Anyar Jaya III B No.8, Gunung Anyar, KOTA SURABAYA - GUNUNGANYAR, JAWA TIMUR, ID 60294
-                </p>
-              </div>
-            </div>
-
-        <!-- Saved Address Modal -->
-        <div id="saved-address-modal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-          <div class="bg-white p-6 rounded-lg shadow-lg w-96 transform scale-95 transition-transform">
-            <h3 class="text-xl font-bold mb-4 text-gray-800">📋 Alamat Saya</h3>
-            <ul id="saved-address-list" class="mb-4 space-y-2">
-              <li data-index="0">
-                <label class="block text-gray-700">
-                  <input type="radio" name="saved_address" value="Jl. Sudirman, Jakarta" class="mr-2" checked>
-                  Jl. Sudirman, Jakarta
-                </label>
-                <button class="text-indigo-600 hover:text-indigo-800 transition font-semibold mt-2" onclick="editAddress(0)">Edit</button>
-              </li>
-              <li data-index="1">
-                <label class="block text-gray-700">
-                  <input type="radio" name="saved_address" value="Jl. Thamrin, Jakarta" class="mr-2">
-                  Jl. Thamrin, Jakarta
-                </label>
-                <button class="text-indigo-600 hover:text-indigo-800 transition font-semibold mt-2" onclick="editAddress(1)">Edit</button>
-              </li>
-            </ul>
-            <button class="text-indigo-600 hover:text-indigo-800 font-semibold transition" onclick="openNewAddressModal()">➕ Tambah Alamat Baru</button>
-            <div class="flex justify-end mt-6 space-x-4">
-              <button class="bg-gray-200 hover:bg-gray-300 text-gray-600 font-semibold px-4 py-2 rounded" onclick="closeModal()">Batal</button>
-              <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2 rounded" onclick="confirmAddress()">Konfirmasi</button>
-            </div>
-          </div>
+        <div class="flex items-center mb-4">
+            <i class="fas fa-map-marker-alt text-indigo-500 mr-2"></i>
+            <h2 class="font-bold text-lg">Shipping Address</h2>
+        </div>
+        <hr class="border-gray-300 mb-4">
+        <div class="mb-4">
+            <p class="font-bold text-gray-800">Chantikka Riffka</p>
+            <p class="text-gray-600">085246934487</p>
+            <p class="text-gray-700">Jl. Kemanaapun asal denganmu, gg gaming, no. 34A</p>
+            <p class="text-gray-700">Bintaro, Tangerang Selatan, 89678</p>
         </div>
 
-        <!-- New Address Modal -->
-        <div id="new-address-modal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-          <div class="bg-white p-6 rounded-lg shadow-lg w-[600px] transform scale-95 transition-transform">
-            <h3 id="address-modal-title" class="text-xl font-bold mb-4 text-gray-800">📍 Alamat Baru</h3>
-            <!-- Nama Lengkap -->
-            <div class="mb-4">
-              <label for="full-name" class="block text-gray-700 mb-2">Nama Lengkap</label>
-              <input id="full-name" class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-indigo-200 transition" placeholder="Nama Lengkap" />
-            </div>
-            <!-- Nomor Telepon -->
-            <div class="mb-4">
-              <label for="phone-number" class="block text-gray-700 mb-2">Nomor Telepon</label>
-              <input id="phone-number" class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-indigo-200 transition" placeholder="08xxxxxx" />
-            </div>
-            <!-- Provinsi, Kota, Kecamatan, Kode Pos -->
-            <div class="mb-4">
-              <label class="block text-gray-700 mb-2">Provinsi, Kota, Kecamatan, Kode Pos</label>
-              <select id="province" class="w-full p-3 border border-gray-300 rounded mb-2 focus:outline-none focus:ring focus:ring-indigo-200 transition" onchange="updateCities()">
-                <option>Provinsi</option>
-                <option>BALI</option>
-                <option>BANTEN</option>
-                <option>DI YOGYAKARTA</option>
-              </select>
-              <select id="city" class="w-full p-3 border border-gray-300 rounded mb-2 focus:outline-none focus:ring focus:ring-indigo-200 transition" onchange="updateKecamatan()">
-                <option>Kota</option>
-              </select>
-              <select id="kecamatan" class="w-full p-3 border border-gray-300 rounded mb-2 focus:outline-none focus:ring focus:ring-indigo-200 transition">
-                <option>Kecamatan</option>
-        </select>
-        <input id="kode-pos" class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-indigo-200 transition" placeholder="Kode Pos" />
-      </div>
-      <!-- Nama Jalan, Gedung, No Rumah -->
-      <div class="mb-4">
-        <label for="address-details" class="block text-gray-700 mb-2">Nama Jalan, Gedung, No Rumah</label>
-        <textarea id="address-details" class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-indigo-200 transition" placeholder="Nama Jalan, Gedung, No Rumah"></textarea>
-      </div>
-      <!-- Save Address -->
-      <div class="mb-4">
-        <input type="checkbox" id="save_address" class="mr-2">
-        <label for="save_address" class="text-gray-700">Simpan Alamat</label>
-      </div>
-      <!-- Form Controls -->
-      <div class="flex justify-end space-x-4">
-        <button class="bg-gray-200 hover:bg-gray-300 text-gray-600 font-semibold px-4 py-2 rounded" onclick="closeModal()">Batal</button>
-        <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2 rounded" onclick="saveNewAddress()">Simpan</button>
-      </div>
-    </div>
-  </div>
+        <hr class="border-gray-300 mb-4">
+
+        <!-- Choose Address Button -->
+        <a href="/choose-address" 
+          class="w-full block text-center bg-white border border-gray-400 rounded-full px-4 py-2 text-gray-700 hover:bg-gray-200 transition">
+            Choose Address
+        </a>
 
   <!-- Store Pickup Option -->
   <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
@@ -168,11 +92,10 @@
 
   <!-- Payment Method Section -->
   <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
-        <h2 class="text-2xl font-semibold mb-4 text-gray-800">Metode Pembayaran</h2>
+        <h2 class="text-2xl font-semibold mb-4 text-gray-800">Payment Method</h2>
         <div class="flex space-x-4">
           <button class="px-4 py-2 bg-gray-200 border-2 border-transparent rounded-md" id="cod" onclick="selectPayment('COD')">COD</button>
           <button class="px-4 py-2 bg-gray-200 border-2 border-transparent rounded-md" id="transfer-bank" onclick="selectPayment('Transfer Bank')">Transfer Bank</button>
-          <button class="px-4 py-2 bg-gray-200 border-2 border-transparent rounded-md" id="qris" onclick="selectPayment('QRIS')">QRIS</button>
         </div>
       </div>
 
@@ -208,33 +131,33 @@
 <!-- Order Summary Section -->
 <div class="space-y-6">
   <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
-    <h2 class="text-2xl font-semibold mb-4 text-gray-800">📦 Ringkasan Pesanan</h2>
+    <h2 class="text-2xl font-semibold mb-4 text-gray-800">📦 Ordered Product</h2>
     <div class="space-y-4">
       <!-- Item 1 -->
       <div class="flex items-center">
-        <img alt="PC system All in One APPLE iMac (2023)" class="w-16 h-16 rounded-lg shadow" src="https://placehold.co/60x60"/>
+        <img alt="Paint in the night" class="w-16 h-16 rounded-lg shadow" src="https://placehold.co/60x60"/>
         <div class="ml-4">
-          <p class="text-gray-700 font-medium">PC system All in One APPLE iMac (2023)</p>
-          <p class="text-gray-500 text-sm">x1</p>
+          <p class="text-gray-700 font-medium">Paint in the night</p>
+          <p class="text-gray-500 text-sm">MonaLisa</p>
         </div>
-        <p class="ml-auto text-gray-700 font-semibold">$1,499</p>
+        <p class="ml-auto text-gray-700 font-semibold">Rp. 1.500.000</p>
       </div>
 
       <!-- Item 2 -->
       <div class="flex items-center">
-        <img alt="Apple Watch Series 8" class="w-16 h-16 rounded-lg shadow" src="https://placehold.co/60x60"/>
+        <img alt="Oily Castle Sky" class="w-16 h-16 rounded-lg shadow" src="https://placehold.co/60x60"/>
         <div class="ml-4">
-          <p class="text-gray-700 font-medium">Apple Watch Series 8</p>
-          <p class="text-gray-500 text-sm">x2</p>
+          <p class="text-gray-700 font-medium">Oily Castle Sky</p>
+          <p class="text-gray-500 text-sm">medium_ilsa</p>
         </div>
-        <p class="ml-auto text-gray-700 font-semibold">$598</p>
+        <p class="ml-auto text-gray-700 font-semibold">Rp. 1.759.000</p>
       </div>
     </div>
   </div>
 
   <!-- Total Summary -->
   <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
-    <h2 class="text-xl font-semibold mb-4 text-gray-800">💳 Total Pesanan</h2>
+    <h2 class="text-xl font-semibold mb-4 text-gray-800">💳 Total Payment</h2>
     <div class="flex justify-between text-lg font-medium mb-2">
       <p>Subtotal</p>
       <p>$2,896</p>
@@ -247,87 +170,39 @@
       <p>Total</p>
       <p>$2,916</p>
     </div>
-    <button onclick="window.location.href='{{ route('order.summary') }}'"class="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold mt-4 hover:bg-indigo-700 transition">Lanjutkan ke Pembayaran</button>
+        <!-- Payment Button -->
+        <button onclick="showSuccessModal()" 
+            class="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold mt-4 hover:bg-indigo-700 transition">
+            Lanjutkan ke Pembayaran
+        </button>
   </div>
 </div>
 
 </div>
 </div>
 
+<!-- Success Modal -->
+<div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg text-center success-modal">
+            <i class="fas fa-check-circle text-indigo-600 text-5xl mb-4"></i>
+            <h2 class="text-2xl font-bold text-gray-800">Your Payment Was Successful!</h2>
+            <p class="text-gray-600 mt-2">Thank you for your purchase.</p>
+        </div>
+  </div>
+
 <!-- Scripts -->
 <script>
-const provinceData = {
-  'BALI': ['Denpasar', 'Badung', 'Tabanan'],
-  'BANTEN': ['Tangerang', 'Serang', 'Cilegon'],
-  'DI YOGYAKARTA': ['Yogyakarta', 'Sleman', 'Bantul'],
-  'DKI JAKARTA': ['Jakarta Selatan', 'Jakarta Timur', 'Jakarta Barat'],
-  'JAWA BARAT': ['Bandung', 'Bogor', 'Bekasi'],
-  'JAWA TENGAH': ['Semarang', 'Surakarta', 'Magelang'],
-  'JAWA TIMUR': ['Surabaya', 'Malang', 'Kediri'],
-  'SUMATERA UTARA': ['Medan', 'Binjai', 'Pematangsiantar'],
-  'SULAWESI SELATAN': ['Makassar', 'Parepare', 'Gowa']
-};
+function showSuccessModal() {
+    // Show success modal
+    const successModal = document.getElementById('successModal');
+    successModal.classList.remove('hidden');
 
-const cityData = {
-  'Denpasar': ['Denpasar Selatan', 'Denpasar Barat'],
-  'Badung': ['Kuta', 'Abiansemal'],
-  'Tabanan': ['Tabanan', 'Kediri'],
-  'Tangerang': ['Cipondoh', 'Karawaci'],
-  'Serang': ['Serang Barat', 'Serang Timur'],
-  'Cilegon': ['Pulomerak', 'Cibeber'],
-  'Yogyakarta': ['Danurejan', 'Gedong Tengen'],
-  'Sleman': ['Depok', 'Godean'],
-  'Bantul': ['Sewon', 'Kasihan'],
-  'Jakarta Selatan': ['Kebayoran Baru', 'Pasar Minggu'],
-  'Jakarta Timur': ['Matraman', 'Duren Sawit'],
-  'Jakarta Barat': ['Grogol Petamburan', 'Palmerah'],
-  'Bandung': ['Cicendo', 'Coblong'],
-  'Bogor': ['Bogor Timur', 'Bogor Barat'],
-  'Bekasi': ['Bekasi Timur', 'Bekasi Barat'],
-  'Semarang': ['Semarang Tengah', 'Semarang Utara'],
-  'Surakarta': ['Banjarsari', 'Jebres'],
-  'Magelang': ['Magelang Utara', 'Magelang Selatan'],
-  'Surabaya': ['Sukolilo', 'Tegalsari'],
-  'Malang': ['Klojen', 'Sukun'],
-  'Kediri': ['Mojoroto', 'Kota Kediri'],
-  'Medan': ['Medan Selayang', 'Medan Tembung'],
-  'Binjai': ['Binjai Timur', 'Binjai Barat'],
-  'Pematangsiantar': ['Siantar Barat', 'Siantar Timur'],
-  'Makassar': ['Panakkukang', 'Tamalanrea'],
-  'Parepare': ['Ujung', 'Soreang'],
-  'Gowa': ['Somba Opu', 'Tombolo Pao']
-};
-
-function updateCities() {
-const province = document.getElementById('province').value;
-const citySelect = document.getElementById('city');
-const kecamatanSelect = document.getElementById('kecamatan');
-
-citySelect.innerHTML = '<option>Kota</option>';
-kecamatanSelect.innerHTML = '<option>Kecamatan</option>';
-
-if (province in provinceData) {
-  provinceData[province].forEach(city => {
-    const option = document.createElement('option');
-    option.text = city;
-    citySelect.add(option);
-  });
-}
-}
-
-function updateKecamatan() {
-const city = document.getElementById('city').value;
-const kecamatanSelect = document.getElementById('kecamatan');
-
-kecamatanSelect.innerHTML = '<option>Kecamatan</option>';
-
-if (city in cityData) {
-  cityData[city].forEach(kecamatan => {
-    const option = document.createElement('option');
-    option.text = kecamatan;
-    kecamatanSelect.add(option);
-  });
-}
+    // Hide the success modal after 3 seconds
+    setTimeout(() => {
+    successModal.classList.add('hidden');
+    // Optionally, redirect to another route
+    window.location.href = "{{ route('order.summary') }}";
+    }, 3000);
 }
 
 function selectPayment(method) {

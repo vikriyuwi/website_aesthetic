@@ -203,3 +203,7 @@ Route::get('/contact-us', [WebController::class, 'contactUs'])->name('contact-us
 Route::get('/colection/detail', [WebController::class, 'collectionDetails'])->name('collection-details');
 
 Route::get('/post/detail', [WebController::class, 'postDetails'])->name('post-details');
+
+Route::get('/choose-address', [WebController::class, 'chooseAddress'])->name('choose-address');
+
+Route::get('/new-address', [WebController::class, 'newAddress'])->name('new-address');
