@@ -12,7 +12,7 @@ class PostComment extends Model
 
     protected $table = 'POST_COMMENT';
     protected $primaryKey = 'POST_COMMENT_ID';
-    protected $fillable = ['POST_ID', 'USER_ID', 'CONTENT', 'created_at'];
+    protected $fillable = ['POST_ID', 'USER_ID', 'CONTENT'];
 
     public function Post(): BelongsTo
     {
