@@ -40,4 +40,9 @@ class Art extends Model
     {
         return $this->hasOne(ArtCollection::class, 'ART_ID', 'ART_ID');
     }
+
+    public function Carts(): HasMany
+    {
+        return $this->hasMany(Cart::class, 'ART_ID', 'ART_ID');
+    }
 }
