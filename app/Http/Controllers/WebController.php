@@ -62,7 +62,11 @@ class WebController extends Controller
 
     public function landing(Request $request)
     {
-        return view('landing');
+        $carts = null;
+        if(Auth::user() != null) {
+            $carts = Auth::user()->Carts;
+        }
+        return view('landing', compact('carts'));
     }
 
     public function landing2(Request $request)
@@ -101,6 +105,8 @@ class WebController extends Controller
         if (!isset($artwork)) {
             abort(404, 'Artwork not found.');
         }
+
+        $carts = Auth::user()->carts;
     
         // // Calculate the aspect ratio
         // $aspectRatio = $image->height() / $image->width();
@@ -119,7 +125,7 @@ class WebController extends Controller
     
         $imageClass = 'h-full w-full object-cover';
 
-        return view('artists.sections.artwork-detail', compact('artwork', 'imageClass','moreArtWorks'));
+        return view('artists.sections.artwork-detail', compact('artwork', 'imageClass','moreArtWorks','carts'));
     }    
 public function showCategory($category)
 {

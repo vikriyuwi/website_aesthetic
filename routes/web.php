@@ -14,6 +14,7 @@ use App\Http\Controllers\ArtistProfileController;
 use App\Http\Controllers\ArtistHireController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\CartController;
 use App\Http\Middleware\Authorization;
 use App\Http\Middleware\Role;
 use App\Http\Middleware\ActiveBuyer;
@@ -76,6 +77,11 @@ Route::middleware([Authorization::class.':true'])->group(function() {
         Route::post('/add', [ArtistHireController::class, 'store'])->name('store');
         Route::get('/{hireId}/delete', [ArtistHireController::class, 'destroy'])->name('destroy');
         Route::put('/{hireId}/update', [ArtistHireController::class, 'update'])->name('update');
+    });
+
+    Route::prefix('cart')->name('cart.')->group(function() {
+        Route::get('/{id}', [CartController::class, 'addToCart'])->name('add');
+        Route::get('/{id}/remove', [CartController::class, 'removeFromCart'])->name('remove');
     });
 });
 
