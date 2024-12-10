@@ -55,43 +55,44 @@
  <div class="mt-8">
   @foreach ($posts as $post )
   <!-- Post Example -->
-  <div class="bg-white p-4 rounded-lg shadow-md mb-4 border border-gray-300 post-card relative cursor-pointer" id="artistPost" data-post-id="{{ $post->POST_ID }}" data-delete-route="{{ route('post.destroy', $post->POST_ID) }}" onclick="showPostDetail({{ $post->POST_ID }})">
-    <!-- Options Menu and Profile Section Omitted for Brevity -->
-    <button class="ellipsisButton text-gray-600 hover:text-gray-800 focus:outline-none" onclick="toggleOptionsMenu(event, this)">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 0 1.5ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-      </svg>
-    </button>
-    <!-- Options Menu -->
-    <div class="optionsMenu">
-      <button class="block w-full text-left px-4 py-2 hover:bg-gray-100">Edit Post</button>
-      <button class="block w-full text-left px-4 py-2 hover:bg-gray-100" onclick="confirmDeletePost(event,{{ $post->POST_ID }})" data-post-id="{{ $post->POST_ID }}">Delete Post</button>
-    </div>
-
-    <div class="flex items-center space-x-4">
-      <img alt="Profile picture of the user" class="w-10 h-10 rounded-full" src="{{ $post->Artist->MasterUser->Buyer->PROFILE_IMAGE_URL != null ? asset($post->Artist->MasterUser->Buyer->PROFILE_IMAGE_URL) : "https://placehold.co/100x100"}}">
-      <div>
-        <h2 class="text-lg font-bold">{{ $post->Artist->MasterUser->Buyer->FULLNAME }}</h2>
-        <p class="text-sm text-gray-600">{{ $post->created_at }}</p>
+  <a href="{{ route('post.detail',['id'=>$post->POST_ID]) }}">
+    <div class="bg-white p-4 rounded-lg shadow-md mb-4 border border-gray-300 post-card relative cursor-pointer" id="artistPost" data-post-id="{{ $post->POST_ID }}" data-delete-route="{{ route('post.destroy', $post->POST_ID) }}" onclick="showPostDetail({{ $post->POST_ID }})">
+      <!-- Options Menu and Profile Section Omitted for Brevity -->
+      {{-- <button class="ellipsisButton text-gray-600 hover:text-gray-800 focus:outline-none" onclick="toggleOptionsMenu(event, this)">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 0 1.5ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+        </svg>
+      </button>
+      <!-- Options Menu -->
+      <div class="optionsMenu">
+        <button class="block w-full text-left px-4 py-2 hover:bg-gray-100">Edit Post</button>
+        <button class="block w-full text-left px-4 py-2 hover:bg-gray-100" onclick="confirmDeletePost(event,{{ $post->POST_ID }})" data-post-id="{{ $post->POST_ID }}">Delete Post</button>
+      </div> --}}
+  
+      <div class="flex items-center space-x-4">
+        <img alt="Profile picture of the user" class="w-10 h-10 rounded-full" src="{{ $post->Artist->MasterUser->Buyer->PROFILE_IMAGE_URL != null ? asset($post->Artist->MasterUser->Buyer->PROFILE_IMAGE_URL) : "https://placehold.co/100x100"}}">
+        <div>
+          <h2 class="text-lg font-bold">{{ $post->Artist->MasterUser->Buyer->FULLNAME }}</h2>
+          <p class="text-sm text-gray-600">{{ $post->created_at }}</p>
+        </div>
+      </div>
+      <p class="mt-4 text-sm">{{ $post->CONTENT }}</p>
+  
+      <!-- Image Container -->
+      @if($post->PostMedias->count() > 0)
+      <div class="aspect-w-2 aspect-h-1 mt-4 rounded-lg overflow-hidden">
+        <img alt="Anime character with pink hair" class="aspect-inner object-cover" src="{{ Str::startsWith($post->PostMedias()->first()->POST_MEDIA_PATH, 'images/post/') ? asset($post->PostMedias()->first()->POST_MEDIA_PATH) : $post->PostMedias()->first()->POST_MEDIA_PATH }}">
+      </div>
+      @endif
+  
+      <div class="mt-2 flex space-x-4 text-gray-600 text-sm">
+        <button class="flex items-center space-x-1"><i class="fas fa-heart text-red-500"></i><span>{{ $post->PostLikes->count() }}</span></button>
+        <button class="flex items-center space-x-1"><i class="far fa-comment"></i><span id="postTotalComments-9999">{{ $post->PostComments->count() }}</span></button>
       </div>
     </div>
-    <p class="mt-4 text-sm">{{ $post->CONTENT }}</p>
-
-    <!-- Image Container -->
-    @if($post->PostMedias->count() > 0)
-    <div class="aspect-w-2 aspect-h-1 mt-4 rounded-lg overflow-hidden">
-      <img alt="Anime character with pink hair" class="aspect-inner object-cover" src="{{ Str::startsWith($post->PostMedias()->first()->POST_MEDIA_PATH, 'images/post/') ? asset($post->PostMedias()->first()->POST_MEDIA_PATH) : $post->PostMedias()->first()->POST_MEDIA_PATH }}">
-    </div>
-    @endif
-
-    <div class="mt-2 flex space-x-4 text-gray-600 text-sm">
-      <button class="flex items-center space-x-1"><i class="fas fa-heart text-red-500"></i><span>100</span></button>
-      <button class="flex items-center space-x-1"><i class="far fa-comment"></i><span id="postTotalComments-9999">9999</span></button>
-      <button class="flex items-center space-x-1"><i class="far fa-share-square"></i><span>Share</span></button>
-    </div>
-  </div>
+  </a>
+  @endforeach
 </div>
-@endforeach
 </div>
   
   <!-- Post Detail Modal -->
@@ -363,37 +364,37 @@
     // }
 
     // Toggle options menu visibility for each ellipsis button
-    function toggleOptionsMenu(event, button) {
-      event.stopPropagation();
-      document.querySelectorAll('.optionsMenu').forEach(menu => {
-        if (menu !== button.nextElementSibling) {
-          menu.style.display = 'none';
-        }
-      });
-      const optionsMenu = button.nextElementSibling;
-      optionsMenu.style.display = optionsMenu.style.display === 'block' ? 'none' : 'block';
-    }
+    // function toggleOptionsMenu(event, button) {
+    //   event.stopPropagation();
+    //   document.querySelectorAll('.optionsMenu').forEach(menu => {
+    //     if (menu !== button.nextElementSibling) {
+    //       menu.style.display = 'none';
+    //     }
+    //   });
+    //   const optionsMenu = button.nextElementSibling;
+    //   optionsMenu.style.display = optionsMenu.style.display === 'block' ? 'none' : 'block';
+    // }
 
-    let postToDelete = null; // Holds the ID of the post to delete
+    // let postToDelete = null; // Holds the ID of the post to delete
 
-    // Function to open the delete confirmation modal
-    function confirmDeletePost(event, postId) {
-        event.stopPropagation(); // Prevent triggering other events (e.g., opening the post)
-        postToDelete = postId; // Set the ID of the post to delete
+    // // Function to open the delete confirmation modal
+    // function confirmDeletePost(event, postId) {
+    //     event.stopPropagation(); // Prevent triggering other events (e.g., opening the post)
+    //     postToDelete = postId; // Set the ID of the post to delete
 
-        console.log(event.target.getAttribute('data-post-id'));
+    //     console.log(event.target.getAttribute('data-post-id'));
 
-        let deletePostRoute = "{{ route('post.destroy', ['postId' => 'POST_ID']) }}";
-        document.getElementById('deleteButtonModal').href = deletePostRoute.replace('POST_ID', event.target.getAttribute('data-post-id'))
+    //     let deletePostRoute = "{{ route('post.destroy', ['postId' => 'POST_ID']) }}";
+    //     document.getElementById('deleteButtonModal').href = deletePostRoute.replace('POST_ID', event.target.getAttribute('data-post-id'))
 
-        document.getElementById('deleteConfirmationModal').classList.remove('hidden'); // Show modal
-    }
+    //     document.getElementById('deleteConfirmationModal').classList.remove('hidden'); // Show modal
+    // }
 
     // Function to close the delete confirmation modal
-    function closeDeleteModal() {
-        document.getElementById('deleteConfirmationModal').classList.add('hidden'); // Hide modal
-        postToDelete = null; // Clear the stored post ID
-    }
+    // function closeDeleteModal() {
+    //     document.getElementById('deleteConfirmationModal').classList.add('hidden'); // Hide modal
+    //     postToDelete = null; // Clear the stored post ID
+    // }
 
     // Function to delete the post via AJAX
     // function deletePost() {

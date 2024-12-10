@@ -7,6 +7,7 @@ use App\Models\Artist;
 use App\Models\Buyer;
 use App\Models\MasterUser;
 use App\Models\Art;
+use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -230,9 +231,16 @@ public function collectionDetails()
 public function buyerProfile(){
     return view('buyer.profile');
 }
-public function postDetails()
+public function postDetails($id)
 {
-    return view('artists.sections.post-detail');
+    $user = Auth::user();
+    $post = Post::find($id);
+
+    if($post == null) {
+        abort(404,"Post not found!");
+    }
+
+    return view('artists.sections.post-detail',compact('user','post'));
 }
 public function chooseAddress()
 {
