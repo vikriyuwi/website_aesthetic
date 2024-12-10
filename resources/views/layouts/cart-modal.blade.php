@@ -82,87 +82,39 @@
         </div>
 
         <!-- Cart Items (with limited height and scroll) -->
-        <div class="border-b border-gray-200 pb-4 mb-6 product-list overflow-y-auto max-h-72">
-            <!-- Abstract Illustration -->
-            <div class="product-card hover:shadow-lg transform transition-transform duration-300 bg-gray-50 rounded-lg p-4 flex items-start mb-4">
-                <input type="checkbox" class="mr-4 mt-2 custom-checkbox item-checkbox" data-price="200.00" checked>
-                <div class="flex items-center justify-between w-full">
-                    <div class="flex items-start">
-                        <img src="/images/indianart.webp" alt="Abstract Illustration" class="w-24 h-24 object-cover rounded-lg shadow-md">
-                        <div class="ml-6">
-                            <h2 class="text-lg font-semibold text-gray-800">Abstract Illustration</h2> <!-- Reduced font size -->
-                            <p class="text-sm text-gray-500 mt-1"><span class="category">Illustrations</span></p> <!-- Reduced font size -->
-                            <a href="#artist-mike" class="text-indigo-600 artist-link font-semibold mt-1 inline-block artist">Mike Hawk</a> <!-- Reduced font size -->
-                            <div class="flex items-center mt-3 text-green-500 font-medium text-sm"><i class="fas fa-check-circle"></i><span class="ml-2">In stock</span></div> <!-- Reduced font size -->
-                        </div>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-lg font-semibold text-gray-800">$200.00</p> <!-- Reduced font size -->
-                        <a href="#" class="text-indigo-600 font-medium mt-1 hover:text-purple-800 transition text-sm">Remove</a> <!-- Reduced font size -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Sculpture Section -->
-            <div class="border-b border-gray-200 pb-4 mb-6 product-card hover:shadow-lg transform transition-transform duration-300 bg-gray-50 rounded-lg p-4 flex items-start">
-                <input type="checkbox" class="mr-4 mt-2 custom-checkbox item-checkbox" data-price="450.00" checked>
-                <div class="flex items-center justify-between w-full">
-                    <div class="flex items-start">
-                        <img src="/images/powerpuff.jpg" alt="Modern Sculpture" class="w-24 h-24 object-cover rounded-lg shadow-md">
-                        <div class="ml-6">
-                            <h2 class="text-lg font-semibold text-gray-800">Modern Minimalist Sculpture</h2> <!-- Reduced font size -->
-                            <p class="text-sm text-gray-500 mt-1"><span class="category">Sculptures</span></p> <!-- Reduced font size -->
-                            <a href="#artist-jane" class="text-indigo-600 artist-link font-semibold mt-1 inline-block artist">Jane Doe</a> <!-- Reduced font size -->
-                            <div class="flex items-center mt-3 text-green-500 font-medium text-sm"><i class="fas fa-check-circle"></i><span class="ml-2">In stock</span></div> <!-- Reduced font size -->
-                        </div>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-lg font-semibold text-gray-800">$450.00</p> <!-- Reduced font size -->
-                        <a href="#" class="text-indigo-600 font-medium mt-1 hover:text-purple-800 transition text-sm">Remove</a> <!-- Reduced font size -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Poster Design Section -->
-            <div class="border-b border-gray-200 pb-4 mb-6 product-card hover:shadow-lg transform transition-transform duration-300 bg-gray-50 rounded-lg p-4 flex items-start">
-                <input type="checkbox" class="mr-4 mt-2 custom-checkbox item-checkbox" data-price="120.00" checked>
-                <div class="flex items-center justify-between w-full">
-                    <div class="flex items-start">
-                        <img src="/images/melody.webp" alt="Creative Poster Design" class="w-24 h-24 object-cover rounded-lg shadow-md">
-                        <div class="ml-6">
-                            <h2 class="text-lg font-semibold text-gray-800">Creative Poster Design</h2> <!-- Reduced font size -->
-                            <p class="text-sm text-gray-500 mt-1"><span class="category">Posters</span></p> <!-- Reduced font size -->
-                            <a href="#artist-john" class="text-indigo-600 artist-link font-semibold mt-1 inline-block artist">John Doe</a> <!-- Reduced font size -->
-                            <div class="flex items-center mt-3 text-green-500 font-medium text-sm"><i class="fas fa-check-circle"></i><span class="ml-2">In stock</span></div> <!-- Reduced font size -->
-                        </div>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-lg font-semibold text-gray-800">$120.00</p> <!-- Reduced font size -->
-                        <a href="#" class="text-indigo-600 font-medium mt-1 hover:text-indigo-600 transition text-sm">Remove</a> <!-- Reduced font size -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Digital Art Section -->
-            <div class="product-card hover:shadow-lg transform transition-transform duration-300 bg-gray-50 rounded-lg p-4 flex items-start">
-                <input type="checkbox" class="mr-4 mt-2 custom-checkbox item-checkbox" data-price="350.00" checked>
-                <div class="flex items-center justify-between w-full">
-                    <div class="flex items-start">
-                        <img src="/images/powerpuff2.jpg" alt="Digital Art Piece" class="w-24 h-24 object-cover rounded-lg shadow-md">
-                        <div class="ml-6">
-                            <h2 class="text-lg font-semibold text-gray-800">Digital Art - Exploration</h2> <!-- Reduced font size -->
-                            <p class="text-sm text-gray-500 mt-1"><span class="category">Digital Art</span></p> <!-- Reduced font size -->
-                            <a href="#artist-emily" class="text-indigo-600 artist-link font-semibold mt-1 inline-block artist">Emily Rose</a> <!-- Reduced font size -->
-                            <div class="flex items-center mt-3 text-yellow-500 font-medium text-sm"><i class="fas fa-clock"></i><span class="ml-2">Ships in 1-2 weeks</span></div> <!-- Reduced font size -->
-                        </div>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-lg font-semibold text-gray-800">$350.00</p> <!-- Reduced font size -->
-                        <a href="#" class="text-indigo-600 font-medium mt-1 hover:text-purple-800 transition text-sm">Remove</a> <!-- Reduced font size -->
-                    </div>
-                </div>
-            </div>
-        </div>
+        @if(isset($carts))
+          @if($carts->count() > 0)
+          <div class="border-b border-gray-200 pb-4 mb-6 product-list overflow-y-auto max-h-72">
+              <!-- Abstract Illustration -->
+              @foreach($carts as $cart)
+              <div class="product-card hover:shadow-lg transform transition-transform duration-300 bg-gray-50 rounded-lg p-4 flex items-start mb-4">
+                  <input type="checkbox" class="mr-4 mt-2 custom-checkbox item-checkbox" data-price="{{ $cart->Art->PRICE }}" checked>
+                  <div class="flex items-center justify-between w-full">
+                      <div class="flex items-start">
+                          <img src="{{ Str::startsWith($cart->Art->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($cart->Art->ArtImages()->first()->IMAGE_PATH) : $cart->Art->ArtImages()->first()->IMAGE_PATH }}" alt="Abstract Illustration" class="w-24 h-24 object-cover rounded-lg shadow-md">
+                          <div class="ml-6">
+                              <h2 class="text-lg font-semibold text-gray-800">{{ $cart->Art->ART_TITLE }}</h2> <!-- Reduced font size -->
+                              <p class="text-sm text-gray-500 mt-1">
+                                @if($cart->Art->ArtCategories->count() > 0)
+                                  @foreach($cart->Art->ArtCategories as $category)
+                                    {{ $cart->Art->ArtCategories->map(fn($category) => $category->ArtCategoryMaster->DESCR)->implode(', ') }}
+                                  @endforeach
+                                @endif
+                              </p> <!-- Reduced font size -->
+                              <a href="#artist-mike" class="text-indigo-600 artist-link font-semibold mt-1 inline-block artist">{{ $cart->Art->MasterUser->Buyer->FULLNAME }}</a> <!-- Reduced font size -->
+                              <div class="flex items-center mt-3 text-green-500 font-medium text-sm"><i class="fas fa-check-circle"></i><span class="ml-2">In stock</span></div> <!-- Reduced font size -->
+                          </div>
+                      </div>
+                      <div class="text-right">
+                          <p class="text-lg font-semibold text-gray-800">Rp {{ number_format($cart->Art->PRICE, 2, ',', '.') }}</p> <!-- Reduced font size -->
+                          <a href="{{ route('cart.remove', ['id'=>$cart->CART_ID]) }}" class="text-indigo-600 font-medium mt-1 hover:text-purple-800 transition text-sm">Remove</a> <!-- Reduced font size -->
+                      </div>
+                  </div>
+              </div>
+              @endforeach
+          </div>
+          @endif
+        @endif
 
         <!-- Subtotal and Checkout Section -->
         <div class="flex justify-between items-center mt-8">
@@ -212,7 +164,14 @@
           subtotal += parseFloat(checkbox.dataset.price);
         }
       });
-      subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
+
+      const formatter = new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        minimumFractionDigits: 0
+      });
+
+      subtotalEl.textContent = formatter.format(subtotal);
     }
 
     checkboxes.forEach(checkbox => {

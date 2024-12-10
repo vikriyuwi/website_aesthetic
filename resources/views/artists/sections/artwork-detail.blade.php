@@ -166,10 +166,10 @@
                             <button class="border border-indigo-500 text-indigo-500 py-2 px-4 rounded-lg hover:bg-indigo-50 transition btn">
                                 CONTACT ARTIST
                             </button>
-                            <button class="border border-indigo-500 text-indigo-500 py-2 px-4 rounded-lg hover:bg-indigo-50 transition btn">
+                            <a href="{{ route('cart.add', ['id'=>$artwork->ART_ID]) }}" class="border border-indigo-500 text-indigo-500 py-2 px-4 rounded-lg hover:bg-indigo-50 transition btn">
                                 <i class="fas fa-shopping-cart"></i>
                                 <span>Add to Cart</span>
-                            </button>
+                            </a>
                         @endif
                     @else
                         <button class="bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition btn">
