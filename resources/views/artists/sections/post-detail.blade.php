@@ -12,22 +12,24 @@
       <!-- Post Example -->
       <div class="bg-white p-4 rounded-lg shadow-md mb-4 border border-gray-300 relative cursor-pointer">
         <div class="flex items-center space-x-4">
-          <img alt="Profile picture of the user" class="w-10 h-10 rounded-full" src="https://images.unsplash.com/photo-1592100231709-5b5c3e6bd667?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
+          <img alt="Profile picture of the user" class="w-10 h-10 rounded-full" src="{{ $post->Artist->MasterUser->Buyer->PROFILE_IMAGE_URL != null ? asset($post->Artist->MasterUser->Buyer->PROFILE_IMAGE_URL) : "https://placehold.co/100x100"}}">
           <div>
-            <h2 class="text-lg font-bold">Something4U</h2>
-            <p class="text-sm text-gray-600">Feb 27, 2023</p>
+            <h2 class="text-lg font-bold">{{ $post->Artist->MasterUser->Buyer->FULLNAME }}</h2>
+            <p class="text-sm text-gray-600">{{ (new \DateTime($post->created_at))->format('M d, Y') }}</p>
           </div>
         </div>
-        <p class="mt-4 text-sm">I'll Hibernate for a while ;)</p>
+        <p class="mt-4 text-sm">{{ $post->CONTENT }}</p>
 
         <!-- Image Container -->
+        @if($post->PostMedias->count() > 0)
         <div class="aspect-w-2 aspect-h-1 mt-4 rounded-lg overflow-hidden">
-          <img alt="Post Content" class="object-cover w-full h-auto" src="https://images.unsplash.com/photo-1521220546621-cf34a1165c67?q=80&w=2952&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
+          <img alt="Post Content" class="aspect-inner w-full h-auto" src="{{ Str::startsWith($post->PostMedias()->first()->POST_MEDIA_PATH, 'images/post/') ? asset($post->PostMedias()->first()->POST_MEDIA_PATH) : $post->PostMedias()->first()->POST_MEDIA_PATH }}">
         </div>
+        @endif
 
         <div class="mt-2 flex space-x-4 text-gray-600 text-xl">
-          <button class="flex items-center space-x-1"><i class="far fa-heart"></i><span>20</span></button>
-          <button class="flex items-center space-x-1"><i class="far fa-comment"></i><span>15</span></button>
+          <button class="flex items-center space-x-1"><i class="far fa-heart"></i><span>{{ $post->PostLikes->count() }}</span></button>
+          <button class="flex items-center space-x-1"><i class="far fa-comment"></i><span>{{ $post->PostComments->count() }}</span></button>
           <button class="flex items-center space-x-1"><i class="far fa-share-square"></i><span>Share</span></button>
         </div>
       </div>
@@ -38,13 +40,15 @@
       <h3 class="text-xl font-bold mb-4">Comments</h3>
       <div id="commentsSection" class="space-y-4 h-48 overflow-y-auto pr-2">
         <!-- Dynamic Comments -->
+        @foreach($post->PostComments as $comment)
         <div class="flex space-x-4">
-          <img class="w-10 h-10 rounded-full" src="https://images.unsplash.com/photo-1703925154666-7484e0ffbdc1?q=80&w=3136&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="User Profile">
+          <img class="w-10 h-10 rounded-full" src="{{ $comment->MasterUser->Buyer->PROFILE_IMAGE_URL != null ? asset($post->Artist->MasterUser->Buyer->PROFILE_IMAGE_URL) : "https://placehold.co/100x100"}}" alt="User Profile">
           <div>
-            <p class="font-bold">Anya <span class="text-sm text-gray-600">1 month ago</span></p>
-            <p class="text-gray-700 mt-1">The fantasy illustrations are pure magic!</p>
+            <p class="font-bold">{{ $comment->MasterUser->Buyer->FULLNAME }} <span class="text-sm text-gray-600">1 month ago</span></p>
+            <p class="text-gray-700 mt-1">{{ $comment->CONTENT }}</p>
           </div>
         </div>
+        @endforeach
         <div class="flex space-x-4">
           <img class="w-10 h-10 rounded-full" src="https://plus.unsplash.com/premium_photo-1719986266408-5cc1f7e07c1b?q=80&w=3095&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="User Profile">
           <div>

@@ -99,9 +99,9 @@ Route::prefix('art-gallery')->name('artGallery.')->group(function () {
     Route::get('/{id}', [ArtGalleryController::class, 'show'])->name('show');
 });
 
-
-
-
+Route::prefix('post')->name('post.')->group(function () {
+    Route::get('/{id}', [WebController::class, 'postDetails'])->name('detail');
+});
 
 Route::get('/explore', [App\Http\Controllers\WebController::class, 'explore']);
 
@@ -201,8 +201,6 @@ Route::get('/blog-detail', [WebController::class, 'blogDetail'])->name('blog-det
 Route::get('/contact-us', [WebController::class, 'contactUs'])->name('contact-us');
 
 Route::get('/colection/detail', [WebController::class, 'collectionDetails'])->name('collection-details');
-
-Route::get('/post/detail', [WebController::class, 'postDetails'])->name('post-details');
 
 Route::get('/choose-address', [WebController::class, 'chooseAddress'])->name('choose-address');
 
