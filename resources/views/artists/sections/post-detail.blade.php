@@ -42,35 +42,25 @@
         <!-- Dynamic Comments -->
         @foreach($post->PostComments as $comment)
         <div class="flex space-x-4">
-          <img class="w-10 h-10 rounded-full" src="{{ $comment->MasterUser->Buyer->PROFILE_IMAGE_URL != null ? asset($post->Artist->MasterUser->Buyer->PROFILE_IMAGE_URL) : "https://placehold.co/100x100"}}" alt="User Profile">
+          <img class="w-10 h-10 rounded-full" src="{{ $comment->MasterUser->Buyer->PROFILE_IMAGE_URL != null ? asset($comment->MasterUser->Buyer->PROFILE_IMAGE_URL) : "https://placehold.co/100x100"}}" alt="User Profile">
           <div>
-            <p class="font-bold">{{ $comment->MasterUser->Buyer->FULLNAME }} <span class="text-sm text-gray-600">1 month ago</span></p>
+            <p class="font-bold">{{ $comment->MasterUser->Buyer->FULLNAME }} <span class="text-sm text-gray-600">{{ (new \DateTime($comment->created_at))->format('M d, Y') }}</span> @if(Auth::user()->USER_ID == $comment->MasterUser->USER_ID) <a href="" class="text-red-700"><i class="fas fa-trash"></i></a> @endif</p>
             <p class="text-gray-700 mt-1">{{ $comment->CONTENT }}</p>
           </div>
         </div>
         @endforeach
-        <div class="flex space-x-4">
-          <img class="w-10 h-10 rounded-full" src="https://plus.unsplash.com/premium_photo-1719986266408-5cc1f7e07c1b?q=80&w=3095&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="User Profile">
-          <div>
-            <p class="font-bold">Sam Jetstream <span class="text-sm text-gray-600">3 months ago</span></p>
-            <p class="text-gray-700 mt-1">The neon-drenched streets are amazing!</p>
-          </div>
-        </div>
-        <div class="flex space-x-4">
-          <img class="w-10 h-10 rounded-full" src="https://images.unsplash.com/photo-1558624232-75ee22af7e67?q=80&w=2960&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="User Profile">
-          <div>
-                <p class="font-bold">Aglio<span class="text-sm text-gray-600"> 1 minutes ago</span></p>
-                <p class="text-gray-700 mt-1">Woowwwwww amazing!</p>
-           </div>
-        </div>
       </div>
 
       <!-- Add Comment Section -->
-      <div class="mt-4">
-        <label for="newComment" class="block text-gray-700 font-semibold mb-2">Add a Comment</label>
-        <textarea id="newComment" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none transition" placeholder="Write your comment..."></textarea>
-        <button onclick="addComment()" class="mt-2 bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600 transition">Post Comment</button>
-      </div>
+      <form action="{{ route('post.comment',['id'=>$post->POST_ID]) }}" method="post">
+        @csrf
+        @method('PUT')
+        <div class="mt-4">
+          <label for="commentContent" class="block text-gray-700 font-semibold mb-2">Add a Comment</label>
+          <textarea id="commentContent" name="commentContent" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none transition" placeholder="Write your comment..."></textarea>
+          <button type="submit" class="mt-2 bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600 transition">Post Comment</button>
+        </div>
+      </form>
     </div>
   </div>
 

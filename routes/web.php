@@ -100,7 +100,8 @@ Route::prefix('art-gallery')->name('artGallery.')->group(function () {
 });
 
 Route::prefix('post')->name('post.')->group(function () {
-    Route::get('/{id}', [WebController::class, 'postDetails'])->name('detail');
+    Route::get('/{id}', [PostController::class, 'postDetails'])->name('detail');
+    Route::put('/{id}/comment', [PostController::class, 'addComment'])->name('comment');
 });
 
 Route::get('/explore', [App\Http\Controllers\WebController::class, 'explore']);

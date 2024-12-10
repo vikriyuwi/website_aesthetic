@@ -231,17 +231,6 @@ public function collectionDetails()
 public function buyerProfile(){
     return view('buyer.profile');
 }
-public function postDetails($id)
-{
-    $user = Auth::user();
-    $post = Post::find($id);
-
-    if($post == null) {
-        abort(404,"Post not found!");
-    }
-
-    return view('artists.sections.post-detail',compact('user','post'));
-}
 public function chooseAddress()
 {
     return view('layouts.choose-address');
