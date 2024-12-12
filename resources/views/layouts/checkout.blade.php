@@ -57,17 +57,23 @@
             <h2 class="font-bold text-lg">Shipping Address</h2>
         </div>
         <hr class="border-gray-300 mb-4">
+        @if($activeAddress != null)
         <div class="mb-4">
-            <p class="font-bold text-gray-800">Chantikka Riffka</p>
-            <p class="text-gray-600">085246934487</p>
-            <p class="text-gray-700">Jl. Kemanaapun asal denganmu, gg gaming, no. 34A</p>
-            <p class="text-gray-700">Bintaro, Tangerang Selatan, 89678</p>
+            <p class="font-bold text-gray-800">{{ $activeAddress->FULLNAME }}</p>
+            <p class="text-gray-600">{{ $activeAddress->PHONE }}</p>
+            <p class="text-gray-700">{{ $activeAddress->ADDRESS }}</p>
+            <p class="text-gray-700">{{ $activeAddress->PROVINCE }}, {{ $activeAddress->CITY }}, {{ $activeAddress->POSTAL_CODE}}</p>
         </div>
+        @else
+        <div class="mb-4">
+          <p class="font-bold text-gray-800">No active address</p>
+        </div>
+        @endif
 
         <hr class="border-gray-300 mb-4">
 
         <!-- Choose Address Button -->
-        <a href="/choose-address" 
+        <a href="{{ route('order.address.show') }}" 
           class="w-full block text-center bg-white border border-gray-400 rounded-full px-4 py-2 text-gray-700 hover:bg-gray-200 transition">
             Choose Address
         </a>
