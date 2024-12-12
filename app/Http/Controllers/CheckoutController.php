@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\MasterUser;
 use App\Models\Order;
+use App\Models\Address;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -20,8 +21,9 @@ class CheckoutController extends Controller
         }
 
         $orders = $user->Orders;
+        $activeAddress = Address::where('USER_ID',$user->USER_ID)->where('IS_ACTIVE',1)->first();
 
-        return view('layouts.checkout', compact('orders'));
+        return view('layouts.checkout', compact('orders','activeAddress'));
     }
 
     public function placeOrder()

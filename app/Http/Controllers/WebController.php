@@ -240,13 +240,5 @@ public function collectionDetails()
 public function buyerProfile(){
     return view('buyer.profile');
 }
-public function chooseAddress()
-{
-    return view('layouts.choose-address');
-}
-public function newAddress()
-{
-    return view('layouts.new-address');
-}
 
 }

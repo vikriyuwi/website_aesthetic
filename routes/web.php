@@ -15,6 +15,8 @@ use App\Http\Controllers\ArtistHireController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\AddressController;
 use App\Http\Middleware\Authorization;
 use App\Http\Middleware\Role;
 use App\Http\Middleware\ActiveBuyer;
@@ -87,6 +89,13 @@ Route::middleware([Authorization::class.':true'])->group(function() {
     Route::prefix('order')->name('order.')->group(function() {
         Route::get('/', [CheckoutController::class, 'show'])->name('my');
         Route::get('/chekcout',[CheckoutController::class, 'placeOrder'])->name('checkout');
+        Route::prefix('address')->name('address.')->group(function() {
+            Route::get('/', [AddressController::class, 'index'])->name('show');
+            Route::get('/add', [AddressController::class, 'add'])->name('add');
+            Route::post('/add', [AddressController::class, 'store'])->name('store');
+            Route::get('/{id}/delete', [AddressController::class, 'destroy'])->name('destroy');
+            Route::get('/{id}/activate', [AddressController::class, 'active'])->name('activate');
+        });
     });
 });
 
@@ -211,7 +220,3 @@ Route::get('/blog-detail', [WebController::class, 'blogDetail'])->name('blog-det
 Route::get('/contact-us', [WebController::class, 'contactUs'])->name('contact-us');
 
 Route::get('/colection/detail', [WebController::class, 'collectionDetails'])->name('collection-details');
-
-Route::get('/choose-address', [WebController::class, 'chooseAddress'])->name('choose-address');
-
-Route::get('/new-address', [WebController::class, 'newAddress'])->name('new-address');
