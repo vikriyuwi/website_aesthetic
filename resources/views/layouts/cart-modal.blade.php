@@ -106,7 +106,7 @@
                           </div>
                       </div>
                       <div class="text-right">
-                          <p class="text-lg font-semibold text-gray-800">Rp {{ number_format($cart->Art->PRICE, 2, ',', '.') }}</p> <!-- Reduced font size -->
+                          <p class="text-lg font-semibold text-gray-800">Rp {{ number_format($cart->Art->PRICE, 0, ',', '.') }}</p> <!-- Reduced font size -->
                           <a href="{{ route('cart.remove', ['id'=>$cart->CART_ID]) }}" class="text-indigo-600 font-medium mt-1 hover:text-purple-800 transition text-sm">Remove</a> <!-- Reduced font size -->
                       </div>
                   </div>
@@ -123,7 +123,7 @@
         </div>
         <p class="text-sm text-gray-500 mt-2">Shipping and taxes will be calculated at checkout.</p> <!-- Reduced font size -->
 
-        <button onclick="window.location.href='{{ route('checkout') }}'" class="w-full bg-indigo-600 text-white py-3 mt-6 rounded-lg text-base font-semibold hover:bg-indigo-800 transition">Checkout</button> <!-- Reduced font size -->
+        <button onclick="window.location.href='{{ route('order.checkout') }}'" class="w-full bg-indigo-600 text-white py-3 mt-6 rounded-lg text-base font-semibold hover:bg-indigo-800 transition">Checkout</button> <!-- Reduced font size -->
 
         <p class="text-center mt-4 text-sm text-gray-500">
             or
