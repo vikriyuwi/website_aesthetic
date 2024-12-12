@@ -106,7 +106,10 @@ class WebController extends Controller
             abort(404, 'Artwork not found.');
         }
 
-        $carts = Auth::user()->carts;
+        $carts = null;
+        if(Auth::user() != null) {
+            $carts = Auth::user()->Carts;
+        }
     
         // // Calculate the aspect ratio
         // $aspectRatio = $image->height() / $image->width();

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreign('ART_ID')->references('ART_ID')->on('ART')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('QUANTITY');
             $table->integer('PRICE_PER_ITEM');
+            $table->integer('STATUS')->default(1);
             $table->timestamps();
         });
     }

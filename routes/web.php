@@ -83,6 +83,11 @@ Route::middleware([Authorization::class.':true'])->group(function() {
         Route::get('/{id}', [CartController::class, 'addToCart'])->name('add');
         Route::get('/{id}/remove', [CartController::class, 'removeFromCart'])->name('remove');
     });
+
+    Route::prefix('order')->name('order.')->group(function() {
+        Route::get('/', [CheckoutController::class, 'show'])->name('my');
+        Route::get('/chekcout',[CheckoutController::class, 'placeOrder'])->name('checkout');
+    });
 });
 
 Route::get('/landing', [App\Http\Controllers\WebController::class, 'landing'])->name('landing');
@@ -119,8 +124,6 @@ Route::get('/explore', [App\Http\Controllers\WebController::class, 'explore']);
 Route::get('/favorites/follows', [WebController::class, 'follows'])->name('favorites.follows');
 
 Route::get('/favorites/likes', [WebController::class, 'likes'])->name('favorites.likes');
-
-Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout');
 
 Route::get('/order-summary', [WebController::class, 'orderSummary'])->name('order.summary');
 

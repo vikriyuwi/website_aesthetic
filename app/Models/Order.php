@@ -12,7 +12,12 @@ class Order extends Model
 
     protected $table = 'ORDER';
     protected $primaryKey = 'ORDER_ID';
-    protected $fillable = ['USER_ID', 'ART_ID', 'QUANTITY','PRICE_PER_ITEM'];
+    protected $fillable = ['USER_ID', 'ART_ID', 'QUANTITY','PRICE_PER_ITEM','STATUS'];
+
+    // STATUS
+    // 1 = NEW
+    // 2 = PAID
+    // 3 = DELIVERED
 
     public function MasterUser(): BelongsTo
     {

@@ -134,24 +134,16 @@
     <h2 class="text-2xl font-semibold mb-4 text-gray-800">📦 Ordered Product</h2>
     <div class="space-y-4">
       <!-- Item 1 -->
-      <div class="flex items-center">
+      @foreach($orders as $order)
+      <div class="flex items-center order-item" data-price="{{ $order->PRICE_PER_ITEM }}">
         <img alt="Paint in the night" class="w-16 h-16 rounded-lg shadow" src="https://placehold.co/60x60"/>
         <div class="ml-4">
-          <p class="text-gray-700 font-medium">Paint in the night</p>
-          <p class="text-gray-500 text-sm">MonaLisa</p>
+          <p class="text-gray-700 font-medium">{{ $order->Art->ART_TITLE }}</p>
+          <p class="text-gray-500 text-sm">{{ $order->Art->MasterUser->Buyer->FULLNAME }}</p>
         </div>
-        <p class="ml-auto text-gray-700 font-semibold">Rp. 1.500.000</p>
+        <p class="ml-auto text-gray-700 font-semibold">Rp {{ number_format($order->Art->PRICE, 0, ',', '.') }}</p>
       </div>
-
-      <!-- Item 2 -->
-      <div class="flex items-center">
-        <img alt="Oily Castle Sky" class="w-16 h-16 rounded-lg shadow" src="https://placehold.co/60x60"/>
-        <div class="ml-4">
-          <p class="text-gray-700 font-medium">Oily Castle Sky</p>
-          <p class="text-gray-500 text-sm">medium_ilsa</p>
-        </div>
-        <p class="ml-auto text-gray-700 font-semibold">Rp. 1.759.000</p>
-      </div>
+      @endforeach
     </div>
   </div>
 
@@ -160,15 +152,15 @@
     <h2 class="text-xl font-semibold mb-4 text-gray-800">💳 Total Payment</h2>
     <div class="flex justify-between text-lg font-medium mb-2">
       <p>Subtotal</p>
-      <p>$2,896</p>
+      <p id="subtotalOrder">$2,896</p>
     </div>
     <div class="flex justify-between text-lg font-medium mb-2">
       <p>Ongkir</p>
-      <p>$20</p>
+      <p>Rp 50.000</p>
     </div>
     <div class="flex justify-between text-xl font-semibold">
       <p>Total</p>
-      <p>$2,916</p>
+      <p id="totalOrder">$2,916</p>
     </div>
         <!-- Payment Button -->
         <button onclick="showSuccessModal()" 
@@ -192,6 +184,29 @@
 
 <!-- Scripts -->
 <script>
+
+const orders = document.querySelectorAll('.order-item');
+const subtotalEl = document.getElementById('subtotalOrder');
+const totalEl = document.getElementById('totalOrder');
+
+function calculateSubtotal() {
+  let subtotal = 0;
+  orders.forEach(order => {
+    subtotal += parseFloat(order.dataset.price);
+  });
+
+  const formatter = new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0
+  });
+
+  subtotalEl.textContent = formatter.format(subtotal);
+  totalEl.textContent = formatter.format(subtotal+50000);
+}
+
+calculateSubtotal();
+
 function showSuccessModal() {
     // Show success modal
     const successModal = document.getElementById('successModal');
