@@ -122,7 +122,7 @@
             class="w-full block text-center bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition">
             View Your Order
         </a>
-          <button class="w-full bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-300 transition">Return to Shopping</button>
+          <a href={{ route('landing') }} class="w-full block text-center bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-300 transition">Return to Shopping</a>
         </div>
       </div>
 

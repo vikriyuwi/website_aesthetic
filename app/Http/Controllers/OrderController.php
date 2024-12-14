@@ -30,12 +30,7 @@ class OrderController extends Controller
 
     public function checkout()
     {
-        $user = null;
-
-        if (Auth::user() != null)
-        {
-            $user = Auth::User();
-        }
+        $user = Auth::User();
 
         // dd($user->Carts->first());
         $activeAddress = Address::where('USER_ID',$user->USER_ID)->where('IS_ACTIVE',1)->first();
@@ -47,28 +42,30 @@ class OrderController extends Controller
         $carts = $user->Carts;
         $order = Order::where('USER_ID', $user->USER_ID)->orderBy('created_at', 'DESC')->first();
 
-        if($order == null) {
-            $order = $user->Orders()->create([
-                'FULLNAME' => $activeAddress->FULLNAME,
-                'PHONE' => $activeAddress->PHONE,
-                'ADDRESS' => $activeAddress->ADDRESS,
-                'PROVINCE' => $activeAddress->PROVINCE,
-                'CITY' => $activeAddress->CITY,
-                'POSTAL_CODE' => $activeAddress->POSTAL_CODE,
-                'STATUS' => 2
-            ]);
-        } else {
-            if ($order->STATUS != 1) {
-                $order = $user->Orders()->create([
-                    'FULLNAME' => $activeAddress->FULLNAME,
-                    'PHONE' => $activeAddress->PHONE,
-                    'ADDRESS' => $activeAddress->ADDRESS,
-                    'PROVINCE' => $activeAddress->PROVINCE,
-                    'CITY' => $activeAddress->CITY,
-                    'POSTAL_CODE' => $activeAddress->POSTAL_CODE,
-                ]);
-            }
-        }
+        $order = $user->Orders()->create([
+            'FULLNAME' => $activeAddress->FULLNAME,
+            'PHONE' => $activeAddress->PHONE,
+            'ADDRESS' => $activeAddress->ADDRESS,
+            'PROVINCE' => $activeAddress->PROVINCE,
+            'CITY' => $activeAddress->CITY,
+            'POSTAL_CODE' => $activeAddress->POSTAL_CODE,
+            'STATUS' => 2
+        ]);
+
+        // if($order == null) {
+            
+        // } else {
+        //     if ($order->STATUS != 1) {
+        //         $order = $user->Orders()->create([
+        //             'FULLNAME' => $activeAddress->FULLNAME,
+        //             'PHONE' => $activeAddress->PHONE,
+        //             'ADDRESS' => $activeAddress->ADDRESS,
+        //             'PROVINCE' => $activeAddress->PROVINCE,
+        //             'CITY' => $activeAddress->CITY,
+        //             'POSTAL_CODE' => $activeAddress->POSTAL_CODE,
+        //         ]);
+        //     }
+        // }
 
         if (count($carts) > 0) {
             foreach ($carts as $cart) {
@@ -82,7 +79,7 @@ class OrderController extends Controller
             }
         }
 
-        return redirect()->route('order.summary',['id'=>$order->id]);
+        return redirect()->route('order.summary',['id'=>$order->ORDER_ID]);
     }
 
     public function show($id)

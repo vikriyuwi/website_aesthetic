@@ -141,7 +141,7 @@
     <div class="space-y-4">
       <!-- Item 1 -->
       @foreach($carts as $order)
-      <div class="flex items-center order-item" data-price="{{ $order->PRICE_PER_ITEM }}">
+      <div class="flex items-center order-item" data-price="{{ $order->Art->PRICE }}">
         <img alt="Paint in the night" class="w-16 h-16 rounded-lg shadow" src="{{ Str::startsWith($order->Art->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($order->Art->ArtImages()->first()->IMAGE_PATH) : $order->Art->ArtImages()->first()->IMAGE_PATH }}"/>
         <div class="ml-4">
           <p class="text-gray-700 font-medium">{{ $order->Art->ART_TITLE }}</p>
@@ -170,7 +170,7 @@
     </div>
         <!-- Payment Button -->
         <a href="{{ route('order.checkout') }}"
-            class="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold mt-4 hover:bg-indigo-700 transition">
+            class="w-full block text-center bg-indigo-600 text-white py-3 rounded-lg font-semibold mt-4 hover:bg-indigo-700 transition">
             Lanjutkan ke Pembayaran
         </a>
   </div>
@@ -192,12 +192,14 @@
 <script>
 
 const orders = document.querySelectorAll('.order-item');
+console.log(orders);
 const subtotalEl = document.getElementById('subtotalOrder');
 const totalEl = document.getElementById('totalOrder');
 
 function calculateSubtotal() {
   let subtotal = 0;
   orders.forEach(order => {
+    // console.log(order.dataset.price);
     subtotal += parseFloat(order.dataset.price);
   });
 
@@ -213,18 +215,17 @@ function calculateSubtotal() {
 
 calculateSubtotal();
 
-function showSuccessModal() {
-    // Show success modal
-    const successModal = document.getElementById('successModal');
-    successModal.classList.remove('hidden');
+// function showSuccessModal() {
+//     // Show success modal
+//     const successModal = document.getElementById('successModal');
+//     successModal.classList.remove('hidden');
 
-    // Hide the success modal after 3 seconds
-    setTimeout(() => {
-    successModal.classList.add('hidden');
-    // Optionally, redirect to another route
-    window.location.href = "{{ route('order.summary') }}";
-    }, 3000);
-}
+//     // Hide the success modal after 3 seconds
+//     setTimeout(() => {
+//     successModal.classList.add('hidden');
+//     // Optionally, redirect to another route
+//     }, 3000);
+// }
 
 function selectPayment(method) {
       // Reset all buttons
