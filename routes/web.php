@@ -23,7 +23,7 @@ use App\Http\Middleware\ActiveBuyer;
 use App\Http\Middleware\ActiveArtist;
 
 Route::get('/', function () {
-    return redirect('/login');
+    return redirect('/landing');
 });
 
 // Route::middleware(ActiveBuyer::class)->group(function() {

@@ -24,6 +24,9 @@ class ArtistProfileController extends Controller
     {
         $user = Auth::guard('MasterUser')->user();
         $artist = Artist::where('ARTIST_ID','=',$ARTIST_ID)->first();
+
+        $artist->addView();
+
         $portfolios = Art::where('USER_ID',$artist->USER_ID)->where('IS_SALE',false)->get();
         $artWorks = Art::where('USER_ID',$artist->USER_ID)->where('IS_SALE',true)->get();
         $artCategoriesMaster = ArtCategoryMaster::all();

@@ -12,7 +12,14 @@ class Artist extends Model
     use HasFactory;
     protected $table = 'ARTIST';
     protected $primaryKey = 'ARTIST_ID';
-    protected $fillable = ['USER_ID', 'LOCATION','ROLE','BIO','ABOUT'];
+    protected $fillable = ['USER_ID', 'LOCATION','ROLE','BIO','ABOUT','IS_ACTIVE','VIEW'];
+
+    public function addView()
+    {
+        $now = $this->VIEW;
+        $this->VIEW = $now+1;
+        $this->save();
+    }
 
     public function MasterUser()
     {

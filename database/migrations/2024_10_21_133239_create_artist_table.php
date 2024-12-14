@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('BIO');
             $table->text('ABOUT');
             $table->boolean('IS_ACTIVE')->default(false);
+            $table->integer('VIEW')->default(0);
             $table->timestamps();
         });
     }

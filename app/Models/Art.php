@@ -16,6 +16,13 @@ class Art extends Model
     protected $primaryKey = 'ART_ID';
     protected $fillable = ['USER_ID', 'ART_TITLE', 'DESCRIPTION', 'VIEW', 'IS_SALE', 'PRICE'];
 
+    public function addView()
+    {
+        $now = $this->VIEW;
+        $this->VIEW = $now+1;
+        $this->save();
+    }
+    
     public function MasterUser(): BelongsTo
     {
         return $this->belongsTo(MasterUser::class, 'USER_ID', 'USER_ID');

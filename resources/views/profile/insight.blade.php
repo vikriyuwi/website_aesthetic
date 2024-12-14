@@ -55,7 +55,7 @@
                 <p class="text-gray-500">Insights on audience engagement</p>
                 <div class="mt-4 grid grid-cols-3 gap-6">
                     <div class="bg-indigo-100 text-indigo-700 rounded-lg p-4 text-center">
-                        <div class="text-xl font-bold">3,200</div>
+                        <div class="text-xl font-bold">{{ $user->Artist->VIEW }}</div>
                         <div class="text-sm">Profile Views</div>
                     </div>
                     <div class="bg-indigo-100 text-indigo-700 rounded-lg p-4 text-center">
