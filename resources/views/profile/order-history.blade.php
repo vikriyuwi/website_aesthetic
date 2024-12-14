@@ -57,16 +57,18 @@
       </div>
 
       <!-- Orders List -->
-      <div class="divide-y divide-gray-200">
+      
+      <div class="divide-y divide-gray-200 order">
         <!-- Example of an order item -->
+        @foreach($orders as $order)
         <div class="order-item px-6 py-5 hover:bg-gray-50 transition" onclick="toggleOrderDetails(this)">
           <!-- Order Summary -->
           <div class="flex justify-between items-center">
             <div>
-              <h4 class="text-gray-800 font-semibold">Order #12345</h4>
-              <p class="text-sm text-gray-600">Date: Oct 12, 2024</p>
-              <p class="text-sm text-gray-600">Total: $299.99</p>
-              <p class="text-sm text-green-600 font-semibold">Status: Completed</p>
+              <h4 class="text-gray-800 font-semibold">Order #{{ $order->ORDER_ID }}</h4>
+              <p class="text-sm text-gray-600">Date: {{ (new \DateTime($order->created_at))->format('M d, Y') }}</p>
+              <p class="text-sm text-gray-600">Total: Rp {{ number_format($order->total_price, 0, ',', '.') }}</p>
+              <p class="text-sm text-green-600 font-semibold">Status: {{ $order->status_text }}</p>
             </div>
             <div class="flex items-center text-indigo-600 font-semibold">
               <span class="mr-2">Details</span>
@@ -82,72 +84,25 @@
               <p><strong>Items:</strong></p>
               <ul class="space-y-4">
                 <!-- Item 1 -->
+                @foreach($order->OrderItems as $orderItem)
                 <li class="flex items-center">
-                  <img src="https://via.placeholder.com/80" alt="Product 1" class="item-image mr-4"/>
+                  <img src="{{ Str::startsWith($orderItem->Art->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($orderItem->Art->ArtImages()->first()->IMAGE_PATH) : $orderItem->Art->ArtImages()->first()->IMAGE_PATH }}" alt="Product 1" class="item-image mr-4"/>
                   <div class="flex-1">
-                    <p class="text-gray-900 font-medium">Product 1</p>
-                    <p class="text-sm text-gray-500">Quantity: 1</p>
+                    <p class="text-gray-900 font-medium">{{ $orderItem->Art->ART_TITLE }}</p>
+                    <p class="text-sm text-gray-500">Quantity: {{ $orderItem->QUANTITY }}</p>
                   </div>
-                  <p class="text-gray-900 font-medium">$150.00</p>
+                  <p class="text-gray-900 font-medium">Rp {{ number_format($orderItem->Art->PRICE, 0, ',', '.') }}</p>
                 </li>
-                <!-- Item 2 -->
-                <li class="flex items-center">
-                  <img src="https://via.placeholder.com/80" alt="Product 2" class="item-image mr-4"/>
-                  <div class="flex-1">
-                    <p class="text-gray-900 font-medium">Product 2</p>
-                    <p class="text-sm text-gray-500">Quantity: 1</p>
-                  </div>
-                  <p class="text-gray-900 font-medium">$149.99</p>
-                </li>
+                @endforeach
               </ul>
             </div>
             <div>
-              <p class="text-gray-700"><strong>Delivery Address:</strong> Jl. Elang Blok 22 No. 29</p>
-              <p class="text-gray-700"><strong>Payment Method:</strong> Cash On Delivery</p>
+              <p class="text-gray-700"><strong>Delivery Address:</strong> {{ $order->ADDRESS }}, {{ $order->CITY }}, {{ $order->PROVINCE }}, {{ $order->POSTAL_CODE }}</p>
+              <p class="text-gray-700"><strong>Payment Method:</strong> {{ $order->PAYMENT }}</p>
             </div>
           </div>
         </div>
-
-        <!-- Another Order Example -->
-        <div class="order-item px-6 py-5 hover:bg-gray-50 transition" onclick="toggleOrderDetails(this)">
-          <!-- Order Summary -->
-          <div class="flex justify-between items-center">
-            <div>
-              <h4 class="text-gray-800 font-semibold">Order #12346</h4>
-              <p class="text-sm text-gray-600">Date: Oct 11, 2024</p>
-              <p class="text-sm text-gray-600">Total: $49.99</p>
-              <p class="text-sm text-yellow-600 font-semibold">Status: Sent to Address</p>
-            </div>
-            <div class="flex items-center text-indigo-600 font-semibold">
-              <span class="mr-2">Details</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M6 9l6 6 6-6"/>
-              </svg>
-            </div>
-          </div>
-
-          <!-- Order Details (Collapsible Section) -->
-          <div class="order-details mt-4 space-y-4">
-            <div class="text-gray-700">
-              <p><strong>Items:</strong></p>
-              <ul class="space-y-4">
-                <!-- Item with Picture -->
-                <li class="flex items-center">
-                  <img src="https://via.placeholder.com/80" alt="Product 3" class="item-image mr-4"/>
-                  <div class="flex-1">
-                    <p class="text-gray-900 font-medium">Product 3</p>
-                    <p class="text-sm text-gray-500">Quantity: 1</p>
-                  </div>
-                  <p class="text-gray-900 font-medium">$49.99</p>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <p class="text-gray-700"><strong>Shipping Address:</strong> 456 Market St, Los Angeles, CA 90001</p>
-              <p class="text-gray-700"><strong>Payment Method:</strong> PayPal</p>
-            </div>
-          </div>
-        </div>
+        @endforeach
       </div>
     </div>
 

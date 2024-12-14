@@ -15,10 +15,13 @@ return new class extends Migration
             $table->id('ORDER_ID');
             $table->unsignedBigInteger('USER_ID');
             $table->foreign('USER_ID')->references('USER_ID')->on('MASTER_USER')->onUpdate('cascade')->onDelete('cascade');
-            $table->unsignedBigInteger('ART_ID');
-            $table->foreign('ART_ID')->references('ART_ID')->on('ART')->onUpdate('cascade')->onDelete('cascade');
-            $table->integer('QUANTITY');
-            $table->integer('PRICE_PER_ITEM');
+            $table->string('PAYMENT')->default('BANK TRANSFER');
+            $table->string('FULLNAME');
+            $table->string('PHONE');
+            $table->string('ADDRESS');
+            $table->string('PROVINCE');
+            $table->string('CITY');
+            $table->string('POSTAL_CODE');
             $table->integer('STATUS')->default(1);
             $table->timestamps();
         });

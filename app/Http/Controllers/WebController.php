@@ -137,15 +137,6 @@ public function showCategory($category)
 
     return view('artists.sections.collection-detail', compact('artworks', 'category'));
 }
-public function orderSummary()
-{
-    return view('layouts.order-summary');
-}
-
-    public function orderHistory()
-    {
-        return view('profile.order-history');
-    }
     public function likeHistory()
     {
         return view('profile.like-history');

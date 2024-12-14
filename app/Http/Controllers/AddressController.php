@@ -69,7 +69,6 @@ class AddressController extends Controller
         }
 
         return redirect()->route('order.my')->with('status','Address has been deleted!');
-        
     }
 
     public function destroy($id) {
