@@ -57,11 +57,13 @@ Route::middleware([Authorization::class.':true'])->group(function() {
     Route::prefix('portfolio')->name('portfolio.')->group(function () {
         Route::post('/add', [ArtistPortfolioController::class, 'store'])->name('store');
         Route::get('/{portfolioId}/delete/',[ArtistPortfolioController::class,'deletePortfolio'])->name('destroy');
+        Route::get('/{id}/like',[ArtistArtWorkController::class,'like'])->name('like');
     });
 
     Route::prefix('artwork')->name('artwork.')->group(function () {
         Route::post('/add',[ArtistArtWorkController::class,'addArtWork'])->name('store');
         Route::get('/{artworkId}/delete/',[ArtistArtWorkController::class,'deleteArtWork'])->name('destroy');
+        Route::get('/{id}/like',[ArtistArtWorkController::class,'like'])->name('like');
     });
 
     Route::prefix('art-collection')->name('artCollection.')->group(function () {
