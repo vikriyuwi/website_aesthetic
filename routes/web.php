@@ -99,6 +99,8 @@ Route::middleware([Authorization::class.':true'])->group(function() {
         });
         Route::get('/{id}/summary', [OrderController::class, 'show'])->name('summary');
     });
+
+    Route::get('/insight-artist', [WebController::class, 'insightArtist'])->name('insight-artist');
 });
 
 Route::get('/landing', [App\Http\Controllers\WebController::class, 'landing'])->name('landing');
@@ -208,8 +210,6 @@ Route::get('/artworks/{artistId}/', [ArtistArtWorkController::class, 'showAllArt
 Route::get('/favorites/cart', [WebController::class, 'cartProfile'])->name('cart.profile');
 
 Route::get('/about-us', [WebController::class, 'aboutUs'])->name('about-us');
-
-Route::get('/insight-artist', [WebController::class, 'insightArtist'])->name('insight-artist');
 
 Route::get('/blog', [WebController::class, 'blog'])->name('blog');
 

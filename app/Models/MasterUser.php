@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -75,6 +76,56 @@ class MasterUser extends Authenticatable
     public function Addresses(): HasMany
     {
         return $this->hasMany(Address::class, 'USER_ID', 'USER_ID');
+    }
+
+    public function getTotalEarningAttribute()
+    {
+        return $this->Arts()->with('OrderItems')
+        ->get()
+        ->flatMap(function ($art) {
+            return $art->OrderItems;
+        })
+        ->sum(function ($orderItem) {
+            return $orderItem->QUANTITY * $orderItem->PRICE_PER_ITEM;
+        });
+    }
+
+    public function getTotalEarningByMonth(int $month)
+    {
+        // Use the relationship to filter by month and sum up the total price
+        return $this->Arts()->with(['OrderItems' => function ($query) use ($month) {
+            $query->whereMonth('created_at', $month); // Filter by the given month
+        }])
+        ->get()
+        ->flatMap(function ($art) {
+            return $art->OrderItemss;
+        })
+        ->sum(function ($orderItem) {
+            return $orderItem->QUANTITY * $orderItem->PRICE_PER_ITEM;
+        });
+    }
+
+    public function getTotalEarningCurrentMonthAttribute()
+    {
+        $currentMonthStart = Carbon::now()->startOfMonth();
+        $currentMonthEnd = Carbon::now()->endOfMonth();
+
+        return $this->Arts()->with('OrderItems')
+        ->whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])
+        ->get()
+        ->flatMap(function ($art) {
+            return $art->OrderItems;
+        })
+        ->sum(function ($orderItem) {
+            return $orderItem->QUANTITY * $orderItem->PRICE_PER_ITEM;
+        });
+    }
+
+    public function getSoldItems()
+    {
+        return OrderItem::whereHas('Art', function ($query) {
+            $query->where('USER_ID', $this->USER_ID);
+        })->get();
     }
 
     // public function Artists()
