@@ -137,15 +137,6 @@ public function showCategory($category)
 
     return view('artists.sections.collection-detail', compact('artworks', 'category'));
 }
-public function orderSummary()
-{
-    return view('layouts.order-summary');
-}
-
-    public function orderHistory()
-    {
-        return view('profile.order-history');
-    }
     public function likeHistory()
     {
         return view('profile.like-history');
@@ -213,7 +204,14 @@ public function registerArtist(Request $request)
 
 public function insightArtist()
 {
-    return view('profile.insight');
+    $user = Auth::user();
+
+    // foreach($user->)
+    // dd($user->USER_ID);
+    // dd($user->getSoldItems());
+    // $soldItems = $user->getSoldItems();
+
+    return view('profile.insight', compact('user'));
 }
 
 public function blog()

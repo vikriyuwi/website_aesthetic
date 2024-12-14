@@ -123,7 +123,7 @@
         </div>
         <p class="text-sm text-gray-500 mt-2">Shipping and taxes will be calculated at checkout.</p> <!-- Reduced font size -->
 
-        <button onclick="window.location.href='{{ route('order.checkout') }}'" class="w-full bg-indigo-600 text-white py-3 mt-6 rounded-lg text-base font-semibold hover:bg-indigo-800 transition">Checkout</button> <!-- Reduced font size -->
+        <button onclick="window.location.href='{{ route('order.my') }}'" class="w-full bg-indigo-600 text-white py-3 mt-6 rounded-lg text-base font-semibold hover:bg-indigo-800 transition">Checkout</button> <!-- Reduced font size -->
 
         <p class="text-center mt-4 text-sm text-gray-500">
             or

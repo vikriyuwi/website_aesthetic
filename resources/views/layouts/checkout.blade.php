@@ -140,9 +140,9 @@
     <h2 class="text-2xl font-semibold mb-4 text-gray-800">📦 Ordered Product</h2>
     <div class="space-y-4">
       <!-- Item 1 -->
-      @foreach($orders as $order)
+      @foreach($carts as $order)
       <div class="flex items-center order-item" data-price="{{ $order->PRICE_PER_ITEM }}">
-        <img alt="Paint in the night" class="w-16 h-16 rounded-lg shadow" src="https://placehold.co/60x60"/>
+        <img alt="Paint in the night" class="w-16 h-16 rounded-lg shadow" src="{{ Str::startsWith($order->Art->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($order->Art->ArtImages()->first()->IMAGE_PATH) : $order->Art->ArtImages()->first()->IMAGE_PATH }}"/>
         <div class="ml-4">
           <p class="text-gray-700 font-medium">{{ $order->Art->ART_TITLE }}</p>
           <p class="text-gray-500 text-sm">{{ $order->Art->MasterUser->Buyer->FULLNAME }}</p>
@@ -158,7 +158,7 @@
     <h2 class="text-xl font-semibold mb-4 text-gray-800">💳 Total Payment</h2>
     <div class="flex justify-between text-lg font-medium mb-2">
       <p>Subtotal</p>
-      <p id="subtotalOrder">$2,896</p>
+      <p id="subtotalOrder">Rp 0</p>
     </div>
     <div class="flex justify-between text-lg font-medium mb-2">
       <p>Ongkir</p>
@@ -166,13 +166,13 @@
     </div>
     <div class="flex justify-between text-xl font-semibold">
       <p>Total</p>
-      <p id="totalOrder">$2,916</p>
+      <p id="totalOrder">Rp 0</p>
     </div>
         <!-- Payment Button -->
-        <button onclick="showSuccessModal()" 
+        <a href="{{ route('order.checkout') }}"
             class="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold mt-4 hover:bg-indigo-700 transition">
             Lanjutkan ke Pembayaran
-        </button>
+        </a>
   </div>
 </div>
 

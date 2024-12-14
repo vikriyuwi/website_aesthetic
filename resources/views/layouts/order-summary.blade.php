@@ -57,24 +57,16 @@
           <div class="space-y-4">
             
             <!-- Item 1 -->
-            <div class="flex items-center">
-              <img alt="PC system All in One APPLE iMac (2023)" class="w-16 h-16 rounded-lg shadow" src="https://placehold.co/60x60"/>
+            @foreach($order->OrderItems as $orderItem)
+            <div class="flex items-center order-item" data-price="{{ $orderItem->PRICE_PER_ITEM }}">
+              <img alt="PC system All in One APPLE iMac (2023)" class="w-16 h-16 rounded-lg shadow" src="{{ Str::startsWith($orderItem->Art->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($orderItem->Art->ArtImages()->first()->IMAGE_PATH) : $orderItem->Art->ArtImages()->first()->IMAGE_PATH }}"/>
               <div class="ml-4">
-                <p class="text-gray-700 font-medium">PC system All in One APPLE iMac (2023)</p>
-                <p class="text-gray-500 text-sm">x1</p>
+                <p class="text-gray-700 font-medium">{{ $orderItem->Art->ART_TITLE }}</p>
+                <p class="text-gray-500 text-sm">x{{ $orderItem->QUANTITY }}</p>
               </div>
-              <p class="ml-auto text-gray-700 font-semibold">$1,499</p>
+              <p class="ml-auto text-gray-700 font-semibold">Rp {{ number_format($orderItem->Art->PRICE, 0, ',', '.') }}</p>
             </div>
-
-            <!-- Item 2 -->
-            <div class="flex items-center">
-              <img alt="Apple Watch Series 8" class="w-16 h-16 rounded-lg shadow" src="https://placehold.co/60x60"/>
-              <div class="ml-4">
-                <p class="text-gray-700 font-medium">Apple Watch Series 8</p>
-                <p class="text-gray-500 text-sm">x2</p>
-              </div>
-              <p class="ml-auto text-gray-700 font-semibold">$598</p>
-            </div>
+            @endforeach
           </div>
         </div>
 
@@ -89,11 +81,11 @@
 
           <!-- Address Details -->
           <div class="space-y-2">
-              <p class="font-bold text-gray-800 text-lg">Chantikka Riffka</p>
-              <p class="text-gray-600">085246934487</p>
+              <p class="font-bold text-gray-800 text-lg">{{ $order->FULLNAME }}</p>
+              <p class="text-gray-600">{{ $order->PHONE }}</p>
               <p class="text-gray-700 leading-relaxed">
-                  Jl. Kemanaapun asal denganmu, gg gaming, no. 34A<br>
-                  Bintaro, Tangerang Selatan, 89678
+                {{ $order->ADDRESS }}<br>
+                {{ $order->PROVINCE }}, {{ $order->CITY }}, {{ $order->POSTAL_CODE }}
               </p>
           </div>
       </div>
@@ -102,7 +94,7 @@
         <!-- Payment Method -->
         <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
           <h2 class="text-2xl font-semibold mb-4 text-gray-800">💳 Payment Method</h2>
-          <p class="text-gray-700">Bank Transfer - Bank BCA</p>
+          <p class="text-gray-700">{{ $order->PAYMENT }}</p>
         </div>
       </div>
 
@@ -112,21 +104,21 @@
           <h2 class="text-2xl font-semibold mb-4 text-gray-800">💵 Total Pesanan</h2>
           <div class="flex justify-between text-lg font-medium mb-2">
             <p>Subtotal</p>
-            <p>$2,896</p>
+            <p id="subtotalOrder">Rp 0</p>
           </div>
           <div class="flex justify-between text-lg font-medium mb-2">
             <p>Shipping</p>
-            <p>$20</p>
+            <p>Rp 50.000</p>
           </div>
           <div class="flex justify-between text-xl font-semibold">
             <p>Total</p>
-            <p>$2,916</p>
+            <p id="totalOrder">Rp 0</p>
           </div>
         </div>
 
         <!-- Button to Go Back or View Receipt -->
         <div class="space-y-4 mt-6">
-        <a href="/order-history" 
+        <a href="{{ route('order.history') }}" 
             class="w-full block text-center bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition">
             View Your Order
         </a>
@@ -136,6 +128,28 @@
 
     </div>
   </div>
+<script>
+  const orders = document.querySelectorAll('.order-item');
+const subtotalEl = document.getElementById('subtotalOrder');
+const totalEl = document.getElementById('totalOrder');
 
+function calculateSubtotal() {
+  let subtotal = 0;
+  orders.forEach(order => {
+    subtotal += parseFloat(order.dataset.price);
+  });
+
+  const formatter = new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0
+  });
+
+  subtotalEl.textContent = formatter.format(subtotal);
+  totalEl.textContent = formatter.format(subtotal+50000);
+}
+
+calculateSubtotal();
+</script>
 </body>
 </html>

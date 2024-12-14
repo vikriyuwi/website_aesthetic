@@ -46,8 +46,8 @@ class Art extends Model
         return $this->hasMany(Cart::class, 'ART_ID', 'ART_ID');
     }
 
-    public function Orders(): HasMany
+    public function OrderItems(): HasMany
     {
-        return $this->hasMany(Order::class, 'ART_ID', 'ART_ID');
+        return $this->hasMany(OrderItem::class, 'ART_ID', 'ART_ID');
     }
 }

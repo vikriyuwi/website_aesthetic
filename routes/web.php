@@ -87,8 +87,9 @@ Route::middleware([Authorization::class.':true'])->group(function() {
     });
 
     Route::prefix('order')->name('order.')->group(function() {
-        Route::get('/', [CheckoutController::class, 'show'])->name('my');
-        Route::get('/chekcout',[CheckoutController::class, 'placeOrder'])->name('checkout');
+        Route::get('/', [OrderController::class, 'index'])->name('my');
+        Route::get('/chekcout',[OrderController::class, 'checkout'])->name('checkout');
+        Route::get('/history', [OrderController::class, 'history'])->name('history');
         Route::prefix('address')->name('address.')->group(function() {
             Route::get('/', [AddressController::class, 'index'])->name('show');
             Route::get('/add', [AddressController::class, 'add'])->name('add');
@@ -96,7 +97,10 @@ Route::middleware([Authorization::class.':true'])->group(function() {
             Route::get('/{id}/delete', [AddressController::class, 'destroy'])->name('destroy');
             Route::get('/{id}/activate', [AddressController::class, 'active'])->name('activate');
         });
+        Route::get('/{id}/summary', [OrderController::class, 'show'])->name('summary');
     });
+
+    Route::get('/insight-artist', [WebController::class, 'insightArtist'])->name('insight-artist');
 });
 
 Route::get('/landing', [App\Http\Controllers\WebController::class, 'landing'])->name('landing');
@@ -133,10 +137,6 @@ Route::get('/explore', [App\Http\Controllers\WebController::class, 'explore']);
 Route::get('/favorites/follows', [WebController::class, 'follows'])->name('favorites.follows');
 
 Route::get('/favorites/likes', [WebController::class, 'likes'])->name('favorites.likes');
-
-Route::get('/order-summary', [WebController::class, 'orderSummary'])->name('order.summary');
-
-Route::get('/order-history', [WebController::class, 'orderHistory'])->name('order.history');
 
 Route::get('/landing2', [App\Http\Controllers\WebController::class, 'landing2']);
 
@@ -210,8 +210,6 @@ Route::get('/artworks/{artistId}/', [ArtistArtWorkController::class, 'showAllArt
 Route::get('/favorites/cart', [WebController::class, 'cartProfile'])->name('cart.profile');
 
 Route::get('/about-us', [WebController::class, 'aboutUs'])->name('about-us');
-
-Route::get('/insight-artist', [WebController::class, 'insightArtist'])->name('insight-artist');
 
 Route::get('/blog', [WebController::class, 'blog'])->name('blog');
 

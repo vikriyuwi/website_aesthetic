@@ -14,7 +14,7 @@
             <h2 class="text-2xl font-semibold text-gray-800">Earnings Overview 💰</h2>
             <p class="text-gray-500">Total earnings in the past month</p>
             <div class="mt-4 flex items-center space-x-4">
-                <div class="text-4xl font-bold text-indigo-600">Rp 5,200,000</div>
+                <div class="text-4xl font-bold text-indigo-600">Rp {{ number_format($user->total_earning_current_month, 0, ',', '.') }}</div>
                 <div class="text-sm text-green-600 bg-green-100 px-2 py-1 rounded">+15% from last month</div>
             </div>
         </div>
@@ -128,62 +128,19 @@
         <div class="overflow-y-auto max-h-64">
         <table class="w-full text-left table-auto border-collapse">
             <tbody class="text-gray-700">
+                @foreach($user->getSoldItems() as $item)
                 <tr class="border-b">
-                    <td class="py-3"><img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=3145&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Product 1" class="w-12 h-12 rounded shadow-sm"></td>
-                    <td class="py-3">Digital Portrait</td>
-                    <td class="py-3">Illustration</td>
-                    <td class="py-3">2024-11-01 14:00</td>
-                    <td class="py-3 font-semibold text-indigo-600">Rp 700,000</td>
+                    <td class="py-3"><img src="{{ Str::startsWith($item->Art->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($item->Art->ArtImages()->first()->IMAGE_PATH) : $item->Art->ArtImages()->first()->IMAGE_PATH }}" alt="Product {{ $item->ORDER_ITEM_ID }}" class="w-12 h-12 rounded shadow-sm"></td>
+                    <td class="py-3">{{ $item->Art->ART_TITLE }}</td>
+                    <td class="py-3">
+                        @foreach($item->Art->ArtCategories as $category)
+                            {{ $category->ArtCategoryMaster->DESCR }},
+                        @endforeach
+                    </td>
+                    <td class="py-3">{{ $item->created_at }}</td>
+                    <td class="py-3 font-semibold text-indigo-600">Rp {{ number_format($item->PRICE_PER_ITEM, 0, ',', '.') }}</td>
                 </tr>
-                <tr class="border-b">
-                    <td class="py-3"><img src="https://plus.unsplash.com/premium_photo-1664013263421-91e3a8101259?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Product 2" class="w-12 h-12 rounded shadow-sm"></td>
-                    <td class="py-3">Fantasy Landscape</td>
-                    <td class="py-3">Painting</td>
-                    <td class="py-3">2024-10-20 11:30</td>
-                    <td class="py-3 font-semibold text-indigo-600">Rp 1,200,000</td>
-                </tr>
-                <tr class="border-b">
-                    <td class="py-3"><img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=3145&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Product 1" class="w-12 h-12 rounded shadow-sm"></td>
-                    <td class="py-3">Digital Portrait</td>
-                    <td class="py-3">Illustration</td>
-                    <td class="py-3">2024-11-01 14:00</td>
-                    <td class="py-3 font-semibold text-indigo-600">Rp 700,000</td>
-                </tr>
-                <tr class="border-b">
-                    <td class="py-3"><img src="https://plus.unsplash.com/premium_photo-1664013263421-91e3a8101259?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Product 2" class="w-12 h-12 rounded shadow-sm"></td>
-                    <td class="py-3">Fantasy Landscape</td>
-                    <td class="py-3">Painting</td>
-                    <td class="py-3">2024-10-20 11:30</td>
-                    <td class="py-3 font-semibold text-indigo-600">Rp 1,200,000</td>
-                </tr>
-                <tr class="border-b">
-                    <td class="py-3"><img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=3145&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Product 1" class="w-12 h-12 rounded shadow-sm"></td>
-                    <td class="py-3">Digital Portrait</td>
-                    <td class="py-3">Illustration</td>
-                    <td class="py-3">2024-11-01 14:00</td>
-                    <td class="py-3 font-semibold text-indigo-600">Rp 700,000</td>
-                </tr>
-                <tr class="border-b">
-                    <td class="py-3"><img src="https://plus.unsplash.com/premium_photo-1664013263421-91e3a8101259?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Product 2" class="w-12 h-12 rounded shadow-sm"></td>
-                    <td class="py-3">Fantasy Landscape</td>
-                    <td class="py-3">Painting</td>
-                    <td class="py-3">2024-10-20 11:30</td>
-                    <td class="py-3 font-semibold text-indigo-600">Rp 1,200,000</td>
-                </tr>
-                <tr class="border-b">
-                    <td class="py-3"><img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=3145&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Product 1" class="w-12 h-12 rounded shadow-sm"></td>
-                    <td class="py-3">Digital Portrait</td>
-                    <td class="py-3">Illustration</td>
-                    <td class="py-3">2024-11-01 14:00</td>
-                    <td class="py-3 font-semibold text-indigo-600">Rp 700,000</td>
-                </tr>
-                <tr class="border-b">
-                    <td class="py-3"><img src="https://plus.unsplash.com/premium_photo-1664013263421-91e3a8101259?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Product 2" class="w-12 h-12 rounded shadow-sm"></td>
-                    <td class="py-3">Fantasy Landscape</td>
-                    <td class="py-3">Painting</td>
-                    <td class="py-3">2024-10-20 11:30</td>
-                    <td class="py-3 font-semibold text-indigo-600">Rp 1,200,000</td>
-                </tr>
+                @endforeach
             </tbody>
         </table>
     </div>
