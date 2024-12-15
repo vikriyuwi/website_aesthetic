@@ -226,3 +226,29 @@ Route::get('/blog-detail', [WebController::class, 'blogDetail'])->name('blog-det
 Route::get('/contact-us', [WebController::class, 'contactUs'])->name('contact-us');
 
 Route::get('/colection/detail', [WebController::class, 'collectionDetails'])->name('collection-details');
+
+Route::get('/admin/dashboard', function () {
+    return view('admin.dashboard', [
+        'totalBuyers' => 150, 
+        'totalArtists' => 80, 
+        'totalCategories' => 20, 
+        'totalSkills' => 35, 
+        'totalArtworks' => 300
+    ]);
+})->name('admin.dashboard');
+
+Route::get('/admin/users', function () {
+    return view('admin.users');
+})->name('admin.users');
+
+Route::get('/admin/category', function () {
+    return view('admin.category');
+})->name('admin.category');
+
+Route::get('/admin/skills', function () {
+    return view('admin.skills');
+})->name('admin.skills');
+
+Route::get('/admin/login', function () {
+    return view('admin.login');
+})->name('admin.login');

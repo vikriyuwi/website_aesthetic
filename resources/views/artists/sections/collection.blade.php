@@ -5,7 +5,7 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <style>
-    .collection-card {
+     .collection-card {
       position: relative;
     }
     .ellipsisButton {
@@ -35,12 +35,12 @@
     }
   </style>
 </head>
-<body>
-  <div class="bg-white p-4 rounded-lg shadow-lg mt-4">
+<body class="bg-gray-100">
+  <div class="max-w-screen-lg mx-auto mt-8">
     <div class="flex justify-between items-center mb-6">
       <h3 class="text-3xl font-extrabold text-gray-800">Collections</h3>
       @if(Auth::check())
-        @if (Auth::user()->USER_ID == $artist->USER_ID )
+        @if (Auth::user()->USER_ID == $artist->USER_ID)
           <button id="addCollectionButton" class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-5 py-2 rounded-full shadow-md hover:from-blue-600 hover:to-indigo-700 transition duration-300 transform hover:scale-105">
             + Add Collection
           </button>
@@ -48,11 +48,11 @@
       @endif
     </div>
 
-    @forEach($artist->Collections as $collection)
-    <!-- Collections Grid -->
+    <!-- Collections Grid Container -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-      <!-- Collection Item Example -->
-      <div class="relative bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 overflow-hidden border border-gray-200 collection-card" id="artistCollection" data-collection-id="collection id" data-delete-route="route delete">
+      @foreach($artist->Collections as $collection)
+      <!-- Collection Item -->
+      <div class="relative bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 overflow-hidden border border-gray-200 collection-card">
         @if(Auth::check())
           @if ($artistItSelf)
           <button class="ellipsisButton text-gray-600 hover:text-gray-800 focus:outline-none" onclick="toggleOptionsMenu(event, this)">
@@ -64,22 +64,27 @@
         @endif
         <!-- Options Menu -->
         <div class="optionsMenu">
-          <button class="block w-full text-left px-4 py-2 hover:bg-gray-100 editCollectionButton" data-collection-id="{{ $collection->ARTIST_COLLECTION_ID }}" data-collection-title="{{ $collection->COLLECTION_NAME }}" data-collection-descr="{{ $collection->COLLECTION_DESCR }}">Edit Collection</button>
-          <button class="block w-full text-left px-4 py-2 hover:bg-gray-100 deleteCollectionButton" data-collection-id="{{ $collection->ARTIST_COLLECTION_ID }}" data-collection-title="{{ $collection->COLLECTION_NAME }}">Delete Collection</button>
+        <button class="block w-full text-left px-4 py-2 hover:bg-gray-100 editCollectionButton" data-collection-id="{{ $collection->ARTIST_COLLECTION_ID }}" data-collection-title="{{ $collection->COLLECTION_NAME }}" data-collection-descr="{{ $collection->COLLECTION_DESCR }}">Edit Collection</button>
+        <button class="block w-full text-left px-4 py-2 hover:bg-gray-100 deleteCollectionButton" data-collection-id="{{ $collection->ARTIST_COLLECTION_ID }}" data-collection-title="{{ $collection->COLLECTION_NAME }}">Delete Collection</button>
         </div>
-        <img alt="Collection Image 1" class="w-full h-48 object-cover transform hover:scale-110 transition-transform duration-500" src="{{ $collection->ArtistCollections->first() != null ? Str::startsWith($collection->ArtistCollections->first()->Art->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($collection->ArtistCollections->first()->art->ArtImages()->first()->IMAGE_PATH) : $collection->ArtistCollections->first()->art->ArtImages()->first()->IMAGE_PATH : "https://placehold.co/300x300"}}">
+
+        <img alt="Collection Image" class="w-full h-48 object-cover transform hover:scale-110 transition-transform duration-500" 
+             src="{{ $collection->ArtistCollections->first() != null ? 
+                (Str::startsWith($collection->ArtistCollections->first()->Art->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? 
+                asset($collection->ArtistCollections->first()->art->ArtImages()->first()->IMAGE_PATH) : 
+                $collection->ArtistCollections->first()->art->ArtImages()->first()->IMAGE_PATH) : 
+                'https://placehold.co/300x300'}}">
+        
         <div class="p-6">
           <h4 class="text-xl font-semibold text-gray-900 mb-2">{{ $collection->COLLECTION_NAME }}</h4>
-          <p class="text-gray-600 mb-4">{{ count($collection->ArtistCollections) }}</p>
-          <a href="{{ route('collection.show', ['artistId' => $artist->ARTIST_ID, 'collectionId' => $collection->ARTIST_COLLECTION_ID]) }}" class=" text-indigo-600 font-bold hover:underline">View Collection &rarr;</a>
+          <p class="text-gray-600 mb-4">{{ count($collection->ArtistCollections) }} Artworks</p>
+          <a href="{{ route('collection.show', ['artistId' => $artist->ARTIST_ID, 'collectionId' => $collection->ARTIST_COLLECTION_ID]) }}" class="text-indigo-600 font-bold hover:underline">View Collection &rarr;</a>
         </div>
       </div>
-      <!-- More collection items can be added similarly -->
+      @endforeach
     </div>
-    @endforeach
-    {{-- End collection grod --}}
+    <!-- End of Grid Container -->
   </div>
-
   <!-- Add Collection Modal -->
   <div id="addCollectionModal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden modal-overlay">
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-xl">

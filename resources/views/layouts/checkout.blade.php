@@ -170,6 +170,7 @@
     </div>
         <!-- Payment Button -->
         <a href="{{ route('order.checkout') }}"
+            onclick="showSuccessModal();"
             class="w-full block text-center bg-indigo-600 text-white py-3 rounded-lg font-semibold mt-4 hover:bg-indigo-700 transition">
             Lanjutkan ke Pembayaran
         </a>
@@ -190,7 +191,16 @@
 
 <!-- Scripts -->
 <script>
+function showSuccessModal() {
+    // Show success modal
+    const successModal = document.getElementById('successModal');
+    successModal.classList.remove('hidden');
 
+    // Hide the success modal after 3 seconds
+    setTimeout(() => {
+    successModal.classList.add('hidden');
+    }, 5000);
+}
 const orders = document.querySelectorAll('.order-item');
 console.log(orders);
 const subtotalEl = document.getElementById('subtotalOrder');

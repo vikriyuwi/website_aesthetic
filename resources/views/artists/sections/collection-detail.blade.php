@@ -41,6 +41,14 @@
     </style>
 </head>
 <body class="container mx-auto p-6">
+    <!-- Back Button -->
+    <a href="javascript:history.back()" 
+    class="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-700 rounded-full hover:bg-gray-300 transition duration-300 shadow-sm">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+    </svg>
+    <span class="text-sm font-medium">Back</span>
+    </a>
     <!-- Button to Trigger Modal -->
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-3xl font-bold">{{ $artsCount }} Artworks</h1>

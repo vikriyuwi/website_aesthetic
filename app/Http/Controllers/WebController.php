@@ -240,4 +240,5 @@ public function buyerProfile(){
     return view('buyer.profile');
 }
 
+
 }
