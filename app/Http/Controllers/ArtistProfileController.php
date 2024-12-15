@@ -11,6 +11,7 @@ use App\Models\ArtistCollection;
 use App\Models\ArtistHire;
 use App\Models\ArtCategoryMaster;
 use App\Models\Post;
+use App\Models\ArtistRating;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -24,6 +25,9 @@ class ArtistProfileController extends Controller
     {
         $user = Auth::guard('MasterUser')->user();
         $artist = Artist::where('ARTIST_ID','=',$ARTIST_ID)->first();
+
+        $artist->addView();
+
         $portfolios = Art::where('USER_ID',$artist->USER_ID)->where('IS_SALE',false)->get();
         $artWorks = Art::where('USER_ID',$artist->USER_ID)->where('IS_SALE',true)->get();
         $artCategoriesMaster = ArtCategoryMaster::all();
@@ -113,4 +117,36 @@ class ArtistProfileController extends Controller
         return redirect()->back()->with('success','Profile has been updated successfully');
     }
         
+    public function reviewArtist($id, Request $request)
+    {
+        $user = Auth::user();
+        $artist = Artist::find($id);
+
+        if($artist == null) {
+            return redirect()->back()->withErrors(['message'=>'Artist not found!']);
+        }
+
+        $review = $artist->ArtistRatings()->create([
+            'USER_ID' => $user->USER_ID,
+            'USER_RATING' => $request->rating,
+            'CONTENT' => $request->content
+        ]);
+
+        return redirect()->back()->with('success','Review has been posted!');
+    }
+
+    public function destroyArtistReview($id)
+    {
+        $user = Auth::user();
+        $review = ArtistRating::find($id);
+
+        if($review->USER_ID != $user->USER_ID)
+        {
+            return redirect()->back()->withErrors(['message'=>'Not your review']);
+        }
+
+        $review->delete();
+
+        return redirect()->back()->with('status','Review has been deleted!');
+    }
 }

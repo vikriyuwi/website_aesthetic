@@ -99,7 +99,8 @@ class WebController extends Controller
 
     public function showArtwork($id)
     {
-        $artwork = Art::where('ART_ID',$id)->first();
+        $artwork = Art::find($id);
+        $artwork->addView();
         $moreArtWorks = Art::where('USER_ID',$artwork->USER_ID)->where('ART_ID', '!=', $artwork->ART_ID)->get();
     
         if (!isset($artwork)) {

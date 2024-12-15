@@ -141,4 +141,21 @@ class ArtistArtWorkController extends Controller
 
         return redirect()->route('artist.show', ['id' => $artist->ARTIST_ID, 'section' => 'artwork'])->with('status', 'Artwork has been deleted successfully!');
     }
+
+    public function like($id)
+    {
+        $user = Auth::user();
+        $art = Art::find($id);
+
+        $like = ArtLike::where('ART_ID',$art->ART_ID)->where('USER_ID',$user->USER_ID)->first();
+        if ($like != null) {
+            $like->delete();
+        } else {
+            $art->ArtLikes()->create([
+                'USER_ID' => $user->USER_ID
+            ]);
+        }
+
+        return redirect()->back()->with('status','art being liked!');
+    }
 }

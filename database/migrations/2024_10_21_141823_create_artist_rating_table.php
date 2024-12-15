@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id('ARTIST_RATING_ID');
             $table->unsignedBigInteger('ARTIST_ID');
             $table->foreign('ARTIST_ID')->references('ARTIST_ID')->on('ARTIST')->onUpdate('cascade')->onDelete('cascade');
-            $table->longText('CONTENT');
+            $table->unsignedBigInteger('USER_ID');
+            $table->foreign('USER_ID')->references('USER_ID')->on('MASTER_USER')->onUpdate('cascade')->onDelete('cascade');
+            $table->longText('CONTENT')->nullable();
             $table->integer('USER_RATING');
             $table->timestamps();
         });

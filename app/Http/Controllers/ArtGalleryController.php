@@ -22,6 +22,8 @@ class ArtGalleryController extends Controller
     {
         $portfolio = Art::find($id);
 
+        $portfolio->addView();
+
         $morePortfolios = Art::where('USER_ID',$portfolio->USER_ID)->where('IS_SALE',false)->where('ART_ID', '!=', $portfolio->ART_ID)->limit(4)->get();
 
         if ($portfolio == null) {

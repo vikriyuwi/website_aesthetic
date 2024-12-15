@@ -23,7 +23,7 @@ use App\Http\Middleware\ActiveBuyer;
 use App\Http\Middleware\ActiveArtist;
 
 Route::get('/', function () {
-    return redirect('/login');
+    return redirect('/landing');
 });
 
 // Route::middleware(ActiveBuyer::class)->group(function() {
@@ -57,11 +57,18 @@ Route::middleware([Authorization::class.':true'])->group(function() {
     Route::prefix('portfolio')->name('portfolio.')->group(function () {
         Route::post('/add', [ArtistPortfolioController::class, 'store'])->name('store');
         Route::get('/{portfolioId}/delete/',[ArtistPortfolioController::class,'deletePortfolio'])->name('destroy');
+        Route::get('/{id}/like',[ArtistArtWorkController::class,'like'])->name('like');
     });
 
     Route::prefix('artwork')->name('artwork.')->group(function () {
         Route::post('/add',[ArtistArtWorkController::class,'addArtWork'])->name('store');
         Route::get('/{artworkId}/delete/',[ArtistArtWorkController::class,'deleteArtWork'])->name('destroy');
+        Route::get('/{id}/like',[ArtistArtWorkController::class,'like'])->name('like');
+    });
+
+    Route::prefix('artist')->name('artist.')->group(function () {
+        Route::put('/{id}/review', [ArtistProfileController::class, 'reviewArtist'])->name('review');
+        Route::get('/review/{id}/delete', [ArtistProfileController::class, 'destroyArtistReview'])->name('review.delete');
     });
 
     Route::prefix('art-collection')->name('artCollection.')->group(function () {
@@ -126,6 +133,7 @@ Route::prefix('art-gallery')->name('artGallery.')->group(function () {
 Route::prefix('post')->name('post.')->group(function () {
     Route::get('/{id}', [PostController::class, 'postDetails'])->name('detail');
     Route::put('/{id}/comment', [PostController::class, 'addComment'])->name('comment');
+    Route::get('/comment/{id}/delete', [PostController::class, 'destroyComment'])->name('comment.delete');
 });
 
 Route::get('/explore', [App\Http\Controllers\WebController::class, 'explore']);
