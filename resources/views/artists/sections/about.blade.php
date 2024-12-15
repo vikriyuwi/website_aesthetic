@@ -85,7 +85,9 @@
                         <p class="font-bold">
                             {{ $rating->MasterUser->Buyer->FULLNAME }}
                             <span class="text-sm text-gray-600"> {{ $rating->created_at }}</span>
-                            @if(Auth::user()->USER_ID == $rating->MasterUser->USER_ID)<a href="{{ route('artist.review.delete',['id'=>$rating->ARTIST_RATING_ID]) }}" class="text-red-700"><i class="fas fa-trash"></i></a> @endif
+                            @if(Auth::user() != null)
+                                @if(Auth::user()->USER_ID == $rating->MasterUser->USER_ID)<a href="{{ route('artist.review.delete',['id'=>$rating->ARTIST_RATING_ID]) }}" class="text-red-700"><i class="fas fa-trash"></i></a> @endif
+                            @endif
                         </p>
                         <!-- Star Rating -->
                         <div class="flex space-x-1 text-yellow-500">
