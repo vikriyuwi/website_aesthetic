@@ -58,51 +58,57 @@
         </div>
         <!-- Reviews Section -->
         <div class="bg-white rounded-lg shadow-lg p-6 mt-6">
-            <h2 class="text-xl font-bold mb-4">total rating Reviews
-                <span class="text-gray-600 font-medium">Avarage rating</span>
+            <h2 class="text-xl font-bold mb-4">Average rating Reviews
+                <span class="text-gray-600 font-medium"> <i class="text-yellow-500 fas fa-star"></i> {{ $artist->average_artist_rating }} Stars</span>
             </h2>
 
             <!-- Star Ratings -->
-            <div class="space-y-2">
+            {{-- <div class="space-y-2">
                 <div class="flex items-center">
-                    <span class="w-1/5 text-right pr-2">5 Stars</span>
+                    <span class="w-1/5 text-right pr-2">{{ $artist->average_artist_rating }} Stars</span>
                     <div class="w-4/5 bg-gray-300 h-2 rounded-full">
                         <div class="bg-gray-500 h-2 rounded-full"
                             style="width: 50%;"></div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
             <!-- Review Comments -->
             <h3 class="text-lg font-bold mt-6">Recent Reviews</h3>
             <div class="mt-4 max-h-60 overflow-y-scroll">
                 <!-- Review 1 -->
+                @foreach($artist->ArtistRatings as $rating)
                 <div class="flex items-start mb-4">
-                    <img class="w-12 h-12 rounded-full object-cover" src="https://placehold.co/100x100"
+                    <img class="w-12 h-12 rounded-full object-cover" src="{{ $rating->MasterUser->Buyer->PROFILE_IMAGE_URL != null ? asset($rating->MasterUser->Buyer->PROFILE_IMAGE_URL) : "https://placehold.co/100x100"}}"
                         alt="Profile picture of Anya">
                     <div class="ml-3">
-                        <p class="font-bold">USERNAME<span class="text-sm text-gray-600"> Comment time</span></p>
+                        <p class="font-bold">
+                            {{ $rating->MasterUser->Buyer->FULLNAME }}
+                            <span class="text-sm text-gray-600"> {{ $rating->created_at }}</span>
+                            @if(Auth::user()->USER_ID == $rating->MasterUser->USER_ID)<a href="{{ route('artist.review.delete',['id'=>$rating->ARTIST_RATING_ID]) }}" class="text-red-700"><i class="fas fa-trash"></i></a> @endif
+                        </p>
                         <!-- Star Rating -->
                         <div class="flex space-x-1 text-yellow-500">
                           @php
-                            $totalRating = 5 - 4
+                            $totalRating = 5 - $rating->USER_RATING
                           @endphp
-                          @for($i = 1; $i <= 4; $i++)
+                          @for($i = 1; $i <= $rating->USER_RATING; $i++)
                             <i class="fas fa-star"></i>
                           @endfor
                           @for($i = 1; $i <= $totalRating; $i++)
                             <i class="far fa-star"></i>
                           @endfor
                         </div>
-                        <p class="text-gray-700 mt-1">CONTENT</p>
-                        <div class="flex space-x-4 text-sm mt-2">
+                        <p class="text-gray-700 mt-1">{{ $rating->CONTENT }}</p>
+                        {{-- <div class="flex space-x-4 text-sm mt-2">
                             <button class="text-gray-600 hover:text-gray-800"><i class="fas fa-thumbs-up mr-1"></i>
                                 Helpful?</button>
                             <button class="text-gray-600 hover:text-gray-800"><i class="fas fa-thumbs-down mr-1"></i>
                                 No</button>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
+                @endforeach
             </div>
 
             <!-- Edit About Me Modal -->

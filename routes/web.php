@@ -66,6 +66,11 @@ Route::middleware([Authorization::class.':true'])->group(function() {
         Route::get('/{id}/like',[ArtistArtWorkController::class,'like'])->name('like');
     });
 
+    Route::prefix('artist')->name('artist.')->group(function () {
+        Route::put('/{id}/review', [ArtistProfileController::class, 'reviewArtist'])->name('review');
+        Route::get('/review/{id}/delete', [ArtistProfileController::class, 'destroyArtistReview'])->name('review.delete');
+    });
+
     Route::prefix('art-collection')->name('artCollection.')->group(function () {
         Route::get('/{artCollectionId}/delete',[ArtCollectionController::class,'destroy'])->name('delete');
     });

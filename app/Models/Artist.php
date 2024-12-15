@@ -26,9 +26,24 @@ class Artist extends Model
         return $this->belongsTo(MasterUser::class, 'USER_ID', 'USER_ID');
     }
 
-    public function ArtistRattings(): HasMany
+    public function ArtistRatings(): HasMany
     {
-        return $this->hasMany(Artist::class, 'ARTIST_ID', 'ARTIST_ID');
+        return $this->hasMany(ArtistRating::class, 'ARTIST_ID', 'ARTIST_ID');
+    }
+
+    public function getAverageArtistRatingAttribute()
+    {
+        $totalRating = 0;
+        $ratings = $this->ArtistRatings;
+        foreach($ratings as $rating) {
+            $totalRating += $rating->USER_RATING;
+        }
+
+        if(count($ratings) > 0) {
+            return $totalRating/count($ratings);
+        } else {
+            return 0;
+        }
     }
 
     public function Collections(): HasMany

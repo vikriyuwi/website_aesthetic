@@ -196,11 +196,13 @@
                                 @endif
                             @else
                                 <!-- Review Artist Button -->
+                                @if($artist->ArtistRatings->where('USER_ID',Auth::user()->USER_ID)->count() == 0)
                                 <button onclick="openReviewModal()"
                                     class="block w-full text-left px-4 py-3 hover:bg-green-100 hover:text-green-600 transition-colors duration-200 font-medium text-gray-700 flex items-center">
                                     <i class="fas fa-star mr-3 text-green-500"></i>
                                     Review Artist
                                 </button>
+                                @endif
 
                                 <!-- Report Artist Button (styled in red) -->
                                 <button onclick="openReportModal()"
@@ -559,6 +561,9 @@
                     </button>
                 </div>
                 <div class="p-6 space-y-4">
+                    <form action="{{ route('artist.review',['id'=>$artist->ARTIST_ID]) }}" method="post">
+                    @method('PUT')
+                    @csrf
                     <!-- Star Rating -->
                     <div>
                         <label class="block text-gray-700 font-medium mb-1">Rating</label>
@@ -577,18 +582,22 @@
                         </div>
                     </div>
 
+                    {{-- rating input --}}
+                    <input type="hidden" id="ratingInput" name="rating">
+
                     <!-- Review Text -->
                     <div>
-                        <label for="reviewText" class="block text-gray-700 font-medium mb-1">Review</label>
-                        <textarea id="reviewText" rows="3"
+                        <label for="content" class="block text-gray-700 font-medium mb-1">Review</label>
+                        <textarea id="content" name="content" rows="3"
                             class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                             placeholder="Write your review..."></textarea>
                     </div>
 
                     <div class="flex justify-end">
-                        <button onclick="submitReview()"
+                        <button type="submit"
                             class="bg-indigo-600 text-white px-6 py-2 rounded-full hover:bg-indigo-700 transition duration-200">Submit</button>
                     </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -1090,6 +1099,7 @@
     // Function to handle star rating selection
     function setRating(rating) {
         selectedRating = rating;
+        document.getElementById('ratingInput').value = selectedRating;
         const stars = document.querySelectorAll('#reviewModal .star');
         stars.forEach((star, index) => {
             if (index < rating) {
