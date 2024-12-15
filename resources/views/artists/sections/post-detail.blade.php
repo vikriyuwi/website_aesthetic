@@ -44,7 +44,10 @@
         <div class="flex space-x-4">
           <img class="w-10 h-10 rounded-full" src="{{ $comment->MasterUser->Buyer->PROFILE_IMAGE_URL != null ? asset($comment->MasterUser->Buyer->PROFILE_IMAGE_URL) : "https://placehold.co/100x100"}}" alt="User Profile">
           <div>
-            <p class="font-bold">{{ $comment->MasterUser->Buyer->FULLNAME }} <span class="text-sm text-gray-600">{{ (new \DateTime($comment->created_at))->format('M d, Y') }}</span> @if(Auth::user()->USER_ID == $comment->MasterUser->USER_ID) <a href="" class="text-red-700"><i class="fas fa-trash"></i></a> @endif</p>
+            <p class="font-bold">
+              {{ $comment->MasterUser->Buyer->FULLNAME }} <span class="text-sm text-gray-600">{{ (new \DateTime($comment->created_at))->format('M d, Y') }}</span>
+              @if(Auth::user()->USER_ID == $comment->MasterUser->USER_ID) <a href="{{ route('post.comment.delete',['id'=>$comment->POST_COMMENT_ID]) }}" class="text-red-700"><i class="fas fa-trash"></i></a> @endif
+            </p>
             <p class="text-gray-700 mt-1">{{ $comment->CONTENT }}</p>
           </div>
         </div>

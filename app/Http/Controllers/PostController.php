@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\PostComment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -45,5 +46,19 @@ class PostController extends Controller
         ]);
 
         return redirect()->back()->with('status','Comment is has been posted!');
+    }
+
+    public function destroyComment($id)
+    {
+        $user = Auth::user();
+        $comment = PostComment::find($id);
+
+        if($comment->USER_ID != $user->USER_ID) {
+            return redirect()->back()->withErrors(['message'=>'Comment is not own by u!']);
+        }
+
+        $comment->Delete();
+
+        return redirect()->back()->with('status','Comment has been deleted!');
     }
 }

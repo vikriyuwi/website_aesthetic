@@ -128,6 +128,7 @@ Route::prefix('art-gallery')->name('artGallery.')->group(function () {
 Route::prefix('post')->name('post.')->group(function () {
     Route::get('/{id}', [PostController::class, 'postDetails'])->name('detail');
     Route::put('/{id}/comment', [PostController::class, 'addComment'])->name('comment');
+    Route::get('/comment/{id}/delete', [PostController::class, 'destroyComment'])->name('comment.delete');
 });
 
 Route::get('/explore', [App\Http\Controllers\WebController::class, 'explore']);
