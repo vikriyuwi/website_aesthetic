@@ -176,7 +176,7 @@ public function joinArtist()
     return view('profile.join-artist', [
         'USER' => $user,
         'ROLE' => $user->USER_LEVEL,
-        'BUYER_DATA' => session('BUYER_DATA'),
+        'BUYER_DATA' => $user->Buyer,
     ]);
 }
 
