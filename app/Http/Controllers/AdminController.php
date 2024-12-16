@@ -66,14 +66,18 @@ class AdminController extends Controller
     {
         $result = "";
         $artist = Artist::find($id);
+        $user = MasterUser::find($artist->USER_ID);
         if ($artist->isActive()) {
             $artist->IS_ACTIVE = 0;
+            $user->USER_LEVEL = 1;
             $result = "deactivated";
         } else {
             $artist->IS_ACTIVE = 1;
+            $user->USER_LEVEL = 2;
             $result = "activated";
         }
         $artist->save();
+        $user->save();
         return redirect()->back()->with('status','Artist '.$artist->MasterUser->Buyer->FULLNAME.' is '.$result);
     }
 

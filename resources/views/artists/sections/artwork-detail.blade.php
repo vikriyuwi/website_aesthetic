@@ -107,7 +107,11 @@
             <span>/</span>
             <span class="text-gray-800">{{ $artwork->ARTWORK_TITLE }}</span>
         </nav>
-
+        @if(session('status'))
+        <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+            {{ session('status') }}
+        </div>
+        @endif
         <!-- Clickable Artwork Image -->
         <div class="flex justify-center items-center max-w-screen-lg p-4">
             <img id="artworkImage" 
@@ -283,7 +287,7 @@
     <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl" 
          x-data="{ 
             uploadOption: 'link', 
-            imagePreview: '{{ Str::startsWith($artwork->ArtImages()->first()->IMAGE_PATH, "images/art/") ? asset($artwork->ArtImages()->first()->IMAGE_PATH) : $artwork->ArtImages()->first()->IMAGE_PATH }}'
+            imagePreview: ''
          }">
 
         <!-- Modal Header -->
@@ -293,7 +297,7 @@
         </div>
 
         <!-- Form -->
-        <form method="POST" action="#" enctype="multipart/form-data" class="space-y-6">
+        <form method="POST" action="{{ route('artwork.update',['artworkId'=>$artwork->ART_ID]) }}" enctype="multipart/form-data" class="space-y-6">
             @csrf
             @method('PUT')
 
@@ -307,11 +311,11 @@
                                class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
                     </div>
                     <!-- Style -->
-                     <div>
+                     {{-- <div>
                         <label for="artworkStyle" class="block text-sm font-semibold text-gray-700 mb-1">Dimension</label>
                         <input type="text" name="artworkStyle" id="artworkStyle" placeholder="length x width" 
                                class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
-                    </div>
+                    </div> --}}
                     <!-- Description -->
                     <div>
                         <label for="artworkDescriptionEdit" class="block text-sm font-semibold text-gray-700 mb-1">Description</label>
@@ -331,6 +335,9 @@
                 <div class="space-y-4">
                     <!-- Image Upload Options -->
                     <div>
+                        <div class="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+                            <span class="font-medium">Info!</span> Leave image blank if you are not going to change the picture
+                        </div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Image Upload Option</label>
                         <div class="flex items-center gap-4">
                             <label class="flex items-center">
@@ -338,7 +345,7 @@
                                 <span>Image URL</span>
                             </label>
                             <label class="flex items-center">
-                                <input type="radio" name="imageOption" value="file" x-model="uploadOption" class="mr-2">
+                                <input type="radio" name="imageOption" value="file" x-model="uploadOption" class="mr-2" selected>
                                 <span>Upload New File</span>
                             </label>
                         </div>
