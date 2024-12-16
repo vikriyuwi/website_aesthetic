@@ -142,6 +142,68 @@ class ArtistArtWorkController extends Controller
         return redirect()->route('artist.show', ['id' => $artist->ARTIST_ID, 'section' => 'artwork'])->with('status', 'Artwork has been deleted successfully!');
     }
 
+    public function update($id, Request $request)
+    {
+        $user = Auth::guard('MasterUser')->user();
+        $artwork = Art::find($id);
+
+        if($artwork->USER_ID != $user->USER_ID) {
+            return redirect()->back()->withError(['message'=>'Artwork is not yours']);
+        }
+
+        $validated = Validator::make($request->all(), [
+            'title' => 'required',
+            'description' => 'required',
+            'price' => 'required',
+        ]);
+
+        if ($validated->fails()) {
+            return redirect()->back()->withError($validated->error());
+        }
+
+        $artwork->ART_TITLE = $request->title;
+        $artwork->DESCRIPTION = $request->description;
+        $artwork->PRICE = $request->price;
+
+        $imagePath = null;
+
+        // If URL is provided
+        if ($request->filled('imageLink')) {
+            $imagePath = $request->input('imageLink');
+            $this->deleteImage($artwork->ART_ID);
+        }
+
+        // If file is uploaded
+        if ($request->hasFile('imageFile')) {
+            $uploadedFile = $request->file('imageFile');
+            $imagePath = $uploadedFile->store('images/art', 'public'); // Save file in the `storage/app/public/images/art` directory
+            $this->deleteImage($artwork->ART_ID);
+        }
+
+        if($imagePath != null) {
+            $artwork->ArtImages()->create([
+                'IMAGE_PATH' => $imagePath
+            ]);
+        }
+
+        $artwork->save();
+        return redirect()->back()->with('status','Art has been updated!');
+    }
+
+    public function deleteImage($artId)
+    {
+        $artImages = ArtImage::where('ART_ID',$artId)->get();
+        foreach($artImages as $image) {
+            if ($image->IMAGE_PATH != null) {
+                if(Str::startsWith($image->IMAGE_PATH, 'images/art/')) {
+                    $filePath = $image->IMAGE_PATH;
+                    Storage::disk('public')->delete($filePath);
+                }
+            }
+            $image->delete();
+        }
+    }
+
     public function like($id)
     {
         $user = Auth::user();

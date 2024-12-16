@@ -111,6 +111,7 @@ Route::middleware([Authorization::class.':true'])->group(function() {
         Route::prefix('artwork')->name('artwork.')->group(function () {
             Route::post('/add',[ArtistArtWorkController::class,'addArtWork'])->name('store');
             Route::get('/{artworkId}/delete/',[ArtistArtWorkController::class,'deleteArtWork'])->name('destroy');
+            ROute::put('/{artworkId}/update/',[ArtistArtWorkController::class,'update'])->name('update');
         });
 
         // POST
