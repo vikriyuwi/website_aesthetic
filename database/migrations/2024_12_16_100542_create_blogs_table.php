@@ -16,8 +16,10 @@ return new class extends Migration
             $table->unsignedBigInteger('USER_ID');
             $table->foreign('USER_ID')->references('USER_ID')->on('MASTER_USER')->onUpdate('cascade')->onDelete('cascade');
             $table->string('TITLE');
+            $table->string('SLUG')->unique();
             $table->text('CONTENT');
             $table->string('IMAGE_PATH');
+            $table->integer('VIEW')->default(0);
             $table->timestamps();
         });
     }

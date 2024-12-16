@@ -161,6 +161,13 @@ Route::middleware([Authorization::class.':true'])->group(function() {
                 Route::get('/', [AdminController::class, 'artistReport'])->name('show');
                 Route::get('/{id}/mark', [AdminController::class, 'markArtistReport'])->name('mark');
             });
+
+            Route::prefix('blog')->name('blog.')->group(function() {
+                Route::get('/', [AdminController::class, 'blog'])->name('show');
+                Route::get('/create', [AdminController::class, 'createBlog'])->name('create');
+                Route::post('/', [AdminController::class, 'storeBlog'])->name('store');
+                Route::get('/{id}/delete', [AdminController::class, 'destroyBlog'])->name('destroy');
+            });
             
             Route::get('/login', function () {
                 return view('admin.login');
@@ -197,6 +204,10 @@ Route::prefix('post')->name('post.')->group(function () {
 
 Route::get('/explore', [App\Http\Controllers\WebController::class, 'explore']);
 
+Route::prefix('blog')->name('blog.')->group(function() {
+    Route::get('/', [WebController::class, 'blog'])->name('all');
+    Route::get('/{slug}', [WebController::class, 'blogPreview'])->name('preview');
+});
 // Route::get('/landing', [App\Http\Controllers\WebController::class, 'landing']);
 
 
@@ -277,8 +288,6 @@ Route::get('/artworks/{artistId}/', [ArtistArtWorkController::class, 'showAllArt
 Route::get('/favorites/cart', [WebController::class, 'cartProfile'])->name('cart.profile');
 
 Route::get('/about-us', [WebController::class, 'aboutUs'])->name('about-us');
-
-Route::get('/blog', [WebController::class, 'blog'])->name('blog');
 
 Route::get('/blog-detail', [WebController::class, 'blogDetail'])->name('blog-detail');
 
