@@ -34,7 +34,7 @@
                                 <li><a href="{{ route('about-us') }}" class="hover:underline">About</a></li>
                                 <li><a href="{{ route('join-artist') }}" class="hover:underline">Careers</a></li>
                                 <li><a href="#" class="hover:underline">Brand Center</a></li>
-                                <li><a href="{{ route('blog') }}" class="hover:underline">Blog</a></li>
+                                <li><a href="{{ route('blog.all') }}" class="hover:underline">Blog</a></li>
                             </ul>
                         </div>
     
