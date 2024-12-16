@@ -142,10 +142,12 @@ Route::middleware([Authorization::class.':true'])->group(function() {
                 Route::post('/', [AdminController::class, 'addCategory'])->name('store');
                 Route::get('/{id}/delete', [AdminController::class, 'deleteCategory'])->name('destroy');
             });
-            
-            Route::get('/skills', function () {
-                return view('admin.skills');
-            })->name('skills');
+
+            Route::prefix('skill')->name('skill.')->group(function() {
+                Route::get('/', [AdminController::class, 'skill'])->name('show');
+                Route::post('/', [AdminController::class, 'addSkill'])->name('store');
+                Route::get('/{id}/delete', [AdminController::class, 'deleteSkill'])->name('destroy');
+            });
             
             Route::get('/login', function () {
                 return view('admin.login');

@@ -11,6 +11,7 @@ use App\Models\Artist;
 use App\Models\Buyer;
 use App\Models\ArtCategory;
 use App\Models\ArtCategoryMaster;
+use App\Models\SkillMaster;
 
 class AdminController extends Controller
 {
@@ -98,5 +99,34 @@ class AdminController extends Controller
         }
         $category->delete();
         return redirect()->back()->with('status','Category "'.$category->DESCR.'" deleted!');
+    }
+
+    public function skill()
+    {
+        $skills = SkillMaster::get();
+        return view('admin.skills',compact('skills'));
+    }
+
+    public function addSkill(Request $request)
+    {
+        $validated = Validator::make($request->all(), [
+            'DESCR' => 'required',
+        ]);
+
+        $skill = SkillMaster::create($request->all());
+
+        return redirect()->back()->with('status','Skill "'.$skill->DESCR.'" added!');
+    }
+
+    public function deleteSkill($id)
+    {
+        $skill = SkillMaster::find($id);
+        // dd($skill);
+
+        if($skill == null) {
+            return redirect()->back()->withErrors(['message'=>'Skill not found!']);
+        }
+        $skill->delete();
+        return redirect()->back()->with('status','Skill "'.$skill->DESCR.'" deleted!');
     }
 }
