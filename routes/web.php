@@ -21,6 +21,7 @@ use App\Http\Middleware\Authorization;
 use App\Http\Middleware\Role;
 use App\Http\Middleware\ActiveBuyer;
 use App\Http\Middleware\ActiveArtist;
+use App\Http\Middleware\AdminAuth;
 
 Route::get('/', function () {
     return redirect('/landing');
@@ -126,32 +127,34 @@ Route::middleware([Authorization::class.':true'])->group(function() {
         Route::get('/insight-artist', [WebController::class, 'insightArtist'])->name('insight-artist');
     });
 
-    Route::prefix('admin')->name('admin.')->group(function() {
-        Route::get('/dashboard', function () {
-            return view('admin.dashboard', [
-                'totalBuyers' => 150, 
-                'totalArtists' => 80, 
-                'totalCategories' => 20, 
-                'totalSkills' => 35, 
-                'totalArtworks' => 300
-            ]);
-        })->name('dashboard');
-        
-        Route::get('/users', function () {
-            return view('users');
-        })->name('users');
-        
-        Route::get('/category', function () {
-            return view('category');
-        })->name('category');
-        
-        Route::get('/skills', function () {
-            return view('skills');
-        })->name('skills');
-        
-        Route::get('/login', function () {
-            return view('login');
-        })->name('login');
+    Route::middleware([AdminAuth::class])->group(function() {
+        Route::prefix('admin')->name('admin.')->group(function() {
+            Route::get('/dashboard', function () {
+                return view('admin.dashboard', [
+                    'totalBuyers' => 150, 
+                    'totalArtists' => 80, 
+                    'totalCategories' => 20, 
+                    'totalSkills' => 35, 
+                    'totalArtworks' => 300
+                ]);
+            })->name('dashboard');
+            
+            Route::get('/users', function () {
+                return view('users');
+            })->name('users');
+            
+            Route::get('/category', function () {
+                return view('category');
+            })->name('category');
+            
+            Route::get('/skills', function () {
+                return view('skills');
+            })->name('skills');
+            
+            Route::get('/login', function () {
+                return view('login');
+            })->name('login');
+        });
     });
 });
 

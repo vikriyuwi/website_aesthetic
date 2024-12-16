@@ -16,11 +16,17 @@ class ActiveBuyer
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::guard('MasterUser')->user()->Buyer->IS_ACTIVE == 1) {
-            return $next($request);
+        $user = Auth::guard('MasterUser')->user();
+        if($user->Buyer == null) {
+            return redirect()->back()->withErrors([
+                'message' => 'Your are not registered as buyer',
+            ]);
         }
-        return redirect()->back()->withErrors([
-            'message' => 'Your artist account is inactive, please contact admin to reactivate your account',
-        ]);
+        if($user->Buyer->IS_ACTIVE == 0) {
+            return redirect()->back()->withErrors([
+                'message' => 'Your buyer account is inactive, please contact admin to reactivate your account',
+            ]);
+        }
+        return $next($request);
     }
 }
