@@ -379,7 +379,15 @@
         </form>
     </div>
 </div>
-
+    <!-- Modal for Zoomed Image -->
+    <div id="imageModal" class="modal">
+        <button id="closeModal" class="absolute top-4 right-4 text-white text-3xl">&times;</button>
+        <img id="modalImage" src="" alt="" class="max-w-full max-h-full object-contain transition-transform duration-300 transform">
+        <div class="zoom-controls">
+            <button id="zoomOut">-</button>
+            <button id="zoomIn">+</button>
+        </div>
+    </div>
 
     <script>
 // Get elements
