@@ -40,79 +40,21 @@
             </thead>
             <tbody class="divide-y divide-gray-200">
                 <!-- Example Row -->
+                @foreach($categories as $category)
                 <tr class="hover:bg-indigo-50">
                     <td class="px-6 py-4">
                         <input type="checkbox" />
                     </td>
-                    <td class="px-6 py-4 text-gray-800 font-medium">Painting</td>
-                    <td class="px-6 py-4 text-gray-600">2</td>
-                    <td class="px-6 py-4 text-gray-600">25-12-2024</td>
-                    <td class="px-6 py-4 flex space-x-2">
-                        <button class="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 flex items-center">
-                            <i class="fas fa-trash-alt mr-1"></i> Delete 
-                        </button>
-                    </td>
-                    <tr class="hover:bg-indigo-50">
-                    <td class="px-6 py-4">
-                        <input type="checkbox" />
-                    </td>
-                    <td class="px-6 py-4 text-gray-800 font-medium">Poster Design</td>
-                    <td class="px-6 py-4 text-gray-600">2</td>
-                    <td class="px-6 py-4 text-gray-600">25-12-2024</td>
-                    <td class="px-6 py-4 flex space-x-2">
-                        <button class="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 flex items-center">
-                            <i class="fas fa-trash-alt mr-1"></i> Delete 
-                        </button>
-                    </td>
-                    <tr class="hover:bg-indigo-50">
-                    <td class="px-6 py-4">
-                        <input type="checkbox" />
-                    </td>
-                    <td class="px-6 py-4 text-gray-800 font-medium">Abstract</td>
-                    <td class="px-6 py-4 text-gray-600">2</td>
-                    <td class="px-6 py-4 text-gray-600">25-12-2024</td>
-                    <td class="px-6 py-4 flex space-x-2">
-                        <button class="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 flex items-center">
-                            <i class="fas fa-trash-alt mr-1"></i> Delete 
-                        </button>
-                    </td>
-                    <tr class="hover:bg-indigo-50">
-                    <td class="px-6 py-4">
-                        <input type="checkbox" />
-                    </td>
-                    <td class="px-6 py-4 text-gray-800 font-medium">Cotemporary</td>
-                    <td class="px-6 py-4 text-gray-600">2</td>
-                    <td class="px-6 py-4 text-gray-600">25-12-2024</td>
-                    <td class="px-6 py-4 flex space-x-2">
-                        <button class="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 flex items-center">
-                            <i class="fas fa-trash-alt mr-1"></i> Delete 
-                        </button>
-                    </td>
-                    <tr class="hover:bg-indigo-50">
-                    <td class="px-6 py-4">
-                        <input type="checkbox" />
-                    </td>
-                    <td class="px-6 py-4 text-gray-800 font-medium">Illustration</td>
-                    <td class="px-6 py-4 text-gray-600">2</td>
-                    <td class="px-6 py-4 text-gray-600">25-12-2024</td>
-                    <td class="px-6 py-4 flex space-x-2">
-                        <button class="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 flex items-center">
-                            <i class="fas fa-trash-alt mr-1"></i> Delete 
-                        </button>
-                    </td>
-                    <tr class="hover:bg-indigo-50">
-                    <td class="px-6 py-4">
-                        <input type="checkbox" />
-                    </td>
-                    <td class="px-6 py-4 text-gray-800 font-medium">Logo</td>
-                    <td class="px-6 py-4 text-gray-600">2</td>
-                    <td class="px-6 py-4 text-gray-600">25-12-2024</td>
-                    <td class="px-6 py-4 flex space-x-2">
-                        <button class="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 flex items-center">
-                            <i class="fas fa-trash-alt mr-1"></i> Delete 
-                        </button>
+                    <td class="px-6 py-4 text-gray-800 font-medium">{{ $category->DESCR }}</td>
+                    <td class="px-6 py-4 text-gray-600">{{ $category->ArtCategories->count() }}</td>
+                    <td class="px-6 py-4 text-gray-600">{{ $category->created_at }}</td>
+                    <td class="px-6 py-4 space-x-2">
+                        <a href="{{ route('admin.category.destroy',['id'=>$category->ART_CATEGORY_MASTER_ID]) }}" onclick="return confirm('Are you sure you want to delete the category?');" class="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 items-center">
+                            Delete 
+                        </a>
                     </td>
                 </tr>
+                @endforeach
             </tbody>
         </table>
 
@@ -143,7 +85,8 @@
         </div>
 
         <!-- Modal Form -->
-        <form action="#" method="POST">
+        <form action="{{ route('admin.category.store') }}" method="POST">
+            @csrf
             <div class="mb-6">
                 <label for="category-name" class="block text-sm font-medium text-gray-700 mb-2">
                     Category Name
@@ -151,7 +94,7 @@
                 <input
                     type="text"
                     id="category-name"
-                    name="category_name"
+                    name="DESCR"
                     placeholder="Enter category name"
                     class="w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                     required

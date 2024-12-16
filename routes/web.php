@@ -137,9 +137,11 @@ Route::middleware([Authorization::class.':true'])->group(function() {
             Route::get('/artist', [AdminController::class, 'artist'])->name('artist');
             Route::get('/artist/{id}/active-toggle', [AdminController::class, 'activateArtist'])->name('artist.activate');
             
-            Route::get('/category', function () {
-                return view('admin.category');
-            })->name('category');
+            Route::prefix('category')->name('category.')->group(function() {
+                Route::get('/', [AdminController::class, 'category'])->name('show');
+                Route::post('/', [AdminController::class, 'addCategory'])->name('store');
+                Route::get('/{id}/delete', [AdminController::class, 'deleteCategory'])->name('destroy');
+            });
             
             Route::get('/skills', function () {
                 return view('admin.skills');

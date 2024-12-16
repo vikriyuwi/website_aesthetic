@@ -10,6 +10,7 @@ use App\Models\MasterUser;
 use App\Models\Artist;
 use App\Models\Buyer;
 use App\Models\ArtCategory;
+use App\Models\ArtCategoryMaster;
 
 class AdminController extends Controller
 {
@@ -68,5 +69,34 @@ class AdminController extends Controller
         }
         $artist->save();
         return redirect()->back()->with('status','Artist '.$artist->MasterUser->Buyer->FULLNAME.' is '.$result);
+    }
+
+    public function category()
+    {
+        $categories = ArtCategoryMaster::get();
+        return view('admin.category',compact('categories'));
+    }
+
+    public function addCategory(Request $request)
+    {
+        $validated = Validator::make($request->all(), [
+            'DESCR' => 'required',
+        ]);
+
+        $category = ArtCategoryMaster::create($request->all());
+
+        return redirect()->back()->with('status','Category "'.$category->DESCR.'" added!');
+    }
+
+    public function deleteCategory($id)
+    {
+        $category = ArtCategoryMaster::find($id);
+        // dd($category);
+
+        if($category == null) {
+            return redirect()->back()->withErrors(['message'=>'Category not found!']);
+        }
+        $category->delete();
+        return redirect()->back()->with('status','Category "'.$category->DESCR.'" deleted!');
     }
 }
