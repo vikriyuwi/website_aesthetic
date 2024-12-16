@@ -12,6 +12,7 @@ use App\Models\Buyer;
 use App\Models\ArtCategory;
 use App\Models\ArtCategoryMaster;
 use App\Models\SkillMaster;
+use App\Models\ArtistReport;
 
 class AdminController extends Controller
 {
@@ -142,5 +143,24 @@ class AdminController extends Controller
         $artist->IS_ACTIVE = 1;
         $artist->save();
         return redirect()->back()->with('status','Artist '.$artist->MasterUser->Buyer->FULLNAME.' is approved');
+    }
+
+    public function artistReport()
+    {
+        $reports = ArtistReport::get();
+        return view('admin.artist-report',compact('reports'));
+    }
+
+    public function markArtistReport($id)
+    {
+        $result = "";
+        $report = ArtistReport::find($id);
+        if ($report->STATUS == 1) {
+            $report->STATUS = 0;
+        } else {
+            $report->STATUS = 1;
+        }
+        $report->save();
+        return redirect()->back()->with('status','Report '.$report->ARTIST_REPORT_ID.' is '. $report->getStatus());
     }
 }

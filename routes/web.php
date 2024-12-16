@@ -156,6 +156,11 @@ Route::middleware([Authorization::class.':true'])->group(function() {
                 Route::post('/', [AdminController::class, 'addSkill'])->name('store');
                 Route::get('/{id}/delete', [AdminController::class, 'deleteSkill'])->name('destroy');
             });
+
+            Route::prefix('report')->name('report.')->group(function() {
+                Route::get('/', [AdminController::class, 'artistReport'])->name('show');
+                Route::get('/{id}/mark', [AdminController::class, 'markArtistReport'])->name('mark');
+            });
             
             Route::get('/login', function () {
                 return view('admin.login');
