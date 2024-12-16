@@ -217,10 +217,11 @@ public function insightArtist()
     return view('profile.insight', compact('user'));
 }
 
-public function blog()
-{
-    return view('footer.blog');
-}
+    public function blog()
+    {
+        $blogs = Blog::all();
+        return view('footer.blog', compact('blogs'));
+    }
 
     public function blogPreview($slug)
     {
