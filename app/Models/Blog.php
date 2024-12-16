@@ -12,7 +12,7 @@ class Blog extends Model
 
     protected $table = 'BLOG';
     protected $primaryKey = 'BLOG_ID';
-    protected $fillable = ['USER_ID', 'TITLE', 'CONTENT', 'IMAGE_PATH'];
+    protected $fillable = ['USER_ID', 'TITLE', 'SLUG', 'CONTENT', 'IMAGE_PATH', 'VIEW'];
 
     public function MasterUser(): BelongsTo
     {

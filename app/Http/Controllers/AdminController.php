@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Art;
 use App\Models\MasterUser;
 use App\Models\Artist;
@@ -13,6 +14,8 @@ use App\Models\ArtCategory;
 use App\Models\ArtCategoryMaster;
 use App\Models\SkillMaster;
 use App\Models\ArtistReport;
+use App\Models\Blog;
+use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
@@ -86,6 +89,10 @@ class AdminController extends Controller
             'DESCR' => 'required',
         ]);
 
+        if ($validated->fails()) {
+            return redirect()->back()->withError($validated->error());
+        }
+
         $category = ArtCategoryMaster::create($request->all());
 
         return redirect()->back()->with('status','Category "'.$category->DESCR.'" added!');
@@ -114,6 +121,10 @@ class AdminController extends Controller
         $validated = Validator::make($request->all(), [
             'DESCR' => 'required',
         ]);
+
+        if ($validated->fails()) {
+            return redirect()->back()->withError($validated->error());
+        }
 
         $skill = SkillMaster::create($request->all());
 
@@ -163,5 +174,68 @@ class AdminController extends Controller
         }
         $report->save();
         return redirect()->back()->with('status','Report '.$report->ARTIST_REPORT_ID.' is '. $report->getStatus());
+    }
+
+    public function blog()
+    {
+        $blogs = Blog::get();
+        return view('admin.blogs', compact('blogs'));
+    }
+
+    public function createBlog()
+    {
+        return view('admin.blog-form');
+    }
+
+    public function storeBlog(Request $request)
+    {
+        $user = Auth::user();
+
+        $validated = Validator::make($request->all(), [
+            'IMAGE' => 'required',
+            'TITLE' => 'required',
+            'CONTENT' => 'required',
+        ]);
+
+        $slug = Str::slug($request->TITLE, '-');
+
+        // Check for uniqueness (optional)
+        $originalSlug = $slug;
+        $counter = 1;
+        while (Blog::where('SLUG', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $counter++;
+        }
+
+        if ($validated->fails()) {
+            return redirect()->back()->withError($validated->errors());
+        }
+
+        $uploadedFile = $request->file('IMAGE');
+        $imagePath = $uploadedFile->store('images/blog', 'public');
+
+        $blog = $user->Blogs()->create([
+            'TITLE' => $request->TITLE,
+            'SLUG' => $slug,
+            'CONTENT' => $request->CONTENT,
+            'IMAGE_PATH' => $imagePath
+        ]);
+
+        return redirect()->route('admin.blog.show')->with('status','Blog "'. $blog->TITLE .'" has been uploaded');
+    }
+
+    public function destroyBlog($id)
+    {
+        $blog = Blog::find($id);
+
+        if($blog == null) {
+            return redirect()->back()->withErrors(['message'=>'Blog not found!']);
+        }
+
+        $filePath = $blog->IMAGE_PATH;
+        Storage::disk('public')->delete($filePath);
+
+        $blog->delete();
+
+        return redirect()->back()->with('status','Blog "'. $blog->TITLE .'" has been deleted!');
     }
 }

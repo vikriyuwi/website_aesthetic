@@ -8,6 +8,7 @@ use App\Models\Buyer;
 use App\Models\MasterUser;
 use App\Models\Art;
 use App\Models\Post;
+use App\Models\Blog;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -131,13 +132,14 @@ class WebController extends Controller
 
         return view('artists.sections.artwork-detail', compact('artwork', 'imageClass','moreArtWorks','carts'));
     }    
-public function showCategory($category)
-{
-    // Logic to fetch artworks based on the category
-    $artworks = $this->getArtworksByCategory($category);
+    public function showCategory($category)
+    {
+        // Logic to fetch artworks based on the category
+        $artworks = $this->getArtworksByCategory($category);
 
-    return view('artists.sections.collection-detail', compact('artworks', 'category'));
-}
+        return view('artists.sections.collection-detail', compact('artworks', 'category'));
+    }
+
     public function likeHistory()
     {
         return view('profile.like-history');
@@ -219,6 +221,21 @@ public function blog()
 {
     return view('footer.blog');
 }
+
+    public function blogPreview($slug)
+    {
+        $blogs = Blog::all();
+        $blog = Blog::where('SLUG',$slug)->first();
+
+        $blog->VIEW = $blog->VIEW + 1;
+        $blog->save();
+
+        if($blog == null) {
+            return redirect()->back()->withErrors(['message'=>'Blog not found!']);
+        }
+
+        return view('footer.blog-detail',compact('blog','blogs'));
+    }
 
 public function blogDetail()
 {
