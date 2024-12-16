@@ -107,7 +107,11 @@
             <span>/</span>
             <span class="text-gray-800">{{ $artwork->ARTWORK_TITLE }}</span>
         </nav>
-
+        @if(session('status'))
+        <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+            {{ session('status') }}
+        </div>
+        @endif
         <!-- Clickable Artwork Image -->
         <div class="flex justify-center items-center max-w-screen-lg p-4">
             <img id="artworkImage" 

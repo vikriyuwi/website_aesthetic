@@ -114,13 +114,16 @@ class ArtistArtWorkController extends Controller
 
     public function deleteArtWork($artworkId){
         $user = Auth::guard('MasterUser')->user();
-
         $artist = Artist::where('ARTIST_ID','=',$user->Artist->ARTIST_ID)->first();
         if($artist == null) {
             abort(404, 'You are not artist');
         }
 
         $artwork = Art::find($artworkId);
+
+        if($artwork->OrderItems->count() > 0) {
+            return redirect()->back()->with('status','Cannot delete due to artwork has been sold');
+        }
 
         if($artwork->USER_ID != $user->USER_ID) {
             abort(404, 'You are not owner of this hiring');
@@ -149,6 +152,10 @@ class ArtistArtWorkController extends Controller
 
         if($artwork->USER_ID != $user->USER_ID) {
             return redirect()->back()->withError(['message'=>'Artwork is not yours']);
+        }
+
+        if($artwork->OrderItems->count() > 0) {
+            return redirect()->back()->with('status','Cannot delete due to artwork has been sold');
         }
 
         $validated = Validator::make($request->all(), [
