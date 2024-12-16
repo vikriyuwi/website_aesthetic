@@ -90,89 +90,111 @@
     </div>
 </div>
 
-<div id="addArtworkModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl mt-16">
-        <div class="flex justify-between items-center mb-4">
+<!-- Add Artwork Modal -->
+<div id="addArtworkModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl" 
+         x-data="{ 
+            uploadOption: 'link', 
+            imagePreview: '' 
+         }">
+
+        <!-- Modal Header -->
+        <div class="flex justify-between items-center border-b pb-4 mb-4">
             <h2 class="text-2xl font-bold text-gray-800">Add New Artwork</h2>
+            <button type="button" onclick="closeModal()" class="text-gray-500 hover:text-red-500 text-2xl">&times;</button>
         </div>
-         <div class="max-h-[60vh] overflow-y-auto pr-6"> <!-- Added padding-right to fix scrollbar issue -->
-            <form class="space-y-6" method="POST" action="{{ route('artwork.store') }}" enctype="multipart/form-data" id="addArtworkForm">
-                @csrf
-                <!-- Title Field -->
-                <div>
-                    <label for="artworkTitle" class="block text-lg font-semibold text-gray-700">Title</label>
-                    <input type="text" id="artworkTitle" name="artworkTitle" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500" required>
-                    <span id="artworkTitleError" class="text-red-600"></span>
-                </div>
 
-                <!-- Description Field -->
-                <div>
-                    <label for="artworkDescription" class="block text-lg font-semibold text-gray-700">Description</label>
-                    <textarea id="artworkDescription" name="artworkDescription" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500" required></textarea>
-                    <span id="artworkDescriptionError" class="text-red-600"></span>
-                </div>
+        <!-- Form -->
+        <form method="POST" action="{{ route('artwork.store') }}" enctype="multipart/form-data" class="space-y-6">
+            @csrf
 
-                <!-- Category Field -->
-                <div>
-                    <label class="block text-lg font-semibold text-gray-700">Category</label>
-                    <div class="flex items-center">
-                        <input type="text" id="selectedCategories" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500" placeholder="Select categories (max 6)">
-                        <button type="button" onclick="toggleCategorySelection()" class="ml-3 text-indigo-600 hover:text-indigo-800">
-                            <i class="fas fa-plus"></i>
-                        </button>
+            <!-- Form Layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Left Section: Text Inputs -->
+                <div class="space-y-4">
+                    <!-- Title -->
+                    <div>
+                        <label for="artworkTitle" class="block text-sm font-semibold text-gray-700 mb-1">Title</label>
+                        <input type="text" name="artworkTitle" id="artworkTitle" placeholder="Enter Title" 
+                               class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
+                    </div>
+
+                    <!-- Style -->
+                    <div>
+                        <label for="artworkStyle" class="block text-sm font-semibold text-gray-700 mb-1">Dimension</label>
+                        <input type="text" name="artworkStyle" id="artworkStyle" placeholder="length x width" 
+                               class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
+                    </div>
+
+                    <!-- Description -->
+                    <div>
+                        <label for="artworkDescription" class="block text-sm font-semibold text-gray-700 mb-1">Description</label>
+                        <textarea name="artworkDescription" id="artworkDescription" rows="5" placeholder="Enter Description" 
+                                  class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required></textarea>
+                    </div>
+
+                    <!-- Price -->
+                    <div>
+                        <label for="artworkPrice" class="block text-sm font-semibold text-gray-700 mb-1">Price</label>
+                        <input type="number" name="artworkPrice" id="artworkPrice" placeholder="Enter Price" 
+                               class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
                     </div>
                 </div>
 
-                <!-- Category Selection Modal -->
-                <div id="categorySelection" class="hidden mt-4">
-                    <h3 class="text-gray-700 font-semibold mb-2">Select Categories</h3>
-                    <div class="grid grid-cols-2 gap-2">
-                        @foreach($artCategoriesMaster as $artCategorie)
-                        <label><input type="checkbox" class="category-checkbox" name="category_art[]" value="{{ $artCategorie->ART_CATEGORY_MASTER_ID }}"> {{ $artCategorie->DESCR }}</label>
-                        @endforeach
+                <!-- Right Section: Image Upload -->
+                <div class="space-y-4">
+                    <!-- Image Upload Options -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Image Upload Option</label>
+                        <div class="flex items-center gap-4">
+                            <label class="flex items-center">
+                                <input type="radio" name="imageOption" value="link" x-model="uploadOption" class="mr-2">
+                                <span>Image URL</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="imageOption" value="file" x-model="uploadOption" class="mr-2">
+                                <span>Upload New File</span>
+                            </label>
+                        </div>
                     </div>
-                </div>
-                <span id="portfolioCategoryError" class="text-red-600"></span>
 
-                <!-- Image Upload Options -->
-                <div>
-                    <label class="block text-lg font-semibold text-gray-700 mb-2">Select Image Upload Option</label>
-                    <div class="flex items-center mb-4">
-                        <input type="radio" id="linkOption" name="imageOption" value="link" class="mr-3" onclick="toggleImageUploadOption('link')" checked>
-                        <label for="linkOption" class="text-gray-700">Upload by Link</label>
+                    <!-- Image URL Field -->
+                    <div x-show="uploadOption === 'link'" class="transition duration-300">
+                        <label for="imageLink" class="block text-sm font-semibold text-gray-700 mb-1">Image URL</label>
+                        <input type="text" name="artworkImageLink" id="imageLink" placeholder="Enter Image URL" 
+                               class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                               x-model="imagePreview" @input="imagePreview = $event.target.value">
                     </div>
-                    <div class="flex items-center mb-4">
-                        <input type="radio" id="fileOption" name="imageOption" value="file" class="mr-3" onclick="toggleImageUploadOption('file')">
-                        <label for="fileOption" class="text-gray-700">Upload from File</label>
+
+                    <!-- File Upload Field -->
+                    <div x-show="uploadOption === 'file'" class="transition duration-300">
+                        <label for="imageFile" class="block text-sm font-semibold text-gray-700 mb-1">Upload Image</label>
+                        <input type="file" name="artworkImageUpload" id="imageFile" accept="image/*" 
+                               @change="imagePreview = URL.createObjectURL($event.target.files[0])"
+                               class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
                     </div>
-                </div>
 
-                <!-- Image Upload Fields -->
-                <div id="linkField" class="mb-4">
-                    <label for="artworkImageLink" class="block text-lg font-semibold text-gray-700">Image URL</label>
-                    <input type="text" id="artworkImageLink" name="artworkImageLink" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
-                    <span id="artworkImageLinkError" class="text-red-600"></span>
-                </div>
-                <div id="fileField" class="mb-4 hidden">
-                    <label for="artworkImageUpload" class="block text-lg font-semibold text-gray-700">Upload Image</label>
-                    <input type="file" id="artworkImageUpload" name="artworkImageUpload" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500" accept="image/*">
-                    <span id="artworkImageUploadError" class="text-red-600"></span>
-                </div>
-
-                <div>
-                    <label for="artworkPrice" class="block text-lg font-semibold text-gray-700">Price</label>
-                    <input type="number" id="artworkPrice" name="artworkPrice" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500" required>
-                    <span id="artworkPriceError" class="text-red-600"></span>
+                    <!-- Image Preview -->
+                    <div>
+                        <p class="text-sm font-semibold text-gray-700 mb-2">Image Preview</p>
+                        <img :src="imagePreview" alt="Image Preview" 
+                             class="w-full h-64 object-cover rounded-lg border">
+                    </div>
                 </div>
             </div>
-            <!-- Modal Footer -->
-            <div class="mt-6 flex justify-end space-x-4">
-                <button onclick="closeModal()" class="bg-gray-300 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-400 transition duration-200">Cancel</button>
-                <button type="submit" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 shadow-md transition duration-300 transform hover:scale-105">Add Artwork</button>
+
+            <!-- Buttons -->
+            <div class="flex justify-end space-x-4 border-t pt-4">
+                <button type="button" onclick="closeModal()" 
+                        class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition">Cancel</button>
+                <button type="submit" 
+                        class="px-4 py-2 text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition">Add Artwork</button>
             </div>
         </form>
     </div>
 </div>
+
+
 
 <!-- Success Modal -->
 @if(session('status'))
@@ -258,6 +280,21 @@
             }
         });
     });
+    function artworkModalLogic() {
+        return {
+            uploadOption: 'link', // Default option
+            imagePreview: '', // Default image preview
+            onFileChange(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    this.imagePreview = URL.createObjectURL(file);
+                }
+            },
+            onImageURLChange(event) {
+                this.imagePreview = event.target.value;
+            }
+        };
+    }
 </script>
 
 </body>

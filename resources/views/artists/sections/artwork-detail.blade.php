@@ -151,7 +151,7 @@
                 <div class="flex space-x-4 mt-6">
                     @if(Auth::check())
                         @if (Auth::user()->USER_ID == $artwork->USER_ID )
-                            <button id="editArtworkButton" class="bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition btn">
+                            <button id="editArtworkButton" onclick="openEditModal()" class="bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition btn">
                                 <i class="fas fa-pen"></i>
                                 <span>EDIT</span>
                             </button>
@@ -278,15 +278,109 @@
         @endforeach
     </div>
 </div>
-    <!-- Modal for Zoomed Image -->
-    <div id="imageModal" class="modal">
-        <button id="closeModal" class="absolute top-4 right-4 text-white text-3xl">&times;</button>
-        <img id="modalImage" src="" alt="" class="max-w-full max-h-full object-contain transition-transform duration-300 transform">
-        <div class="zoom-controls">
-            <button id="zoomOut">-</button>
-            <button id="zoomIn">+</button>
+<!-- Edit Artwork Modal -->
+<div id="editArtworkModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl" 
+         x-data="{ 
+            uploadOption: 'link', 
+            imagePreview: '{{ Str::startsWith($artwork->ArtImages()->first()->IMAGE_PATH, "images/art/") ? asset($artwork->ArtImages()->first()->IMAGE_PATH) : $artwork->ArtImages()->first()->IMAGE_PATH }}'
+         }">
+
+        <!-- Modal Header -->
+        <div class="flex justify-between items-center border-b pb-4 mb-4">
+            <h2 class="text-2xl font-bold text-gray-800">Edit Artwork</h2>
+            <button type="button" onclick="closeEditModal()" class="text-gray-500 hover:text-red-500 text-2xl">&times;</button>
         </div>
+
+        <!-- Form -->
+        <form method="POST" action="#" enctype="multipart/form-data" class="space-y-6">
+            @csrf
+            @method('PUT')
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Left Section: Text Inputs -->
+                <div class="space-y-4">
+                    <!-- Title -->
+                    <div>
+                        <label for="artworkTitleEdit" class="block text-sm font-semibold text-gray-700 mb-1">Title</label>
+                        <input type="text" name="title" id="artworkTitleEdit" value="{{ $artwork->ART_TITLE }}" 
+                               class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
+                    </div>
+                    <!-- Style -->
+                     <div>
+                        <label for="artworkStyle" class="block text-sm font-semibold text-gray-700 mb-1">Dimension</label>
+                        <input type="text" name="artworkStyle" id="artworkStyle" placeholder="length x width" 
+                               class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
+                    </div>
+                    <!-- Description -->
+                    <div>
+                        <label for="artworkDescriptionEdit" class="block text-sm font-semibold text-gray-700 mb-1">Description</label>
+                        <textarea name="description" id="artworkDescriptionEdit" rows="5" 
+                                  class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>{{ $artwork->DESCRIPTION }}</textarea>
+                    </div>
+
+                    <!-- Price -->
+                    <div>
+                        <label for="artworkPriceEdit" class="block text-sm font-semibold text-gray-700 mb-1">Price</label>
+                        <input type="number" name="price" id="artworkPriceEdit" value="{{ $artwork->PRICE }}" 
+                               class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
+                    </div>
+                </div>
+
+                <!-- Right Section: Image Options -->
+                <div class="space-y-4">
+                    <!-- Image Upload Options -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Image Upload Option</label>
+                        <div class="flex items-center gap-4">
+                            <label class="flex items-center">
+                                <input type="radio" name="imageOption" value="link" x-model="uploadOption" class="mr-2">
+                                <span>Image URL</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="imageOption" value="file" x-model="uploadOption" class="mr-2">
+                                <span>Upload New File</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Image URL Field -->
+                    <div x-show="uploadOption === 'link'" class="transition duration-300">
+                        <label for="imageLinkEdit" class="block text-sm font-semibold text-gray-700 mb-1">Image URL</label>
+                        <input type="text" name="imageLink" id="imageLinkEdit" placeholder="Enter Image URL" 
+                               class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                               x-model="imagePreview" @input="imagePreview = $event.target.value">
+                    </div>
+
+                    <!-- File Upload Field -->
+                    <div x-show="uploadOption === 'file'" class="transition duration-300">
+                        <label for="imageFileEdit" class="block text-sm font-semibold text-gray-700 mb-1">Upload Image</label>
+                        <input type="file" name="imageFile" id="imageFileEdit" accept="image/*" 
+                               @change="imagePreview = URL.createObjectURL($event.target.files[0])"
+                               class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+
+                    <!-- Image Preview -->
+                    <div>
+                        <p class="text-sm font-semibold text-gray-700 mb-2">Image Preview</p>
+                        <img :src="imagePreview" alt="Image Preview" 
+                             class="w-full h-64 object-cover rounded-lg border">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex justify-end space-x-4 border-t pt-4">
+                <button type="button" onclick="closeEditModal()" 
+                        class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition">Cancel</button>
+                <button type="submit" 
+                        class="px-4 py-2 text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition">Save Changes</button>
+            </div>
+        </form>
     </div>
+</div>
+
+
     <script>
 // Get elements
 const artworkImage = document.getElementById('artworkImage');
@@ -361,6 +455,13 @@ const artworkImage = document.getElementById('artworkImage');
     // Apply Transform (Zoom and Pan)
     function applyTransform() {
         modalImage.style.transform = `translate(${translateX}px, ${translateY}px) scale(${zoomScale})`;
+    }
+    function openEditModal() {
+        document.getElementById('editArtworkModal').classList.remove('hidden');
+    }
+
+    function closeEditModal() {
+        document.getElementById('editArtworkModal').classList.add('hidden');
     }
     </script>
 </body>
