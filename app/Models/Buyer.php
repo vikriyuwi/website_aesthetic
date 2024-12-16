@@ -23,6 +23,15 @@ class Buyer extends Model
 
     public function MasterUser():BelongsTo
     {
-        return $this->belongsTo(MasterUser::class);
+        return $this->belongsTo(MasterUser::class, 'USER_ID', 'USER_ID');
+    }
+
+    public function isActive()
+    {
+        if($this->IS_ACTIVE == 1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

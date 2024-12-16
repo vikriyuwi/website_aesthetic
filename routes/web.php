@@ -17,6 +17,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\AdminController;
 use App\Http\Middleware\Authorization;
 use App\Http\Middleware\Role;
 use App\Http\Middleware\ActiveBuyer;
@@ -129,30 +130,22 @@ Route::middleware([Authorization::class.':true'])->group(function() {
 
     Route::middleware([AdminAuth::class])->group(function() {
         Route::prefix('admin')->name('admin.')->group(function() {
-            Route::get('/dashboard', function () {
-                return view('admin.dashboard', [
-                    'totalBuyers' => 150, 
-                    'totalArtists' => 80, 
-                    'totalCategories' => 20, 
-                    'totalSkills' => 35, 
-                    'totalArtworks' => 300
-                ]);
-            })->name('dashboard');
+            Route::get('/', [AdminController::class, 'index'])->name('dashboard');
             
-            Route::get('/users', function () {
-                return view('users');
-            })->name('users');
+            Route::get('/buyer', [AdminController::class, 'buyer'])->name('buyer');
+            Route::get('/buyer/{id}/active-toggle', [AdminController::class, 'activateBuyer'])->name('buyer.activate');
+            Route::get('/artist', [AdminController::class, 'artist'])->name('artist');
             
             Route::get('/category', function () {
-                return view('category');
+                return view('admin.category');
             })->name('category');
             
             Route::get('/skills', function () {
-                return view('skills');
+                return view('admin.skills');
             })->name('skills');
             
             Route::get('/login', function () {
-                return view('login');
+                return view('admin.login');
             })->name('login');
         });
     });
