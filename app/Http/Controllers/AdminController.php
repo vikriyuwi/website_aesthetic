@@ -129,4 +129,18 @@ class AdminController extends Controller
         $skill->delete();
         return redirect()->back()->with('status','Skill "'.$skill->DESCR.'" deleted!');
     }
+
+    public function joinRequest()
+    {
+        $artists = Artist::where('IS_ACTIVE',0)->get();
+        return view('admin.artist-join-request', compact('artists'));
+    }
+
+    public function approveArtist($id)
+    {
+        $artist = Artist::find($id);
+        $artist->IS_ACTIVE = 1;
+        $artist->save();
+        return redirect()->back()->with('status','Artist '.$artist->MasterUser->Buyer->FULLNAME.' is approved');
+    }
 }

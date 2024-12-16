@@ -136,6 +136,12 @@ Route::middleware([Authorization::class.':true'])->group(function() {
             Route::get('/buyer/{id}/active-toggle', [AdminController::class, 'activateBuyer'])->name('buyer.activate');
             Route::get('/artist', [AdminController::class, 'artist'])->name('artist');
             Route::get('/artist/{id}/active-toggle', [AdminController::class, 'activateArtist'])->name('artist.activate');
+
+            Route::get('/artist/join-request', [AdminController::class, 'joinRequest'])->name('artist.joinRequest');
+            Route::get('/artist/join-request/{id}/active-toggle', [AdminController::class, 'approveArtist'])->name('artist.joinRequest.approve');
+
+            Route::get('/artist', [AdminController::class, 'artist'])->name('artist');
+            Route::get('/artist/{id}/active-toggle', [AdminController::class, 'activateArtist'])->name('artist.activate');
             
             Route::prefix('category')->name('category.')->group(function() {
                 Route::get('/', [AdminController::class, 'category'])->name('show');

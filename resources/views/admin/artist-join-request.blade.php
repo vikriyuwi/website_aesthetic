@@ -1,6 +1,6 @@
 @extends('admin.admin')
 
-@section('title', 'Artists')
+@section('title', 'Artist Join Request')
 
 @section('content')
 <div class="flex-1 p-6">
@@ -40,7 +40,6 @@
                     </th>
                     <th class="px-6 py-3 text-left font-semibold">Name</th>
                     <th class="px-6 py-3 text-left font-semibold">Phone</th>
-                    <th class="px-6 py-3 text-left font-semibold">Status</th>
                     <th class="px-6 py-3 text-left font-semibold">Actions</th>
                 </tr>
             </thead>
@@ -63,35 +62,9 @@
                         </div>
                     </td>
                     <td class="px-6 py-4 text-gray-500">{{ $artist->MasterUser->Buyer->PHONE_NUMBER }}</td>
-                    <td class="px-6 py-4">
-                        @if($artist->isActive())
-                        <span class="inline-flex items-center px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">
-                            Active
-                        </span>
-                        @else
-                        <span class="inline-flex items-center px-2 py-1 text-xs font-semibold text-red-700 bg-red-100 rounded-full">
-                            Inactive
-                        </span>
-                        @endif
-                    </td>
                     <td class="px-6 py-4 space-x-2">
-                        <a href="{{ route('admin.artist.activate',['id'=>$artist->ARTIST_ID]) }}" class="px-3 py-1 text-white rounded-md
-                            @if($artist->isActive())
-                                bg-red-500
-                            @else
-                                bg-green-500
-                            @endif
-                            @if($artist->isActive())
-                                hover:bg-red-600
-                            @else
-                                hover:bg-green-600
-                            @endif"
-                        >
-                            @if($artist->isActive())
-                                Deactive Account
-                            @else
-                                Activate Account
-                            @endif
+                        <a href="{{ route('admin.artist.joinRequest.approve',['id'=>$artist->ARTIST_ID]) }}" class="px-3 py-1 text-white rounded-md bg-green-500 hover:bg-green-600">
+                            Approve Account
                         </a>
                     </td>
                 </tr>
