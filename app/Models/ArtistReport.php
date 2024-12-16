@@ -10,7 +10,7 @@ class ArtistReport extends Model
     use HasFactory;
     protected $table = 'ARTIST_REPORT';
     protected $primaryKey = 'ARTIST_REPORT_ID';
-    protected $fillable = ['ARTIST_ID', 'USER_ID', 'USER_RATING', 'CONTENT'];
+    protected $fillable = ['ARTIST_ID', 'USER_ID', 'USER_RATING', 'CONTENT', 'STATUS'];
 
     public function Artist()
     {
@@ -20,5 +20,16 @@ class ArtistReport extends Model
     public function MasterUser(): BelongsTo
     {
         return $this->belongsTo(MasterUser::class, 'USER_ID', 'USER_ID');
+    }
+
+    public function getStatus()
+    {
+        if($this->STATUS == 0) {
+            return 'NEW';
+        } elseif ($this->STATUS == 1) {
+            return 'REVIEWED';
+        } else {
+            return 'UNKNOWN';
+        }
     }
 }

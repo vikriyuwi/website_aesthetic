@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('USER_ID');
             $table->foreign('USER_ID')->references('USER_ID')->on('MASTER_USER')->onUpdate('cascade')->onDelete('cascade');
             $table->longText('CONTENT');
+            $table->tinyInteger('STATUS')->default(0);
             $table->timestamps();
         });
     }
