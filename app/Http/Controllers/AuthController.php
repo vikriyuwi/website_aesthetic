@@ -87,7 +87,11 @@ class AuthController extends Controller
                 'ARTIST_SATA' => $artist,
             ]);
 
-            return redirect()->route('landing');
+            if($user->USER_LEVEL == 3) {
+                return redirect()->route('admin.dashboard');
+            } else {
+                return redirect()->route('landing');
+            }
         } else {
             return redirect()->back()->withErrors([
                 'authorization' => 'Account not authorized!'

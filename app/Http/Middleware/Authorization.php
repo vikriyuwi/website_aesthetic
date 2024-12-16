@@ -20,12 +20,16 @@ class Authorization
             if(Auth::check()) {
                 return $next($request);
             }
-            return redirect('/login');
+            return redirect('/login')->withErrors([
+                'message' => 'Your have to login before go to the website page',
+            ]);
         } else {
             if(!Auth::check()) {
                 return $next($request);
             }
-            return redirect('/landing');
+            return redirect('/landing')->withErrors([
+                'message' => 'You are loged in, no need to login again',
+            ]);
         }
     }
 }
