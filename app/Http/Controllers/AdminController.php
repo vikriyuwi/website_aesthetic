@@ -48,4 +48,25 @@ class AdminController extends Controller
         $buyer->save();
         return redirect()->back()->with('status','Buyer '.$buyer->FULLNAME.' is '.$result);
     }
+
+    public function artist()
+    {
+        $artists = Artist::all();
+        return view('admin.artists', compact('artists'));
+    }
+
+    public function activateArtist($id)
+    {
+        $result = "";
+        $artist = Artist::find($id);
+        if ($artist->isActive()) {
+            $artist->IS_ACTIVE = 0;
+            $result = "deactivated";
+        } else {
+            $artist->IS_ACTIVE = 1;
+            $result = "activated";
+        }
+        $artist->save();
+        return redirect()->back()->with('status','Artist '.$artist->MasterUser->Buyer->FULLNAME.' is '.$result);
+    }
 }

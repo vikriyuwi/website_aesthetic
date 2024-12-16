@@ -135,6 +135,7 @@ Route::middleware([Authorization::class.':true'])->group(function() {
             Route::get('/buyer', [AdminController::class, 'buyer'])->name('buyer');
             Route::get('/buyer/{id}/active-toggle', [AdminController::class, 'activateBuyer'])->name('buyer.activate');
             Route::get('/artist', [AdminController::class, 'artist'])->name('artist');
+            Route::get('/artist/{id}/active-toggle', [AdminController::class, 'activateArtist'])->name('artist.activate');
             
             Route::get('/category', function () {
                 return view('admin.category');
