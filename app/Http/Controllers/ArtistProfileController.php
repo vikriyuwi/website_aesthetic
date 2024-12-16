@@ -149,4 +149,21 @@ class ArtistProfileController extends Controller
 
         return redirect()->back()->with('status','Review has been deleted!');
     }
+    
+    public function sendReport($id, Request $request)
+    {
+        $user = Auth::user();
+        $artist = Artist::find($id);
+
+        if($artist == null) {
+            return redirect()->back()->withErrors(['message'=>'Artist not found!']);
+        }
+
+        $user->ArtistReports()->create([
+            'ARTIST_ID' => $artist->ARTIST_ID,
+            'CONTENT' => $request->CONTENT
+        ]);
+        
+        return redirect()->back()->with('status','Report to '. $artist->MasterUser->Buyer->FULLNAME .' has been sent !');
+    }
 }

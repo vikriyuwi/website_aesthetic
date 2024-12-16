@@ -50,6 +50,8 @@ Route::middleware([Authorization::class.':true'])->group(function() {
         Route::get('/join-artist', [WebController::class, 'joinArtist'])->name('join-artist');
         Route::post('/join-artist', [WebController::class, 'registerArtist'])->name('register-artist');
 
+        Route::put('/artist/{artistId}/report/', [ArtistProfileController::class,'sendReport'])->name('artist.report');
+
         // CART
         Route::prefix('cart')->name('cart.')->group(function() {
             Route::get('/{id}', [CartController::class, 'addToCart'])->name('add');
@@ -153,6 +155,11 @@ Route::middleware([Authorization::class.':true'])->group(function() {
                 Route::get('/', [AdminController::class, 'skill'])->name('show');
                 Route::post('/', [AdminController::class, 'addSkill'])->name('store');
                 Route::get('/{id}/delete', [AdminController::class, 'deleteSkill'])->name('destroy');
+            });
+
+            Route::prefix('report')->name('report.')->group(function() {
+                Route::get('/', [AdminController::class, 'artistReport'])->name('show');
+                Route::get('/{id}/mark', [AdminController::class, 'markArtistReport'])->name('mark');
             });
             
             Route::get('/login', function () {

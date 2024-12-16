@@ -43,6 +43,11 @@ class MasterUser extends Authenticatable
         return $this->hasMany(ArtistRating::class, 'USER_ID', 'USER_ID');
     }
 
+    public function ArtistReports(): HasMany
+    {
+        return $this->hasMany(ArtistReport::class, 'USER_ID', 'USER_ID');
+    }
+
     public function Arts():HasMany
     {
         return $this->hasMany(Art::class, 'USER_ID', 'USER_ID');

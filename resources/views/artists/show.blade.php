@@ -724,11 +724,15 @@
                             <p id="selectedReasonText" class="font-semibold text-gray-800"></p>
                             <p class="text-gray-500 text-sm">Please confirm your reason for reporting.</p>
                         </div>
-                        <div class="flex justify-end mt-6">
-                            <button onclick="submitReport()"
-                                class="bg-indigo-600 text-white px-5 py-2 rounded-full hover:bg-indigo-700 transition-all">Submit
-                                report</button>
-                        </div>
+                        <form action="{{ route('artist.report',['artistId'=>$artist->ARTIST_ID]) }}" method="POST">
+                            @method('PUT')
+                            @csrf
+                            <input type="hidden" name="CONTENT" id="reason-content">
+                            <div class="flex justify-end mt-6">
+                                <button type="submit"
+                                    class="bg-indigo-600 text-white px-5 py-2 rounded-full hover:bg-indigo-700 transition-all">Submit report</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -1200,6 +1204,7 @@
         event.target.classList.add('selected');
 
         document.getElementById('selectedReasonText').textContent = selectedReasonText;
+        document.getElementById('reason-content').value = selectedReasonText;
         document.getElementById('reportConfirmation').classList.remove('hidden');
     }
 

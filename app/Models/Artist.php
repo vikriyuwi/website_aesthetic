@@ -40,6 +40,16 @@ class Artist extends Model
         return $this->hasMany(ArtistRating::class, 'ARTIST_ID', 'ARTIST_ID');
     }
 
+    public function ArtistReports(): HasMany
+    {
+        return $this->hasMany(ArtistReport::class, 'ARTIST_ID', 'ARTIST_ID');
+    }
+    
+    public function ArtistSkills(): HasMany
+    {
+        return $this->hasMany(ArtistSkill::class, 'ARTIST_ID', 'ARTIST_ID');
+    }
+
     public function getAverageArtistRatingAttribute()
     {
         $totalRating = 0;
