@@ -59,9 +59,22 @@
                 <p class="mt-6 text-lg">
                     Join Aesthetic, the premier platform for artists in Indonesia. Share your art, connect with buyers, and grow your career today!
                 </p>
+                @if(Auth::user()->Artist == null)
                 <button onclick="openJoinModal()" class="mt-8 px-8 py-3 bg-secondary text-primary font-semibold rounded-lg shadow-lg hover:bg-primary hover:text-white transition">
                     Join as an Artist
                 </button>
+                @else
+                <p class="mt-6 text-lg">
+                    <button class="mt-8 px-8 py-3 bg-secondary text-primary font-semibold rounded-lg shadow-lg hover:bg-secondary hover:text-primary transition">
+                        @if(Auth::user()->Artist->isActive())
+                            You are already being Artist
+                        @else
+                            Admin is reviewing, check on your email for all update
+                        @endif
+                    </button>
+                </p>
+                @endif
+                
             </div>
             <div class="w-full lg:w-1/2">
                 <img src="https://plus.unsplash.com/premium_photo-1704835116060-d88d18bd4727?q=80&w=2910&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Artistic Hero" class="rounded-lg shadow-lg">
