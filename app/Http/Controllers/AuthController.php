@@ -75,19 +75,11 @@ class AuthController extends Controller
             $buyer = $user->Buyer;
             $artist = $user->Artist;
 
-            // Determine the role
-            $role;
-            if ($user->USER_LEVEL == 1) $role = 'BUYER';
-            if ($user->USER_LEVEL == 2) $role = 'ARTIST';
-
-            // Store roles and related data in the session
-            session([
-                'ROLE' => $role,
-                'BUYER_DATA' => $buyer,
-                'ARTIST_SATA' => $artist,
-            ]);
-
-            return redirect()->route('landing');
+            if($user->USER_LEVEL == 3) {
+                return redirect()->route('admin.dashboard');
+            } else {
+                return redirect()->route('landing');
+            }
         } else {
             return redirect()->back()->withErrors([
                 'authorization' => 'Account not authorized!'

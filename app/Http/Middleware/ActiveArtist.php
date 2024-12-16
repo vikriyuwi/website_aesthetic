@@ -16,9 +16,18 @@ class ActiveArtist
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::guard('MasterUser')->user()->Artist->IS_ACTIVE) {
-            return $next($request);
+        $user = Auth::guard('MasterUser')->user();
+        // dd($user->Artist);
+        if($user->Artist == null) {
+            return redirect()->back()->withErrors([
+                'message' => 'Your are not registered as Artist',
+            ]);
         }
-        return redirect()->back();
+        if($user->Artist->IS_ACTIVE == 0) {
+            return redirect()->back()->withErrors([
+                'message' => 'Your Artist account is inactive, please contact admin to reactivate your account',
+            ]);
+        }
+        return $next($request);
     }
 }

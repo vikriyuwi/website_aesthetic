@@ -17,10 +17,12 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\AdminController;
 use App\Http\Middleware\Authorization;
 use App\Http\Middleware\Role;
 use App\Http\Middleware\ActiveBuyer;
 use App\Http\Middleware\ActiveArtist;
+use App\Http\Middleware\AdminAuth;
 
 Route::get('/', function () {
     return redirect('/landing');
@@ -43,71 +45,121 @@ Route::middleware(Authorization::class.':false')->group(function() {
 Route::middleware([Authorization::class.':true'])->group(function() {
     Route::get('/resetpassword', [WebController::class, 'resetpassword']);
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::get('/join-artist', [WebController::class, 'joinArtist'])->name('join-artist');
-    Route::post('/join-artist', [WebController::class, 'registerArtist'])->name('register-artist');
 
-    // COLLECTION
-    Route::prefix('collection')->name('collection.')->group(function () {
-        Route::post('/add', [ArtistCollectionController::class, 'store'])->name('store');
-        Route::put('/{collectionId}/update', [ArtistCollectionController::class, 'update'])->name('update');
-        Route::put('/{collectionId}/addArt', [ArtistCollectionController::class, 'addArtToCollection'])->name('addArt');
-        Route::get('/delete/{collectionId}', [ArtistCollectionController::class, 'destroy'])->name('delete');
-    });
+    Route::middleware([ActiveBuyer::class])->group(function() {
+        Route::get('/join-artist', [WebController::class, 'joinArtist'])->name('join-artist');
+        Route::post('/join-artist', [WebController::class, 'registerArtist'])->name('register-artist');
 
-    Route::prefix('portfolio')->name('portfolio.')->group(function () {
-        Route::post('/add', [ArtistPortfolioController::class, 'store'])->name('store');
-        Route::get('/{portfolioId}/delete/',[ArtistPortfolioController::class,'deletePortfolio'])->name('destroy');
-        Route::get('/{id}/like',[ArtistArtWorkController::class,'like'])->name('like');
-    });
-
-    Route::prefix('artwork')->name('artwork.')->group(function () {
-        Route::post('/add',[ArtistArtWorkController::class,'addArtWork'])->name('store');
-        Route::get('/{artworkId}/delete/',[ArtistArtWorkController::class,'deleteArtWork'])->name('destroy');
-        Route::get('/{id}/like',[ArtistArtWorkController::class,'like'])->name('like');
-    });
-
-    Route::prefix('artist')->name('artist.')->group(function () {
-        Route::put('/{id}/review', [ArtistProfileController::class, 'reviewArtist'])->name('review');
-        Route::get('/review/{id}/delete', [ArtistProfileController::class, 'destroyArtistReview'])->name('review.delete');
-    });
-
-    Route::prefix('art-collection')->name('artCollection.')->group(function () {
-        Route::get('/{artCollectionId}/delete',[ArtCollectionController::class,'destroy'])->name('delete');
-    });
-
-    Route::put('/artist/{artistId}/update/', [ArtistProfileController::class,'updateArtistProfile'])->name('artist.update');
-
-    Route::prefix('post')->name('post.')->group(function () {
-        Route::post('/add',[ArtistPostController::class,'store'])->name('store');
-        Route::get('/{postId}/delete',[ArtistPostController::class,'deletePost'])->name('destroy');
-    });
-
-    Route::prefix('hire')->name('hire.')->group(function() {
-        Route::post('/add', [ArtistHireController::class, 'store'])->name('store');
-        Route::get('/{hireId}/delete', [ArtistHireController::class, 'destroy'])->name('destroy');
-        Route::put('/{hireId}/update', [ArtistHireController::class, 'update'])->name('update');
-    });
-
-    Route::prefix('cart')->name('cart.')->group(function() {
-        Route::get('/{id}', [CartController::class, 'addToCart'])->name('add');
-        Route::get('/{id}/remove', [CartController::class, 'removeFromCart'])->name('remove');
-    });
-
-    Route::prefix('order')->name('order.')->group(function() {
-        Route::get('/', [OrderController::class, 'index'])->name('my');
-        Route::get('/chekcout',[OrderController::class, 'checkout'])->name('checkout');
-        Route::get('/history', [OrderController::class, 'history'])->name('history');
-        Route::prefix('address')->name('address.')->group(function() {
-            Route::get('/', [AddressController::class, 'index'])->name('show');
-            Route::get('/add', [AddressController::class, 'add'])->name('add');
-            Route::post('/add', [AddressController::class, 'store'])->name('store');
-            Route::get('/{id}/delete', [AddressController::class, 'destroy'])->name('destroy');
-            Route::get('/{id}/activate', [AddressController::class, 'active'])->name('activate');
+        // CART
+        Route::prefix('cart')->name('cart.')->group(function() {
+            Route::get('/{id}', [CartController::class, 'addToCart'])->name('add');
+            Route::get('/{id}/remove', [CartController::class, 'removeFromCart'])->name('remove');
         });
-        Route::get('/{id}/summary', [OrderController::class, 'show'])->name('summary');
+
+        // PORTFOLIO
+        Route::get('/portfolio/{id}/like',[ArtistArtWorkController::class,'like'])->name('portfolio.like');
+        Route::get('/artwork/{id}/like',[ArtistArtWorkController::class,'like'])->name('artwork.like');
+
+        // ARTIST REVIEW
+        Route::prefix('artist')->name('artist.')->group(function () {
+            Route::put('/{id}/review', [ArtistProfileController::class, 'reviewArtist'])->name('review');
+            Route::get('/review/{id}/delete', [ArtistProfileController::class, 'destroyArtistReview'])->name('review.delete');
+        });
+
+        // ORDER
+        Route::prefix('order')->name('order.')->group(function() {
+            Route::get('/', [OrderController::class, 'index'])->name('my');
+            Route::get('/chekcout',[OrderController::class, 'checkout'])->name('checkout');
+            Route::get('/history', [OrderController::class, 'history'])->name('history');
+            Route::prefix('address')->name('address.')->group(function() {
+                Route::get('/', [AddressController::class, 'index'])->name('show');
+                Route::get('/add', [AddressController::class, 'add'])->name('add');
+                Route::post('/add', [AddressController::class, 'store'])->name('store');
+                Route::get('/{id}/delete', [AddressController::class, 'destroy'])->name('destroy');
+                Route::get('/{id}/activate', [AddressController::class, 'active'])->name('activate');
+            });
+            Route::get('/{id}/summary', [OrderController::class, 'show'])->name('summary');
+        });
     });
 
-    Route::get('/insight-artist', [WebController::class, 'insightArtist'])->name('insight-artist');
+    Route::middleware([ActiveArtist::class])->group(function() {
+
+        // PROFILE
+        Route::put('/artist/{artistId}/update/', [ArtistProfileController::class,'updateArtistProfile'])->name('artist.update');
+
+        // COLLECTION
+        Route::prefix('collection')->name('collection.')->group(function () {
+            Route::post('/add', [ArtistCollectionController::class, 'store'])->name('store');
+            Route::put('/{collectionId}/update', [ArtistCollectionController::class, 'update'])->name('update');
+            Route::put('/{collectionId}/addArt', [ArtistCollectionController::class, 'addArtToCollection'])->name('addArt');
+            Route::get('/delete/{collectionId}', [ArtistCollectionController::class, 'destroy'])->name('delete');
+        });
+
+        Route::prefix('art-collection')->name('artCollection.')->group(function () {
+            Route::get('/{artCollectionId}/delete',[ArtCollectionController::class,'destroy'])->name('delete');
+        });
+
+        // PORATFOLIO
+        Route::prefix('portfolio')->name('portfolio.')->group(function () {
+            Route::post('/add', [ArtistPortfolioController::class, 'store'])->name('store');
+            Route::get('/{portfolioId}/delete/',[ArtistPortfolioController::class,'deletePortfolio'])->name('destroy');
+        });
+
+        // ARTWORK
+        Route::prefix('artwork')->name('artwork.')->group(function () {
+            Route::post('/add',[ArtistArtWorkController::class,'addArtWork'])->name('store');
+            Route::get('/{artworkId}/delete/',[ArtistArtWorkController::class,'deleteArtWork'])->name('destroy');
+        });
+
+        // POST
+        Route::prefix('post')->name('post.')->group(function () {
+            Route::post('/add',[ArtistPostController::class,'store'])->name('store');
+            Route::get('/{postId}/delete',[ArtistPostController::class,'deletePost'])->name('destroy');
+        });
+
+        // HIRE
+        Route::prefix('hire')->name('hire.')->group(function() {
+            Route::post('/add', [ArtistHireController::class, 'store'])->name('store');
+            Route::get('/{hireId}/delete', [ArtistHireController::class, 'destroy'])->name('destroy');
+            Route::put('/{hireId}/update', [ArtistHireController::class, 'update'])->name('update');
+        });
+
+        // INSIGHT
+        Route::get('/insight-artist', [WebController::class, 'insightArtist'])->name('insight-artist');
+    });
+
+    Route::middleware([AdminAuth::class])->group(function() {
+        Route::prefix('admin')->name('admin.')->group(function() {
+            Route::get('/', [AdminController::class, 'index'])->name('dashboard');
+            
+            Route::get('/buyer', [AdminController::class, 'buyer'])->name('buyer');
+            Route::get('/buyer/{id}/active-toggle', [AdminController::class, 'activateBuyer'])->name('buyer.activate');
+            Route::get('/artist', [AdminController::class, 'artist'])->name('artist');
+            Route::get('/artist/{id}/active-toggle', [AdminController::class, 'activateArtist'])->name('artist.activate');
+
+            Route::get('/artist/join-request', [AdminController::class, 'joinRequest'])->name('artist.joinRequest');
+            Route::get('/artist/join-request/{id}/active-toggle', [AdminController::class, 'approveArtist'])->name('artist.joinRequest.approve');
+
+            Route::get('/artist', [AdminController::class, 'artist'])->name('artist');
+            Route::get('/artist/{id}/active-toggle', [AdminController::class, 'activateArtist'])->name('artist.activate');
+            
+            Route::prefix('category')->name('category.')->group(function() {
+                Route::get('/', [AdminController::class, 'category'])->name('show');
+                Route::post('/', [AdminController::class, 'addCategory'])->name('store');
+                Route::get('/{id}/delete', [AdminController::class, 'deleteCategory'])->name('destroy');
+            });
+
+            Route::prefix('skill')->name('skill.')->group(function() {
+                Route::get('/', [AdminController::class, 'skill'])->name('show');
+                Route::post('/', [AdminController::class, 'addSkill'])->name('store');
+                Route::get('/{id}/delete', [AdminController::class, 'deleteSkill'])->name('destroy');
+            });
+            
+            Route::get('/login', function () {
+                return view('admin.login');
+            })->name('login');
+        });
+    });
 });
 
 Route::get('/landing', [App\Http\Controllers\WebController::class, 'landing'])->name('landing');
@@ -226,29 +278,3 @@ Route::get('/blog-detail', [WebController::class, 'blogDetail'])->name('blog-det
 Route::get('/contact-us', [WebController::class, 'contactUs'])->name('contact-us');
 
 Route::get('/colection/detail', [WebController::class, 'collectionDetails'])->name('collection-details');
-
-Route::get('/admin/dashboard', function () {
-    return view('admin.dashboard', [
-        'totalBuyers' => 150, 
-        'totalArtists' => 80, 
-        'totalCategories' => 20, 
-        'totalSkills' => 35, 
-        'totalArtworks' => 300
-    ]);
-})->name('admin.dashboard');
-
-Route::get('/admin/users', function () {
-    return view('admin.users');
-})->name('admin.users');
-
-Route::get('/admin/category', function () {
-    return view('admin.category');
-})->name('admin.category');
-
-Route::get('/admin/skills', function () {
-    return view('admin.skills');
-})->name('admin.skills');
-
-Route::get('/admin/login', function () {
-    return view('admin.login');
-})->name('admin.login');

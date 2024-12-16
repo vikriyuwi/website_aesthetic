@@ -14,6 +14,15 @@ class Artist extends Model
     protected $primaryKey = 'ARTIST_ID';
     protected $fillable = ['USER_ID', 'LOCATION','ROLE','BIO','ABOUT','IS_ACTIVE','VIEW'];
 
+    public function isActive()
+    {
+        if($this->IS_ACTIVE == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
     public function addView()
     {
         $now = $this->VIEW;
