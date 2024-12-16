@@ -22,11 +22,12 @@ class AdminController extends Controller
         $totalArtist = MasterUser::has('ARTIST')->count();
         $totalCategory = ArtCategory::count();
         $totalArtwork = Art::where('IS_SALE',true)->count();
+        $totalSkill = SkillMaster::count();
         return view('admin.dashboard', [
             'totalBuyers' => $totalBuyer, 
             'totalArtists' => $totalArtist, 
             'totalCategories' => $totalCategory, 
-            'totalSkills' => 35, 
+            'totalSkills' => $totalSkill, 
             'totalArtworks' => $totalArtwork
         ]);
     }
