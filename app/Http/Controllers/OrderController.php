@@ -12,6 +12,32 @@ use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
+    public function checkBeforeCheckout()
+    {
+        $user = null;
+
+        if (Auth::user() != null)
+        {
+            $user = Auth::User();
+        }
+
+        $usercarts = $user->Carts;
+        $total = $usercarts->count();
+
+        foreach($usercarts as $cart) {
+            if($cart->Art->isInStock() == false) {
+                $cart->delete();
+                $total -= 1;
+            }
+        }
+
+        if($total > 0) {
+            return redirect()->route('order.my');
+        } else {
+            return redirect()->back()->withErrors(['message'=>'Nothing to checkout']);
+        }
+    }
+
     public function index()
     {
         $user = null;
@@ -22,7 +48,11 @@ class OrderController extends Controller
         }
 
         // $order = Order::where('USER_ID',$user->USER_ID)->latest('created_at')->first();
+
         $carts = $user->Carts;
+
+        // dd($carts);
+
         $activeAddress = Address::where('USER_ID',$user->USER_ID)->where('IS_ACTIVE',1)->first();
 
         return view('layouts.checkout', compact('carts','activeAddress'));
@@ -36,10 +66,15 @@ class OrderController extends Controller
         $activeAddress = Address::where('USER_ID',$user->USER_ID)->where('IS_ACTIVE',1)->first();
 
         if($activeAddress == null) {
-            return redirect()->back()->withErrors(['message'=>'no active address']);
+            return redirect()->back()->withErrors(['message'=>'No active address']);
         }
 
         $carts = $user->Carts;
+
+        if($carts->count() <= 0) {
+            return redirect()->back()->withErrors(['message'=>'Nothing to checkout']);
+        }
+
         $order = Order::where('USER_ID', $user->USER_ID)->orderBy('created_at', 'DESC')->first();
 
         $order = $user->Orders()->create([

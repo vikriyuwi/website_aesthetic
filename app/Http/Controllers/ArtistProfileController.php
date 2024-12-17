@@ -24,6 +24,11 @@ class ArtistProfileController extends Controller
 {
     public function showArtist($ARTIST_ID, $section = 'home')
     {
+        $carts = null;
+        if(Auth::user() != null) {
+            $carts = Auth::user()->Carts;
+        }
+
         $user = Auth::guard('MasterUser')->user();
         $artist = Artist::where('ARTIST_ID','=',$ARTIST_ID)->first();
 
@@ -45,7 +50,7 @@ class ArtistProfileController extends Controller
         }
         else{
             $artistItSelf = $user == $artist->MasterUser;
-            return view('artists.show', compact('artist','section','artistItSelf','portfolios','artWorks','artCategoriesMaster','posts', 'hire', 'skillsMaster')); //ABOUT RENDER
+            return view('artists.show', compact('artist','section','artistItSelf','portfolios','artWorks','artCategoriesMaster','posts', 'hire', 'skillsMaster', 'carts')); //ABOUT RENDER
         }
     }
     

@@ -68,4 +68,13 @@ class Art extends Model
     {
         return $this->hasMany(OrderItem::class, 'ART_ID', 'ART_ID');
     }
+
+    public function isInStock()
+    {
+        if($this->OrderItems->count() > 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

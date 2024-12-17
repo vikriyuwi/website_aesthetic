@@ -4,12 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Artist;
 
 class ListArtistController extends Controller
 {
     public function viewListArtist()
     {
+        $carts = null;
+        if(Auth::user() != null) {
+            $carts = Auth::user()->Carts;
+        }
+
         $countArtist = Artist::where('IS_ACTIVE',true)->count();
 
         $listArtist = Artist::where('IS_ACTIVE',true)->get();
@@ -19,7 +25,7 @@ class ListArtistController extends Controller
         //             ->join('MASTER_USER', 'ARTIST.USER_ID', '=', 'MASTER_USER.USER_ID')
         //             ->get();
 
-        return view('artists.index', compact('countArtist','listArtist'));
+        return view('artists.index', compact('countArtist','listArtist','carts'));
 
     }
 
