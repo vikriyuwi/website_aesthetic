@@ -255,7 +255,8 @@ public function collectionDetails()
 
 
 public function buyerProfile(){
-    return view('buyer.profile');
+    $user = Auth::user();
+    return view('buyer.profile',compact('user'));
 }
 
 
