@@ -146,7 +146,7 @@
 
                 <div class="text-xl font-semibold text-indigo-600 mt-4">
                     @if ($artwork->IS_SALE == 1)
-                    Rp.{{ number_format($artwork->PRICE, 2, ',', '.') }}
+                    Rp {{ number_format($artwork->PRICE, 0, ',', '.') }}
                     @else
                     Not For Sale
                     @endif
@@ -271,7 +271,7 @@
                 <h3 class="text-lg font-semibold text-gray-800 mb-1 group-hover:text-indigo-600 transition-colors">{{ $otherArtwork->ART_TITLE }}</h3>
                 <p class="text-gray-500">
                     @if ($otherArtwork->IS_SALE == 1)
-                    Rp.{{ number_format($otherArtwork->PRICE, 2, ',', '.') }}
+                    Rp {{ number_format($otherArtwork->PRICE, 0, ',', '.') }}
                     @else
                     Not For Sale
                     @endif

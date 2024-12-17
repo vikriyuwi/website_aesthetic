@@ -12,11 +12,11 @@
         <!-- Profile Header -->
         <div class="bg-gradient-to-r from-indigo-500 to-purple-500 text-white p-8 flex flex-col items-center">
             <!-- Profile Image -->
-            <img src="https://plus.unsplash.com/premium_photo-1674248776543-ffa661a3544a?q=80&w=2869&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Buyer Avatar" class="w-32 h-32 rounded-full shadow-lg border-4 border-white">
+            <img src="{{ $user->Buyer->PROFILE_IMAGE_URL != null ? asset($user->Buyer->PROFILE_IMAGE_URL) : "https://placehold.co/100x100"}}" alt="Buyer Avatar" class="w-32 h-32 rounded-full shadow-lg border-4 border-white">
             <!-- Buyer Info -->
             <div class="text-center mt-4">
-                <h1 class="text-3xl font-bold">John John</h1>
-                <p class="text-indigo-200 text-sm">Buyer since January 2023</p>
+                <h1 class="text-3xl font-bold">{{ $user->Buyer->FULLNAME }}</h1>
+                <p class="text-indigo-200 text-sm">Buyer since {{ (new \DateTime($user->created_at))->format('F Y') }}</p>
             </div>
             <!-- Edit Profile Button -->
             <button class="mt-4 px-6 py-2 bg-white text-indigo-600 rounded-full shadow-md hover:bg-indigo-100 transition">
@@ -27,15 +27,15 @@
         <!-- Profile Stats -->
         <div class="grid grid-cols-3 text-center gap-4 bg-gray-50 p-6">
             <div>
-                <h2 class="text-2xl font-bold text-indigo-600">12</h2>
+                <h2 class="text-2xl font-bold text-indigo-600">{{ $user->total_purchased_item }}</h2>
                 <p class="text-gray-700">Artworks Purchased</p>
             </div>
             <div>
-                <h2 class="text-2xl font-bold text-indigo-600">Rp. 1.500.000</h2>
+                <h2 class="text-2xl font-bold text-indigo-600">Rp {{ number_format($user->total_spend, 0, ',', '.') }}</h2>
                 <p class="text-gray-700">Total Spend</p>
             </div>
             <div>
-                <h2 class="text-2xl font-bold text-indigo-600">5</h2>
+                <h2 class="text-2xl font-bold text-indigo-600">{{ $user->Followings->count() }}</h2>
                 <p class="text-gray-700">Artists Following</p>
             </div>
         </div>
@@ -45,19 +45,16 @@
             <h2 class="text-2xl font-bold text-gray-800 mb-6">Recent Purchases</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <!-- Artwork Card -->
-                <div class="bg-gray-100 rounded-lg shadow-md p-4 hover:shadow-lg transition">
-                    <img src="https://plus.unsplash.com/premium_photo-1719986264301-f19780a93358?q=80&w=2795&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Artwork Title" class="w-full h-40 object-cover rounded-lg mb-4">
-                    <h3 class="text-lg font-semibold text-gray-800">Abstract Sunset</h3>
-                    <p class="text-sm text-gray-600">By Jane Doe</p>
-                    <p class="text-sm text-gray-500">Rp. 500.000</p>
-                </div>
-                <!-- Artwork Card -->
-                <div class="bg-gray-100 rounded-lg shadow-md p-4 hover:shadow-lg transition">
-                    <img src="https://plus.unsplash.com/premium_photo-1719986264226-fa2a55f35e90?q=80&w=2795&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Artwork Title" class="w-full h-40 object-cover rounded-lg mb-4">
-                    <h3 class="text-lg font-semibold text-gray-800">Modern Geometry</h3>
-                    <p class="text-sm text-gray-600">By Alex Johnson</p>
-                    <p class="text-sm text-gray-500">Rp. 450.000</p>
-                </div>
+                @foreach($user->Orders()->orderBy('created_at','DESC')->get() as $order)
+                    @foreach($order->OrderItems as $item)
+                    <div class="bg-gray-100 rounded-lg shadow-md p-4 hover:shadow-lg transition">
+                        <img src="{{ Str::startsWith($item->Art->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($item->Art->ArtImages()->first()->IMAGE_PATH) : $item->Art->ArtImages()->first()->IMAGE_PATH }}" alt="Artwork Title" class="w-full h-40 object-cover rounded-lg mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">{{ $item->Art->ART_TITLE }}</h3>
+                        <p class="text-sm text-gray-600">by {{ $item->Art->MasterUser->Buyer->FULLNAME }}</p>
+                        <p class="text-sm text-gray-500">Rp {{ number_format($item->PRICE_PER_ITEM, 0, ',', '.') }}</p>
+                    </div>
+                    @endforeach
+                @endforeach
             </div>
             <!-- No Purchases -->
             <div class="text-center mt-8">

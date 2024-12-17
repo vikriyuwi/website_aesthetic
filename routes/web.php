@@ -50,6 +50,8 @@ Route::middleware([Authorization::class.':true'])->group(function() {
     Route::get('/follow/{userId}',[FollowController::class, 'follow'])->name('follow');
     Route::get('/unfollow/{userId}',[FollowController::class, 'unfollow'])->name('unfollow');
 
+    Route::get('buyer/profile',[WebController::class,'buyerProfile'])->name('buyer.showProfile');
+
     Route::middleware([ActiveBuyer::class])->group(function() {
         Route::get('/join-artist', [WebController::class, 'joinArtist'])->name('join-artist');
         Route::post('/join-artist', [WebController::class, 'registerArtist'])->name('register-artist');
@@ -236,8 +238,6 @@ Route::get('/following', [WebController::class, 'following'])->name('following')
 
 #REGION BUYER
 //------------------------------------------------------------------BUYER------------------------------------------------------------------
-
-Route::get('buyer/profile',[WebController::class,'buyerProfile'])->name('buyer.showProfile');
 
 //---------------------------------------------------------------ENDBUYER------------------------------------------------------------------
 

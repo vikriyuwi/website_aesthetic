@@ -33,6 +33,28 @@ class MasterUser extends Authenticatable
         return $this->hasMany(Follower::class, 'FOLLOWER_USER_ID', 'USER_ID');
     }
 
+    public function getTotalPurchasedItemAttribute()
+    {
+        $total = 0;
+        foreach($this->Orders as $order) {
+            foreach($order->OrderItems as $item) {
+                $total += $item->QUANTITY;
+            }
+        }
+        return $total;
+    }
+
+    public function getTotalSpendAttribute()
+    {
+        $total = 0;
+        foreach($this->Orders as $order) {
+            foreach($order->OrderItems as $item) {
+                $total += ($item->QUANTITY * $item->PRICE_PER_ITEM);
+            }
+        }
+        return $total;
+    }
+
     public function getTotalArtViewAttribute()
     {
         $total = 0;
