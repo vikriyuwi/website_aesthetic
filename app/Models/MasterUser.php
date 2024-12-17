@@ -28,6 +28,44 @@ class MasterUser extends Authenticatable
         'IS_ACTIVE'
     ];
 
+    public function Followings(): HasMany
+    {
+        return $this->hasMany(Follower::class, 'FOLLOWER_USER_ID', 'USER_ID');
+    }
+
+    public function getTotalArtViewAttribute()
+    {
+        $total = 0;
+        foreach($this->Arts as $art) {
+            $total += $art->VIEW;
+        }
+        return $total;
+    }
+
+    public function getTotalArtLikeAttribute()
+    {
+        $total = 0;
+        foreach($this->Arts as $art) {
+            $total += $art->ArtLikes->count();
+        }
+        return $total;
+    }
+
+    public function isFollowing($userId)
+    {
+        $data = $this->Followings->where('FOLLOWED_USER_ID',$userId)->first();
+        if($data == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function Followers(): HasMany
+    {
+        return $this->hasMany(Follower::class, 'FOLLOWED_USER_ID', 'USER_ID');
+    }
+
     public function Buyer():HasOne
     {
         return $this->hasOne(Buyer::class, 'USER_ID', 'USER_ID');
