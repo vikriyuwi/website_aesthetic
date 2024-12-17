@@ -166,53 +166,6 @@
                 <div class="w-1/4 relative">
                     <div class="bg-white p-4 rounded-lg shadow-lg relative">
                         <!-- Ellipsis Button -->
-                        
-                        @if(Auth::check())
-                        <button id="optionMenuArtistToggle"
-                            class="ellipsisButton absolute top-2 right-2 text-gray-600 hover:text-gray-800 focus:outline-none">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                stroke="currentColor" class="w-6 h-6">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
-                            </svg>
-                        </button>
-                            
-                        <!-- Options Menu -->
-                        <div id="optionMenuArtist" class="optionsMenu bg-white rounded-lg shadow-lg py-2 w-48 hidden">
-                            <!-- Edit Profile Button -->
-                            @if($artistItSelf)
-                                <button onclick="openEditProfileModal()"
-                                    class="block w-full text-left px-4 py-3 hover:bg-indigo-100 hover:text-indigo-600 transition-colors duration-200 font-medium text-gray-700 flex items-center">
-                                    <i class="fas fa-user-edit mr-3 text-indigo-500"></i>
-                                    Edit Profile
-                                </button>
-                                @if(!isset($hire))
-                                <!-- Hire Freelance Button -->
-                                <button onclick="openHireFormModal()"
-                                    class="block w-full text-left px-4 py-3 hover:bg-green-100 hover:text-green-600 transition-colors duration-200 font-medium text-gray-700 flex items-center">
-                                    <i class="fas fa-file mr-3 text-blue-500"></i>
-                                    Hire Freelance
-                                </button>
-                                @endif
-                            @else
-                                <!-- Review Artist Button -->
-                                @if($artist->ArtistRatings->where('USER_ID',Auth::user()->USER_ID)->count() == 0)
-                                <button onclick="openReviewModal()"
-                                    class="block w-full text-left px-4 py-3 hover:bg-green-100 hover:text-green-600 transition-colors duration-200 font-medium text-gray-700 flex items-center">
-                                    <i class="fas fa-star mr-3 text-green-500"></i>
-                                    Review Artist
-                                </button>
-                                @endif
-
-                                <!-- Report Artist Button (styled in red) -->
-                                <button onclick="openReportModal()"
-                                    class="block w-full text-left px-4 py-3 hover:bg-red-100 hover:bg-red-100 text-red-600 hover:text-red-700 transition-colors duration-200 font-medium flex items-center">
-                                    <i class="fa fa-flag mr-3 text-red-600"></i>
-                                    Report / Block
-                                </button>
-                            @endif
-                        </div>
-                        @endif
 
                         <div class="text-center">
                             <img src="{{ $artist->MasterUser->Buyer->PROFILE_IMAGE_URL != null ? asset($artist->MasterUser->Buyer->PROFILE_IMAGE_URL) : "https://placehold.co/100x100"}}" alt="Profile picture"
