@@ -223,13 +223,43 @@
                             <p class="text-gray-600"><i class="fas fa-map-marker-alt"></i> {{ $artist->LOCATION }}</p>
 
                             @if(!$artistItSelf)
-                            <button onclick="toggleFollow()" id="followButton" class="bg-green-500 text-white px-4 py-2 rounded-full w-full mt-4">
-                                <i id="followIcon" class="fas fa-user-plus mr-2"></i>
-                                <span id="followText">Follow</span>
-                            </button>
-                            <button onclick="openChatWindow()" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-full w-full mt-1">
+                                @if($artist->ArtistRatings->where('USER_ID',Auth::user()->USER_ID)->count() == 0)
+                                <button onclick="openReviewModal()" class="bg-yellow-500 text-white px-4 py-2 rounded-full w-full mt-4">
+                                    <i class="fas fa-star mr-3 text-white"></i>
+                                    <span id="followText">Review Artist</span>
+                                </button>
+                                @endif
+
+                                <button onclick="openReportModal()" class="bg-red-500 text-white px-4 py-2 rounded-full w-full mt-4">
+                                    <i class="fa fa-flag mr-3 text-white"></i>
+                                    <span id="followText">Report</span>
+                                </button>
+                                @if(Auth::user()->isFollowing($artist->USER_ID))
+                                <button onclick="window.location.href='{{ route('unfollow', ['userId' => $artist->USER_ID]) }}'" class="bg-gray-500 text-white px-4 py-2 rounded-full w-full mt-4">
+                                    <i id="followIcon" class="fas fa-user-check mr-2"></i>
+                                    <span id="followText">Followed</span>
+                                </button>
+                                @else
+                                <button onclick="window.location.href='{{ route('follow', ['userId' => $artist->USER_ID]) }}'" class="bg-green-500 text-white px-4 py-2 rounded-full w-full mt-4">
+                                    <i id="followIcon" class="fas fa-user-plus mr-2"></i>
+                                    <span id="followText">Follow</span>
+                                </button>
+                                @endif
+                            {{-- <button onclick="openChatWindow()" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-full w-full mt-1">
                                 <i class="fas fa-envelope mr-2"></i> Message
-                            </button>
+                            </button> --}}
+                            @else
+                                <button onclick="openEditProfileModal()" class="bg-indigo-500 text-white px-4 py-2 rounded-full w-full mt-4">
+                                    <i class="fas fa-user-edit mr-3 text-white-500"></i>
+                                    <span id="followText">Edit Profile</span>
+                                </button>
+                                @if(!isset($hire))
+                                <!-- Hire Freelance Button -->
+                                <button onclick="openHireFormModal()" class="bg-blue-500 text-white px-4 py-2 rounded-full w-full mt-4">
+                                    <i class="fas fa-file mr-3 text-white-500"></i>
+                                    <span id="followText">Hire Freelance</span>
+                                </button>
+                                @endif
                             @endif
                         </div>
 
@@ -251,23 +281,23 @@
                         <div class="mt-4 space-y-2">
                             <div class="flex justify-between">
                                 <span class="text-gray-600">Project Views</span>
-                                <span class="text-gray-800">0</span>
+                                <span class="text-gray-800">{{ $artist->MasterUser->total_art_view }}</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-gray-600">Likes</span>
-                                <span class="text-gray-800">0</span>
+                                <span class="text-gray-600">Project likes</span>
+                                <span class="text-gray-800">{{ $artist->MasterUser->total_art_like }}</span>
                             </div>
                             <div class="flex justify-between">
                                 <a href="{{ route('followers') }}" class="text-gray-600 hover:underline">Followers</a>
-                                <a href="{{ route('followers') }}" class="text-gray-800">0</a>
+                                <a href="{{ route('followers') }}" class="text-gray-800">{{ $artist->MasterUser->Followers->count() }}</a>
                             </div>
                             <div class="flex justify-between">
                                 <a href="{{ route('following') }}" class="text-gray-600 hover:underline">Following</a>
-                                <a href="{{ route('following') }}" class="text-gray-800">0</a>
+                                <a href="{{ route('following') }}" class="text-gray-800">{{ $artist->MasterUser->Followings->count() }}</a>
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-gray-600">Artist Overall Rating</span>
-                                <span class="text-gray-800">0</span>
+                                <span class="text-gray-800">{{ $artist->average_artist_rating }}</span>
                             </div>
                         </div>
 

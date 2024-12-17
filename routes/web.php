@@ -18,6 +18,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\FollowController;
 use App\Http\Middleware\Authorization;
 use App\Http\Middleware\Role;
 use App\Http\Middleware\ActiveBuyer;
@@ -45,6 +46,9 @@ Route::middleware(Authorization::class.':false')->group(function() {
 Route::middleware([Authorization::class.':true'])->group(function() {
     Route::get('/resetpassword', [WebController::class, 'resetpassword']);
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::get('/follow/{userId}',[FollowController::class, 'follow'])->name('follow');
+    Route::get('/unfollow/{userId}',[FollowController::class, 'unfollow'])->name('unfollow');
 
     Route::middleware([ActiveBuyer::class])->group(function() {
         Route::get('/join-artist', [WebController::class, 'joinArtist'])->name('join-artist');
