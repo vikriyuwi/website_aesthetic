@@ -76,6 +76,7 @@ Route::middleware([Authorization::class.':true'])->group(function() {
 
         // ORDER
         Route::prefix('order')->name('order.')->group(function() {
+            Route::get('/process', [OrderController::class, 'checkBeforeCheckout'])->name('process');
             Route::get('/', [OrderController::class, 'index'])->name('my');
             Route::get('/chekcout',[OrderController::class, 'checkout'])->name('checkout');
             Route::get('/history', [OrderController::class, 'history'])->name('history');

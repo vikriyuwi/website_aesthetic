@@ -56,10 +56,14 @@ class WebController extends Controller
     ];
 
     return view('artists.index', compact('artists'));
-}
-        public function explore(Request $request)
+    }
+    public function explore(Request $request)
     {
-        return view('explore');
+        $carts = null;
+        if(Auth::user() != null) {
+            $carts = Auth::user()->Carts;
+        }
+        return view('explore', compact('carts'));
     }
 
     public function landing(Request $request)
@@ -162,7 +166,8 @@ public function following()
 }
 public function cartProfile()
 {
-    return view('profile.cart-profile');
+    $carts = Auth::user()->Carts;
+    return view('profile.cart-profile', compact('carts'));
 }
 
 public function aboutUs()

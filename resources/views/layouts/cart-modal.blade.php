@@ -88,7 +88,7 @@
               <!-- Abstract Illustration -->
               @foreach($carts as $cart)
               <div class="product-card hover:shadow-lg transform transition-transform duration-300 bg-gray-50 rounded-lg p-4 flex items-start mb-4">
-                  <input type="checkbox" class="mr-4 mt-2 custom-checkbox item-checkbox" data-price="{{ $cart->Art->PRICE }}" checked>
+                  <input type="hidden" class="mr-4 mt-2 custom-checkbox item-checkbox" data-price="{{ $cart->Art->PRICE }}" @if($cart->Art->isInStock()) checked @endif>
                   <div class="flex items-center justify-between w-full">
                       <div class="flex items-start">
                           <img src="{{ Str::startsWith($cart->Art->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($cart->Art->ArtImages()->first()->IMAGE_PATH) : $cart->Art->ArtImages()->first()->IMAGE_PATH }}" alt="Abstract Illustration" class="w-24 h-24 object-cover rounded-lg shadow-md">
@@ -101,8 +101,12 @@
                                   @endforeach
                                 @endif
                               </p> <!-- Reduced font size -->
-                              <a href="#artist-mike" class="text-indigo-600 artist-link font-semibold mt-1 inline-block artist">{{ $cart->Art->MasterUser->Buyer->FULLNAME }}</a> <!-- Reduced font size -->
-                              <div class="flex items-center mt-3 text-green-500 font-medium text-sm"><i class="fas fa-check-circle"></i><span class="ml-2">In stock</span></div> <!-- Reduced font size -->
+                              <a href="{{ route('artist.show',['id'=>$cart->Art->MasterUser->Artist->ARTIST_ID]) }}" class="text-indigo-600 artist-link font-semibold mt-1 inline-block artist">{{ $cart->Art->MasterUser->Buyer->FULLNAME }}</a> <!-- Reduced font size -->
+                              @if($cart->Art->isInStock())
+                              <div class="flex items-center mt-3 text-green-500 font-medium text-sm"><i class="fas fa-check-circle"></i><span class="ml-2">In stock</span></div>
+                              @else
+                              <div class="flex items-center mt-3 text-yellow-500 font-medium text-sm"><i class="fas fa-clock"></i><span class="ml-2">Out of stock</span></div>
+                              @endif
                           </div>
                       </div>
                       <div class="text-right">
@@ -117,18 +121,21 @@
         @endif
 
         <!-- Subtotal and Checkout Section -->
+
+        @if($carts->count() > 0)
         <div class="flex justify-between items-center mt-8">
-            <p class="text-base font-semibold">Subtotal</p> <!-- Reduced font size -->
-            <p class="text-base font-semibold" id="subtotal">$320.00</p> <!-- Reduced font size -->
+          <p class="text-base font-semibold">Subtotal</p> <!-- Reduced font size -->
+          <p class="text-base font-semibold" id="subtotal">$320.00</p> <!-- Reduced font size -->
         </div>
         <p class="text-sm text-gray-500 mt-2">Shipping and taxes will be calculated at checkout.</p> <!-- Reduced font size -->
-
-        <button onclick="window.location.href='{{ route('order.my') }}'" class="w-full bg-indigo-600 text-white py-3 mt-6 rounded-lg text-base font-semibold hover:bg-indigo-800 transition">Checkout</button> <!-- Reduced font size -->
-
+        <button onclick="window.location.href='{{ route('order.process') }}'" class="w-full bg-indigo-600 text-white py-3 mt-6 rounded-lg text-base font-semibold hover:bg-indigo-800 transition">Checkout</button> <!-- Reduced font size -->
         <p class="text-center mt-4 text-sm text-gray-500">
-            or
-            <a href="#" class="text-indigo-600 hover:underline">Continue Shopping →</a> <!-- Reduced font size -->
+          or
+          <a href="{{ url('artists') }}" class="text-indigo-600 hover:underline">Continue Shopping →</a> <!-- Reduced font size -->
         </p>
+        @else
+        <span class="text-gray-500">Add some art to cart to checkout</span>
+        @endif
     </div>
 </div>
 
