@@ -12,6 +12,7 @@ use App\Models\ArtistHire;
 use App\Models\ArtCategoryMaster;
 use App\Models\Post;
 use App\Models\ArtistRating;
+use App\Models\SkillMaster;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -26,6 +27,10 @@ class ArtistProfileController extends Controller
         $user = Auth::guard('MasterUser')->user();
         $artist = Artist::where('ARTIST_ID','=',$ARTIST_ID)->first();
 
+        if($artist == null) {
+            return redirect()->route('landing')->withErrors(['message'=>'Artist not found']);
+        }
+
         $artist->addView();
 
         $portfolios = Art::where('USER_ID',$artist->USER_ID)->where('IS_SALE',false)->get();
@@ -33,13 +38,14 @@ class ArtistProfileController extends Controller
         $artCategoriesMaster = ArtCategoryMaster::all();
         $posts = Post::where('ARTIST_ID','=',$ARTIST_ID)->get();
         $hire = ArtistHire::where('ARTIST_ID','=',$ARTIST_ID)->first();
+        $skillsMaster = SkillMaster::all();
 
         if ($artist == null) {
             abort(404, 'Artist not found.');
         }
         else{
             $artistItSelf = $user == $artist->MasterUser;
-            return view('artists.show', compact('artist','section','artistItSelf','portfolios','artWorks','artCategoriesMaster','posts', 'hire')); //ABOUT RENDER
+            return view('artists.show', compact('artist','section','artistItSelf','portfolios','artWorks','artCategoriesMaster','posts', 'hire', 'skillsMaster')); //ABOUT RENDER
         }
     }
     

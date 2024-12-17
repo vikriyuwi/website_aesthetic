@@ -459,9 +459,9 @@
                                 <select id="headline" name="role"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
                                     required>
-                                    <option value="Illustrator" @if($artist->ROLE == "Illustrator") selected @endif>Illustrator</option>
-                                    <option value="Graphic Designer" @if($artist->ROLE == "Graphic Designer") selected @endif>Graphic Designer</option>
-                                    <option value="Web Designer" @if($artist->ROLE == "Web Designer") selected @endif>Web Designer</option>
+                                    @foreach($skillsMaster as $skill)
+                                    <option value="{{ $skill->DESCR }}" @if($artist->ROLE == "{{ $skill->DESCR }}") selected @endif>{{ $skill->DESCR }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <!-- Bio Field -->

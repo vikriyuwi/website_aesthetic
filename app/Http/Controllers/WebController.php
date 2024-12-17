@@ -9,6 +9,7 @@ use App\Models\MasterUser;
 use App\Models\Art;
 use App\Models\Post;
 use App\Models\Blog;
+use App\Models\SkillMaster;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -172,11 +173,13 @@ public function aboutUs()
 public function joinArtist()
 {
     $user = Auth::guard('MasterUser')->user();
+    $skillsMaster = SkillMaster::all();
 
     return view('profile.join-artist', [
         'USER' => $user,
         'ROLE' => $user->USER_LEVEL,
         'BUYER_DATA' => $user->Buyer,
+        'skillsMaster' => $skillsMaster
     ]);
 }
 
