@@ -49,7 +49,7 @@ class ArtistProfileController extends Controller
             abort(404, 'Artist not found.');
         }
         else{
-            $artistItSelf = $user == $artist->MasterUser;
+            $artistItSelf = $user->USER_ID == $artist->USER_ID;
             return view('artists.show', compact('artist','section','artistItSelf','portfolios','artWorks','artCategoriesMaster','posts', 'hire', 'skillsMaster', 'carts')); //ABOUT RENDER
         }
     }

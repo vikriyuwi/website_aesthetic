@@ -174,8 +174,7 @@
                             <p class="text-gray-600">{{ $artist->ROLE }}</p>
                             <p class="text-gray-600">{{ $artist->BIO }}</p>
                             <p class="text-gray-600"><i class="fas fa-map-marker-alt"></i> {{ $artist->LOCATION }}</p>
-
-                            @if(!$artistItSelf)
+                            @if($artistItSelf == false)
                                 @if($artist->ArtistRatings->where('USER_ID',Auth::user()->USER_ID)->count() == 0)
                                 <button onclick="openReviewModal()" class="bg-yellow-500 text-white px-4 py-2 rounded-full w-full mt-4">
                                     <i class="fas fa-star mr-3 text-white"></i>
