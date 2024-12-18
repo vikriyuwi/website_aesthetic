@@ -152,7 +152,11 @@ class WebController extends Controller
 
     public function folloProfile()
     {
-        return view('profile.follo-profile');
+        $user = Auth::user();
+        $followers = $user->Followers;
+        $followings = $user->Followings;
+
+        return view('profile.follo-profile', compact('user','followers','followings'));
     }
 
     public function followers()
@@ -160,10 +164,13 @@ class WebController extends Controller
         return view('artists.followers-sidebar');
     }
 
-public function following()
-{
-    return view('artists.following-sidebar');
-}
+    public function following()
+    {
+        $user = Auth::user();
+        $followings = $user->Followings;
+        return view('artists.following-sidebar',compact('followings'));
+    }
+
 public function cartProfile()
 {
     $carts = Auth::user()->Carts;

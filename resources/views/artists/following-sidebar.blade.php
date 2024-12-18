@@ -12,32 +12,26 @@
 
         <div class="space-y-6">
             <!-- Sample Following Card -->
+            @foreach($followings as $following)
             <div class="flex items-center justify-between bg-gray-50 p-4 rounded-lg">
-          <div class="flex items-center space-x-4">
-            <img src="https://play-lh.googleusercontent.com/t2tJJ3PvHpZwSVH20B7zGBqcqMrUMnNpQ8re_BiS6vqdxboDm_RM_pcJvuRY-n8KvGA=w526-h296-rw" alt="Profile picture" class="w-12 h-12 rounded-full object-cover">
-            <div>
-              <p class="text-lg font-semibold text-gray-800">bio.artsy</p>
-              <p class="text-gray-500 text-sm">Following bio snippet...</p>
+              <div class="flex items-center space-x-4">
+                <img src="{{ $following->Followed->Buyer->PROFILE_IMAGE_URL != null ? asset($following->Followed->Buyer->PROFILE_IMAGE_URL) : "https://placehold.co/100x100"}}" alt="Profile picture" class="w-12 h-12 rounded-full object-cover">
+                <div>
+                  <p class="text-lg font-semibold text-gray-800">{{ $following->Followed->Buyer->FULLNAME }}</p>
+                  <p class="text-gray-500 text-sm">{{ $following->Followed->USERNAME }}</p>
+                </div>
+              </div>
+              @if(Auth::user()->isFollowing($following->Followed->USER_ID))
+              <button onclick="window.location.href='{{ route('unfollow', ['userId' => $following->Followed->USER_ID]) }}'" class="bg-gray-600 text-white px-4 py-2 rounded-full shadow hover:bg-gray-700 transition duration-200">
+                Followed
+              </button>
+              @else
+              <button onclick="window.location.href='{{ route('follow', ['userId' => $following->Followed->USER_ID]) }}'" class="bg-indigo-600 text-white px-4 py-2 rounded-full shadow hover:bg-indigo-700 transition duration-200">
+                Follow
+              </button>
+              @endif
             </div>
-          </div>
-          <button onclick="toggleFollow(this)" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-full shadow hover:bg-gray-300 transition duration-200">
-            Following
-          </button>
-        </div>
-            <!-- Repeat more following cards as needed -->
-            <!-- Following Item 2 -->
-        <div class="flex items-center justify-between bg-gray-50 p-4 rounded-lg">
-          <div class="flex items-center space-x-4">
-            <img src="https://i.pinimg.com/236x/5e/f5/b5/5ef5b5465147514c10b85aa6d4845d11.jpg" alt="Profile picture" class="w-12 h-12 rounded-full object-cover">
-            <div>
-              <p class="text-lg font-semibold text-gray-800">belinda_oiling</p>
-              <p class="text-gray-500 text-sm">Another following bio snippet...</p>
-            </div>
-          </div>
-          <button onclick="toggleFollow(this)" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-full shadow hover:bg-gray-300 transition duration-200">
-            Following
-          </button>
-        </div>
+            @endforeach
         </div>
     </div>
 

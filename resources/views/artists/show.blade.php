@@ -240,8 +240,8 @@
                                 <span class="text-gray-800">{{ $artist->MasterUser->total_art_like }}</span>
                             </div>
                             <div class="flex justify-between">
-                                <a href="{{ route('followers') }}" class="text-gray-600 hover:underline">Followers</a>
-                                <a href="{{ route('followers') }}" class="text-gray-800">{{ $artist->MasterUser->Followers->count() }}</a>
+                                <a href="{{ route('follower') }}" class="text-gray-600 hover:underline">Followers</a>
+                                <a href="{{ route('follower') }}" class="text-gray-800">{{ $artist->MasterUser->Followers->count() }}</a>
                             </div>
                             <div class="flex justify-between">
                                 <a href="{{ route('following') }}" class="text-gray-600 hover:underline">Following</a>
