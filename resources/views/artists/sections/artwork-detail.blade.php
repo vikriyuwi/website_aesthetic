@@ -99,14 +99,22 @@
 
     <!-- Main Content -->
     <div class="max-w-6xl mx-auto p-4">
-        <!-- Breadcrumb Navigation -->
+        {{-- <!-- Breadcrumb Navigation -->
         <nav class="flex items-center space-x-2 text-sm text-gray-500 mb-4">
             <a href="/" class="hover:underline">home</a>
             <span>/</span>
             <a href="/category" class="hover:underline">{{ $artwork['category'] }}</a>
             <span>/</span>
             <span class="text-gray-800">{{ $artwork->ARTWORK_TITLE }}</span>
-        </nav>
+        </nav> --}}
+        <!-- Back Button with Arrow Icon -->
+        <a href="javascript:history.back()" 
+        class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-300 transition duration-300 shadow-sm mt-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            <span class="text-sm font-medium text-white">Back</span>
+        </a>
 
         <!-- Clickable Artwork Image -->
         <div class="flex justify-center items-center max-w-screen-lg p-4">
@@ -248,8 +256,6 @@
         </div>
 <!-- Other Listings Section -->
 <div class="max-w-7xl mx-auto py-12 mt-12">
-<a href="#" class="flex items-center px-6 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition">
-              View All <span class="ml-2">→</span>
     <div class="text-center mb-8">
         <img alt="Profile picture of Ruslana Levandovska" class="rounded-full mx-auto mb-4 w-16 h-16 object-cover"
              src="{{ $artwork->MasterUser->Buyer->PROFILE_IMAGE_URL != null ? asset($artwork->MasterUser->Buyer->PROFILE_IMAGE_URL) : "https://placehold.co/100x100"}}" />
@@ -278,7 +284,13 @@
             </div>
         </a>
         @endforeach
-    </div>
+</div>
+<!-- View More Button -->
+<div class="flex justify-center mt-8">
+    <a href="#"
+       class="inline-flex items-center px-6 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition">
+        View More <span class="ml-2">→</span>
+    </a>
 </div>
 <!-- Edit Artwork Modal -->
 <div id="editArtworkModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
