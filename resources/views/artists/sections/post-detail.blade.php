@@ -40,7 +40,7 @@
       <h3 class="text-xl font-bold mb-4">Comments</h3>
       <div id="commentsSection" class="space-y-4 h-48 overflow-y-auto pr-2">
         <!-- Dynamic Comments -->
-        @foreach($post->PostComments as $comment)
+        @foreach($post->PostComments()->orderBy('created_at','DESC')->get() as $comment)
         <div class="flex space-x-4">
           <img class="w-10 h-10 rounded-full" src="{{ $comment->MasterUser->Buyer->PROFILE_IMAGE_URL != null ? asset($comment->MasterUser->Buyer->PROFILE_IMAGE_URL) : "https://placehold.co/100x100"}}" alt="User Profile">
           <div>
