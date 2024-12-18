@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ListArtistController;
+use App\Http\Controllers\BuyerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WebController;
 use App\Http\Controllers\ArtGalleryController;
@@ -53,6 +54,9 @@ Route::middleware([Authorization::class.':true'])->group(function() {
     Route::get('buyer/profile',[WebController::class,'buyerProfile'])->name('buyer.showProfile');
 
     Route::middleware([ActiveBuyer::class])->group(function() {
+        Route::prefix('profile')->name('profile.')->group(function() {
+            Route::post('/update', [BuyerController::class, 'updateBuyerProfile'])->name('update');
+        });
         Route::get('/join-artist', [WebController::class, 'joinArtist'])->name('join-artist');
         Route::post('/join-artist', [WebController::class, 'registerArtist'])->name('register-artist');
 
