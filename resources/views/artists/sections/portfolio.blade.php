@@ -199,14 +199,13 @@
                         </div>
                     </div>
 
-                    <!-- Category -->
                     <!-- Category Selection -->
                     <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-1">Category</label>
                     <div class="flex items-center gap-3">
                         <input type="text" id="selectedCategories" readonly
                             class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500 bg-gray-100 cursor-not-allowed" 
-                            placeholder="Select categories (max 6)">
+                            placeholder="Select categories (max 3)">
                         <button type="button" onclick="toggleCategorySelection()" 
                                 class="text-indigo-600 hover:text-indigo-800 transition">
                             <i class="fas fa-plus"></i>
