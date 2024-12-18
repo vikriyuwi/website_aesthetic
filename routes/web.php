@@ -58,6 +58,8 @@ Route::middleware([Authorization::class.':true'])->group(function() {
     Route::get('/follower', [WebController::class, 'followers'])->name('follower');
     Route::get('/following', [WebController::class, 'following'])->name('following');
 
+    Route::post('/contact-us', [WebController::class, 'storeContactUs'])->name('contact.store');
+
     Route::middleware([ActiveBuyer::class])->group(function() {
 
         Route::prefix('profile')->name('profile.')->group(function() {

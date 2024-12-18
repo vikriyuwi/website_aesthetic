@@ -11,6 +11,7 @@ use App\Models\Post;
 use App\Models\Blog;
 use App\Models\SkillMaster;
 use App\Models\ArtCategoryMaster;
+use App\Models\contactUs;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -257,15 +258,39 @@ public function insightArtist()
         return view('footer.blog-detail',compact('blog','blogs'));
     }
 
-public function blogDetail()
-{
-    return view('footer.blog-detail');
-}
+    public function blogDetail()
+    {
+        return view('footer.blog-detail');
+    }
 
-public function contactUs()
-{
-    return view('footer.contact-us');
-}
+    public function contactUs()
+    {
+        return view('footer.contact-us');
+    }
+
+    public function storeContactUs(Request $request)
+    {
+        $validated = Validator::make($request->all(), [
+            'firstName' => 'required',
+            'lastName' => 'required',
+            'email' => 'required',
+            'phoneNumber' => 'required',
+            'message' => 'required',
+        ]);
+
+        if ($validated->fails()) {
+            return redirect()->back()->withError($validated->error());
+        }
+
+        contactUs::create([
+            'FULLNAME' => $request->firstName." ".$request->lastName,
+            'EMAIL' => $request->email,
+            'PHONE_NUMBER' => $request->phoneNumber,
+            'MESSAGE' => $request->message
+        ]);
+
+        return redirect()->back()->with('status','Hi '.$request->firstName.' '.$request->lastName. ', your message has been sent. We will reach you out soon');
+    }
 
 public function collectionDetails()
 {
