@@ -507,9 +507,10 @@
                             </div>
 
                             <!-- Social Media Links -->
-                            {{-- <div>
+                            <div>
                                 <label class="block text-gray-700 font-medium">🌐 Social Media</label>
-                                <div class="space-y-4 mt-2">
+                                <!-- Two Columns Layout -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
                                     <!-- Twitter Field -->
                                     <div class="flex items-center">
                                         <i class="fab fa-twitter text-blue-400 mr-3 text-xl"></i>
@@ -517,6 +518,7 @@
                                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
                                             placeholder="Twitter Profile URL">
                                     </div>
+
                                     <!-- Pinterest Field -->
                                     <div class="flex items-center">
                                         <i class="fab fa-pinterest text-red-600 mr-3 text-xl"></i>
@@ -524,6 +526,7 @@
                                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
                                             placeholder="Pinterest Profile URL">
                                     </div>
+
                                     <!-- Instagram Field -->
                                     <div class="flex items-center">
                                         <i class="fab fa-instagram text-pink-500 mr-3 text-xl"></i>
@@ -531,6 +534,7 @@
                                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
                                             placeholder="Instagram Profile URL">
                                     </div>
+
                                     <!-- LinkedIn Field -->
                                     <div class="flex items-center">
                                         <i class="fab fa-linkedin text-blue-600 mr-3 text-xl"></i>
@@ -539,7 +543,7 @@
                                             placeholder="LinkedIn Profile URL">
                                     </div>
                                 </div>
-                            </div> --}}
+                            </div>
 
                             <!-- Save Button -->
                             <div class="flex justify-end mt-6">

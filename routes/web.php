@@ -307,3 +307,15 @@ Route::get('/blog-detail', [WebController::class, 'blogDetail'])->name('blog-det
 Route::get('/contact-us', [WebController::class, 'contactUs'])->name('contact-us');
 
 Route::get('/colection/detail', [WebController::class, 'collectionDetails'])->name('collection-details');
+
+Route::get('/admin/contact-us', function () {
+    return view('admin.contact-us'); 
+})->name('admin.contact.show');
+
+Route::get('/admin/contact', function () {
+    return view('admin.contact.show');
+})->name('admin.contact.index');
+
+Route::get('/admin/contact/view/{id}', function ($id) {
+    return view('admin.contact-us-view');
+})->name('admin.contact.view');

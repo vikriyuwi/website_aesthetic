@@ -9,9 +9,17 @@
 </head>
 <body class="bg-white text-black font-sans">
   <div class="container mx-auto p-6">
+    <!-- Back Button with Arrow Icon -->
+    <a href="javascript:history.back()" 
+      class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-300 transition duration-300 shadow-sm mt-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+        <span class="text-sm font-medium text-white">Back</span>
+    </a>
     <div class="flex flex-wrap lg:flex-nowrap">
       <!-- Main Content -->
-      <div class="w-full lg:w-3/4 lg:pr-6">
+      <div class="w-full lg:w-3/4 lg:pr-6 mt-6">
         <!-- Artwork Image -->
         <img src="{{ Str::startsWith($portfolio->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($portfolio->ArtImages()->first()->IMAGE_PATH) : $portfolio->ArtImages()->first()->IMAGE_PATH }}" alt="{{ $portfolio->ARTWORK_TITLE }}" class="w-full h-auto rounded-lg shadow-md"/>
         
