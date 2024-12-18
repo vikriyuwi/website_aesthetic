@@ -153,6 +153,11 @@ class MasterUser extends Authenticatable
         return $this->hasMany(Address::class, 'USER_ID', 'USER_ID');
     }
 
+    public function hireQuestions(): HasMany
+    {
+        return $this->hasMany(HireQuestion::class, 'USER_ID', 'USER_ID');
+    }
+
     public function getTotalEarningAttribute()
     {
         return $this->Arts()->with('OrderItems')

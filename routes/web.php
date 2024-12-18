@@ -61,7 +61,6 @@ Route::middleware([Authorization::class.':true'])->group(function() {
     Route::post('/contact-us', [WebController::class, 'storeContactUs'])->name('contact.store');
 
     Route::middleware([ActiveBuyer::class])->group(function() {
-
         Route::prefix('profile')->name('profile.')->group(function() {
             Route::post('/update', [BuyerController::class, 'updateBuyerProfile'])->name('update');
         });
@@ -100,6 +99,13 @@ Route::middleware([Authorization::class.':true'])->group(function() {
                 Route::get('/{id}/activate', [AddressController::class, 'active'])->name('activate');
             });
             Route::get('/{id}/summary', [OrderController::class, 'show'])->name('summary');
+        });
+
+        Route::prefix('hiring')->name('hiring.')->group(function() {
+            Route::put('/{id}/question',[ArtistProfileController::class, 'storeHireQuestion'])->name('storeQuestion');
+            Route::get('/question/{id}/delete',[ArtistProfileController::class, 'destroyHireQuestion'])->name('destroyQuestion');
+            Route::put('/{id}/reply',[ArtistProfileController::class, 'storeHireQuestionReply'])->name('storeReply');
+            Route::get('/reply/{id}/delete',[ArtistProfileController::class, 'destroyHireQuestionReply'])->name('destroyReply');
         });
     });
 
@@ -204,6 +210,8 @@ Route::get('/home', [App\Http\Controllers\WebController::class, 'home'])->name('
 Route::get('/artists',[App\Http\Controllers\ListArtistController::class, 'viewListArtist']);
 Route::get('/artists/{id}/{section?}', [ArtistProfileController::class, 'showArtist'])->name('artist.show');
 Route::get('/category/{category}', [WebController::class, 'showCategory'])->name('category.show');
+
+Route::get('/hiring/{id}', [ArtistProfileController::class, 'hiring'])->name('artist.hiring');
 
 //VIEW ART INSIDE COLLECTION
 Route::get('/artists/{artistId}/collection/{collectionId}', [ArtistProfileController::class, 'showCollection'])->name('collection.show');

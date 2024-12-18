@@ -54,7 +54,9 @@
           <div>
             <p class="font-bold">
               {{ $comment->MasterUser->Buyer->FULLNAME }} <span class="text-sm text-gray-600">{{ (new \DateTime($comment->created_at))->format('M d, Y') }}</span>
+              @if(Auth::user() != null)
               @if(Auth::user()->USER_ID == $comment->MasterUser->USER_ID) <a href="{{ route('post.comment.delete',['id'=>$comment->POST_COMMENT_ID]) }}" class="text-red-700"><i class="fas fa-trash"></i></a> @endif
+              @endif
             </p>
             <p class="text-gray-700 mt-1">{{ $comment->CONTENT }}</p>
           </div>
@@ -63,6 +65,7 @@
       </div>
 
       <!-- Add Comment Section -->
+      @if(Auth::user() != null)
       <form action="{{ route('post.comment',['id'=>$post->POST_ID]) }}" method="post">
         @csrf
         @method('PUT')
@@ -72,6 +75,11 @@
           <button type="submit" class="mt-2 bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600 transition">Post Comment</button>
         </div>
       </form>
+      @else
+      <div class="p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300" role="alert">
+        Log in to send some comment and like
+      </div>
+      @endif
     </div>
   </div>
 
