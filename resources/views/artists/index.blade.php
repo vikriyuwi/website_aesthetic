@@ -150,7 +150,7 @@
                   $artist = (object) $artist;
               }
           @endphp
-              <div class="artist-card bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition transform hover:-translate-y-2 duration-300 ease-in-out" data-field="{{$artist->ROLE}}" data-name="{{$artist->USERNAME}}">
+              <div class="artist-card bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition transform hover:-translate-y-2 duration-300 ease-in-out" data-field="{{$artist->ROLE}}" data-name="{{$artist->MasterUser->Buyer->FULLNAME}}">
                   <div class="flex items-center mb-4">
                       <!-- Artist Image -->
                       <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-indigo-500">
@@ -203,6 +203,20 @@
             }
         });
     }
+
+    document.getElementById('searchInput').addEventListener('input', function () {
+        const searchValue = this.value.toLowerCase();
+        const items = document.querySelectorAll('.artist-card');
+
+        items.forEach(item => {
+            const itemName = item.getAttribute('data-name').toLowerCase();
+            if (itemName.includes(searchValue)) {
+                item.style.display = 'block'; // Show the item
+            } else {
+                item.style.display = 'none'; // Hide the item
+            }
+        });
+    });
 
     // Placeholder function for loading more artists (can be replaced with backend logic)
     function loadMoreArtists() {
