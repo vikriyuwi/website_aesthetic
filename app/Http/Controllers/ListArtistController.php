@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Artist;
+use App\Models\SkillMaster;
 
 class ListArtistController extends Controller
 {
@@ -19,13 +20,14 @@ class ListArtistController extends Controller
         $countArtist = Artist::where('IS_ACTIVE',true)->count();
 
         $listArtist = Artist::where('IS_ACTIVE',true)->get();
+        $skills = SkillMaster::all();
 
         // DB::table('ARTIST')
         //             ->select('ARTIST.ARTIST_ID', DB::raw('DATEDIFF(day, ARTIST.JOIN_DATE, GETDATE()) AS JOINED'), 'MASTER_USER.USERNAME', 'ARTIST.LOCATION', 'ARTIST.ROLE','ARTIST.BIO', 'MASTER_USER.PROFILE_IMAGE_PATH')
         //             ->join('MASTER_USER', 'ARTIST.USER_ID', '=', 'MASTER_USER.USER_ID')
         //             ->get();
 
-        return view('artists.index', compact('countArtist','listArtist','carts'));
+        return view('artists.index', compact('countArtist','listArtist','carts', 'skills'));
 
     }
 
