@@ -9,6 +9,8 @@ use App\Models\MasterUser;
 use App\Models\ArtCollection;
 use App\Models\ArtistCollection;
 use App\Models\ArtistHire;
+use App\Models\HireQuestion;
+use App\Models\HireQuestionReply;
 use App\Models\ArtCategoryMaster;
 use App\Models\Post;
 use App\Models\ArtistRating;
@@ -25,6 +27,7 @@ class ArtistProfileController extends Controller
     public function showArtist($ARTIST_ID, $section = 'home')
     {
         $carts = null;
+
         if(Auth::user() != null) {
             $carts = Auth::user()->Carts;
         }
@@ -49,7 +52,11 @@ class ArtistProfileController extends Controller
             abort(404, 'Artist not found.');
         }
         else{
-            $artistItSelf = $user->USER_ID == $artist->USER_ID;
+            if(Auth::user() != null) {
+                $artistItSelf = $user->USER_ID == $artist->USER_ID;
+            } else {
+                $artistItSelf = false;
+            }
             return view('artists.show', compact('artist','section','artistItSelf','portfolios','artWorks','artCategoriesMaster','posts', 'hire', 'skillsMaster', 'carts')); //ABOUT RENDER
         }
     }
@@ -176,5 +183,101 @@ class ArtistProfileController extends Controller
         ]);
         
         return redirect()->back()->with('status','Report to '. $artist->MasterUser->Buyer->FULLNAME .' has been sent !');
+    }
+
+    public function hiring($id)
+    {
+        $hiring = ArtistHire::find($id);
+        if($hiring == null) {
+            return redirect()->back()->withErrors(['message','Hiring f=not found']);
+        }
+        
+        return view('artists.hire-view', compact('hiring'));
+    }
+
+    public function storeHireQuestion($id, Request $request)
+    {
+        $user = Auth::user();
+        $hiring = ArtistHire::find($id);
+
+        if($hiring == null) {
+            return redirect()->back()->withErrors(['message'=>'Hiring not found!']);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'QUESTION' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator->all());
+        }
+
+        $hiring->HireQuestions()->create([
+            'QUESTION' => $request->QUESTION,
+            'USER_ID' => $user->USER_ID,
+        ]);
+
+        return redirect()->back()->with('status','Comment has been posted');
+    }
+
+    public function destroyHireQuestion($id)
+    {
+        $user = Auth::user();
+        $question = HireQuestion::find($id);
+
+        if($question == null) {
+            return redirect()->back()->withErrors(['message'=>'Comment not found!']);
+        }
+
+        if($user->USER_ID != $question->USER_ID) {
+            return redirect()->back()->withErrors(['message'=>'Not allowed to delete other user comment!']);
+        }
+
+        $question->delete();
+
+        return redirect()->back()->with('status','Question "'.$question->QUESTION.'" has been deleted');
+    }
+
+    public function storeHireQuestionReply($id, Request $request)
+    {
+        $user = Auth::user();
+        $question = HireQuestion::find($id);
+
+        if($question == null) {
+            return redirect()->back()->withErrors(['message'=>'Hire comment not found!']);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'REPLY' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator->all());
+        }
+
+        $question->HireQuestionReplies()->create([
+            'REPLY' => $request->REPLY,
+            'USER_ID' => $user->USER_ID,
+        ]);
+
+        return redirect()->back()->with('status','Reply has been posted');
+    }
+
+    public function destroyHireQuestionReply($id)
+    {
+        $user = Auth::user();
+        $reply = HireQuestionReply::find($id);
+
+        if($reply == null) {
+            return redirect()->back()->withErrors(['message'=>'Reply not found!']);
+        }
+
+        if($user->USER_ID != $reply->USER_ID) {
+            return redirect()->back()->withErrors(['message'=>'Not allowed to delete other user reply!']);
+        }
+
+        $reply->delete();
+
+        return redirect()->back()->with('status','Reply "'.$reply->REPLY.'" has been deleted');
     }
 }
