@@ -46,6 +46,16 @@
 <body class="bg-gray-100 font-sans antialiased">
 
   <div class="max-w-7xl mx-auto py-12 px-4">
+        <!-- Total Spend Section -->
+        <div class="bg-white shadow-md rounded-lg p-6 mb-8 flex items-center justify-between">
+        <div>
+            <h2 class="text-2xl font-semibold text-gray-700">💰 Total Spend</h2>
+            <p class="text-gray-500 mt-1">Your total spend across all orders</p>
+        </div>
+        <div class="text-3xl font-bold text-indigo-600">
+            Rp. 5,000,000 
+        </div>
+    </div>
     <!-- Profile Heading -->
     <h1 class="text-3xl font-bold text-gray-800 mb-8">🛒 Order History</h1>
 
