@@ -66,8 +66,8 @@
         <!-- Search Bar -->
       <div class="mt-8 w-full flex justify-center">
         <div class="relative w-full max-w-xl custom-search">
-          <input class="custom-input" placeholder="Search for assets..." type="text" id="searchInput">
-          <button class="custom-button" onclick="">Search</button>
+            <input class="custom-input text-gray-700" placeholder="Search for artists..." type="text" id="searchInput">
+            <button class="custom-button" onclick="">Search</button>
         </div>
       </div>
     </div>
@@ -83,20 +83,19 @@
           <h2 class="text-2xl font-bold text-gray-800">10,000+ Assets</h2>
           <div class="flex items-center space-x-4">
               <div class="relative">
-                  <select class="appearance-none pl-4 pr-10 py-2 bg-white border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500" id="locationFilter">
-                      <option value="sort-by-likes">Sort by Likes</option>
-                      <option value="most-recent">Most Recent</option>
-                      <option value="trending">Trending</option>
+                  <select class="appearance-none pl-4 pr-10 py-2 bg-white border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500" id="sortSelection">
+                      <option value="keywords">Sort by Name</option>
+                      <option value="like">Sort by Likes</option>
+                      <option value="time">Most Recent</option>
                   </select>
                   <i class="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
               </div>
               <div class="relative">
-                  <select id="filterField" class="appearance-none pl-4 pr-10 py-2 bg-white border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500" onchange="filterArtists()">
-                      <option value="poster">Poster Design</option>
-                      <option value="logo">Logo Design</option>
-                      <option value="3d-art">3D Art</option>
-                      <option value="animation">Animation</option>
-                      <option value="comission">Commision</option>
+                  <select id="filterField" class="appearance-none pl-4 pr-10 py-2 bg-white border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    @foreach($artCategories as $category)
+                      <option value="">All</option>
+                      <option value="{{ $category->DESCR }}">{{ $category->DESCR }}</option>
+                    @endforeach
                   </select>
                   <i class="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
               </div>
@@ -105,98 +104,44 @@
 
     <!-- Art Gallery Grid Start -->
     <section id="art-gallery" class="py-8">
-        <div class="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div id="container-art-gallery" class="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Example Card 1 -->
-            <div class="card bg-white rounded-lg shadow-md hover:shadow-lg transform transition-transform duration-300 hover:-translate-y-1">
-                <img src="/images/Assets/Category/Hero.jpg" alt="Night Kingdom of Fantasy" class="w-full h-48 object-cover">
+            @foreach($arts as $art)
+            <div class="card art-gallery-card bg-white rounded-lg shadow-md hover:shadow-lg transform transition-transform duration-300 hover:-translate-y-1" data-time="{{ $art->created_at }}" data-like="{{ $art->ArtLikes->count() }}" data-keywords="
+                {{ $art->ART_TITLE }}
+                @foreach($art->ArtCategories as $category)
+                    {{ $art->ArtCategories->map(fn($category) => $category->ArtCategoryMaster->DESCR)->implode(' ') }}
+                @endforeach
+             ">
+                <img src="{{ Str::startsWith($art->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($art->ArtImages()->first()->IMAGE_PATH) : $art->ArtImages()->first()->IMAGE_PATH }}" alt="Night Kingdom of Fantasy" class="w-full h-48 object-cover">
                 <div class="p-4">
-                    <h3 class="text-lg font-bold text-gray-900">Night Kingdom of Fantasy</h3>
-                    <p class="text-sm text-gray-500">Mike Hawk</p>
+                    <h3 class="text-lg font-bold text-gray-900">{{ $art->ART_TITLE }}</h3>
+                    <p class="text-sm text-gray-500">{{ $art->MasterUser->Buyer->FULLNAME }}</p>
                     <div class="flex justify-between items-center mt-2 text-gray-500 text-sm">
                         <div class="flex items-center space-x-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 9l-2 1-2-1V5a2 2 0 012-2h0a2 2 0 012 2v4z" />
+                            @if(Auth::user() != null)
+                            <a href="{{ route('artwork.like',['id'=>$art->ART_ID]) }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="@if($art->isLiked()) currentColor @else none @endif" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-pink-500">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
                             </svg>
-                            <span>500</span>
+                            </a>
+                            @else
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-pink-500">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                            </svg>
+                            @endif
+                            <span>{{ $art->ArtLikes->count() }}</span>
                         </div>
                         <div class="flex items-center space-x-1">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
                             </svg>
-                            <span>5.2K</span>
+                            <span>{{ $art->VIEW }}</span>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Example Card 2 -->
-            <div class="card bg-white rounded-lg shadow-md hover:shadow-lg transform transition-transform duration-300 hover:-translate-y-1">
-                <img src="/images/Assets/Gallery/1.jpg" alt="Sky Fantasy" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h3 class="text-lg font-bold text-gray-900">Painting The Sky Fantasy</h3>
-                    <p class="text-sm text-gray-500">Mike Hawk</p>
-                    <div class="flex justify-between items-center mt-2 text-gray-500 text-sm">
-                        <div class="flex items-center space-x-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 9l-2 1-2-1V5a2 2 0 012-2h0a2 2 0 012 2v4z" />
-                            </svg>
-                            <span>500</span>
-                        </div>
-                        <div class="flex items-center space-x-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-                            </svg>
-                            <span>5.2K</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Example Card 3 -->
-            <div class="card bg-white rounded-lg shadow-md hover:shadow-lg transform transition-transform duration-300 hover:-translate-y-1">
-                <img src="/images/Assets/Gallery/2.jpg" alt="Commission Art" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h3 class="text-lg font-bold text-gray-900">Commission Art</h3>
-                    <p class="text-sm text-gray-500">Jane Doe</p>
-                    <div class="flex justify-between items-center mt-2 text-gray-500 text-sm">
-                        <div class="flex items-center space-x-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 9l-2 1-2-1V5a2 2 0 012-2h0a2 2 0 012 2v4z" />
-                            </svg>
-                            <span>400</span>
-                        </div>
-                        <div class="flex items-center space-x-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-                            </svg>
-                            <span>4.5K</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Example Card 4 -->
-            <div class="card bg-white rounded-lg shadow-md hover:shadow-lg transform transition-transform duration-300 hover:-translate-y-1">
-                <img src="/images/Assets/Gallery/3.jpg" alt="Commission Art" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h3 class="text-lg font-bold text-gray-900">Commission Art</h3>
-                    <p class="text-sm text-gray-500">Jane Doe</p>
-                    <div class="flex justify-between items-center mt-2 text-gray-500 text-sm">
-                        <div class="flex items-center space-x-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 9l-2 1-2-1V5a2 2 0 012-2h0a2 2 0 012 2v4z" />
-                            </svg>
-                            <span>400</span>
-                        </div>
-                        <div class="flex items-center space-x-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-                            </svg>
-                            <span>4.5K</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
 
         
@@ -206,6 +151,113 @@
 </div>
 
     <script>
+        document.getElementById('searchInput').addEventListener('input', function () {
+            const searchValue = this.value.toLowerCase();
+            const items = document.querySelectorAll('.art-gallery-card');
+
+            items.forEach(item => {
+
+                const itemName = item.getAttribute('data-keywords').toLowerCase();
+                console.log(itemName)
+                if (itemName.includes(searchValue)) {
+                    item.style.display = 'block'; // Show the item
+                } else {
+                    item.style.display = 'none'; // Hide the item
+                }
+            });
+        });
+
+        document.getElementById('filterField').addEventListener('input', function () {
+            const searchValue = this.value.toLowerCase();
+            const items = document.querySelectorAll('.art-gallery-card');
+
+            items.forEach(item => {
+
+                const itemName = item.getAttribute('data-keywords').toLowerCase();
+                console.log(itemName)
+                if (itemName.includes(searchValue)) {
+                    item.style.display = 'block'; // Show the item
+                } else {
+                    item.style.display = 'none'; // Hide the item
+                }
+            });
+        });
+
+        document.getElementById('sortSelection').addEventListener('input', function () {
+            const sortValue = this.value.toLowerCase();
+            if (sortValue == "like") {
+                orderByLike()
+            } else if (sortValue == "keywords") {
+                orderByKeyword()
+            } else {
+                orderByTime()
+            }
+        });
+
+        orderByKeyword()
+
+        function orderByLike() {
+            // Get the container element
+            const container = document.getElementById('container-art-gallery');
+
+            // Select all divs with a data-like attribute inside the container
+            const divs = Array.from(container.querySelectorAll('.art-gallery-card'));
+
+            // Sort the divs based on the data-like attribute in descending order
+            divs.sort((a, b) => {
+                const likeA = parseInt(a.getAttribute('data-like'), 10);
+                const likeB = parseInt(b.getAttribute('data-like'), 10);
+                console.log("a")
+                console.log("a"+likeA)
+                console.log("b")
+                console.log("b"+likeB)
+
+                return likeB - likeA; // Descending order
+            });
+
+            // Append the sorted divs back to the container
+            divs.forEach(div => container.appendChild(div));
+        }
+
+
+        function orderByKeyword() {
+            // Get the container element
+            const container = document.getElementById('container-art-gallery');
+
+            // Select all divs with a data-keywords attribute inside the container
+            const divs = Array.from(container.querySelectorAll('.art-gallery-card'));
+
+            // Sort the divs based on the data-keywords attribute (case-insensitive comparison)
+            divs.sort((a, b) => {
+                const nameA = a.getAttribute('data-keywords').toLowerCase();
+                const nameB = b.getAttribute('data-keywords').toLowerCase();
+
+                return nameA.localeCompare(nameB); // Ascending order
+            });
+
+            // Append the sorted divs back to the container
+            divs.forEach(div => container.appendChild(div));
+        }
+
+        function orderByTime() {
+            // Get the container element
+            const container = document.getElementById('container-art-gallery');
+
+            // Select all divs with a data-keywords attribute inside the container
+            const divs = Array.from(container.querySelectorAll('.art-gallery-card'));
+
+            // Sort the divs based on the data-keywords attribute (case-insensitive comparison)
+            divs.sort((a, b) => {
+                const timeA = new Date(a.getAttribute('data-time')).getTime();
+                const timeB = new Date(b.getAttribute('data-time')).getTime();
+
+                return timeB - timeA; // Latest first
+            });
+
+            // Append the sorted divs back to the container
+            divs.forEach(div => container.appendChild(div));
+        }
+
         // Smooth Scrolling for Anchor Links
         document.querySelectorAll('.scroll-link').forEach(link => {
             link.addEventListener('click', function (e) {

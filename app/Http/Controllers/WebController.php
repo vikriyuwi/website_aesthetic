@@ -10,6 +10,7 @@ use App\Models\Art;
 use App\Models\Post;
 use App\Models\Blog;
 use App\Models\SkillMaster;
+use App\Models\ArtCategoryMaster;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -63,7 +64,9 @@ class WebController extends Controller
         if(Auth::user() != null) {
             $carts = Auth::user()->Carts;
         }
-        return view('explore', compact('carts'));
+        $arts = Art::all();
+        $artCategories = ArtCategoryMaster::all();
+        return view('explore', compact('carts', 'arts', 'artCategories'));
     }
 
     public function landing(Request $request)
