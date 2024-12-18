@@ -145,8 +145,8 @@
 
             <!-- Description -->
             <div>
-                <label for="portfolioDescription" class="block text-sm font-semibold text-gray-700 mb-2">Description</label>
-                <textarea id="portfolioDescription" name="portfolioDescription" rows="5" maxlength="150"
+                <label for="artworkDescription" class="block text-sm font-semibold text-gray-700 mb-2">Description</label>
+                <textarea id="artworkDescription" name="artworkDescription" rows="5" maxlength="150"
                         class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none transition"
                         placeholder="Write about your portfolio..." 
                         oninput="updateCharCount(this)"></textarea>
@@ -177,8 +177,7 @@
                     @foreach($artCategoriesMaster as $artCategorie)
                     <label class="flex items-center space-x-2">
                         <input type="checkbox" class="category-checkbox w-4 h-4 text-indigo-600 focus:ring-indigo-500"
-                            name="category_art[]" value="{{ $artCategorie->ART_CATEGORY_MASTER_ID }}">
-                        <span class="text-gray-700">{{ $artCategorie->DESCR }}</span>
+                            name="category_art[]" value="{{ $artCategorie->ART_CATEGORY_MASTER_ID }}"> {{ $artCategorie->DESCR }}
                     </label>
                     @endforeach
                 </div>
@@ -212,7 +211,7 @@
                     <label for="imageLink" class="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
                     <input type="text" name="artworkImageLink" id="imageLink" placeholder="Enter Image URL" 
                            class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" x-model="imagePreview" 
-                           @input="imagePreview = $event.target.value">
+                           @input="imagePreview = $event.target.value" required>
                 </div>
 
                 <!-- File Upload Field -->
@@ -292,8 +291,8 @@
     function toggleImageUploadOption(option) {
         const linkField = document.getElementById('linkField');
         const fileField = document.getElementById('fileField');
-        const artworkImageLink = document.getElementById('artworkImageLink');
-        const artworkImageUpload = document.getElementById('artworkImageUpload');
+        const artworkImageLink = document.getElementById('imageLink');
+        const artworkImageUpload = document.getElementById('imageFile');
 
         if (option === 'link') {
             // Show link field and hide file field
@@ -320,6 +319,9 @@
             const selectedCategories = Array.from(document.querySelectorAll('.category-checkbox:checked')).map(
                 (checkbox) => checkbox.nextSibling.textContent.trim()
             );
+
+            console.log(selectedCategories)
+
             if (selectedCategories.length > 6) {
                 checkbox.checked = false;
                 alert('You can select up to 6 categories.');
