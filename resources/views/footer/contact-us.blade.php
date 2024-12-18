@@ -17,42 +17,48 @@
             <p class="mt-4 text-lg text-gray-500 max-w-2xl mx-auto">
                 Got a technical issue? Want to send feedback about a beta feature? Need details about our Business plan? Let us know.
             </p>
+            @if(session('status'))
+            <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+                {{ session('status') }}
+            </div>
+            @endif
         </div>
 
         <!-- Contact Form and Information -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
             <!-- Contact Form -->
             <div class="p-6 bg-white rounded-lg shadow-inner">
-                <form action="#" method="POST" class="space-y-6">
+                <form action="{{ route('contact.store') }}" method="POST" class="space-y-6">
+                    @csrf
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div>
                             <label for="first-name" class="block text-sm font-semibold text-gray-700">First Name</label>
-                            <input type="text" name="first-name" id="first-name" placeholder="First Name"
-                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-3 bg-white">
+                            <input type="text" name="firstName" id="first-name" placeholder="First Name"
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-3 bg-white" required>
                         </div>
                         <div>
                             <label for="last-name" class="block text-sm font-semibold text-gray-700">Last Name</label>
-                            <input type="text" name="last-name" id="last-name" placeholder="Last Name"
-                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-3 bg-white">
+                            <input type="text" name="lastName" id="last-name" placeholder="Last Name"
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-3 bg-white" required>
                         </div>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div>
                             <label for="email" class="block text-sm font-semibold text-gray-700">Your Email</label>
                             <input type="email" name="email" id="email" placeholder="you@example.com"
-                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-3 bg-white">
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-3 bg-white" required>
                         </div>
                         <div>
                             <label for="phone-number" class="block text-sm font-semibold text-gray-700">Phone Number</label>
-                            <input type="tel" name="phone-number" id="phone-number" placeholder="+1 (555) 555-5555"
-                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-3 bg-white">
+                            <input type="tel" name="phoneNumber" id="phone-number" placeholder="+1 (555) 555-5555"
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-3 bg-white" required>
                         </div>
                     </div>
                     <div>
                         <label for="message" class="block text-sm font-semibold text-gray-700">Your Message</label>
                         <textarea id="message" name="message" rows="4"
                             class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-3 bg-white"
-                            placeholder="Write your message..."></textarea>
+                            placeholder="Write your message..." required></textarea>
                     </div>
                     <p class="text-sm text-gray-500">
                         By submitting this form, you agree to our <a href="#" class="text-indigo-600 hover:underline">terms and conditions</a> and <a href="#" class="text-indigo-600 hover:underline">privacy policy</a>.
