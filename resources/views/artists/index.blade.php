@@ -122,19 +122,19 @@
       <div class="flex justify-between items-center mb-6">
           <h2 class="text-3xl font-bold text-gray-800">{{$countArtist}} Artist</h2>
           <div class="flex items-center space-x-4">
-              <div class="relative">
+              {{-- <div class="relative">
                   <select class="appearance-none pl-4 pr-10 py-2 bg-white border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500" id="locationFilter">
                       <option value="Anywhere">Anywhere</option>
                       <option value="Indonesia">Indonesia</option>
                   </select>
                   <i class="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-              </div>
+              </div> --}}
               <div class="relative">
-                  <select id="filterField" class="appearance-none pl-4 pr-10 py-2 bg-white border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500" onchange="filterArtists()">
+                  <select id="filterField" class="appearance-none pl-4 pr-10 py-2 bg-white border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500">
                       <option value="">All Creative Fields</option>
-                      <option value="Graphic Designer">Graphic Designer</option>
-                      <option value="Illustrator">Illustrator</option>
-                      <option value="Web Designer">Web Designer</option>
+                      @foreach($skills as $skill)
+                      <option value="{{ $skill->DESCR }}">{{ $skill->DESCR }}</option>
+                      @endforeach
                   </select>
                   <i class="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
               </div>
@@ -211,6 +211,20 @@
         items.forEach(item => {
             const itemName = item.getAttribute('data-name').toLowerCase();
             if (itemName.includes(searchValue)) {
+                item.style.display = 'block'; // Show the item
+            } else {
+                item.style.display = 'none'; // Hide the item
+            }
+        });
+    });
+
+    document.getElementById('filterField').addEventListener('input', function () {
+        const searchValue = this.value.toLowerCase();
+        const items = document.querySelectorAll('.artist-card');
+
+        items.forEach(item => {
+            const itemField = item.getAttribute('data-field').toLowerCase();
+            if (itemField.includes(searchValue)) {
                 item.style.display = 'block'; // Show the item
             } else {
                 item.style.display = 'none'; // Hide the item
