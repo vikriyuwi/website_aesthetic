@@ -57,56 +57,19 @@
             <div id="liked-artworks" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 
                 <!-- Liked Artwork Item 1 -->
+                @foreach($artLikes as $artLike)
                 <div class="bg-white rounded-lg shadow-lg p-4 artwork-card" data-artwork-id="1">
-                    <img src="images/painting2.webp" alt="Artwork Image 1" class="rounded-lg w-full h-48 object-cover">
+                    <img src="{{ Str::startsWith($artLike->Art->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($artLike->Art->ArtImages()->first()->IMAGE_PATH) : $artLike->Art->ArtImages()->first()->IMAGE_PATH }}" alt="Artwork Image 1" class="rounded-lg w-full h-48 object-cover">
                     <div class="mt-4">
-                        <h3 class="text-lg font-bold text-gray-800">Fantasy World</h3>
-                        <p class="text-gray-600 text-sm">Artist: John Doe</p>
+                        <h3 class="text-lg font-bold text-gray-800">{{ $artLike->Art->ART_TITLE }}</h3>
+                        <p class="text-gray-600 text-sm">{{ $artLike->Art->MasterUser->Buyer->FULLNAME }}</p>
                     </div>
                     <div class="mt-4 flex justify-between items-center">
-                        <a href="#" class="text-indigo-600 hover:text-indigo-800 transition">View Details</a>
-                        <ion-icon name="heart" class="like-btn active" onclick="toggleLike(this, 1)"></ion-icon>
+                        <a href="{{ route('artwork.show', ['id'=>$artLike->ART_ID]) }}" class="text-indigo-600 hover:text-indigo-800 transition">View Details</a>
+                        <ion-icon name="heart" class="like-btn active" onclick="window.location.href='{{ route('artwork.like',['id'=>$artLike->ART_ID]) }}'"></ion-icon>
                     </div>
                 </div>
-
-                <!-- Liked Artwork Item 2 -->
-                <div class="bg-white rounded-lg shadow-lg p-4 artwork-card" data-artwork-id="2">
-                    <img src="/images/indianart.webp" alt="Artwork Image 2" class="rounded-lg w-full h-48 object-cover">
-                    <div class="mt-4">
-                        <h3 class="text-lg font-bold text-gray-800">Mystic Landscape</h3>
-                        <p class="text-gray-600 text-sm">Artist: Jane Doe</p>
-                    </div>
-                    <div class="mt-4 flex justify-between items-center">
-                        <a href="#" class="text-indigo-600 hover:text-indigo-800 transition">View Details</a>
-                        <ion-icon name="heart" class="like-btn active" onclick="toggleLike(this, 2)"></ion-icon>
-                    </div>
-                </div>
-
-                <!-- Liked Artwork Item 3 -->
-                <div class="bg-white rounded-lg shadow-lg p-4 artwork-card" data-artwork-id="3">
-                    <img src="/images/paintingart3.png" alt="Artwork Image 3" class="rounded-lg w-full h-48 object-cover">
-                    <div class="mt-4">
-                        <h3 class="text-lg font-bold text-gray-800">Urban Street Art</h3>
-                        <p class="text-gray-600 text-sm">Artist: Alex B.</p>
-                    </div>
-                    <div class="mt-4 flex justify-between items-center">
-                        <a href="#" class="text-indigo-600 hover:text-indigo-800 transition">View Details</a>
-                        <ion-icon name="heart" class="like-btn active" onclick="toggleLike(this, 3)"></ion-icon>
-                    </div>
-                </div>
-
-                <!-- Liked Artwork Item 4 -->
-                <div class="bg-white rounded-lg shadow-lg p-4 artwork-card" data-artwork-id="3">
-                    <img src="/images/paintingart4.png" alt="Artwork Image 3" class="rounded-lg w-full h-48 object-cover">
-                    <div class="mt-4">
-                        <h3 class="text-lg font-bold text-gray-800">Urban Street Art</h3>
-                        <p class="text-gray-600 text-sm">Artist: Alex B.</p>
-                    </div>
-                    <div class="mt-4 flex justify-between items-center">
-                        <a href="#" class="text-indigo-600 hover:text-indigo-800 transition">View Details</a>
-                        <ion-icon name="heart" class="like-btn active" onclick="toggleLike(this, 3)"></ion-icon>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>
