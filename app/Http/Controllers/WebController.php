@@ -147,7 +147,8 @@ class WebController extends Controller
 
     public function likeHistory()
     {
-        return view('profile.like-history');
+        $artLikes = Auth::user()->ArtLikes;
+        return view('profile.like-history', compact('artLikes'));
     }
 
     public function folloProfile()

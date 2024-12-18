@@ -52,11 +52,13 @@ Route::middleware([Authorization::class.':true'])->group(function() {
     Route::get('/unfollow/{userId}',[FollowController::class, 'unfollow'])->name('unfollow');
 
     Route::get('buyer/profile',[WebController::class,'buyerProfile'])->name('buyer.showProfile');
+    Route::get('/like-history', [WebController::class, 'likeHistory'])->name('like.history');
+
+    Route::get('/follows', [WebController::class, 'folloProfile'])->name('follows');
+    Route::get('/follower', [WebController::class, 'followers'])->name('follower');
+    Route::get('/following', [WebController::class, 'following'])->name('following');
 
     Route::middleware([ActiveBuyer::class])->group(function() {
-        Route::get('/follows', [WebController::class, 'folloProfile'])->name('follows');
-        Route::get('/follower', [WebController::class, 'followers'])->name('follower');
-        Route::get('/following', [WebController::class, 'following'])->name('following');
 
         Route::prefix('profile')->name('profile.')->group(function() {
             Route::post('/update', [BuyerController::class, 'updateBuyerProfile'])->name('update');
@@ -237,7 +239,7 @@ Route::get('/landing2', [App\Http\Controllers\WebController::class, 'landing2'])
 
 Route::get('/home', [App\Http\Controllers\WebController::class, 'home'])->name('Home.home');
 
-Route::get('/like-history', [WebController::class, 'likeHistory'])->name('like.history');
+
 
 
 #REGION BUYER
