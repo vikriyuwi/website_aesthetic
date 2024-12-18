@@ -60,10 +60,12 @@
 </div>
                     @if(Auth::check())
                         @if (Auth::user()->USER_ID == $portfolio->USER_ID )
-                            <button id="editPortfolioButton" class="bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition btn">
-                                <i class="fas fa-pen"></i>
-                                <span>EDIT</span>
-                            </button>
+                        <button id="editPortfolioButton" 
+                                onclick="openEditPortfolioModal()" 
+                                class="bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition btn">
+                            <i class="fas fa-pen"></i>
+                            <span>EDIT</span>
+                        </button>
                             <a href={{ route('portfolio.destroy', ['portfolioId' => $portfolio->ART_ID]) }} class="border border-red-500 text-red-500 py-2 px-4 rounded-lg hover:bg-red-50 transition btn">
                                 <i class="fas fa-trash"></i>
                                 <span>DELETE</span>
@@ -269,12 +271,200 @@
                 <img src="/images/powerpuff2.jpg" alt="Emily C. Artwork" class="w-full h-40 object-cover rounded-lg">
             </div>
         </div>
+      </div>
+    </div>
+  </div>
 
+  <!-- Edit Portfolio Modal -->
+<div id="editPortfolioModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white p-8 rounded-lg shadow-2xl w-full max-w-7xl h-[90vh] overflow-y-auto" 
+         x-data="{ 
+            uploadOption: '{{ Str::startsWith($portfolio->ArtImages()->first()->IMAGE_PATH, "images/art/") ? "file" : "link" }}', 
+            imagePreview: '{{ Str::startsWith($portfolio->ArtImages()->first()->IMAGE_PATH, "images/art/") ? asset($portfolio->ArtImages()->first()->IMAGE_PATH) : $portfolio->ArtImages()->first()->IMAGE_PATH }}'
+         }">
+
+        <!-- Modal Header -->
+        <div class="flex justify-between items-center border-b pb-4 mb-4">
+            <h2 class="text-2xl font-bold text-gray-800">Edit Portfolio</h2>
+            <button type="button" onclick="closeEditModal()" class="text-gray-500 hover:text-red-500 text-2xl">&times;</button>
+        </div>
+
+        <!-- Form -->
+        <form method="POST" action="#" enctype="multipart/form-data" class="space-y-6" id="editPortfolioForm">
+            @csrf
+            @method('PUT')
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Left Section -->
+                <div class="space-y-4">
+                    <!-- Title -->
+                    <div>
+                        <label for="portfolioTitleEdit" class="block text-sm font-semibold text-gray-700 mb-1">Title</label>
+                        <input type="text" name="portfolioTitle" id="portfolioTitleEdit" value="{{ $portfolio->ART_TITLE }}" 
+                               class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
+                    </div>
+
+                    <!-- Dimensions -->
+                    <div>
+                        <label for="dimensionEdit" class="block text-sm font-semibold text-gray-700 mb-1">Dimensions</label>
+                        <div class="flex gap-4">
+                            <div class="flex-1">
+                                <input type="number" name="artworkLength" id="artworkLengthEdit" placeholder="Length" 
+                                       value="{{ $portfolio->LENGTH }}" 
+                                       class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
+                                <p class="text-xs text-gray-500 mt-1">Enter length</p>
+                            </div>
+                            <div class="flex-1">
+                                <input type="number" name="artworkWidth" id="artworkWidthEdit" placeholder="Width" 
+                                       value="{{ $portfolio->WIDTH }}" 
+                                       class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
+                                <p class="text-xs text-gray-500 mt-1">Enter width</p>
+                            </div>
+                            <div class="w-32">
+                                <select name="dimensionUnit" id="dimensionUnitEdit" 
+                                        class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
+                                    <option value="cm" {{ $portfolio->UNIT == 'cm' ? 'selected' : '' }}>cm</option>
+                                    <option value="mm" {{ $portfolio->UNIT == 'mm' ? 'selected' : '' }}>mm</option>
+                                    <option value="m" {{ $portfolio->UNIT == 'm' ? 'selected' : '' }}>m</option>
+                                </select>
+                                <p class="text-xs text-gray-500 mt-1">Select unit</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div>
+                        <label for="portfolioDescriptionEdit" class="block text-sm font-semibold text-gray-700 mb-2">Description</label>
+                        <textarea id="portfolioDescriptionEdit" name="portfolioDescription" rows="5" maxlength="150"
+                                  class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none transition"
+                                  oninput="updateCharCount(this)" required>{{ $portfolio->DESCRIPTION }}</textarea>
+                        <div class="flex justify-between items-center mt-2 text-sm text-gray-500">
+                            <span id="charCountEdit">0 / 150</span>
+                            <span id="errorMessageEdit" class="text-red-600 hidden">Maximum 150 characters allowed</span>
+                        </div>
+                    </div>
+
+                    <!-- Category Selection -->
+                    <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Category</label>
+                    <div class="flex items-center gap-3">
+                        <input type="text" id="selectedCategories" readonly
+                            class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500 bg-gray-100 cursor-not-allowed" 
+                            placeholder="Select categories (max 3)">
+                        <button type="button" onclick="toggleCategorySelection()" 
+                                class="text-indigo-600 hover:text-indigo-800 transition">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+
+                    <!-- Category Dropdown -->
+                    <div id="categorySelection" class="hidden mt-4 bg-gray-50 p-4 rounded-lg border border-gray-200 shadow-sm">
+                        <h3 class="text-gray-700 font-semibold mb-2">Select Categories</h3>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                          {{--   @foreach($artCategoriesMaster as $artCategorie) --}}
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" class="category-checkbox w-4 h-4 text-indigo-600 focus:ring-indigo-500"
+                                  {{--  name="category_art[]" value="{{ $artCategorie->ART_CATEGORY_MASTER_ID }}" --}}>
+                                <span class="text-gray-700"> {{-- {{ $artCategorie->DESCR }} --}}</span>
+                            </label>
+                          {{--  @endforeach --}}
+                        </div>
+                        <span id="portfolioCategoryError" class="text-red-600 text-sm hidden">You can select up to 3 categories only.</span>
+                    </div>
+                </div>
+            </div>
+
+                <!-- Right Section -->
+                <div class="space-y-4">
+                    <!-- Image Upload Options -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Image Upload Option</label>
+                        <div class="flex items-center gap-4">
+                            <label class="flex items-center">
+                                <input type="radio" name="imageOption" value="link" x-model="uploadOption" class="mr-2">
+                                <span>Image URL</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="imageOption" value="file" x-model="uploadOption" class="mr-2">
+                                <span>Upload New File</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Image URL -->
+                    <div x-show="uploadOption === 'link'">
+                        <label for="portfolioImageLinkEdit" class="block text-sm font-semibold text-gray-700 mb-1">Image URL</label>
+                        <input type="text" name="portfolioImageLink" id="portfolioImageLinkEdit" value="{{ $portfolio->IMAGE_URL }}"
+                               class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" 
+                               x-model="imagePreview" @input="imagePreview = $event.target.value">
+                    </div>
+
+                    <!-- File Upload -->
+                    <div x-show="uploadOption === 'file'">
+                        <label for="portfolioImageUploadEdit" class="block text-sm font-semibold text-gray-700 mb-1">Upload Image</label>
+                        <input type="file" name="portfolioImageUpload" id="portfolioImageUploadEdit" accept="image/*"
+                               @change="imagePreview = URL.createObjectURL($event.target.files[0])" 
+                               class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+
+                    <!-- Image Preview -->
+                    <div>
+                        <p class="text-sm font-semibold text-gray-700 mb-2">Image Preview</p>
+                        <img :src="imagePreview" alt="Image Preview" 
+                             class="w-full h-64 object-cover rounded-lg border">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex justify-end space-x-4 border-t pt-4">
+                <button type="button" onclick="closeEditModal()" 
+                        class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition">Cancel</button>
+                <button type="submit" 
+                        class="px-4 py-2 text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition">Save Changes</button>
+            </div>
+        </form>
     </div>
 </div>
+<script>
+    function openEditPortfolioModal() {
+        document.getElementById('editPortfolioModal').classList.remove('hidden');
+    }
+    function closeEditModal() {
+        document.getElementById('editPortfolioModal').classList.add('hidden');
+    }
+    function updateCharCount(textarea) {
+        const maxLength = 150;
+        const charCount = textarea.value.length;
 
+        const charCountSpan = document.getElementById('charCount');
+        const errorMessage = document.getElementById('errorMessage');
 
-       
-  </div>
+        charCountSpan.textContent = `${charCount} / ${maxLength}`;
+
+        if (charCount > maxLength) {
+            errorMessage.classList.remove('hidden');
+            textarea.value = textarea.value.substring(0, maxLength); // Truncate excess characters
+            charCountSpan.textContent = `${maxLength} / ${maxLength}`;
+        } else {
+            errorMessage.classList.add('hidden');
+        }
+    }
+    // Update the selected categories display
+    document.querySelectorAll('.category-checkbox').forEach((checkbox) => {
+        checkbox.addEventListener('change', () => {
+            const selectedCategories = Array.from(document.querySelectorAll('.category-checkbox:checked')).map(
+                (checkbox) => checkbox.nextSibling.textContent.trim()
+            );
+            if (selectedCategories.length > 3) {
+                checkbox.checked = false;
+                alert('You can select up to 3 categories.');
+            } else {
+                document.getElementById('selectedCategories').value = selectedCategories.join(', ');
+            }
+        });
+    });
+</script>
+
 </body>
 </html>

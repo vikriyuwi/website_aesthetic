@@ -19,7 +19,7 @@
                 <p class="text-indigo-200 text-sm">Buyer since {{ (new \DateTime($user->created_at))->format('F Y') }}</p>
             </div>
             <!-- Edit Profile Button -->
-            <button class="mt-4 px-6 py-2 bg-white text-indigo-600 rounded-full shadow-md hover:bg-indigo-100 transition">
+            <button onclick="openEditProfileModal()"class="mt-4 px-6 py-2 bg-white text-indigo-600 rounded-full shadow-md hover:bg-indigo-100 transition">
                 Edit Profile
             </button>
         </div>
@@ -63,6 +63,107 @@
             </div>
         </div>
     </div>
+    
+<!-- Edit Profile Modal -->
+<div id="editProfileModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-4xl h-[90vh] overflow-hidden relative">
+        <!-- Modal Header -->
+        <div class="flex justify-between items-center border-b px-8 py-4">
+            <h2 class="text-3xl font-bold text-gray-800">Edit Profile</h2>
+            <button onclick="closeEditProfileModal()" class="text-gray-600 hover:text-gray-800">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="p-8 overflow-y-auto h-[calc(100%-120px)]">
+            <!-- Profile Image Upload Section -->
+            <div class="flex justify-center mb-6">
+                <div class="relative w-32 h-32">
+                    <!-- Image Preview -->
+                    <img id="profileImagePreview" src="https://placehold.co/150" alt="Profile Picture"
+                         class="w-full h-full object-cover rounded-full border-4 border-gray-200">
+                    <!-- Upload Icon -->
+                    <label for="profilePictureUpload"
+                           class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white rounded-full cursor-pointer hover:bg-opacity-70">
+                        <i class="fas fa-camera text-2xl"></i>
+                    </label>
+                    <input type="file" id="profilePictureUpload" accept="image/*" class="hidden"
+                           onchange="previewProfileImage(event)">
+                </div>
+            </div>
+
+            <!-- Form Fields -->
+            <form>
+                <!-- Name -->
+                <div class="mb-6">
+                    <label for="name" class="block text-sm font-bold text-gray-700 mb-2">Name</label>
+                    <input id="name" type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="John Doe">
+                </div>
+
+                <!-- Username -->
+                <div class="mb-6">
+                    <label for="username" class="block text-sm font-bold text-gray-700 mb-2">Username</label>
+                    <input id="username" type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="@johndoe">
+                </div>
+
+                <!-- Phone -->
+                <div class="mb-6">
+                    <label for="phone" class="block text-sm font-bold text-gray-700 mb-2">Phone</label>
+                    <div class="flex">
+                        <span class="inline-flex items-center px-3 border border-r-0 border-gray-300 bg-gray-50 rounded-l-lg text-gray-500">+62</span>
+                        <input id="phone" type="text" class="w-full px-4 py-2 border rounded-r-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="8123456789">
+                    </div>
+                </div>
+
+                <!-- Address -->
+                <div class="mb-6">
+                    <label for="address" class="block text-sm font-bold text-gray-700 mb-2">Address</label>
+                    <textarea id="address" rows="3" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="123 Main St, Jakarta, Indonesia"></textarea>
+                </div>
+
+                <!-- Location -->
+                <div class="mb-6">
+                    <label for="location" class="block text-sm font-bold text-gray-700 mb-2">Location</label>
+                    <input id="location" type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="Jakarta, Indonesia">
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex justify-end">
+                    <button type="button" onclick="closeEditProfileModal()"
+                            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 mr-4">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                            class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+    <script>
+        function openEditProfileModal() {
+            document.getElementById('editProfileModal').classList.remove('hidden');
+        }
+
+        function closeEditProfileModal() {
+            document.getElementById('editProfileModal').classList.add('hidden');
+        }
+            // Image Preview Functionality
+        function previewProfileImage(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('profileImagePreview').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+    </script>
 </body>
 
 </html>

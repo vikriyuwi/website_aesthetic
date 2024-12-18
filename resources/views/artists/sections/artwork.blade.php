@@ -92,94 +92,142 @@
 
 <!-- Add Artwork Modal -->
 <div id="addArtworkModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl" 
+    <div class="bg-white p-8 rounded-lg shadow-2xl w-full max-w-5xl h-[90vh] overflow-y-auto" 
          x-data="{ 
             uploadOption: 'link', 
             imagePreview: '' 
          }">
 
         <!-- Modal Header -->
-        <div class="flex justify-between items-center border-b pb-4 mb-4">
+        <div class="flex justify-between items-center border-b pb-4 mb-6">
             <h2 class="text-2xl font-bold text-gray-800">Add New Artwork</h2>
             <button type="button" onclick="closeModal()" class="text-gray-500 hover:text-red-500 text-2xl">&times;</button>
         </div>
 
         <!-- Form -->
-        <form method="POST" action="{{ route('artwork.store') }}" enctype="multipart/form-data" class="space-y-6">
+        <form method="POST" action="{{ route('artwork.store') }}" enctype="multipart/form-data" class="space-y-8">
             @csrf
 
-            <!-- Form Layout -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <!-- Left Section: Text Inputs -->
-                <div class="space-y-4">
-                    <!-- Title -->
-                    <div>
-                        <label for="artworkTitle" class="block text-sm font-semibold text-gray-700 mb-1">Title</label>
-                        <input type="text" name="artworkTitle" id="artworkTitle" placeholder="Enter Title" 
-                               class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
-                    </div>
+            <!-- Title -->
+            <div class="grid grid-cols-1 gap-4">
+                <div>
+                    <label for="artworkTitle" class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                    <input type="text" name="artworkTitle" id="artworkTitle" placeholder="Enter Title" 
+                           class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
+                </div>
+            </div>
 
-                    <!-- Style -->
-                    <div>
-                        <label for="artworkStyle" class="block text-sm font-semibold text-gray-700 mb-1">Dimension</label>
-                        <input type="text" name="artworkStyle" id="artworkStyle" placeholder="length x width" 
-                               class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
-                    </div>
+            <!-- Dimensions -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Length -->
+                <div>
+                    <label for="artworkLength" class="block text-sm font-medium text-gray-700 mb-1">Length</label>
+                    <input type="number" name="artworkLength" id="artworkLength" placeholder="Length" 
+                           class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
+                </div>
+                <!-- Width -->
+                <div>
+                    <label for="artworkWidth" class="block text-sm font-medium text-gray-700 mb-1">Width</label>
+                    <input type="number" name="artworkWidth" id="artworkWidth" placeholder="Width" 
+                           class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
+                </div>
+                <!-- Unit -->
+                <div>
+                    <label for="dimensionUnit" class="block text-sm font-medium text-gray-700 mb-1">Unit</label>
+                    <select name="dimensionUnit" id="dimensionUnit" 
+                            class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
+                        <option value="cm">cm</option>
+                        <option value="mm">mm</option>
+                        <option value="m">m</option>
+                    </select>
+                </div>
+            </div>
 
-                    <!-- Description -->
-                    <div>
-                        <label for="artworkDescription" class="block text-sm font-semibold text-gray-700 mb-1">Description</label>
-                        <textarea name="artworkDescription" id="artworkDescription" rows="5" placeholder="Enter Description" 
-                                  class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required></textarea>
-                    </div>
+            <!-- Description -->
+            <div>
+                <label for="portfolioDescription" class="block text-sm font-semibold text-gray-700 mb-2">Description</label>
+                <textarea id="portfolioDescription" name="portfolioDescription" rows="5" maxlength="150"
+                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none transition"
+                        placeholder="Write about your portfolio..." 
+                        oninput="updateCharCount(this)"></textarea>
+                <!-- Character Count -->
+                <div class="flex justify-between items-center mt-2 text-sm text-gray-500">
+                    <span id="charCount">0 / 150</span>
+                    <span id="errorMessage" class="text-red-600 hidden">Maximum 150 characters allowed</span>
+                </div>
+            </div>
 
-                    <!-- Price -->
-                    <div>
-                        <label for="artworkPrice" class="block text-sm font-semibold text-gray-700 mb-1">Price</label>
-                        <input type="number" name="artworkPrice" id="artworkPrice" placeholder="Enter Price" 
-                               class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
-                    </div>
+            <!-- Category Selection -->
+            <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Category</label>
+            <div class="flex items-center gap-3">
+                <input type="text" id="selectedCategories" readonly
+                    class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500 bg-gray-100 cursor-not-allowed" 
+                    placeholder="Select categories (max 6)">
+                <button type="button" onclick="toggleCategorySelection()" 
+                        class="text-indigo-600 hover:text-indigo-800 transition">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+
+            <!-- Category Dropdown -->
+            <div id="categorySelection" class="hidden mt-4 bg-gray-50 p-4 rounded-lg border border-gray-200 shadow-sm">
+                <h3 class="text-gray-700 font-semibold mb-2">Select Categories</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    @foreach($artCategoriesMaster as $artCategorie)
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" class="category-checkbox w-4 h-4 text-indigo-600 focus:ring-indigo-500"
+                            name="category_art[]" value="{{ $artCategorie->ART_CATEGORY_MASTER_ID }}">
+                        <span class="text-gray-700">{{ $artCategorie->DESCR }}</span>
+                    </label>
+                    @endforeach
+                </div>
+                <span id="portfolioCategoryError" class="text-red-600 text-sm hidden">You can select up to 6 categories only.</span>
+            </div>
+        </div>
+
+        <!-- Price -->
+        <div>
+            <label for="artworkPrice" class="block text-sm font-semibold text-gray-700 mb-1">Price</label>
+            <input type="number" name="artworkPrice" id="artworkPrice" placeholder="Enter Price" 
+                class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
+        </div>
+
+            <!-- Image Upload Section -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Image Upload Option</label>
+                <div class="flex items-center gap-4 mb-4">
+                    <label class="flex items-center">
+                        <input type="radio" name="imageOption" value="link" x-model="uploadOption" class="mr-2">
+                        <span>Image URL</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="radio" name="imageOption" value="file" x-model="uploadOption" class="mr-2">
+                        <span>Upload New File</span>
+                    </label>
                 </div>
 
-                <!-- Right Section: Image Upload -->
-                <div class="space-y-4">
-                    <!-- Image Upload Options -->
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Image Upload Option</label>
-                        <div class="flex items-center gap-4">
-                            <label class="flex items-center">
-                                <input type="radio" name="imageOption" value="link" x-model="uploadOption" class="mr-2">
-                                <span>Image URL</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="radio" name="imageOption" value="file" x-model="uploadOption" class="mr-2">
-                                <span>Upload New File</span>
-                            </label>
-                        </div>
-                    </div>
+                <!-- Image URL Field -->
+                <div x-show="uploadOption === 'link'" class="transition">
+                    <label for="imageLink" class="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
+                    <input type="text" name="artworkImageLink" id="imageLink" placeholder="Enter Image URL" 
+                           class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" x-model="imagePreview" 
+                           @input="imagePreview = $event.target.value">
+                </div>
 
-                    <!-- Image URL Field -->
-                    <div x-show="uploadOption === 'link'" class="transition duration-300">
-                        <label for="imageLink" class="block text-sm font-semibold text-gray-700 mb-1">Image URL</label>
-                        <input type="text" name="artworkImageLink" id="imageLink" placeholder="Enter Image URL" 
-                               class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
-                               x-model="imagePreview" @input="imagePreview = $event.target.value">
-                    </div>
+                <!-- File Upload Field -->
+                <div x-show="uploadOption === 'file'" class="transition">
+                    <label for="imageFile" class="block text-sm font-medium text-gray-700 mb-1">Upload Image</label>
+                    <input type="file" name="artworkImageUpload" id="imageFile" accept="image/*" 
+                           @change="imagePreview = URL.createObjectURL($event.target.files[0])" 
+                           class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
 
-                    <!-- File Upload Field -->
-                    <div x-show="uploadOption === 'file'" class="transition duration-300">
-                        <label for="imageFile" class="block text-sm font-semibold text-gray-700 mb-1">Upload Image</label>
-                        <input type="file" name="artworkImageUpload" id="imageFile" accept="image/*" 
-                               @change="imagePreview = URL.createObjectURL($event.target.files[0])"
-                               class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
-                    </div>
-
-                    <!-- Image Preview -->
-                    <div>
-                        <p class="text-sm font-semibold text-gray-700 mb-2">Image Preview</p>
-                        <img :src="imagePreview" alt="Image Preview" 
-                             class="w-full h-64 object-cover rounded-lg border">
-                    </div>
+                <!-- Image Preview -->
+                <div>
+                    <p class="text-sm font-medium text-gray-700 mb-2">Image Preview</p>
+                    <img :src="imagePreview" alt="Image Preview" 
+                         class="w-full h-64 object-cover rounded-lg border border-gray-200">
                 </div>
             </div>
 
@@ -294,6 +342,23 @@
                 this.imagePreview = event.target.value;
             }
         };
+    }
+    function updateCharCount(textarea) {
+        const maxLength = 150;
+        const charCount = textarea.value.length;
+
+        const charCountSpan = document.getElementById('charCount');
+        const errorMessage = document.getElementById('errorMessage');
+
+        charCountSpan.textContent = `${charCount} / ${maxLength}`;
+
+        if (charCount > maxLength) {
+            errorMessage.classList.remove('hidden');
+            textarea.value = textarea.value.substring(0, maxLength); // Truncate excess characters
+            charCountSpan.textContent = `${maxLength} / ${maxLength}`;
+        } else {
+            errorMessage.classList.add('hidden');
+        }
     }
 </script>
 

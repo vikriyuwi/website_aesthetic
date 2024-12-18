@@ -107,11 +107,7 @@
             <span>/</span>
             <span class="text-gray-800">{{ $artwork->ARTWORK_TITLE }}</span>
         </nav>
-        @if(session('status'))
-        <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
-            {{ session('status') }}
-        </div>
-        @endif
+
         <!-- Clickable Artwork Image -->
         <div class="flex justify-center items-center max-w-screen-lg p-4">
             <img id="artworkImage" 
@@ -146,10 +142,7 @@
 
                 <div class="text-xl font-semibold text-indigo-600 mt-4">
                     @if ($artwork->IS_SALE == 1)
-                    Rp {{ number_format($artwork->PRICE, 0, ',', '.') }}
-                        @if(!$artwork->isInStock())
-                        <span class="text-red-500">[OUT OF STOCK]</span>
-                        @endif
+                    Rp.{{ number_format($artwork->PRICE, 2, ',', '.') }}
                     @else
                     Not For Sale
                     @endif
@@ -167,20 +160,16 @@
                                 <span>DELETE</span>
                             </a>
                         @else
-                            @if($artwork->isInStock())
                             <button class="bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition btn">
                                 BUY NOW
                             </button>
-                            @endif
-                            <button class="border border-indigo-500 text-indigo-500 py-2 px-4 rounded-lg hover:bg-indigo-500 transition btn">
+                            <button class="border border-indigo-500 text-indigo-500 py-2 px-4 rounded-lg hover:bg-indigo-50 transition btn">
                                 CONTACT ARTIST
                             </button>
-                            @if($artwork->isInStock())
-                            <a href="{{ route('cart.add', ['id'=>$artwork->ART_ID]) }}" class="border border-indigo-500 text-indigo-500 py-2 px-4 rounded-lg hover:bg-indigo-500 transition btn">
+                            <a href="{{ route('cart.add', ['id'=>$artwork->ART_ID]) }}" class="border border-indigo-500 text-indigo-500 py-2 px-4 rounded-lg hover:bg-indigo-50 transition btn">
                                 <i class="fas fa-shopping-cart"></i>
                                 <span>Add to Cart</span>
                             </a>
-                            @endif
                         @endif
                     @else
                         <button class="bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600 transition btn">
@@ -278,7 +267,7 @@
                 <h3 class="text-lg font-semibold text-gray-800 mb-1 group-hover:text-indigo-600 transition-colors">{{ $otherArtwork->ART_TITLE }}</h3>
                 <p class="text-gray-500">
                     @if ($otherArtwork->IS_SALE == 1)
-                    Rp {{ number_format($otherArtwork->PRICE, 0, ',', '.') }}
+                    Rp.{{ number_format($otherArtwork->PRICE, 2, ',', '.') }}
                     @else
                     Not For Sale
                     @endif
@@ -291,95 +280,135 @@
 </div>
 <!-- Edit Artwork Modal -->
 <div id="editArtworkModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl" 
+    <div class="bg-white p-8 rounded-lg shadow-2xl w-full max-w-5xl h-[90vh] overflow-y-auto" 
          x-data="{ 
-            uploadOption: 'link', 
-            imagePreview: ''
+            uploadOption: '{{ Str::startsWith($artwork->ArtImages()->first()->IMAGE_PATH, "images/art/") ? "file" : "link" }}', 
+            imagePreview: '{{ Str::startsWith($artwork->ArtImages()->first()->IMAGE_PATH, "images/art/") ? asset($artwork->ArtImages()->first()->IMAGE_PATH) : $artwork->ArtImages()->first()->IMAGE_PATH }}' 
          }">
 
         <!-- Modal Header -->
-        <div class="flex justify-between items-center border-b pb-4 mb-4">
+        <div class="flex justify-between items-center border-b pb-4 mb-6">
             <h2 class="text-2xl font-bold text-gray-800">Edit Artwork</h2>
             <button type="button" onclick="closeEditModal()" class="text-gray-500 hover:text-red-500 text-2xl">&times;</button>
         </div>
 
         <!-- Form -->
-        <form method="POST" action="{{ route('artwork.update',['artworkId'=>$artwork->ART_ID]) }}" enctype="multipart/form-data" class="space-y-6">
+        <form method="POST" action="#" enctype="multipart/form-data" class="space-y-6">
             @csrf
             @method('PUT')
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <!-- Left Section: Text Inputs -->
-                <div class="space-y-4">
-                    <!-- Title -->
-                    <div>
-                        <label for="artworkTitleEdit" class="block text-sm font-semibold text-gray-700 mb-1">Title</label>
-                        <input type="text" name="title" id="artworkTitleEdit" value="{{ $artwork->ART_TITLE }}" 
-                               class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
-                    </div>
-                    <!-- Style -->
-                     {{-- <div>
-                        <label for="artworkStyle" class="block text-sm font-semibold text-gray-700 mb-1">Dimension</label>
-                        <input type="text" name="artworkStyle" id="artworkStyle" placeholder="length x width" 
-                               class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
-                    </div> --}}
-                    <!-- Description -->
-                    <div>
-                        <label for="artworkDescriptionEdit" class="block text-sm font-semibold text-gray-700 mb-1">Description</label>
-                        <textarea name="description" id="artworkDescriptionEdit" rows="5" 
-                                  class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>{{ $artwork->DESCRIPTION }}</textarea>
-                    </div>
+            <!-- Title -->
+            <div>
+                <label for="artworkTitleEdit" class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                <input type="text" name="title" id="artworkTitleEdit" value="{{ $artwork->ART_TITLE }}" 
+                       class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
+            </div>
 
-                    <!-- Price -->
-                    <div>
-                        <label for="artworkPriceEdit" class="block text-sm font-semibold text-gray-700 mb-1">Price</label>
-                        <input type="number" name="price" id="artworkPriceEdit" value="{{ $artwork->PRICE }}" 
-                               class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
-                    </div>
+            <!-- Dimensions -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label for="artworkLengthEdit" class="block text-sm font-medium text-gray-700 mb-1">Length</label>
+                    <input type="number" name="artworkLength" id="artworkLengthEdit" value="{{ $artwork->LENGTH }}" 
+                           class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
+                </div>
+                <div>
+                    <label for="artworkWidthEdit" class="block text-sm font-medium text-gray-700 mb-1">Width</label>
+                    <input type="number" name="artworkWidth" id="artworkWidthEdit" value="{{ $artwork->WIDTH }}" 
+                           class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
+                </div>
+                <div>
+                    <label for="dimensionUnitEdit" class="block text-sm font-medium text-gray-700 mb-1">Unit</label>
+                    <select name="dimensionUnit" id="dimensionUnitEdit" 
+                            class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
+                        <option value="cm" {{ $artwork->UNIT == 'cm' ? 'selected' : '' }}>cm</option>
+                        <option value="mm" {{ $artwork->UNIT == 'mm' ? 'selected' : '' }}>mm</option>
+                        <option value="m" {{ $artwork->UNIT == 'm' ? 'selected' : '' }}>m</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div>
+                <label for="artworkDescriptionEdit" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <textarea name="description" id="artworkDescriptionEdit" rows="5" maxlength="150"
+                          class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" 
+                          oninput="updateCharCount(this)" required>{{ $artwork->DESCRIPTION }}</textarea>
+                <div class="flex justify-between items-center mt-2 text-sm text-gray-500">
+                    <span id="charCountEdit">0 / 150</span>
+                    <span id="errorMessageEdit" class="text-red-600 hidden">Maximum 150 characters allowed</span>
+                </div>
+            </div>
+
+            <!-- Category Selection -->
+            <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Category</label>
+            <div class="flex items-center gap-3">
+                <input type="text" id="selectedCategories" readonly
+                    class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500 bg-gray-100 cursor-not-allowed" 
+                    placeholder="Select categories (max 6)">
+                <button type="button" onclick="toggleCategorySelection()" 
+                        class="text-indigo-600 hover:text-indigo-800 transition">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+
+            <!-- Category Dropdown -->
+            <div id="categorySelection" class="hidden mt-4 bg-gray-50 p-4 rounded-lg border border-gray-200 shadow-sm">
+                <h3 class="text-gray-700 font-semibold mb-2">Select Categories</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                   {{-- @foreach($artCategoriesMaster as $artCategorie) --}}
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" class="category-checkbox w-4 h-4 text-indigo-600 focus:ring-indigo-500"
+                        {{--   name="category_art[]" value="{{ $artCategorie->ART_CATEGORY_MASTER_ID }}" --}}>
+                        <span class="text-gray-700"> {{-- {{ $artCategorie->DESCR }} --}}</span>
+                    </label>
+                  {{--  @endforeach --}}
+                </div>
+                <span id="portfolioCategoryError" class="text-red-600 text-sm hidden">You can select up to 3 categories only.</span>
+            </div>
+        </div>
+
+
+            <!-- Price -->
+            <div>
+                <label for="artworkPriceEdit" class="block text-sm font-medium text-gray-700 mb-1">Price</label>
+                <input type="number" name="price" id="artworkPriceEdit" value="{{ $artwork->PRICE }}" 
+                       class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
+            </div>
+
+            <!-- Image Upload Section -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Image Upload Option</label>
+                <div class="flex items-center gap-4 mb-4">
+                    <label class="flex items-center">
+                        <input type="radio" name="imageOption" value="link" x-model="uploadOption" class="mr-2">
+                        <span>Image URL</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="radio" name="imageOption" value="file" x-model="uploadOption" class="mr-2">
+                        <span>Upload New File</span>
+                    </label>
                 </div>
 
-                <!-- Right Section: Image Options -->
-                <div class="space-y-4">
-                    <!-- Image Upload Options -->
-                    <div>
-                        <div class="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
-                            <span class="font-medium">Info!</span> Leave image blank if you are not going to change the picture
-                        </div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Image Upload Option</label>
-                        <div class="flex items-center gap-4">
-                            <label class="flex items-center">
-                                <input type="radio" name="imageOption" value="link" x-model="uploadOption" class="mr-2">
-                                <span>Image URL</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="radio" name="imageOption" value="file" x-model="uploadOption" class="mr-2" selected>
-                                <span>Upload New File</span>
-                            </label>
-                        </div>
-                    </div>
+                <div x-show="uploadOption === 'link'" class="transition">
+                    <label for="imageLinkEdit" class="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
+                    <input type="text" name="imageLink" id="imageLinkEdit" value="{{ $artwork->IMAGE_URL }}"
+                           class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                           x-model="imagePreview" @input="imagePreview = $event.target.value">
+                </div>
 
-                    <!-- Image URL Field -->
-                    <div x-show="uploadOption === 'link'" class="transition duration-300">
-                        <label for="imageLinkEdit" class="block text-sm font-semibold text-gray-700 mb-1">Image URL</label>
-                        <input type="text" name="imageLink" id="imageLinkEdit" placeholder="Enter Image URL" 
-                               class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
-                               x-model="imagePreview" @input="imagePreview = $event.target.value">
-                    </div>
+                <div x-show="uploadOption === 'file'" class="transition">
+                    <label for="imageFileEdit" class="block text-sm font-medium text-gray-700 mb-1">Upload Image</label>
+                    <input type="file" name="imageFile" id="imageFileEdit" accept="image/*"
+                           @change="imagePreview = URL.createObjectURL($event.target.files[0])"
+                           class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
 
-                    <!-- File Upload Field -->
-                    <div x-show="uploadOption === 'file'" class="transition duration-300">
-                        <label for="imageFileEdit" class="block text-sm font-semibold text-gray-700 mb-1">Upload Image</label>
-                        <input type="file" name="imageFile" id="imageFileEdit" accept="image/*" 
-                               @change="imagePreview = URL.createObjectURL($event.target.files[0])"
-                               class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
-                    </div>
-
-                    <!-- Image Preview -->
-                    <div>
-                        <p class="text-sm font-semibold text-gray-700 mb-2">Image Preview</p>
-                        <img :src="imagePreview" alt="Image Preview" 
-                             class="w-full h-64 object-cover rounded-lg border">
-                    </div>
+                <!-- Image Preview -->
+                <div>
+                    <p class="text-sm font-medium text-gray-700 mb-2">Image Preview</p>
+                    <img :src="imagePreview" alt="Image Preview" 
+                         class="w-full h-64 object-cover rounded-lg border border-gray-200">
                 </div>
             </div>
 
@@ -484,6 +513,22 @@ const artworkImage = document.getElementById('artworkImage');
 
     function closeEditModal() {
         document.getElementById('editArtworkModal').classList.add('hidden');
+    }
+    // Character Count Logic
+    function updateCharCount(textarea) {
+        const currentLength = textarea.value.length;
+        const charCount = document.getElementById('charCountEdit');
+        const errorMessage = document.getElementById('errorMessageEdit');
+
+        charCount.textContent = `${currentLength} / 150`;
+
+        if (currentLength > 150) {
+            errorMessage.classList.remove('hidden');
+            textarea.value = textarea.value.substring(0, 150);
+            charCount.textContent = '150 / 150';
+        } else {
+            errorMessage.classList.add('hidden');
+        }
     }
     </script>
 </body>

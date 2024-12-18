@@ -14,24 +14,14 @@
                 <h1 class="text-3xl font-bold">About Me</h1>
 
                 <!-- Ellipsis Button -->
-                @if (Auth::check())
-                    @if (Auth::user()->USER_ID == $artist->USER_ID)
-                        <button class="ellipsisButton text-gray-600 hover:text-gray-800 focus:outline-none">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                stroke="currentColor" class="size-6">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
-                            </svg>
-                        </button>
-                        <!-- Options Menu -->
-
-                        <div
-                            class="optionsMenu absolute top-12 right-4 bg-white border border-gray-200 shadow-lg rounded-md p-2 w-44 hidden">
-                            <button class="block w-full text-left px-4 py-2 hover:bg-gray-100"
-                                onclick="openEditModal()">Edit</button>
-                        </div>
-                    @endif
-                @endif
+               {{-- @if (Auth::check())
+                    @if (Auth::user()->USER_ID == $artist->USER_ID) --}}
+                <!-- Pen Button -->
+                <button id="openEditModal" class="text-gray-600 hover:text-indigo-600 focus:outline-none">
+                    <i class="fas fa-pencil-alt text-lg"></i>
+                </button>
+                   {{-- @endif
+                @endif --}}
             </div>
 
             <div class="text-gray-700">
@@ -113,103 +103,140 @@
                 @endforeach
             </div>
 
-            <!-- Edit About Me Modal -->
-            <div id="editAboutMeModal"
-                class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-                <div
-                    class="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl transform transition-all duration-300 mt-16">
-                    <h3 class="text-2xl font-semibold text-gray-800 mb-2">Edit About Me 📝</h3>
-                    <form id="aboutMeForm" class="space-y-6">
-                        <!-- About Me Description -->
-                        <div>
-                            <label for="aboutDescription"
-                                class="block text-gray-700 font-semibold mb-2">Description</label>
-                            <textarea id="aboutDescription" rows="8"
-                                class="w-full px-4 py-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
-                                placeholder="Write about yourself...">I'm an illustrator obsessed with creating fantastical realms, gritty cyberpunk landscapes, and nostalgic retro vibes. From childhood notebook doodles to polished client projects, my passion for art has fueled a journey that blends traditional and digital techniques.</textarea>
-                        </div>
-
-                        <!-- Skills Section with Dropdown and Selection Limit -->
-                        <div>
-                            <label for="skillsDropdown" class="block text-gray-700 font-semibold mb-2">Skills</label>
-                            <select id="skillsDropdown"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
-                                placeholder="Select skills">
-                                <option value="" disabled selected>Select skills...</option>
-                                <option value="Graphic Design">Graphic Design</option>
-                                <option value="Adobe Illustration">Adobe Illustration</option>
-                                <option value="Adobe Photoshop">Adobe Photoshop</option>
-                                <option value="Logo Design">Logo Design</option>
-                            </select>
-                            <div class="flex flex-wrap gap-2 mt-4" id="selectedSkillsContainer">
-                                <!-- Selected skills will appear here -->
-                            </div>
-                        </div>
-
-                        <!-- Additional Info Section -->
-                        <div class="grid grid-cols-2 gap-6">
-                            <div>
-                                <label for="sinceDate" class="block text-gray-700 font-semibold mb-2">Aesthetic
-                                    Since</label>
-                                <input type="text" id="sinceDate"
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg" value="October 2023">
-                            </div>
-                            <div>
-                                <label for="language" class="block text-gray-700 font-semibold mb-2">Language</label>
-                                <select id="language" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
-                                    <option value="English" selected>English</option>
-                                    <option value="Indonesian">Indonesian</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Form Actions -->
-                        <div class="flex justify-end space-x-3 mt-4">
-                            <button type="button" id="cancelEditButton"
-                                class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition">Cancel</button>
-                            <button type="submit"
-                                class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">Save</button>
-                        </div>
-                    </form>
+    <!-- Edit About Me Modal -->
+    <div id="editAboutMeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl">
+            <h3 class="text-2xl font-semibold text-gray-800 mb-2">Edit About Me 📝</h3>
+            <form id="aboutMeForm" class="space-y-6">
+                <!-- Description -->
+                <div>
+                <label for="aboutDescription" class="block text-gray-700 font-semibold mb-2">Description</label>
+                    <textarea id="aboutDescription" rows="5"
+                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500"
+                        placeholder="Write about yourself..." maxlength="150"></textarea>
+                    <!-- Character Count -->
+                    <div class="flex justify-between items-center mt-2 text-sm text-gray-500">
+                        <span id="charCount">0 / 150</span>
+                        <span id="errorMessage" class="text-red-600 hidden">Maximum 150 characters allowed</span>
+                    </div>
                 </div>
-            </div>
 
-            <script>
-                // Toggle the edit modal visibility
-                function openEditModal() {
-                    document.getElementById('editAboutMeModal').classList.remove('hidden');
-                }
+            <!-- Skills Section -->
+            <div>
+                <label class="block text-gray-700 font-semibold mb-2">Skills</label>
+                <!-- Skills Grid -->
+                <div id="skillsContainer" class="grid grid-cols-2 gap-4">
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" value="Graphic Design" class="skillsCheckbox w-5 h-5">
+                        <span>Graphic Design</span>
+                    </label>
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" value="Adobe Illustration" class="skillsCheckbox w-5 h-5">
+                        <span>Adobe Illustration</span>
+                    </label>
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" value="Adobe Photoshop" class="skillsCheckbox w-5 h-5">
+                        <span>Adobe Photoshop</span>
+                    </label>
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" value="Logo Design" class="skillsCheckbox w-5 h-5">
+                        <span>Logo Design</span>
+                    </label>
+                </div>
+                <!-- Error Message -->
+                <p id="skillsError" class="text-red-600 text-sm mt-2 hidden">You can select up to 3 skills only.</p>
+                    <!-- Display selected skills -->
+                    <div id="selectedSkillsContainer" class="flex flex-wrap gap-2 mt-4">
+                        <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-lg text-sm">Graphic Design</span>
+                        <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-lg text-sm">Logo Design</span>
+                        <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-lg text-sm">Adobe Photoshop</span>
+                    </div>
+                </div>
 
-                document.getElementById('cancelEditButton').addEventListener('click', () => {
-                    document.getElementById('editAboutMeModal').classList.add('hidden');
-                });
-                // Function to toggle options menu visibility
-                document.querySelectorAll('.ellipsisButton').forEach(button => {
-                    button.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        const optionsMenu = button.nextElementSibling;
-                        optionsMenu.classList.toggle('hidden');
-                    });
-                });
+                <!-- Additional Info Section -->
+                <div class="grid grid-cols-2 gap-6">
+                    <!-- Aesthetic Since (Non-editable) -->
+                    <div>
+                        <label for="sinceDate" class="block text-gray-700 font-semibold mb-2">Aesthetic Since</label>
+                        <input type="text" id="sinceDate" value="October 2023"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-500 cursor-not-allowed"
+                            readonly>
+                    </div>
 
-                // Hide options menu when clicking outside
-                document.addEventListener('click', (e) => {
-                    if (!e.target.closest('.ellipsisButton') && !e.target.closest('.optionsMenu')) {
-                        document.querySelectorAll('.optionsMenu').forEach(menu => menu.classList.add('hidden'));
-                    }
-                });
+                 <!-- Language Dropdown -->
+                 <div>
+                        <label for="language" class="block text-gray-700 font-semibold mb-2">Language</label>
+                        <select id="language"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none transition">
+                            <option value="English" selected>English</option>
+                            <option value="Indonesian">Indonesian</option>
+                        </select>
+                    </div>
+                </div>
 
-                // Show edit modal when Edit is clicked
-                function openEditModal() {
-                    document.getElementById('editAboutMeModal').classList.remove('hidden');
-                    document.querySelector('.optionsMenu').classList.add('hidden'); // Hide options menu
-                }
+                <!-- Buttons -->
+                <div class="flex justify-end gap-4">
+                    <button type="button" id="cancelEditButton" class="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-                // Hide the edit modal
-                document.getElementById('cancelEditButton').addEventListener('click', () => {
-                    document.getElementById('editAboutMeModal').classList.add('hidden');
-                });
-            </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    // Open Edit Modal
+    const openEditModalButton = document.getElementById('openEditModal');
+    const editModal = document.getElementById('editAboutMeModal');
+    const cancelEditButton = document.getElementById('cancelEditButton');
+
+    openEditModalButton.addEventListener('click', () => {
+        editModal.classList.remove('hidden');
+    });
+
+    // Close Edit Modal
+    cancelEditButton.addEventListener('click', () => {
+        editModal.classList.add('hidden');
+    });
+
+    // Description Character Count
+    const aboutDescription = document.getElementById('aboutDescription');
+    const charCount = document.getElementById('charCount');
+    const errorMessage = document.getElementById('errorMessage');
+
+    aboutDescription.addEventListener('input', () => {
+        const currentLength = aboutDescription.value.length;
+
+        charCount.textContent = `${currentLength} / 150`;
+
+        if (currentLength > 150) {
+            errorMessage.classList.remove('hidden');
+            aboutDescription.value = aboutDescription.value.substring(0, 150);
+            charCount.textContent = `150 / 150`;
+        } else {
+            errorMessage.classList.add('hidden');
+        }
+    });
+
+    // Skills Selection Logic - Maximum 2
+    const checkboxes = document.querySelectorAll('.skillsCheckbox');
+    const skillsError = document.getElementById('skillsError');
+
+    checkboxes.forEach((checkbox) => {
+        checkbox.addEventListener('change', () => {
+            const checkedBoxes = document.querySelectorAll('.skillsCheckbox:checked');
+
+            if (checkedBoxes.length > 3) {
+                checkbox.checked = false; // Prevent selecting more than 2
+                skillsError.classList.remove('hidden');
+            } else {
+                skillsError.classList.add('hidden');
+            }
+        });
+    });
+});
+
+    </script>
 </body>
 
 </html>

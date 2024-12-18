@@ -108,80 +108,178 @@
     </div>
 </div>
 
-<!-- Modal -->
-<div id="addPortfolioModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl mt-16">
-        <div class="flex justify-between items-center mb-4">
+<!-- Add Portfolio Modal -->
+<div id="addPortfolioModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white p-8 rounded-lg shadow-2xl w-full max-w-7xl h-[90vh] overflow-y-auto" 
+         x-data="{ 
+            uploadOption: 'link', 
+            imagePreview: '' 
+         }">
+
+        <!-- Modal Header -->
+        <div class="flex justify-between items-center border-b pb-4 mb-4">
             <h2 class="text-2xl font-bold text-gray-800">Add New Portfolio</h2>
+            <button type="button" onclick="closeModal()" class="text-gray-500 hover:text-red-500 text-2xl">&times;</button>
         </div>
-         <div class="max-h-[60vh] overflow-y-auto pr-6"> <!-- Added padding-right to fix scrollbar issue -->
-            <form class="space-y-6" method="POST" action="{{ route('portfolio.store') }}" enctype="multipart/form-data" id="addPortfolioForm">
-                @csrf
-                <!-- Title Field -->
+
+        <!-- Form -->
+        <form method="POST" action="{{ route('portfolio.store') }}" enctype="multipart/form-data" class="space-y-6" id="addPortfolioForm">
+            @csrf
+
+            <!-- Form Layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Left Section: Text Inputs -->
+                <div class="space-y-4">
+                    <!-- Title -->
+                    <div>
+                        <label for="portfolioTitle" class="block text-sm font-semibold text-gray-700 mb-1">Title</label>
+                        <input type="text" name="portfolioTitle" id="portfolioTitle" placeholder="Enter Title" 
+                               class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
+                        <span id="portfolioTitleError" class="text-red-600"></span>
+                    </div>
+
+                                    <!-- Dimension Section -->
                 <div>
-                    <label for="portfolioTitle" class="block text-lg font-semibold text-gray-700">Title</label>
-                    <input type="text" id="portfolioTitle" name="portfolioTitle" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500" required>
-                    <span id="portfolioTitleError" class="text-red-600"></span>
+                    <label for="dimension" class="block text-sm font-semibold text-gray-700 mb-1">Dimensions</label>
+                    <div class="flex gap-4">
+                        <!-- Length Input -->
+                        <div class="flex-1">
+                            <input 
+                                type="number" 
+                                name="artworkLength" 
+                                id="artworkLength" 
+                                placeholder="Length" 
+                                class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" 
+                                required
+                            />
+                            <p class="text-xs text-gray-500 mt-1">Enter length</p>
+                        </div>
+
+                        <!-- Width Input -->
+                        <div class="flex-1">
+                            <input 
+                                type="number" 
+                                name="artworkWidth" 
+                                id="artworkWidth" 
+                                placeholder="Width" 
+                                class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" 
+                                required
+                            />
+                            <p class="text-xs text-gray-500 mt-1">Enter width</p>
+                        </div>
+
+                        <!-- Unit Dropdown -->
+                        <div class="w-32">
+                            <select 
+                                name="dimensionUnit" 
+                                id="dimensionUnit" 
+                                class="w-full px-4 py-2 border rounded-lg bg-white focus:ring-indigo-500 focus:border-indigo-500"
+                                required
+                            >
+                                <option value="cm">cm</option>
+                                <option value="mm">mm</option>
+                                <option value="m">m</option>
+                            </select>
+                            <p class="text-xs text-gray-500 mt-1">Select unit</p>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Description Field -->
-                <div>
-                    <label for="portfolioDescription" class="block text-lg font-semibold text-gray-700">Description</label>
-                    <textarea id="portfolioDescription" name="portfolioDescription" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500" required></textarea>
-                    <span id="portfolioDescriptionError" class="text-red-600"></span>
-                </div>
+                    <!-- Description -->
+                    <div>
+                        <label for="portfolioDescription" class="block text-sm font-semibold text-gray-700 mb-2">Description</label>
+                        <textarea id="portfolioDescription" name="portfolioDescription" rows="5" maxlength="150"
+                                class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none transition"
+                                placeholder="Write about your portfolio..." 
+                                oninput="updateCharCount(this)"></textarea>
+                        <!-- Character Count -->
+                        <div class="flex justify-between items-center mt-2 text-sm text-gray-500">
+                            <span id="charCount">0 / 150</span>
+                            <span id="errorMessage" class="text-red-600 hidden">Maximum 150 characters allowed</span>
+                        </div>
+                    </div>
 
-                <!-- Category Field -->
-                <div>
-                    <label class="block text-lg font-semibold text-gray-700">Category</label>
-                    <div class="flex items-center">
-                        <input type="text" id="selectedCategories" readonly class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500" placeholder="Select categories (max 6)">
-                        <button type="button" onclick="toggleCategorySelection()" class="ml-3 text-indigo-600 hover:text-indigo-800">
+                    <!-- Category -->
+                    <!-- Category Selection -->
+                    <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Category</label>
+                    <div class="flex items-center gap-3">
+                        <input type="text" id="selectedCategories" readonly
+                            class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500 bg-gray-100 cursor-not-allowed" 
+                            placeholder="Select categories (max 6)">
+                        <button type="button" onclick="toggleCategorySelection()" 
+                                class="text-indigo-600 hover:text-indigo-800 transition">
                             <i class="fas fa-plus"></i>
                         </button>
                     </div>
-                </div>
 
-                <!-- Category Selection Modal -->
-                <div id="categorySelection" class="hidden mt-4">
-                    <h3 class="text-gray-700 font-semibold mb-2">Select Categories</h3>
-                    <div class="grid grid-cols-2 gap-2">
-                        @foreach($artCategoriesMaster as $artCategorie)
-                        <label><input type="checkbox" class="category-checkbox" name="category_art[]" value="{{ $artCategorie->ART_CATEGORY_MASTER_ID }}"> {{ $artCategorie->DESCR }}</label>
-                        @endforeach
+                    <!-- Category Dropdown -->
+                    <div id="categorySelection" class="hidden mt-4 bg-gray-50 p-4 rounded-lg border border-gray-200 shadow-sm">
+                        <h3 class="text-gray-700 font-semibold mb-2">Select Categories</h3>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                            @foreach($artCategoriesMaster as $artCategorie)
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" class="category-checkbox w-4 h-4 text-indigo-600 focus:ring-indigo-500"
+                                    name="category_art[]" value="{{ $artCategorie->ART_CATEGORY_MASTER_ID }}">
+                                <span class="text-gray-700">{{ $artCategorie->DESCR }}</span>
+                            </label>
+                            @endforeach
+                        </div>
+                        <span id="portfolioCategoryError" class="text-red-600 text-sm hidden">You can select up to 6 categories only.</span>
                     </div>
-                </div>
-                <span id="portfolioCategoryError" class="text-red-600"></span>
-
-                <!-- Image Upload Options -->
-                <div>
-                    <label class="block text-lg font-semibold text-gray-700 mb-2">Select Image Upload Option</label>
-                    <div class="flex items-center mb-4">
-                        <input type="radio" id="linkOption" name="imageOption" value="link" class="mr-3" onclick="toggleImageUploadOption('link')" checked>
-                        <label for="linkOption" class="text-gray-700">Upload by Link</label>
-                    </div>
-                    <div class="flex items-center mb-4">
-                        <input type="radio" id="fileOption" name="imageOption" value="file" class="mr-3" onclick="toggleImageUploadOption('file')">
-                        <label for="fileOption" class="text-gray-700">Upload from File</label>
-                    </div>
-                </div>
-
-                <!-- Image Upload Fields -->
-                <div id="linkField" class="mb-4">
-                    <label for="portfolioImageLink" class="block text-lg font-semibold text-gray-700">Image URL</label>
-                    <input type="text" id="portfolioImageLink" name="portfolioImageLink" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
-                    <span id="portfolioImageLinkError" class="text-red-600"></span>
-                </div>
-                <div id="fileField" class="mb-4 hidden">
-                    <label for="portfolioImageUpload" class="block text-lg font-semibold text-gray-700">Upload Image</label>
-                    <input type="file" id="portfolioImageUpload" name="portfolioImageUpload" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500" accept="image/*">
-                    <span id="portfolioImageUploadError" class="text-red-600"></span>
                 </div>
             </div>
-            <!-- Modal Footer -->
-            <div class="mt-6 flex justify-end space-x-4">
-                <button onclick="closeModal()" class="bg-gray-300 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-400 transition duration-200">Cancel</button>
-                <button type="submit" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 shadow-md transition duration-300 transform hover:scale-105">Add Portfolio</button>
+
+                <!-- Right Section: Image Upload -->
+                <div class="space-y-4">
+                    <!-- Image Upload Options -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Image Upload Option</label>
+                        <div class="flex items-center gap-4">
+                            <label class="flex items-center">
+                                <input type="radio" name="imageOption" value="link" x-model="uploadOption" class="mr-2" checked>
+                                <span>Image URL</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="imageOption" value="file" x-model="uploadOption" class="mr-2">
+                                <span>Upload New File</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Image URL Field -->
+                    <div x-show="uploadOption === 'link'" class="transition duration-300">
+                        <label for="portfolioImageLink" class="block text-sm font-semibold text-gray-700 mb-1">Image URL</label>
+                        <input type="text" name="portfolioImageLink" id="portfolioImageLink" placeholder="Enter Image URL" 
+                               class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+                               x-model="imagePreview" @input="imagePreview = $event.target.value">
+                        <span id="portfolioImageLinkError" class="text-red-600"></span>
+                    </div>
+
+                    <!-- File Upload Field -->
+                    <div x-show="uploadOption === 'file'" class="transition duration-300">
+                        <label for="portfolioImageUpload" class="block text-sm font-semibold text-gray-700 mb-1">Upload Image</label>
+                        <input type="file" name="portfolioImageUpload" id="portfolioImageUpload" accept="image/*" 
+                               @change="imagePreview = URL.createObjectURL($event.target.files[0])"
+                               class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                        <span id="portfolioImageUploadError" class="text-red-600"></span>
+                    </div>
+
+                    <!-- Image Preview -->
+                    <div>
+                        <p class="text-sm font-semibold text-gray-700 mb-2">Image Preview</p>
+                        <img :src="imagePreview" alt="Image Preview" 
+                             class="w-full h-64 object-cover rounded-lg border">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex justify-end space-x-4 border-t pt-4">
+                <button type="button" onclick="closeModal()" 
+                        class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition">Cancel</button>
+                <button type="submit" 
+                        class="px-4 py-2 text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition">Add Portfolio</button>
             </div>
         </form>
     </div>
@@ -214,6 +312,24 @@
     function closeSuccessModal() {
         document.getElementById('successModal').classList.add('hidden'); // Hide the modal
         clearErrorsAndForm(); // Clear errors and reset the form
+    }
+
+    function updateCharCount(textarea) {
+        const maxLength = 150;
+        const charCount = textarea.value.length;
+
+        const charCountSpan = document.getElementById('charCount');
+        const errorMessage = document.getElementById('errorMessage');
+
+        charCountSpan.textContent = `${charCount} / ${maxLength}`;
+
+        if (charCount > maxLength) {
+            errorMessage.classList.remove('hidden');
+            textarea.value = textarea.value.substring(0, maxLength); // Truncate excess characters
+            charCountSpan.textContent = `${maxLength} / ${maxLength}`;
+        } else {
+            errorMessage.classList.add('hidden');
+        }
     }
 
     function clearErrorsAndForm() {
@@ -264,9 +380,9 @@
             const selectedCategories = Array.from(document.querySelectorAll('.category-checkbox:checked')).map(
                 (checkbox) => checkbox.nextSibling.textContent.trim()
             );
-            if (selectedCategories.length > 6) {
+            if (selectedCategories.length > 3) {
                 checkbox.checked = false;
-                alert('You can select up to 6 categories.');
+                alert('You can select up to 3 categories.');
             } else {
                 document.getElementById('selectedCategories').value = selectedCategories.join(', ');
             }
