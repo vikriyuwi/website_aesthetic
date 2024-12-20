@@ -68,9 +68,9 @@ class ArtistArtWorkController extends Controller
             'artworkTitle' => 'required',
             'artworkDescription' => 'required',
             'artworkPrice' => 'required',
-        ], [
-            'collectionTitle.required' => '* The Artwork title is required.',
-            'collectionDescription.required' => '* The Artwork description is required.',
+            'artworkWidth' => 'required',
+            'artworkHeight' => 'required',
+            'dimensionUnit' => 'required',
         ]);
 
         if ($validated->fails()) {
@@ -81,7 +81,10 @@ class ArtistArtWorkController extends Controller
             'ART_TITLE' => $request->artworkTitle,
             'DESCRIPTION' => $request->artworkDescription,
             'IS_SALE' => true,
-            'PRICE' => $request->artworkPrice
+            'PRICE' => $request->artworkPrice,
+            'WIDTH' => $request->artworkWidth,
+            'HEIGHT' => $request->artworkHeight,
+            'UNIT' => $request->dimensionUnit
         ]);
 
         if($request->category_art != null) {
@@ -162,6 +165,9 @@ class ArtistArtWorkController extends Controller
             'title' => 'required',
             'description' => 'required',
             'price' => 'required',
+            'artworkWidth' => 'required',
+            'artworkHeight' => 'required',
+            'dimensionUnit' => 'required',
         ]);
 
         if ($validated->fails()) {
@@ -171,6 +177,9 @@ class ArtistArtWorkController extends Controller
         $artwork->ART_TITLE = $request->title;
         $artwork->DESCRIPTION = $request->description;
         $artwork->PRICE = $request->price;
+        $artwork->WIDTH = $request->artworkWidth;
+        $artwork->HEIGHT = $request->artworkHeight;
+        $artwork->UNIT = $request->dimensionUnit;
 
         $imagePath = null;
 

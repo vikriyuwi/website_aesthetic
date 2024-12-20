@@ -236,7 +236,7 @@
                 <i class="fas fa-ruler-combined text-gray-500"></i>
                 <div>
                     <h4 class="text-sm font-bold">Dimensions</h4>
-                    <p class="text-sm text-gray-500">24x36 inches</p>
+                    <p class="text-sm text-gray-500">{{ $artwork->WIDTH }}x{{ $artwork->HEIGHT }} {{ $artwork->UNIT }}</p>
                 </div>
             </div>
             <div class="flex items-center space-x-2">
@@ -307,7 +307,7 @@
         </div>
 
         <!-- Form -->
-        <form method="POST" action="#" enctype="multipart/form-data" class="space-y-6">
+        <form method="POST" action="{{ route('artwork.update',['artworkId'=>$artwork->ART_ID]) }}" enctype="multipart/form-data" class="space-y-6">
             @csrf
             @method('PUT')
 
@@ -321,8 +321,8 @@
             <!-- Dimensions -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                    <label for="artworkLengthEdit" class="block text-sm font-medium text-gray-700 mb-1">Length</label>
-                    <input type="number" name="artworkLength" id="artworkLengthEdit" value="{{ $artwork->LENGTH }}" 
+                    <label for="artworkLengthEdit" class="block text-sm font-medium text-gray-700 mb-1">Height</label>
+                    <input type="number" name="artworkHeight" id="artworkLengthEdit" value="{{ $artwork->HEIGHT }}" 
                            class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
                 </div>
                 <div>
@@ -408,7 +408,7 @@
                     <label for="imageLinkEdit" class="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
                     <input type="text" name="imageLink" id="imageLinkEdit" value="{{ $artwork->IMAGE_URL }}"
                            class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
-                           x-model="imagePreview" @input="imagePreview = $event.target.value">
+                            @input="imagePreview = $event.target.value">
                 </div>
 
                 <div x-show="uploadOption === 'file'" class="transition">

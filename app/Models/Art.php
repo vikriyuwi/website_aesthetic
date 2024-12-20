@@ -15,7 +15,7 @@ class Art extends Model
 
     protected $table = 'ART';
     protected $primaryKey = 'ART_ID';
-    protected $fillable = ['USER_ID', 'ART_TITLE', 'DESCRIPTION', 'VIEW', 'IS_SALE', 'PRICE'];
+    protected $fillable = ['USER_ID', 'ART_TITLE', 'DESCRIPTION', 'WIDTH', 'HEIGHT', 'UNIT', 'VIEW', 'IS_SALE', 'PRICE'];
 
     public function addView()
     {
