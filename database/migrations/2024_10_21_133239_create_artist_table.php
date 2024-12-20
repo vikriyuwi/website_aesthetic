@@ -19,6 +19,10 @@ return new class extends Migration
             $table->string('ROLE');
             $table->string('BIO');
             $table->text('ABOUT');
+            $table->string('X')->nullable();
+            $table->string('PINTEREST')->nullable();
+            $table->string('INSTAGRAM')->nullable();
+            $table->string('LINKEDIN')->nullable();
             $table->boolean('IS_ACTIVE')->default(false);
             $table->integer('VIEW')->default(0);
             $table->timestamps();

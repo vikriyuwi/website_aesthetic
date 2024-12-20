@@ -256,10 +256,18 @@
                         </div>
 
                         <div class="flex justify-center mt-4 space-x-4">
-                            <button class="text-gray-600"><i class="fab fa-instagram"></i></button>
-                            <button class="text-gray-600"><i class="fab fa-pinterest"></i></button>
-                            <button class="text-gray-600"><i class="fab fa-twitter"></i></button>
-                            <button class="text-gray-600"><i class="fab fa-linkedin"></i></button>
+                            @if($artist->INSTAGRAM != null)
+                            <button onclick="window.open('{{ $artist->INSTAGRAM }}','_blank')" class="text-gray-600"><i class="fab fa-instagram"></i></button>
+                            @endif
+                            @if($artist->PINTEREST != null)
+                            <button onclick="window.open('{{ $artist->PINTEREST }}','_blank')" class="text-gray-600"><i class="fab fa-pinterest"></i></button>
+                            @endif
+                            @if($artist->X != null)
+                            <button onclick="window.open('{{ $artist->X }}','_blank')" class="text-gray-600"><i class="fab fa-twitter"></i></button>
+                            @endif
+                            @if($artist->LINKEDIN != null)
+                            <button onclick="window.open('{{ $artist->LINKEDIN }}','_blank')" class="text-gray-600"><i class="fab fa-linkedin"></i></button>
+                            @endif
                         </div>
 
                     </div>
@@ -482,7 +490,7 @@
                                     placeholder="8123456789" 
                                     oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 13)" 
                                     required 
-                                    value="{{ $artist->PHONE ?? '' }}"
+                                    value="{{ $artist->MasterUser->Buyer->PHONE_NUMBER ?? '' }}"
                                 />
                             </div>
                         </div>
@@ -516,33 +524,33 @@
                                     <!-- Twitter Field -->
                                     <div class="flex items-center">
                                         <i class="fab fa-twitter text-blue-400 mr-3 text-xl"></i>
-                                        <input type="url" id="twitter"
+                                        <input type="url" id="twitter" name="X"
                                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
-                                            placeholder="Twitter Profile URL">
+                                            placeholder="Twitter Profile URL" value="{{ $artist->X }}">
                                     </div>
 
                                     <!-- Pinterest Field -->
                                     <div class="flex items-center">
                                         <i class="fab fa-pinterest text-red-600 mr-3 text-xl"></i>
-                                        <input type="url" id="pinterest"
+                                        <input type="url" id="pinterest" name="PINTEREST"
                                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
-                                            placeholder="Pinterest Profile URL">
+                                            placeholder="Pinterest Profile URL" value="{{ $artist->PINTEREST }}">
                                     </div>
 
                                     <!-- Instagram Field -->
                                     <div class="flex items-center">
                                         <i class="fab fa-instagram text-pink-500 mr-3 text-xl"></i>
-                                        <input type="url" id="instagram"
+                                        <input type="url" id="instagram" name="INSTAGRAM"
                                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
-                                            placeholder="Instagram Profile URL">
+                                            placeholder="Instagram Profile URL" value="{{ $artist->INSTAGRAM }}">
                                     </div>
 
                                     <!-- LinkedIn Field -->
                                     <div class="flex items-center">
                                         <i class="fab fa-linkedin text-blue-600 mr-3 text-xl"></i>
-                                        <input type="url" id="linkedin"
+                                        <input type="url" id="linkedin" name="LINKEDIN"
                                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
-                                            placeholder="LinkedIn Profile URL">
+                                            placeholder="LinkedIn Profile URL" value="{{ $artist->LINKEDIN }}">
                                     </div>
                                 </div>
                             </div>

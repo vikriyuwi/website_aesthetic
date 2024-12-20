@@ -12,7 +12,7 @@ class Artist extends Model
     use HasFactory;
     protected $table = 'ARTIST';
     protected $primaryKey = 'ARTIST_ID';
-    protected $fillable = ['USER_ID', 'LOCATION','ROLE','BIO','ABOUT','IS_ACTIVE','VIEW'];
+    protected $fillable = ['USER_ID', 'LOCATION','ROLE','BIO','ABOUT','X','PINTEREST','INSTAGRAM','LINKEDIN','IS_ACTIVE','VIEW'];
 
     public function isActive()
     {
