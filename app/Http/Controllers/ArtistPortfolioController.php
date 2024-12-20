@@ -24,6 +24,9 @@ class ArtistPortfolioController extends Controller
         $validated = Validator::make($request->all(), [
             'portfolioTitle' => 'required',
             'portfolioDescription' => 'required',
+            'artworkWidth' => 'required',
+            'artworkHeight' => 'required',
+            'dimensionUnit' => 'required',
         ], [
             'collectionTitle.required' => '* The Collection title is required.',
             'collectionDescription.required' => '* The Collection description is required.',
@@ -33,23 +36,13 @@ class ArtistPortfolioController extends Controller
             return redirect()->back()->withError($validated->error());
         }
 
-        $imagePath = null;
-
-        // If URL is provided
-        if ($request->filled('portfolioImageLink')) {
-            $imagePath = $request->input('portfolioImageLink');
-        }
-
-        // If file is uploaded
-        if ($request->hasFile('portfolioImageUpload')) {
-            $uploadedFile = $request->file('portfolioImageUpload');
-            $imagePath = $uploadedFile->store('images/art', 'public'); // Save file in the `storage/app/public/images/art` directory
-        }
-
         $art = $user->Arts()->create([
             'ART_TITLE' => $request->portfolioTitle,
             'DESCRIPTION' => $request->portfolioDescription,
-            'IS_SALE' => false
+            'IS_SALE' => false,
+            'WIDTH' => $request->artworkWidth,
+            'HEIGHT' => $request->artworkHeight,
+            'UNIT' => $request->dimensionUnit
         ]);
 
         if($request->category_art != null) {
@@ -58,6 +51,18 @@ class ArtistPortfolioController extends Controller
                     'ART_CATEGORY_MASTER_ID' => $categoryId,
                 ]);
             }
+        }
+
+        $imagePath = null;
+
+        if ($request->filled('portfolioImageLink')) {
+            $imagePath = $request->input('portfolioImageLink');
+        }
+
+        // If file is uploaded
+        if ($request->hasFile('portfolioImageUpload')) {
+            $uploadedFile = $request->file('portfolioImageUpload');
+            $imagePath = $uploadedFile->store('images/art', 'public'); // Save file in the `storage/app/public/images/art` directory
         }
 
         $art->ArtImages()->create([
@@ -113,6 +118,9 @@ class ArtistPortfolioController extends Controller
         $validated = Validator::make($request->all(), [
             'title' => 'required',
             'description' => 'required',
+            'portfolioWidth' => 'required',
+            'portfolioHeight' => 'required',
+            'dimensionUnit' => 'required',
         ]);
 
         if ($validated->fails()) {
@@ -121,6 +129,9 @@ class ArtistPortfolioController extends Controller
 
         $portfolio->ART_TITLE = $request->title;
         $portfolio->DESCRIPTION = $request->description;
+        $portfolio->WIDTH = $request->portfolioWidth;
+        $portfolio->HEIGHT = $request->portfolioHeight;
+        $portfolio->UNIT = $request->dimensionUnit;
 
         $imagePath = null;
 

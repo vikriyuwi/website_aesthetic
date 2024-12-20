@@ -146,13 +146,13 @@
                         <div class="flex-1">
                             <input 
                                 type="number" 
-                                name="artworkLength" 
-                                id="artworkLength" 
-                                placeholder="Length" 
+                                name="artworkHeight" 
+                                id="artworkHeight" 
+                                placeholder="Height" 
                                 class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" 
                                 required
                             />
-                            <p class="text-xs text-gray-500 mt-1">Enter length</p>
+                            <p class="text-xs text-gray-500 mt-1">Enter height</p>
                         </div>
 
                         <!-- Width Input -->
@@ -176,9 +176,9 @@
                                 class="w-full px-4 py-2 border rounded-lg bg-white focus:ring-indigo-500 focus:border-indigo-500"
                                 required
                             >
-                                <option value="cm">cm</option>
-                                <option value="mm">mm</option>
-                                <option value="m">m</option>
+                                <option value="CM">CM</option>
+                                <option value="MM">MM</option>
+                                <option value="M">M</option>
                             </select>
                             <p class="text-xs text-gray-500 mt-1">Select unit</p>
                         </div>

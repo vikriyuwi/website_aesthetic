@@ -56,13 +56,13 @@
         @endif
         <span>{{ $portfolio->ArtLikes->count() }}</span>
       </div>
-      <div class="flex items-center space-x-2">
+      {{-- <div class="flex items-center space-x-2">
         <!-- Custom Comment Icon -->
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
           <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
         </svg>
         <span>Comment</span>
-      </div>
+      </div> --}}
     </div>
   </div>
 </div>
@@ -88,16 +88,16 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
               </svg>
-              <span>10K Views</span>
+              <span>{{ $portfolio->VIEW }} Views</span>
             </div>
-            <div class="flex items-center space-x-2">
+            {{-- <div class="flex items-center space-x-2">
               <!-- Custom Comment Icon -->
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
               </svg>
               <span>20 Comments</span>
-            </div>
-            <i class="fas fa-ellipsis-h cursor-pointer"></i>
+            </div> --}}
+            {{-- <i class="fas fa-ellipsis-h cursor-pointer"></i> --}}
           </div>
           
           <!-- Tags -->
@@ -109,15 +109,15 @@
 
           <!-- Artwork Details -->
           <p class="mt-6">{{ $portfolio->DESCRIPTION }}</p>
-          <p class="text-gray-600 mt-4">Image Size: 1920x1080px</p>
-          <p class="text-gray-600">Total Size: 3.5 MB</p>
+          <p class="text-gray-600 mt-4">Image Size: {{ $portfolio->WIDTH }}x{{ $portfolio->HEIGHT }} {{ $portfolio->UNIT }}</p>
+          {{-- <p class="text-gray-600">Total Size: 3.5 MB</p> --}}
           <p class="text-gray-600">© {{ (new \DateTime($portfolio->created_at))->format('Y') }} {{ $portfolio->MasterUser->Buyer->FULLNAME }}</p>
 
         <!-- Divider Line Before Comments Section -->
-        <hr class="my-8 border-gray-700"/>
+        {{-- <hr class="my-8 border-gray-700"/> --}}
 
         <!-- Comment Sections -->
-        <div class="max-w-1xl ml-1 py-4">
+        {{-- <div class="max-w-1xl ml-1 py-4">
           <h2 class="text-xl font-semibold mb-4">20 Comments</h2>
           <div class="space-y-4 max-h-80 overflow-y-auto pr-4">
             <!-- Comment 1 -->
@@ -192,7 +192,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> --}}
       </div>
 
       <!-- Sidebar Content -->
@@ -312,8 +312,8 @@
      <!-- Dimensions -->
      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
          <div>
-             <label for="portfolioLengthEdit" class="block text-sm font-medium text-gray-700 mb-1">Length</label>
-             <input type="number" name="portfolioLength" id="portfolioLengthEdit" value="{{ $portfolio->LENGTH }}" 
+             <label for="portfolioHeightEdit" class="block text-sm font-medium text-gray-700 mb-1">Height</label>
+             <input type="number" name="portfolioHeight" id="portfolioHeightEdit" value="{{ $portfolio->HEIGHT }}" 
                     class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
          </div>
          <div>
@@ -325,9 +325,9 @@
              <label for="dimensionUnitEdit" class="block text-sm font-medium text-gray-700 mb-1">Unit</label>
              <select name="dimensionUnit" id="dimensionUnitEdit" 
                      class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
-                 <option value="cm" {{ $portfolio->UNIT == 'cm' ? 'selected' : '' }}>cm</option>
-                 <option value="mm" {{ $portfolio->UNIT == 'mm' ? 'selected' : '' }}>mm</option>
-                 <option value="m" {{ $portfolio->UNIT == 'm' ? 'selected' : '' }}>m</option>
+                 <option value="CM" {{ $portfolio->UNIT == 'CM' ? 'selected' : '' }}>CM</option>
+                 <option value="MM" {{ $portfolio->UNIT == 'MM' ? 'selected' : '' }}>MM</option>
+                 <option value="M" {{ $portfolio->UNIT == 'M' ? 'selected' : '' }}>M</option>
              </select>
          </div>
      </div>
@@ -388,7 +388,7 @@
 
          <div x-show="uploadOption === 'link'" class="transition">
              <label for="imageLinkEdit" class="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
-             <input type="text" name="imageLink" id="imageLinkEdit" value=""
+             <input type="text" name="imageLink" id="imageLinkEdit"
                     class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
                     @input="imagePreview = $event.target.value">
          </div>
