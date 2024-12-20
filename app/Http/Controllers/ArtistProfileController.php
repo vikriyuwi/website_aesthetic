@@ -99,7 +99,8 @@ class ArtistProfileController extends Controller
             'name' => 'required',
             'bio' => 'required',
             'location' => 'required',
-            'role' => 'required'
+            'role' => 'required',
+            'phone' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -110,6 +111,10 @@ class ArtistProfileController extends Controller
         $artist->ABOUT = $request->bio;
         $artist->LOCATION = $request->location;
         $artist->ROLE = $request->role;
+        $artist->X = $request->X;
+        $artist->PINTEREST = $request->PINTEREST;
+        $artist->INSTAGRAM = $request->INSTAGRAM;
+        $artist->LINKEDIN = $request->LINKEDIN;
         $artist->save();
 
         $buyer->FULLNAME = $request->name;
@@ -129,6 +134,7 @@ class ArtistProfileController extends Controller
             }
         }
 
+        $buyer->PHONE_NUMBER = $request->phone;
         $buyer->PROFILE_IMAGE_URL = $imagePath;
         $buyer->save();
 
