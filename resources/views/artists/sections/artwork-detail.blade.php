@@ -99,14 +99,22 @@
 
     <!-- Main Content -->
     <div class="max-w-6xl mx-auto p-4">
-        <!-- Breadcrumb Navigation -->
+        {{-- <!-- Breadcrumb Navigation -->
         <nav class="flex items-center space-x-2 text-sm text-gray-500 mb-4">
             <a href="/" class="hover:underline">home</a>
             <span>/</span>
             <a href="/category" class="hover:underline">{{ $artwork['category'] }}</a>
             <span>/</span>
             <span class="text-gray-800">{{ $artwork->ARTWORK_TITLE }}</span>
-        </nav>
+        </nav> --}}
+        <!-- Back Button with Arrow Icon -->
+        <a href="javascript:history.back()" 
+        class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-300 transition duration-300 shadow-sm mt-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            <span class="text-sm font-medium text-white">Back</span>
+        </a>
 
         <!-- Clickable Artwork Image -->
         <div class="flex justify-center items-center max-w-screen-lg p-4">
@@ -276,7 +284,13 @@
             </div>
         </a>
         @endforeach
-    </div>
+</div>
+<!-- View More Button -->
+<div class="flex justify-center mt-8">
+    <a href="#"
+       class="inline-flex items-center px-6 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition">
+        View More <span class="ml-2">→</span>
+    </a>
 </div>
 <!-- Edit Artwork Modal -->
 <div id="editArtworkModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
@@ -293,7 +307,7 @@
         </div>
 
         <!-- Form -->
-        <form method="POST" action="{{ route('artwork.update',['artworkId'=>$artwork->ART_ID]) }}" enctype="multipart/form-data" class="space-y-6">
+        <form method="POST" action="#" enctype="multipart/form-data" class="space-y-6">
             @csrf
             @method('PUT')
 
@@ -341,32 +355,32 @@
 
             <!-- Category Selection -->
             <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1">Category</label>
-                <div class="flex items-center gap-3">
-                    <input type="text" id="selectedCategories" readonly
-                        class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500 bg-gray-100 cursor-not-allowed" 
-                        placeholder="Select categories (max 6)">
-                    <button type="button" onclick="toggleCategorySelection()" 
-                            class="text-indigo-600 hover:text-indigo-800 transition">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                </div>
-
-                <!-- Category Dropdown -->
-                <div id="categorySelection" class="hidden mt-4 bg-gray-50 p-4 rounded-lg border border-gray-200 shadow-sm">
-                    <h3 class="text-gray-700 font-semibold mb-2">Select Categories</h3>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                    {{-- @foreach($artCategoriesMaster as $artCategorie) --}}
-                        <label class="flex items-center space-x-2">
-                            <input type="checkbox" class="category-checkbox w-4 h-4 text-indigo-600 focus:ring-indigo-500"
-                            {{--   name="category_art[]" value="{{ $artCategorie->ART_CATEGORY_MASTER_ID }}" --}}>
-                            <span class="text-gray-700"> {{-- {{ $artCategorie->DESCR }} --}}</span>
-                        </label>
-                    {{--  @endforeach --}}
-                    </div>
-                    <span id="portfolioCategoryError" class="text-red-600 text-sm hidden">You can select up to 3 categories only.</span>
-                </div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Category</label>
+            <div class="flex items-center gap-3">
+                <input type="text" id="selectedCategories" readonly
+                    class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500 bg-gray-100 cursor-not-allowed" 
+                    placeholder="Select categories (max 3)">
+                <button type="button" onclick="toggleCategorySelection()" 
+                        class="text-indigo-600 hover:text-indigo-800 transition">
+                    <i class="fas fa-plus"></i>
+                </button>
             </div>
+
+            <!-- Category Dropdown -->
+            <div id="categorySelection" class="hidden mt-4 bg-gray-50 p-4 rounded-lg border border-gray-200 shadow-sm">
+                <h3 class="text-gray-700 font-semibold mb-2">Select Categories</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                   {{-- @foreach($artCategoriesMaster as $artCategorie) --}}
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" class="category-checkbox w-4 h-4 text-indigo-600 focus:ring-indigo-500"
+                        {{--   name="category_art[]" value="{{ $artCategorie->ART_CATEGORY_MASTER_ID }}" --}}>
+                        <span class="text-gray-700"> {{-- {{ $artCategorie->DESCR }} --}}</span>
+                    </label>
+                  {{--  @endforeach --}}
+                </div>
+                <span id="portfolioCategoryError" class="text-red-600 text-sm hidden">You can select up to 3 categories only.</span>
+            </div>
+        </div>
 
 
             <!-- Price -->
@@ -392,9 +406,9 @@
 
                 <div x-show="uploadOption === 'link'" class="transition">
                     <label for="imageLinkEdit" class="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
-                    <input type="text" name="imageLink" id="imageLinkEdit" value=""
+                    <input type="text" name="imageLink" id="imageLinkEdit" value="{{ $artwork->IMAGE_URL }}"
                            class="w-full px-4 py-2 border rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
-                           @input="imagePreview = $event.target.value">
+                           x-model="imagePreview" @input="imagePreview = $event.target.value">
                 </div>
 
                 <div x-show="uploadOption === 'file'" class="transition">
@@ -434,7 +448,7 @@
 
     <script>
 // Get elements
-    const artworkImage = document.getElementById('artworkImage');
+const artworkImage = document.getElementById('artworkImage');
     const imageModal = document.getElementById('imageModal');
     const modalImage = document.getElementById('modalImage');
     const closeModal = document.getElementById('closeModal');

@@ -4,46 +4,29 @@
 
 @section('content')
 <div class="flex-1 p-6">
-    <!-- Search and Filter Controls -->
-    <div class="flex items-center justify-between mb-4">
+    <!-- Search and Controls -->
+    <div class="flex items-center mb-4">
         <!-- Search Bar -->
-        <div class="relative w-2/3">
-            <input
-                type="text"
-                id="searchInput"
-                placeholder="Search for users..."
-                class="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none"
-            />
-            <i class="fas fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-        </div>
+        <input
+            type="text"
+            placeholder="Search for users..."
+            class="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+        />
 
-        <!-- Filters -->
-        <div class="flex items-center space-x-4">
-            <!-- Role Filter -->
-            <div>
-                <label for="roleFilter" class="text-gray-600 font-medium">Role:</label>
-                <select
-                    id="roleFilter"
-                    class="px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none text-gray-600"
-                >
-                    <option value="all" selected>All</option>
-                    <option value="artist">Artist</option>
-                    <option value="buyer">Buyer</option>
-                </select>
-            </div>
-
-            <!-- Status Filter -->
-            <div>
-                <label for="statusFilter" class="text-gray-600 font-medium">Status:</label>
-                <select
-                    id="statusFilter"
-                    class="px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none text-gray-600"
-                >
-                    <option value="all" selected>All</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                </select>
-            </div>
+        <!-- Controls -->
+        <div class="flex items-center space-x-3 ml-4">
+            <button class="text-gray-600 hover:text-indigo-600">
+                <i class="fas fa-cog"></i>
+            </button>
+            <button class="text-gray-600 hover:text-indigo-600">
+                <i class="fas fa-trash"></i>
+            </button>
+            <button class="text-gray-600 hover:text-indigo-600">
+                <i class="fas fa-exclamation-circle"></i>
+            </button>
+            <button class="text-gray-600 hover:text-indigo-600">
+                <i class="fas fa-ellipsis-h"></i>
+            </button>
         </div>
     </div>
 
@@ -141,36 +124,4 @@
         </div>
     </div>
 </div>
-
-<script>
-    const searchInput = document.getElementById('searchInput');
-    const roleFilter = document.getElementById('roleFilter');
-    const statusFilter = document.getElementById('statusFilter');
-    const rows = document.querySelectorAll('#userTableBody tr');
-
-    // Filter Logic
-    function filterTable() {
-        const searchText = searchInput.value.toLowerCase();
-        const role = roleFilter.value;
-        const status = statusFilter.value;
-
-        rows.forEach(row => {
-            const name = row.children[1].textContent.toLowerCase();
-            const email = row.children[1].querySelector('p.text-gray-500').textContent.toLowerCase();
-            const rowRole = row.dataset.role;
-            const rowStatus = row.dataset.status;
-
-            const matchesSearch = name.includes(searchText) || email.includes(searchText);
-            const matchesRole = role === 'all' || rowRole === role;
-            const matchesStatus = status === 'all' || rowStatus === status;
-
-            row.style.display = matchesSearch && matchesRole && matchesStatus ? '' : 'none';
-        });
-    }
-
-    searchInput.addEventListener('input', filterTable);
-    roleFilter.addEventListener('change', filterTable);
-    statusFilter.addEventListener('change', filterTable);
-</script>
-
 @endsection

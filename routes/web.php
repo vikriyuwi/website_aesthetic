@@ -327,3 +327,7 @@ Route::get('/admin/contact', function () {
 Route::get('/admin/contact/view/{id}', function ($id) {
     return view('admin.contact-us-view');
 })->name('admin.contact.view');
+
+Route::get('/update-order', function () {
+    return view('profile.update-order');
+})->name('update.order');
