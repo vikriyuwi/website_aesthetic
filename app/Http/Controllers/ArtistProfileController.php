@@ -195,7 +195,7 @@ class ArtistProfileController extends Controller
     {
         $hiring = ArtistHire::find($id);
         if($hiring == null) {
-            return redirect()->back()->withErrors(['message','Hiring f=not found']);
+            return redirect()->back()->withErrors(['message'=>'Hiring found found']);
         }
         
         return view('artists.hire-view', compact('hiring'));

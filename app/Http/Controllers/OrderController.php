@@ -140,4 +140,56 @@ class OrderController extends Controller
 
         return view('profile.order-history', compact('user','orders'));
     }
+
+    public function artistOrder()
+    {
+        $user = Auth::user();
+        $userId = $user->USER_ID;
+        $orders = Order::whereHas('OrderItems', function ($query) use ($userId) {
+            $query->whereHas('Art', function ($query) use ($userId) {
+                $query->where('USER_ID', $userId);
+            });
+        })->get();
+
+        // dd($orders);
+
+        $orderItems = OrderItem::whereHas('Art', function ($query) use ($userId) {
+            $query->where('USER_ID', $userId);
+        })->get();
+
+        // dd($orderItems);
+
+        return view('profile.update-order', compact('orderItems','orders'));
+    }
+
+    public function updateStatusOrder($id, Request $request)
+    {
+        $user = Auth::user();
+        $userId = $user->USER_ID;
+
+        $order = Order::find($id);
+
+        if($order == null) {
+            return redirect()->back()->withErrors(['message'=>'Order data not found']);
+        }
+
+        if($order->OrderItems->first()->Art->USER_ID != $userId) {
+            return redirect()->back()->withErrors(['message'=>'Order data is not yours']);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'STATUS' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator->all());
+        }
+
+        $order->STATUS = $request->STATUS;
+        $order->save();
+
+        $order = Order::find($id);
+
+        return redirect()->back()->with('status','Order #'.$order->ORDER_ID.' status has been updated to '.$order->status_text);
+    }
 }
