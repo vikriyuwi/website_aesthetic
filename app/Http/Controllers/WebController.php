@@ -111,7 +111,7 @@ class WebController extends Controller
     {
         $artwork = Art::find($id);
         $artwork->addView();
-        $moreArtWorks = Art::where('USER_ID',$artwork->USER_ID)->where('ART_ID', '!=', $artwork->ART_ID)->get();
+        $moreArtWorks = Art::where('USER_ID',$artwork->USER_ID)->where('ART_ID', '!=', $artwork->ART_ID)->limit(4)->get();
     
         if (!isset($artwork)) {
             abort(404, 'Artwork not found.');

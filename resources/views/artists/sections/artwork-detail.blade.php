@@ -181,7 +181,7 @@
                                 <i class="fas fa-pen"></i>
                                 <span>EDIT</span>
                             </button>
-                            <a href={{ route('artwork.destroy', ['artworkId' => $artwork->ART_ID]) }} class="border border-red-500 text-red-500 py-2 px-4 rounded-lg hover:bg-red-50 transition btn">
+                            <a href={{ route('artwork.destroy', ['artworkId' => $artwork->ART_ID]) }} class="border border-red-500 text-red-500 py-2 px-4 rounded-lg hover:bg-red-50 transition btn" onclick="return confirm('Are you sure you want to delete this art?');">
                                 <i class="fas fa-trash"></i>
                                 <span>DELETE</span>
                             </a>
@@ -298,7 +298,11 @@
                     Not For Sale
                     @endif
                 </p>
-                <p class="text-gray-500 text-sm">Oil</p>
+                <p class="text-gray-500 text-sm">
+                    @foreach($otherArtwork->ArtCategories as $category)
+                        {{ $otherArtwork->ArtCategories->map(fn($category) => $category->ArtCategoryMaster->DESCR)->implode(' | ') }}
+                    @endforeach
+                </p>
             </div>
         </a>
         @endforeach

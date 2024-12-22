@@ -59,12 +59,12 @@
                         <div class="text-sm">Profile Views</div>
                     </div>
                     <div class="bg-indigo-100 text-indigo-700 rounded-lg p-4 text-center">
-                        <div class="text-xl font-bold">1,250</div>
-                        <div class="text-sm">Likes</div>
+                        <div class="text-xl font-bold">{{ $user->Artist->MasterUser->total_art_like }}</div>
+                        <div class="text-sm">Project likes</div>
                     </div>
                     <div class="bg-indigo-100 text-indigo-700 rounded-lg p-4 text-center">
-                        <div class="text-xl font-bold">89</div>
-                        <div class="text-sm">Comments</div>
+                        <div class="text-xl font-bold">{{ $user->Artist->average_artist_rating }}</div>
+                        <div class="text-sm">Overall rating</div>
                     </div>
                 </div>
             </div>
@@ -134,7 +134,7 @@
                     <td class="py-3">{{ $item->Art->ART_TITLE }}</td>
                     <td class="py-3">
                         @foreach($item->Art->ArtCategories as $category)
-                            {{ $category->ArtCategoryMaster->DESCR }},
+                            {{ $item->Art->ArtCategories->map(fn($category) => $category->ArtCategoryMaster->DESCR)->implode(' | ') }}
                         @endforeach
                     </td>
                     <td class="py-3">{{ $item->created_at }}</td>
