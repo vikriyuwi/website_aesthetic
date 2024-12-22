@@ -20,6 +20,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FollowController;
+use App\Http\Controllers\ContactUsController;
 use App\Http\Middleware\Authorization;
 use App\Http\Middleware\Role;
 use App\Http\Middleware\ActiveBuyer;
@@ -202,6 +203,12 @@ Route::middleware([Authorization::class.':true'])->group(function() {
             Route::get('/login', function () {
                 return view('admin.login');
             })->name('login');
+
+            Route::prefix('contact-us')->name('contact.')->group(function() {
+                Route::get('/', [ContactUsController::class, 'index'])->name('all');
+                Route::get('/{id}', [ContactUsController::class, 'show'])->name('show');
+                Route::get('/{id}/update', [ContactUsController::class, 'update'])->name('update');
+            });
         });
     });
 });
@@ -318,15 +325,3 @@ Route::get('/blog-detail', [WebController::class, 'blogDetail'])->name('blog-det
 Route::get('/contact-us', [WebController::class, 'contactUs'])->name('contact-us');
 
 Route::get('/colection/detail', [WebController::class, 'collectionDetails'])->name('collection-details');
-
-Route::get('/admin/contact-us', function () {
-    return view('admin.contact-us'); 
-})->name('admin.contact.show');
-
-Route::get('/admin/contact', function () {
-    return view('admin.contact.show');
-})->name('admin.contact.index');
-
-Route::get('/admin/contact/view/{id}', function ($id) {
-    return view('admin.contact-us-view');
-})->name('admin.contact.view');
