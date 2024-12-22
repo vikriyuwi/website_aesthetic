@@ -114,6 +114,9 @@ Route::middleware([Authorization::class.':true'])->group(function() {
         // PROFILE
         Route::put('/artist/{artistId}/update/', [ArtistProfileController::class,'updateArtistProfile'])->name('artist.update');
 
+        Route::get('/artist/order', [OrderController::class, 'artistOrder'])->name('artist.order');
+        Route::put('/order/{id}/update', [OrderController::class, 'updateStatusOrder'])->name('order.update');
+
         // COLLECTION
         Route::prefix('collection')->name('collection.')->group(function () {
             Route::post('/add', [ArtistCollectionController::class, 'store'])->name('store');
@@ -327,7 +330,3 @@ Route::get('/admin/contact', function () {
 Route::get('/admin/contact/view/{id}', function ($id) {
     return view('admin.contact-us-view');
 })->name('admin.contact.view');
-
-Route::get('/update-order', function () {
-    return view('profile.update-order');
-})->name('update.order');

@@ -20,6 +20,13 @@ class CartController extends Controller
             abort(404,"Art not found");
         }
 
+        if($user->Carts->count() > 0) {
+            $prevCartUserId = $user->Carts[0]->Art->USER_ID;
+            if($prevCartUserId != $art->USER_ID) {
+                return redirect()->back()->withErrors(['You cannot add arts from different artist to the cart']);
+            }
+        }
+
         $user->Carts()->create([
             'ART_ID' => $art->ART_ID
         ]);

@@ -24,10 +24,26 @@ class Order extends Model
     public function getStatusTextAttribute()
     {
         $statuses = [
+            0 => 'CANCELED',
             1 => 'NEW',
             2 => 'PAID',
-            3 => 'IN DELIVERY',
-            4 => 'DELIVERED',
+            3 => 'PACKED',
+            4 => 'SHIPPED',
+            5 => 'DELIVERED',
+        ];
+
+        return $statuses[$this->STATUS] ?? 'UNKNOWN';
+    }
+
+    public function getStatusColorAttribute()
+    {
+        $statuses = [
+            0 => 'red',
+            1 => 'blue',
+            2 => 'purple',
+            3 => 'orange',
+            4 => 'pink',
+            5 => 'green',
         ];
 
         return $statuses[$this->STATUS] ?? 'UNKNOWN';

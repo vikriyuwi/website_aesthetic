@@ -68,7 +68,7 @@ class AddressController extends Controller
             return redirect()->back()->withError('status','Address not yours');
         }
 
-        return redirect()->route('order.my')->with('status','Address has been deleted!');
+        return redirect()->route('order.my')->with('status','Active address has been setted up!');
     }
 
     public function destroy($id) {
