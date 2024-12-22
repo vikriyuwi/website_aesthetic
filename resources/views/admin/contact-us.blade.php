@@ -48,48 +48,27 @@
 
             <tbody id="contactTableBody" class="divide-y divide-gray-200">
                 <!-- Dummy Data Row 1 -->
+                @foreach($messages as $message)
                 <tr class="hover:bg-indigo-50">
-                    <td class="px-6 py-4">1</td>
-                    <td class="px-6 py-4 font-semibold text-gray-800">Chantikka Riffka</td>
-                    <td class="px-6 py-4 text-gray-600">cacabuyer@email.com</td>
-                    <td class="px-6 py-4 text-gray-600">082456773435</td>
+                    <td class="px-6 py-4">#{{ $message->CONTACT_US_ID }}</td>
+                    <td class="px-6 py-4 font-semibold text-gray-800">{{ $message->FULLNAME }}</td>
+                    <td class="px-6 py-4 text-gray-600">{{ $message->EMAIL }}</td>
+                    <td class="px-6 py-4 text-gray-600">{{ $message->PHONE_NUMBER }}</td>
                     <td class="px-6 py-4 text-center">
-                        <a href="{{ route('admin.contact.view', ['id' => 1]) }}" class="px-3 py-1 bg-indigo-500 text-white rounded-md hover:bg-indigo-600">
+                        <a href="{{ route('admin.contact.show', ['id' => $message->CONTACT_US_ID]) }}" class="px-3 py-1 bg-indigo-500 text-white rounded-md hover:bg-indigo-600">
                             <i class="fas fa-eye mr-1"></i> View
                         </a>
                     </td>
                     <td class="px-6 py-4 text-center text-gray-600">
-                        <span>June 17, 2024</span><br>
-                        <span class="text-sm text-gray-500">10:30 AM</span>
+                        {{ $message->created_at }}
                     </td>
                     <td class="px-6 py-4 text-center space-x-2">
-                        <a href="#" class="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600">
-                            Contact
+                        <a href="{{ ROUTE('admin.contact.update',['id'=>$message->CONTACT_US_ID]) }}" class="px-3 py-1 bg-{{ $message->status_color }}-500 text-white rounded-md hover:bg-{{ $message->status_color }}-600">
+                            {{ $message->status_text }}
                         </a>
                     </td>
                 </tr>
-
-                <!-- Dummy Data Row 2 -->
-                <tr class="hover:bg-indigo-50">
-                    <td class="px-6 py-4">2</td>
-                    <td class="px-6 py-4 font-semibold text-gray-800">Cacaoo</td>
-                    <td class="px-6 py-4 text-gray-600">caca@email.com</td>
-                    <td class="px-6 py-4 text-gray-600">081245678876</td>
-                    <td class="px-6 py-4 text-center">
-                        <a href="{{ route('admin.contact.view', ['id' => 2]) }}" class="px-3 py-1 bg-indigo-500 text-white rounded-md hover:bg-indigo-600">
-                            <i class="fas fa-eye mr-1"></i> View
-                        </a>
-                    </td>
-                    <td class="px-6 py-4 text-center text-gray-600">
-                        <span>June 17, 2024</span><br>
-                        <span class="text-sm text-gray-500">11:00 AM</span>
-                    </td>
-                    <td class="px-6 py-4 text-center space-x-2">
-                        <a href="#" class="px-3 py-1 bg-green-500 text-white rounded-md hover:bg-green-600">
-                            Done
-                        </a>
-                    </td>
-                </tr>
+                @endforeach
             </tbody>
         </table>
     </div>
