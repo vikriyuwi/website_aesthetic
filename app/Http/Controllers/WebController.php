@@ -219,7 +219,7 @@ public function registerArtist(Request $request)
     $artist->LOCATION = $request->location;
     $artist->ROLE = $request->role;
     $artist->BIO = $request->bio;
-    $artist->ABOUT = $request->bio;
+    $artist->ABOUT = ' ';
     $artist->save();
 
     return redirect()->back()->with('status','success');

@@ -14,6 +14,7 @@ use App\Models\HireQuestionReply;
 use App\Models\ArtCategoryMaster;
 use App\Models\Post;
 use App\Models\ArtistRating;
+use App\Models\ArtistSkill;
 use App\Models\SkillMaster;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -46,7 +47,11 @@ class ArtistProfileController extends Controller
         $artCategoriesMaster = ArtCategoryMaster::all();
         $posts = Post::where('ARTIST_ID','=',$ARTIST_ID)->get();
         $hire = ArtistHire::where('ARTIST_ID','=',$ARTIST_ID)->first();
-        $skillsMaster = SkillMaster::all();
+
+        $excludedSkillIds = ArtistSkill::where('ARTIST_ID', $artist->ARTIST_ID)
+        ->pluck('SKILL_MASTER_ID');
+        $skillsMaster = SkillMaster::whereNotIn('SKILL_MASTER_ID', $excludedSkillIds)
+        ->get();
 
         if ($artist == null) {
             abort(404, 'Artist not found.');
@@ -59,6 +64,25 @@ class ArtistProfileController extends Controller
             }
             return view('artists.show', compact('artist','section','artistItSelf','portfolios','artWorks','artCategoriesMaster','posts', 'hire', 'skillsMaster', 'carts')); //ABOUT RENDER
         }
+    }
+
+    public function updateAboutMe(Request $request)
+    {
+        $user = Auth::user();
+        $artist = Artist::where('USER_ID',$user->USER_ID)->first();
+
+        $validator = Validator::make($request->all(), [
+            'ABOUT' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator->all());
+        }
+
+        $artist->ABOUT = $request->ABOUT;
+        $artist->save();
+
+        return redirect()->back();
     }
     
     public function showCollection($artistId, $ARTIST_COLLECTION_ID)
@@ -285,5 +309,39 @@ class ArtistProfileController extends Controller
         $reply->delete();
 
         return redirect()->back()->with('status','Reply "'.$reply->REPLY.'" has been deleted');
+    }
+
+    public function addSkill($id)
+    {
+        $user = Auth::user();
+        $skill = SkillMaster::find($id);
+
+        if($skill == null) {
+            return redirect()->back()->withErrors(['message'=>'Skill master data not found!']);
+        }
+
+        $user->Artist->ArtistSkills()->create([
+            'SKILL_MASTER_ID' => $skill->SKILL_MASTER_ID
+        ]);
+
+        return redirect()->back()->with('status', 'Success to add skill '.$skill->DESCR);
+    }
+
+    public function removeSkill($id)
+    {
+        $user = Auth::user();
+        $skill = ArtistSkill::find($id);
+
+        if($skill == null) {
+            return redirect()->back()->withErrors(['message'=>'Artist skill data not found!']);
+        }
+
+        if($skill->ARTIST_ID != $user->Artist->ARTIST_ID) {
+            return redirect()->back()->withErrors(['message'=>'Not allowed to delete other artist skill!']);
+        }
+
+        $skill->delete();
+
+        return redirect()->back()->with('status', 'Success to delete skill '.$skill->SkillMaster->DESCR);
     }
 }

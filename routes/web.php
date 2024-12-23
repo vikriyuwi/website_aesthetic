@@ -159,6 +159,13 @@ Route::middleware([Authorization::class.':true'])->group(function() {
 
         // INSIGHT
         Route::get('/insight-artist', [WebController::class, 'insightArtist'])->name('insight-artist');
+
+        Route::prefix('skill')->name('skill.')->group(function() {
+            Route::get('/{id}/add', [ArtistProfileController::class, 'addSkill'])->name('store');
+            Route::get('/{id}/remove', [ArtistProfileController::class, 'removeSkill'])->name('destroy');
+        });
+
+        Route::post('/aboutme/update', [ArtistProfileController::class, 'updateAboutMe'])->name('aboutme.update');
     });
 
     Route::middleware([AdminAuth::class])->group(function() {

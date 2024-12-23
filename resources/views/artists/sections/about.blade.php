@@ -17,33 +17,33 @@
                {{-- @if (Auth::check())
                     @if (Auth::user()->USER_ID == $artist->USER_ID) --}}
                 <!-- Pen Button -->
-                <button id="openEditModal" class="text-gray-600 hover:text-indigo-600 focus:outline-none">
-                    <i class="fas fa-pencil-alt text-lg"></i>
-                </button>
+                @if(Auth::user() != null)
+                    @if(Auth::user()->USER_ID == $artist->USER_ID)
+                    <button id="openEditModal" class="text-gray-600 hover:text-indigo-600 focus:outline-none">
+                        <i class="fas fa-pencil-alt text-lg"></i>
+                    </button>
+                    @endif
+                @endif
                    {{-- @endif
                 @endif --}}
             </div>
 
             <div class="text-gray-700">
-                {{ $artist->BIO }}
+                {{ $artist->ABOUT }}
             </div>
 
             <h2 class="mt-8 text-xl font-bold">Skills</h2>
             <div class="flex flex-wrap gap-2 mt-4">
-                <span class="bg-green-400 text-black-800 px-3 py-1 rounded-full border fill-green-400">Graphic
-                    Design</span>
-                <span class="bg-blue-500 text-black-800 px-3 py-1 rounded-full border fill-blue-700">Adobe
-                    Illustration</span>
-                <span class="bg-fuchsia-500 text-black-800 px-3 py-1 rounded-full border fill-fuchsia-500">Adobe
-                    Photoshop</span>
-                <span class="bg-yellow-300 text-black-800 px-3 py-1 rounded-full border fill-yellow-300">Logo
-                    Design</span>
+                @foreach($artist->ArtistSkills as $skill)
+                <span class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full border fill-indigo-100">Graphic
+                    {{ $skill->SkillMaster->DESCR }}</span>
+                @endforeach
             </div>
 
             <p class="mt-6 text-gray-700">
-                Aesthetic since October 2023
-                <i class="fas fa-check-circle text-green-500 ml-2"></i>
-                English
+                Aesthetic since {{ (new \DateTime($artist->created_at))->format('F Y') }}
+                {{-- <i class="fas fa-check-circle text-green-500 ml-2"></i>
+                English --}}
             </p>
         </div>
         <!-- Reviews Section -->
@@ -104,16 +104,19 @@
             </div>
 
     <!-- Edit About Me Modal -->
+    @if(Auth::user() != null)
+    @if(Auth::user()->USER_ID == $artist->USER_ID)
     <div id="editAboutMeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
         <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl">
             <h3 class="text-2xl font-semibold text-gray-800 mb-2">Edit About Me 📝</h3>
-            <form id="aboutMeForm" class="space-y-6">
+            <form id="aboutMeForm" action="{{ Route('aboutme.update') }}" method="POST" class="space-y-6">
                 <!-- Description -->
+                @csrf
                 <div>
                 <label for="aboutDescription" class="block text-gray-700 font-semibold mb-2">Description</label>
-                    <textarea id="aboutDescription" rows="5"
+                    <textarea id="aboutDescription" rows="5" name="ABOUT"
                         class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500"
-                        placeholder="Write about yourself..." maxlength="150"></textarea>
+                        placeholder="Write about yourself..." maxlength="150">{{ $artist->ABOUT }}</textarea>
                     <!-- Character Count -->
                     <div class="flex justify-between items-center mt-2 text-sm text-gray-500">
                         <span id="charCount">0 / 150</span>
@@ -122,10 +125,10 @@
                 </div>
 
             <!-- Skills Section -->
-            <div>
+                <div>
                 <label class="block text-gray-700 font-semibold mb-2">Skills</label>
                 <!-- Skills Grid -->
-                <div id="skillsContainer" class="grid grid-cols-2 gap-4">
+                {{-- <div id="skillsContainer" class="grid grid-cols-2 gap-4">
                     <label class="flex items-center space-x-2">
                         <input type="checkbox" value="Graphic Design" class="skillsCheckbox w-5 h-5">
                         <span>Graphic Design</span>
@@ -142,36 +145,31 @@
                         <input type="checkbox" value="Logo Design" class="skillsCheckbox w-5 h-5">
                         <span>Logo Design</span>
                     </label>
-                </div>
+                </div> --}}
                 <!-- Error Message -->
                 <p id="skillsError" class="text-red-600 text-sm mt-2 hidden">You can select up to 3 skills only.</p>
                     <!-- Display selected skills -->
                     <div id="selectedSkillsContainer" class="flex flex-wrap gap-2 mt-4">
-                        <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-lg text-sm">Graphic Design</span>
-                        <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-lg text-sm">Logo Design</span>
-                        <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-lg text-sm">Adobe Photoshop</span>
+                        @foreach($artist->ArtistSkills as $skill)
+                        <a href="{{ route('skill.destroy', ['id'=>$skill->ARTIST_SKILL_ID]) }}" class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-lg text-sm"><b>{{ $skill->SkillMaster->DESCR }} -</b></a>
+                        @endforeach
                     </div>
+                    @if($artist->ArtistSkills->count() < 3)
+                    <p class="mt-4 mb-2">Click on skill below to add to your skill list</p>
+                    <div  class="flex flex-wrap gap-2">
+                        @foreach($skillsMaster as $skill)
+                        <a href="{{ route('skill.store', ['id'=>$skill->SKILL_MASTER_ID]) }}" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-lg text-sm">{{ $skill->DESCR }} +</a>
+                        @endforeach
+                    </div>
+                    @else
+                    <p class="mt-4 mb-2">You can only have maximum 3 skills</p>
+                    @endif
                 </div>
-
-                <!-- Additional Info Section -->
-                <div class="grid grid-cols-2 gap-6">
-                    <!-- Aesthetic Since (Non-editable) -->
-                    <div>
-                        <label for="sinceDate" class="block text-gray-700 font-semibold mb-2">Aesthetic Since</label>
-                        <input type="text" id="sinceDate" value="October 2023"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-500 cursor-not-allowed"
-                            readonly>
-                    </div>
-
-                 <!-- Language Dropdown -->
-                 <div>
-                        <label for="language" class="block text-gray-700 font-semibold mb-2">Language</label>
-                        <select id="language"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none transition">
-                            <option value="English" selected>English</option>
-                            <option value="Indonesian">Indonesian</option>
-                        </select>
-                    </div>
+                <div>
+                    <label for="sinceDate" class="block text-gray-700 font-semibold mb-2">Aesthetic Since</label>
+                    <input type="text" id="sinceDate" value="{{ (new \DateTime($artist->created_at))->format('F Y') }}"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-500 cursor-not-allowed"
+                        readonly>
                 </div>
 
                 <!-- Buttons -->
@@ -182,6 +180,15 @@
             </form>
         </div>
     </div>
+    @endif
+    @endif
+
+    @if(session('status'))
+    <script>
+        const editModal = document.getElementById('editAboutMeModal');
+        editModal.classList.remove('hidden');
+    </script>
+    @endif
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
