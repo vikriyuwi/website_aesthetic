@@ -74,6 +74,7 @@
 
         <!-- Input Form for Comments -->
         @if(Auth::user() != null)
+        @if($hiring->Artist->MasterUser->USER_ID != Auth::user()->USER_ID)
         <form action="{{ route('hiring.storeQuestion',['id'=>$hiring->ARTIST_HIRE_ID]) }}" method="post">
             @method('PUT')
             @csrf
@@ -90,6 +91,7 @@
                 </div>
             </div>
         </form>
+        @endif
         @endif
     
     <!-- Comment Threads -->
@@ -112,7 +114,25 @@
                     <p class="text-gray-600 mt-2">{{ $question->QUESTION }}</p>
     
                     <!-- Reply Button -->
-                    <button class="reply-button text-indigo-600 mt-2 hover:underline text-sm" data-id="{{ $question->HIRE_QUESTION_ID }}" data-question="{{ $question->QUESTION }}">Reply</button>
+                    <button onclick="toggleReplyForm({{ $question->HIRE_QUESTION_ID }})" class="text-indigo-600 mt-2 hover:underline text-sm">
+                        Reply
+                    </button>
+
+                    <!-- Reply Form (Hidden by Default) -->
+                    <div id="replyForm{{ $question->HIRE_QUESTION_ID }}" class="hidden mt-4">
+                        <form id="replyForm" class="space-y-6" action="{{ route('hiring.storeReply', ['id' => $question->HIRE_QUESTION_ID]) }}" method="post">
+                            @csrf
+                            @method('PUT')
+                            <textarea placeholder="Write your reply..." rows="2" name="REPLY"
+                                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500"></textarea>
+                            <div class="flex justify-end mt-2">
+                                <button type="submit" 
+                                        class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+                                    Post Reply
+                                </button>
+                            </div>
+                        </form>
+                    </div>
     
                     <!-- Nested Reply -->
                     @if($question->HireQuestionReplies->count() > 0)
@@ -163,7 +183,7 @@
                 <div class="flex items-center p-4 text-sm text-gray-800 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600" role="alert">
                     <div>
                       <span class="font-medium">Comment</span><br>
-                      <span id="questionToReply">asdfasdf</span>
+                      <span id="questionToReply"></span>
                     </div>
                 </div>
                 <div>
@@ -290,6 +310,20 @@
     @endif
 
     <script>
+
+    function toggleReplyForm(id) {
+        const replyForm = document.getElementById(`replyForm${id}`);
+        if (replyForm.classList.contains('hidden')) {
+            replyForm.classList.remove('hidden');
+        } else {
+            replyForm.classList.add('hidden');
+        }
+    }
+
+    // Simulate posting a reply
+    function submitReply() {
+        alert('Your reply has been posted!');
+    }
 
     var replyButtons = document.querySelectorAll('.reply-button');
     console.log(replyButtons)
