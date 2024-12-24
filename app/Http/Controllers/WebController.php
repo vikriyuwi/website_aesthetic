@@ -203,7 +203,7 @@ public function joinArtist()
 public function registerArtist(Request $request)
 {
     $validator = Validator::make($request->all(), [
-        'location' => 'required',
+        // 'location' => 'required',
         'role' => 'required',
         'bio' => 'required',
     ]);
@@ -216,7 +216,7 @@ public function registerArtist(Request $request)
 
     $artist = new Artist();
     $artist->USER_ID = $user->USER_ID;
-    $artist->LOCATION = $request->location;
+    $artist->LOCATION = 'Indonesia';
     $artist->ROLE = $request->role;
     $artist->BIO = $request->bio;
     $artist->ABOUT = ' ';

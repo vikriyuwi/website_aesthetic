@@ -215,7 +215,7 @@
                     <label for="portfolio" class="block text-gray-700 font-medium">Portfolio Link</label>
                     <input type="url" id="portfolio" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary" placeholder="Portfolio or Social Media Link">
                 </div> --}}
-                <div>
+                {{-- <div>
                     <label for="location" class="block text-gray-700 font-medium">Location <Style></Style></label>
                     <select id="location" name="location"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600"
@@ -225,7 +225,7 @@
                         <option value="Russia">Russia</option>
                         <option value="Singapore">Singapore</option>
                     </select>
-                </div>
+                </div> --}}
                 <div>
                     <label for="role" class="block text-gray-700 font-medium">Headline <Style></Style></label>
                     <select id="headline" name="role"
