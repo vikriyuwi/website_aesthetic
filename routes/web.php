@@ -4,6 +4,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ListArtistController;
 use App\Http\Controllers\BuyerController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\JoinArtistRejected;
 use App\Http\Controllers\WebController;
 use App\Http\Controllers\ArtGalleryController;
 use App\Http\Controllers\ArtistArtWorkController;
@@ -178,7 +180,8 @@ Route::middleware([Authorization::class.':true'])->group(function() {
             Route::get('/artist/{id}/active-toggle', [AdminController::class, 'activateArtist'])->name('artist.activate');
 
             Route::get('/artist/join-request', [AdminController::class, 'joinRequest'])->name('artist.joinRequest');
-            Route::get('/artist/join-request/{id}/active-toggle', [AdminController::class, 'approveArtist'])->name('artist.joinRequest.approve');
+            Route::get('/artist/join-request/{id}/approve', [AdminController::class, 'approveArtist'])->name('artist.joinRequest.approve');
+            Route::get('/artist/join-request/{id}/reject', [AdminController::class, 'rejectArtist'])->name('artist.joinRequest.reject');
 
             Route::get('/artist', [AdminController::class, 'artist'])->name('artist');
             Route::get('/artist/{id}/active-toggle', [AdminController::class, 'activateArtist'])->name('artist.activate');

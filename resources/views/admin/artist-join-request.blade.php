@@ -63,8 +63,11 @@
                     </td>
                     <td class="px-6 py-4 text-gray-500">{{ $artist->MasterUser->Buyer->PHONE_NUMBER }}</td>
                     <td class="px-6 py-4 space-x-2">
-                        <a href="{{ route('admin.artist.joinRequest.approve',['id'=>$artist->ARTIST_ID]) }}" class="px-3 py-1 text-white rounded-md bg-green-500 hover:bg-green-600">
-                            Approve Account
+                        <a href="{{ route('admin.artist.joinRequest.approve',['id'=>$artist->ARTIST_ID]) }}" class="px-3 py-1 text-white rounded-md bg-green-500 hover:bg-green-600" onclick="return confirm('Are you sure you want to approve the application?');">
+                            Approve
+                        </a>
+                        <a href="{{ route('admin.artist.joinRequest.reject',['id'=>$artist->ARTIST_ID]) }}" class="px-3 py-1 text-white rounded-md bg-red-500 hover:bg-red-600" onclick="return confirm('Are you sure you want to reject the application?');">
+                            Reject
                         </a>
                     </td>
                 </tr>

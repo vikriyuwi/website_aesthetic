@@ -16,6 +16,14 @@ use App\Models\SkillMaster;
 use App\Models\ArtistReport;
 use App\Models\Blog;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ActiveArtist;
+use App\Mail\DeactiveArtist;
+use App\Mail\ActiveBuyer;
+use App\Mail\DeactiveBuyer;
+use App\Mail\JoinArtistApprove;
+use App\Mail\JoinArtistRejected;
+
 
 class AdminController extends Controller
 {
@@ -46,9 +54,11 @@ class AdminController extends Controller
         $result = "";
         $buyer = Buyer::find($id);
         if ($buyer->isActive()) {
+            Mail::to($buyer->MasterUser->EMAIL)->send(new DeactiveBuyer($buyer));
             $buyer->IS_ACTIVE = 0;
             $result = "deactivated";
         } else {
+            Mail::to($buyer->MasterUser->EMAIL)->send(new ActiveBuyer($buyer));
             $buyer->IS_ACTIVE = 1;
             $result = "activated";
         }
@@ -58,7 +68,9 @@ class AdminController extends Controller
 
     public function artist()
     {
-        $artists = Artist::all();
+        $artists = Artist::whereHas('MasterUser', function ($query) {
+            $query->where('USER_LEVEL', 2);
+        })->get();;
         return view('admin.artists', compact('artists'));
     }
 
@@ -68,12 +80,12 @@ class AdminController extends Controller
         $artist = Artist::find($id);
         $user = MasterUser::find($artist->USER_ID);
         if ($artist->isActive()) {
+            Mail::to($artist->MasterUser->EMAIL)->send(new DeactiveArtist($artist));
             $artist->IS_ACTIVE = 0;
-            $user->USER_LEVEL = 1;
             $result = "deactivated";
         } else {
+            Mail::to($artist->MasterUser->EMAIL)->send(new ActiveArtist($artist));
             $artist->IS_ACTIVE = 1;
-            $user->USER_LEVEL = 2;
             $result = "activated";
         }
         $artist->save();
@@ -149,16 +161,41 @@ class AdminController extends Controller
 
     public function joinRequest()
     {
-        $artists = Artist::where('IS_ACTIVE',0)->get();
+        $artists = Artist::where('IS_ACTIVE', 0)
+        ->whereHas('MasterUser', function ($query) {
+            $query->where('USER_LEVEL', 1);
+        })
+        ->get();
         return view('admin.artist-join-request', compact('artists'));
     }
 
     public function approveArtist($id)
     {
         $artist = Artist::find($id);
+
+        if($artist->count() < 1) {
+            return redirect()->back()->withErrors(['message'=>'Join artist application not found!']);
+        }
+
+        $user = MasterUser::find($artist->USER_ID);
         $artist->IS_ACTIVE = 1;
+        $user->USER_LEVEL = 2;
         $artist->save();
+        $user->save();
+        Mail::to($artist->MasterUser->EMAIL)->send(new JoinArtistApprove($artist));
         return redirect()->back()->with('status','Artist '.$artist->MasterUser->Buyer->FULLNAME.' is approved');
+    }
+
+    public function rejectArtist($id)
+    {
+        $artist = Artist::find($id);
+        if($artist->count() < 1) {
+            return redirect()->back()->withErrors(['message'=>'Join artist application not found!']);
+        }
+
+        $artist->delete();
+        Mail::to($artist->MasterUser->EMAIL)->send(new JoinArtistRejected($artist));
+        return redirect()->back()->with('status','Artist '.$artist->MasterUser->Buyer->FULLNAME.' is rejected');
     }
 
     public function artistReport()
