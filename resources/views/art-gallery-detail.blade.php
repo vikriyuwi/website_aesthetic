@@ -8,6 +8,11 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
 </head>
 <body class="bg-white text-black font-sans">
+  @if(Auth::Check())
+    @include('layouts.navbar-login')
+    @else
+    @include('layouts.navbar')
+  @endif
   <div class="container mx-auto p-6">
     <!-- Back Button with Arrow Icon -->
     <a href="javascript:history.back()" 

@@ -32,7 +32,11 @@
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
-
+@if(Auth::Check())
+    @include('layouts.navbar-login')
+@else
+    @include('layouts.navbar')
+@endif
 <!-- Art Gallery Section -->
 <div class="gallery-section mt-12">
     <div class="gallery-title text-center text-3xl font-bold text-gray-800 mb-6">
