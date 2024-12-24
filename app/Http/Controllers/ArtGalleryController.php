@@ -13,13 +13,25 @@ class ArtGalleryController extends Controller
 {
     public function index()
     {
+        $carts = null;
+
+        if(Auth::user() != null) {
+            $carts = Auth::user()->Carts;
+        }
+
         $portfolios = Art::where('IS_SALE',false)->get();
 
-        return view('art-gallery',compact('portfolios'));
+        return view('art-gallery',compact('portfolios','carts'));
     }
 
     public function show($id)
     {
+        $carts = null;
+
+        if(Auth::user() != null) {
+            $carts = Auth::user()->Carts;
+        }
+
         $portfolio = Art::find($id);
 
         $portfolio->addView();
@@ -30,7 +42,7 @@ class ArtGalleryController extends Controller
             abort(404);
         }
 
-        return view('art-gallery-detail',compact('portfolio','morePortfolios'));
+        return view('art-gallery-detail',compact('portfolio','morePortfolios', 'carts'));
     }
 
 }
