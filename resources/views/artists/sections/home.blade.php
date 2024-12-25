@@ -16,8 +16,10 @@
         </div>
         <div class="grid grid-cols-3 gap-4 mt-4">
             @foreach($artWorks->take(3) as $artWork)
-            <img src="{{ Str::startsWith($artWork->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($artWork->ArtImages()->first()->IMAGE_PATH) : $artWork->ArtImages()->first()->IMAGE_PATH }}"
-            alt="{{ $artWork->ART_TITLE }}" class="rounded-lg object-cover">
+            <a href="{{ route('artwork.show', $artWork->ART_ID) }}">
+                <img src="{{ Str::startsWith($artWork->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($artWork->ArtImages()->first()->IMAGE_PATH) : $artWork->ArtImages()->first()->IMAGE_PATH }}"
+                alt="{{ $artWork->ART_TITLE }}" class="rounded-lg object-cover">
+            </a>
             @endforeach
         </div>
     </div>
@@ -30,8 +32,10 @@
         </div>
         <div class="grid grid-cols-3 gap-4 mt-4">
             @foreach($portfolios->take(3) as $portfolio)
-            <img src="{{ Str::startsWith($portfolio->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($portfolio->ArtImages()->first()->IMAGE_PATH) : $portfolio->ArtImages()->first()->IMAGE_PATH }}"
-            alt="{{ $portfolio->ART_TITLE }}" class="rounded-lg object-cover">
+            <a href="{{ route('artGallery.show', $portfolio->ART_ID) }}">
+                <img src="{{ Str::startsWith($portfolio->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($portfolio->ArtImages()->first()->IMAGE_PATH) : $portfolio->ArtImages()->first()->IMAGE_PATH }}"
+                alt="{{ $portfolio->ART_TITLE }}" class="rounded-lg object-cover">
+            </a>
             @endforeach
         </div>
     </div>

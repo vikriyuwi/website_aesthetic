@@ -107,40 +107,39 @@
         <div id="container-art-gallery" class="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Example Card 1 -->
             @foreach($arts as $art)
-            <div class="card art-gallery-card bg-white rounded-lg shadow-md hover:shadow-lg transform transition-transform duration-300 hover:-translate-y-1" data-time="{{ $art->created_at }}" data-like="{{ $art->ArtLikes->count() }}" data-keywords="
-                {{ $art->ART_TITLE }}
-                @foreach($art->ArtCategories as $category)
-                    {{ $art->ArtCategories->map(fn($category) => $category->ArtCategoryMaster->DESCR)->implode(' ') }}
-                @endforeach
-             ">
-                <img src="{{ Str::startsWith($art->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($art->ArtImages()->first()->IMAGE_PATH) : $art->ArtImages()->first()->IMAGE_PATH }}" alt="Night Kingdom of Fantasy" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h3 class="text-lg font-bold text-gray-900">{{ $art->ART_TITLE }}</h3>
-                    <p class="text-sm text-gray-500">{{ $art->MasterUser->Buyer->FULLNAME }}</p>
-                    <div class="flex justify-between items-center mt-2 text-gray-500 text-sm">
-                        <div class="flex items-center space-x-1">
-                            @if(Auth::user() != null)
-                            <a href="{{ route('artwork.like',['id'=>$art->ART_ID]) }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="@if($art->isLiked()) currentColor @else none @endif" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-pink-500">
+                <div onclick="window.location.href='@if($art->IS_SALE == 0) {{ route('artGallery.show', $art->ART_ID) }} @else {{ route('artwork.show', $art->ART_ID) }} @endif'" class="card art-gallery-card bg-white rounded-lg shadow-md hover:shadow-lg transform transition-transform duration-300 hover:-translate-y-1" data-time="{{ $art->created_at }}" data-like="{{ $art->ArtLikes->count() }}" data-keywords="
+                    {{ $art->ART_TITLE }}
+                    @foreach($art->ArtCategories as $category)
+                        {{ $art->ArtCategories->map(fn($category) => $category->ArtCategoryMaster->DESCR)->implode(' ') }}
+                    @endforeach">
+                    <img src="{{ Str::startsWith($art->ArtImages()->first()->IMAGE_PATH, 'images/art/') ? asset($art->ArtImages()->first()->IMAGE_PATH) : $art->ArtImages()->first()->IMAGE_PATH }}" alt="Night Kingdom of Fantasy" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-lg font-bold text-gray-900">{{ $art->ART_TITLE }}</h3>
+                        <p class="text-sm text-gray-500">{{ $art->MasterUser->Buyer->FULLNAME }}</p>
+                        <div class="flex justify-between items-center mt-2 text-gray-500 text-sm">
+                            <div class="flex items-center space-x-1">
+                                @if(Auth::user() != null)
+                                <a href="{{ route('artwork.like',['id'=>$art->ART_ID]) }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="@if($art->isLiked()) currentColor @else none @endif" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-pink-500">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                                </svg>
+                                </a>
+                                @else
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-pink-500">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                            </svg>
-                            </a>
-                            @else
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-pink-500">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                            </svg>
-                            @endif
-                            <span>{{ $art->ArtLikes->count() }}</span>
-                        </div>
-                        <div class="flex items-center space-x-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-                            </svg>
-                            <span>{{ $art->VIEW }}</span>
+                                </svg>
+                                @endif
+                                <span>{{ $art->ArtLikes->count() }}</span>
+                            </div>
+                            <div class="flex items-center space-x-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                                </svg>
+                                <span>{{ $art->VIEW }}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
             @endforeach
         </div>
 
