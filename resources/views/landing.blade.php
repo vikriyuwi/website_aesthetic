@@ -182,45 +182,30 @@
    <div class="container mx-auto">
        <div class="flex flex-wrap md:flex-nowrap space-y-6 md:space-y-0 md:space-x-12">
            <!-- Community Board Section -->
-           <div class="w-full md:w-2/3">
-               <h2 class="text-3xl font-bold text-indigo-800 mb-6">Join Our Community Board ~ (COMING SOON!!!)</h2>
+           <a href="{{ route('blog.preview',['slug'=>$latestBlog->SLUG]) }}" class="w-full md:w-2/3">
+               <h2 class="text-3xl font-bold text-indigo-800 mb-6">{{ $latestBlog->TITLE }}</h2>
                <p class="text-gray-600 mb-6">
-                   Connect, collaborate, and create on our Community Board—a vibrant space for artists to ask questions, exchange ideas, seek collaborations, and share their artistic journeys with a community that shares their passion.
+                {{ \Illuminate\Support\Str::limit($latestBlog->CONTENT, 128) }}
                </p>
-               <img src="images/Assets/Homepage & Explore/Interested to be a designer.jpeg" alt="Community Board" class="w-full h-56 object-cover rounded-xl shadow-lg mb-6 transform hover:scale-105 transition">
-           </div>
+               <img src="{{ asset($latestBlog->IMAGE_PATH) }}" alt="{{ $latestBlog->TITLE }}" class="w-full h-56 object-cover rounded-xl shadow-lg mb-6 transform hover:scale-105 transition">
+            </a>
            <!-- Separator Line -->
            <div class="hidden md:block w-px bg-gray-300"></div>
            <!-- Tips, Trends, and Guides Section -->
            <div class="w-full md:w-1/3">
                <h2 class="text-2xl font-bold text-indigo-800 mb-6">Tips, Trends, and Guides</h2>
                <div class="space-y-6">
-                   <!-- Tip 1 -->
-                   <div class="flex items-center">
-                       <img src="images/Assets/Gallery/12.jpg" alt="Tip 1" class="w-20 h-20 object-cover rounded-xl shadow-lg mr-6 transform hover:scale-105 transition">
+                   @foreach($blogs as $blog)
+                   <a href="{{ route('blog.preview',['slug'=>$blog->SLUG]) }}"  class="flex items-center">
+                       <img src="{{ asset($blog->IMAGE_PATH) }}" alt="{{ $blog->TITLE }}" class="w-20 h-20 object-cover rounded-xl shadow-lg mr-6 transform hover:scale-105 transition">
                        <div>
-                           <h3 class="text-gray-800 font-semibold mb-1">5 helpful tips to make good illustrations</h3>
-                           <p class="text-gray-500 text-sm">2 weeks ago | Langa</p>
+                           <h3 class="text-gray-800 font-semibold mb-1">{{ $latestBlog->TITLE }}</h3>
+                           <p class="text-gray-500 text-sm">{{ $blog->created_at->diffForHumans() }}</p>
                        </div>
-                   </div>
-                   <!-- Tip 2 -->
-                   <div class="flex items-center">
-                       <img src="images/Assets/Gallery/7.jpg" alt="Tip 2" class="w-20 h-20 object-cover rounded-xl shadow-lg mr-6 transform hover:scale-105 transition">
-                       <div>
-                           <h3 class="text-gray-800 font-semibold mb-1">10 simple illustration examples</h3>
-                           <p class="text-gray-500 text-sm">2 months ago | Langa</p>
-                       </div>
-                   </div>
-                   <!-- Tip 3 -->
-                   <div class="flex items-center">
-                       <img src="images/Assets/Gallery/1.jpg" alt="Tip 3" class="w-20 h-20 object-cover rounded-xl shadow-lg mr-6 transform hover:scale-105 transition">
-                       <div>
-                           <h3 class="text-gray-800 font-semibold mb-1">How to make a simple logo brand</h3>
-                           <p class="text-gray-500 text-sm">3 months ago | Langa</p>
-                       </div>
-                   </div>
+                    </a>
+                   @endforeach
                </div>
-               <a href="#" class="text-indigo-600 font-semibold hover:underline mt-8 block">Take Me to the Blog →</a>
+               <a href="{{ route('blog.all') }}" class="text-indigo-600 font-semibold hover:underline mt-8 block">Take Me to the Blog →</a>
            </div>
        </div>
    </div>

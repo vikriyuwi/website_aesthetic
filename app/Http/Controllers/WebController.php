@@ -76,7 +76,11 @@ class WebController extends Controller
         if(Auth::user() != null) {
             $carts = Auth::user()->Carts;
         }
-        return view('landing', compact('carts'));
+
+        $latestBlog = Blog::orderBy('created_at','DESC')->first();
+        $blogs = Blog::where('BLOG_ID','!=',$latestBlog->BLOG_ID)->limit(3)->get();
+
+        return view('landing', compact('carts','latestBlog','blogs'));
     }
 
     public function landing2(Request $request)
@@ -245,7 +249,7 @@ public function insightArtist()
 
     public function blogPreview($slug)
     {
-        $blogs = Blog::all();
+        $blogs = Blog::orderBy('created_at','DESC')->limit(4)->get();
         $blog = Blog::where('SLUG',$slug)->first();
 
         $blog->VIEW = $blog->VIEW + 1;
