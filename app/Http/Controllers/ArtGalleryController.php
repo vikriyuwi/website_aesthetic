@@ -36,13 +36,20 @@ class ArtGalleryController extends Controller
 
         $portfolio->addView();
 
+        $role = $portfolio->MasterUser->Artist->ROLE;
+
+        $artistRecommendations = Artist::where('ROLE', $role)
+        ->where('USER_ID', '!=', $portfolio->MasterUser->USER_ID)
+        ->limit(4) // Exclude the current artist
+        ->get();
+
         $morePortfolios = Art::where('USER_ID',$portfolio->USER_ID)->where('IS_SALE',false)->where('ART_ID', '!=', $portfolio->ART_ID)->limit(4)->get();
 
         if ($portfolio == null) {
             abort(404);
         }
 
-        return view('art-gallery-detail',compact('portfolio','morePortfolios', 'carts'));
+        return view('art-gallery-detail',compact('portfolio','morePortfolios', 'carts', 'artistRecommendations'));
     }
 
 }

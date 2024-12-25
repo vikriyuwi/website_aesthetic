@@ -233,60 +233,30 @@
 </div>
 
 <!-- Suggested Artists -->
+@if($artistRecommendations->count() > 0)
 <div class="w-full mt-8">
     <h2 class="text-xl font-bold text-black">Suggested Artists</h2>
     <div class="grid grid-cols-2 gap-4 mt-4">
         
         <!-- Artist 1 -->
-        <div class="flex flex-col items-center">
-            <!-- Name and More Button -->
-            <div class="flex justify-between w-full px-2 mb-2">
-                <p class="text-black font-bold">Sosaku</p>
-            </div>
-            <!-- Image Border -->
-            <div class="relative w-full">
-                <img src="/images/assets/1.jpg" alt="Sosaku Artwork" class="w-full h-40 object-cover rounded-lg">
-            </div>
-        </div>
-
-        <!-- Artist 2 -->
-        <div class="flex flex-col items-center">
-            <!-- Name and More Button -->
-            <div class="flex justify-between w-full px-2 mb-2">
-                <p class="text-black font-bold">Lixi</p>
-            </div>
-            <!-- Image Border -->
-            <div class="relative w-full">
-                <img src="/images/melody.webp" alt="Li Shenshun Artwork" class="w-full h-40 object-cover rounded-lg">
-            </div>
-        </div>
-
-        <!-- Artist 3 -->
-        <div class="flex flex-col items-center">
-            <!-- Name and More Button -->
-            <div class="flex justify-between w-full px-2 mb-2">
-                <p class="text-black font-bold">Alex B.</p>
-            </div>
-            <!-- Image Border -->
-            <div class="relative w-full">
-                <img src="/images/powerpuff.jpg" alt="Alex B. Artwork" class="w-full h-40 object-cover rounded-lg">
-            </div>
-        </div>
-
-        <!-- Artist 4 -->
-        <div class="flex flex-col items-center">
-            <!-- Name and More Button -->
-            <div class="flex justify-between w-full px-2 mb-2">
-                <p class="text-black font-bold">Emily C.</p>
-            </div>
-            <!-- Image Border -->
-            <div class="relative w-full">
-                <img src="/images/powerpuff2.jpg" alt="Emily C. Artwork" class="w-full h-40 object-cover rounded-lg">
-            </div>
-        </div>
+        @foreach($artistRecommendations as $artist)
+        <a href="{{ route('artist.show', ['id'=>$artist->ARTIST_ID,'section'=>'home']) }}">
+          <div class="flex flex-col items-center">
+              <!-- Name and More Button -->
+              <div class="flex justify-between w-full px-2 mb-2">
+                  <p class="text-black font-bold">{{ $artist->MasterUser->Buyer->FULLNAME }}</p>
+              </div>
+              <!-- Image Border -->
+              <div class="relative w-full">
+                  <img src="{{ $artist->MasterUser->Buyer->PROFILE_IMAGE_URL != null ? asset($artist->MasterUser->Buyer->PROFILE_IMAGE_URL) : "https://placehold.co/100x100"}}" alt="Sosaku Artwork" class="w-full h-40 object-cover rounded-lg">
+              </div>
+          </div>
+        </a>
+        @endforeach
       </div>
     </div>
-  </div>
+</div>
+@endif
 
   <!-- Edit Portfolio Modal -->
 <div id="editPortfolioModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
