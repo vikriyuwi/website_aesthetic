@@ -21,17 +21,19 @@
                   <p class="text-gray-500 text-sm">{{ $following->Followed->USERNAME }}</p>
                 </div>
               </div>
-              @if($following->Followed->Artist)
-                @if($following->Followed->USER_ID != Auth::user()->USER_ID)
-                  @if(Auth::user()->isFollowing($following->Followed->USER_ID))
-                  <button onclick="window.location.href='{{ route('unfollow', ['userId' => $following->Followed->USER_ID]) }}'" class="bg-gray-600 text-white px-4 py-2 rounded-full shadow hover:bg-gray-700 transition duration-200">
-                    Followed
-                  </button>
-                  @else
-                  <button onclick="window.location.href='{{ route('follow', ['userId' => $following->Followed->USER_ID]) }}'" class="bg-indigo-600 text-white px-4 py-2 rounded-full shadow hover:bg-indigo-700 transition duration-200">
-                    Follow
-                  </button>
-                  @endif
+              @if(Auth::user() != null)
+                @if($following->Followed->Artist)
+                    @if($following->Followed->USER_ID != Auth::user()->USER_ID)
+                        @if(Auth::user()->isFollowing($following->Followed->USER_ID))
+                        <button onclick="window.location.href='{{ route('unfollow', ['userId' => $following->Followed->USER_ID]) }}'" class="bg-gray-600 text-white px-4 py-2 rounded-full shadow hover:bg-gray-700 transition duration-200">
+                            Followed
+                        </button>
+                        @else
+                        <button onclick="window.location.href='{{ route('follow', ['userId' => $following->Followed->USER_ID]) }}'" class="bg-indigo-600 text-white px-4 py-2 rounded-full shadow hover:bg-indigo-700 transition duration-200">
+                            Follow
+                        </button>
+                        @endif
+                    @endif
                 @endif
               @endif
             </div>

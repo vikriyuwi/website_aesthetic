@@ -242,12 +242,12 @@
                                 <span class="text-gray-800">{{ $artist->MasterUser->total_art_like }}</span>
                             </div>
                             <div class="flex justify-between">
-                                <a href="{{ route('follower') }}" class="text-gray-600 hover:underline">Followers</a>
-                                <a href="{{ route('follower') }}" class="text-gray-800">{{ $artist->MasterUser->Followers->count() }}</a>
+                                <a href="{{ route('artist.viewfollower',['id'=>$artist->MasterUser->USER_ID]) }}" class="text-gray-600 hover:underline">Followers</a>
+                                <a href="{{ route('artist.viewfollower',['id'=>$artist->MasterUser->USER_ID]) }}" class="text-gray-800">{{ $artist->MasterUser->Followers->count() }}</a>
                             </div>
                             <div class="flex justify-between">
-                                <a href="{{ route('following') }}" class="text-gray-600 hover:underline">Following</a>
-                                <a href="{{ route('following') }}" class="text-gray-800">{{ $artist->MasterUser->Followings->count() }}</a>
+                                <a href="{{ route('artist.viewfollowing',['id'=>$artist->MasterUser->USER_ID]) }}" class="text-gray-600 hover:underline">Following</a>
+                                <a href="{{ route('artist.viewfollowing',['id'=>$artist->MasterUser->USER_ID]) }}" class="text-gray-800">{{ $artist->MasterUser->Followings->count() }}</a>
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-gray-600">Artist Overall Rating</span>

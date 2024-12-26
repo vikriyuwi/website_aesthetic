@@ -180,6 +180,28 @@ class WebController extends Controller
         return view('artists.following-sidebar',compact('followings'));
     }
 
+    public function artistfollowers($id)
+    {
+        $user = MasterUser::find($id);
+        if($user == null) {
+            return redirect()->back()->withErrors(['User not found']);
+        }
+        $followers = $user->Followers;
+
+        // dd($followers);
+        return view('artists.followers', compact('followers'));
+    }
+
+    public function artistfollowing($id)
+    {
+        $user = MasterUser::find($id);
+        if($user == null) {
+            return redirect()->back()->withErrors(['User not found']);
+        }
+        $followings = $user->Followings;
+        return view('artists.following',compact('followings'));
+    }
+
 public function cartProfile()
 {
     $carts = Auth::user()->Carts;
