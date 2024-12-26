@@ -80,7 +80,7 @@
     <div class="container mx-auto px-6">
       <!-- Job Count and Filters -->
       <div class="flex justify-between items-center mb-6">
-          <h2 class="text-2xl font-bold text-gray-800">10,000+ Assets</h2>
+          <h2 class="text-2xl font-bold text-gray-800">{{ number_format($arts->count(), 0, ',', '.') }} Assets</h2>
           <div class="flex items-center space-x-4">
               <div class="relative">
                   <select class="appearance-none pl-4 pr-10 py-2 bg-white border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500" id="sortSelection">
@@ -92,8 +92,8 @@
               </div>
               <div class="relative">
                   <select id="filterField" class="appearance-none pl-4 pr-10 py-2 bg-white border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="">All</option>
                     @foreach($artCategories as $category)
-                      <option value="">All</option>
                       <option value="{{ $category->DESCR }}">{{ $category->DESCR }}</option>
                     @endforeach
                   </select>

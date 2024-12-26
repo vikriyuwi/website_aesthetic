@@ -75,6 +75,14 @@ class AuthController extends Controller
             $buyer = $user->Buyer;
             $artist = $user->Artist;
 
+            $buyerInactive = $user->Buyer && $user->Buyer->IS_ACTIVE == 0;
+            $artistInactive = $user->Artist && $user->Artist->IS_ACTIVE == 0;
+
+            if ($buyerInactive || $artistInactive) {
+                Auth::guard('MasterUser')->logout(); // Log out the user
+                return redirect()->route('login')->withErrors(['Your account is inactive.']);
+            }
+
             if($user->USER_LEVEL == 3) {
                 return redirect()->route('admin.dashboard');
             } else {

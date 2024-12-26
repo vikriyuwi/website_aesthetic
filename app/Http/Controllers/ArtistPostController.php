@@ -132,36 +132,19 @@ class ArtistPostController extends Controller
 
     public function togglePostLike($postId, Request $request)
     {
-        $userId = auth()->id(); // Get the current user ID
+        $user = Auth::user();
+        $post = Post::find($postId);
 
-        try {
-            // Check if the user has already liked the post
-            $postLike = PostLike::where('USER_ID', $userId)->where('POST_ID', $postId)->first();
+        $like = PostLike::where('POST_ID',$post->POST_ID)->where('USER_ID',$user->USER_ID)->first();
 
-            $isLiked = false; // Default state
-            if ($postLike) {
-                $postLike->delete(); // Unlike the post
-            } else {
-                PostLike::create([
-                    'USER_ID' => $userId,
-                    'POST_ID' => $postId
-                ]);
-                $isLiked = true; // Like the post
-            }
-
-            // Get the updated total likes for the post
-            $totalLikes = PostLike::where('POST_ID', $postId)->count();
-
-            return response()->json([
-                'success' => true, // Indicates the operation was successful
-                'isLiked' => $isLiked, // Current like state
-                'total_likes' => $totalLikes, // Updated like count
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'An error occurred while toggling the like.',
+        if ($like != null) {
+            $like->delete();
+        } else {
+            $post->PostLikes()->create([
+                'USER_ID' => $user->USER_ID
             ]);
         }
+
+        return redirect()->back()->with('status','Post being liked!');
     }
 }

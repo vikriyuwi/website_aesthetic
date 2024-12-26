@@ -63,6 +63,15 @@ Route::middleware([Authorization::class.':true'])->group(function() {
 
     Route::post('/contact-us', [WebController::class, 'storeContactUs'])->name('contact.store');
 
+    //LIKE POST TOGGLE
+    Route::get('post/like/{postId}', [ArtistPostController::class, 'togglePostLike'])->name('post.likeToggle');
+
+    //GET COMMENT FROM ARTIST POST
+    Route::get('/comments/{postId}', [ArtistPostController::class, 'getPostComments']);
+
+    //ADD COMMENT FROM ARTIST POST
+    Route::post('/comments/{postId}', [ArtistPostController::class, 'addPostComment']);
+
     Route::middleware([ActiveBuyer::class])->group(function() {
         Route::prefix('profile')->name('profile.')->group(function() {
             Route::post('/update', [BuyerController::class, 'updateBuyerProfile'])->name('update');
@@ -223,6 +232,9 @@ Route::middleware([Authorization::class.':true'])->group(function() {
     });
 });
 
+Route::get('/artist/{id}/follower', [WebController::class, 'artistfollowers'])->name('artist.viewfollower');
+Route::get('/artist/{id}/following', [WebController::class, 'artistfollowing'])->name('artist.viewfollowing');
+
 Route::get('/landing', [App\Http\Controllers\WebController::class, 'landing'])->name('landing');
 Route::get('/home', [App\Http\Controllers\WebController::class, 'home'])->name('home');
 
@@ -304,14 +316,7 @@ Route::get('/artist/profile/{artistId}', [ArtistProfileController::class, 'getAr
 //DELETE POST
 
 
-//LIKE POST TOGGLE
-Route::post('post/like/{postId}', [ArtistPostController::class, 'togglePostLike'])->name('post.likeToggle');
 
-//GET COMMENT FROM ARTIST POST
-Route::get('/comments/{postId}', [ArtistPostController::class, 'getPostComments']);
-
-//ADD COMMENT FROM ARTIST POST
-Route::post('/comments/{postId}', [ArtistPostController::class, 'addPostComment']);
 //------------------------------------------------------------------ENDPOST----------------------------------------------------------------
 
 

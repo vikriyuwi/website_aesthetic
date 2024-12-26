@@ -208,6 +208,16 @@ class MasterUser extends Authenticatable
         })->get();
     }
 
+    public function getTotalSpendingAttribute()
+    {
+        // Sum up the total price of all orders related to this user
+        return $this->Orders()->with('OrderItems')->get()->sum(function ($order) {
+            return $order->OrderItems->sum(function ($item) {
+                return $item->QUANTITY * $item->PRICE_PER_ITEM;
+            });
+        });
+    }
+
     // public function Artists()
     // {
     //     return $this->hasOne(Artist::class);

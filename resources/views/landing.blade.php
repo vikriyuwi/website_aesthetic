@@ -39,11 +39,11 @@
                 <div class="absolute inset-0 bg-white opacity-50"></div>
                 <div class="relative w-full h-full flex transition-transform" id="carousel">
                     <!-- Slide 1 -->
-                    <img src="images/homepage6.JPG" alt="Art Image 1" class="w-full h-full object-cover rounded-lg flex-shrink-0 opacity-75">
+                    <img src="{{ URL::asset('images/homepage6.JPG') }}" alt="Art Image 1" class="w-full h-full object-cover rounded-lg flex-shrink-0 opacity-75">
                     <!-- Slide 2 -->
-                    <img src="images/homepage7.JPG" alt="Art Image 2" class="w-full h-full object-cover rounded-lg flex-shrink-0 opacity-75">
+                    <img src="{{ URL::asset('images/homepage7.JPG') }}" alt="Art Image 2" class="w-full h-full object-cover rounded-lg flex-shrink-0 opacity-75">
                     <!-- Slide 3 -->
-                    <img src="images/homepage3.jpeg" alt="Art Image 3" class="w-full h-full object-cover rounded-lg flex-shrink-0 opacity-75">
+                    <img src="{{ URL::asset('images/homepage3.jpeg') }}" alt="Art Image 3" class="w-full h-full object-cover rounded-lg flex-shrink-0 opacity-75">
                 </div>
                 <!-- Overlay Text -->
                 <div class="absolute inset-0 flex flex-col justify-center items-center text-center p-8 z-10 text-white">
@@ -87,7 +87,7 @@
                 <p class="text-gray-600 mb-6">
                     We provide a variety of <span class="font-bold">professional services</span> including Contemporary Art, 3D Art Design, and Custom Art Commissions.
                 </p>
-                <a href="#" class="bg-indigo-600 text-white px-6 py-3 rounded-full hover:bg-indigo-700">See All Services</a>
+                <a href="{{ url('login') }}" class="bg-indigo-600 text-white px-6 py-3 rounded-full hover:bg-indigo-700">See All Services</a>
             </div>
         </div>
     </section>
@@ -106,7 +106,7 @@
                                 Our poster design service is curated by seasoned professionals, to leave a lasting impression on your audience.
                             </p>
                         </div>
-                        <img src="images/poster-design.PNG" alt="Poster Design" class="w-full h-70 object-cover">
+                        <img src="{{ URL::asset('images/poster-design.PNG') }}" alt="Poster Design" class="w-full h-70 object-cover">
                     </a>
                 </div>
                 <!-- Card 2 -->
@@ -118,7 +118,7 @@
                                 Focused on non-representational and experimental works, playing with colors, shapes, and textures.
                             </p>
                         </div>
-                        <img src="images/3d-art.jpeg" alt="Abstract Art" class="w-full h-70 object-cover">
+                        <img src="{{ URL::asset('images/3d-art.jpeg') }}" alt="Abstract Art" class="w-full h-70 object-cover">
                     </a>
                 </div>
                 <!-- Card 3 -->
@@ -130,7 +130,7 @@
                                 Reflects modern-day themes, concepts, and innovations in art, often blending traditional and digital media.
                             </p>
                         </div>
-                        <img src="images/animate-art.jpeg" alt="Contemporary Art" class="w-full h-90 object-cover">
+                        <img src="{{ URL::asset('images/animate-art.jpeg') }}" alt="Contemporary Art" class="w-full h-90 object-cover">
                     </a>
                 </div>
                 <!-- Card 4 -->
@@ -142,7 +142,7 @@
                                 Covers hand-drawn and digital illustrations used for storytelling, design, or personal expression.
                             </p>
                         </div>
-                        <img src="images/custom-art.jpeg" alt="Illustration" class="w-full h-90 object-cover">
+                        <img src="{{ URL::asset('images/custom-art.jpeg') }}" alt="Illustration" class="w-full h-90 object-cover">
                     </a>
                 </div>
                 <!-- Card 5 -->
@@ -154,7 +154,7 @@
                                 Our logo creation service is curated by seasoned professionals, to leave a lasting impression on your audience.
                             </p>
                         </div>
-                        <img src="images/logo-art.png" alt="Logo Creation" class="w-full h-70 object-cover">
+                        <img src="{{ URL::asset('images/logo-art.png') }}" alt="Logo Creation" class="w-full h-70 object-cover">
                     </a>
                 </div>
             </div>
@@ -166,7 +166,7 @@
     <section id="home" class="py-16 bg-white scroll-animation">
         <div class="container mx-auto">
             <div class="relative mb-16">
-                <img src="images/art-gallery.jpeg" alt="Art Gallery" class="w-full h-96 object-cover rounded-lg">
+                <img src="{{ URL::asset('images/art-gallery.jpeg') }}" alt="Art Gallery" class="w-full h-96 object-cover rounded-lg">
                 <div class="absolute inset-0 flex flex-col justify-center items-start text-white p-8 bg-black bg-opacity-50 rounded-lg">
                     <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Dive Into The Exquisite Realm of Imagination and Discover The Boundless Beauty of Creativity In Our Art Gallery</h2>
                     <p class="text-lg mb-6">Your Journey through the Masterpieces Begins Here.</p>
@@ -199,7 +199,7 @@
                    <a href="{{ route('blog.preview',['slug'=>$blog->SLUG]) }}"  class="flex items-center">
                        <img src="{{ asset($blog->IMAGE_PATH) }}" alt="{{ $blog->TITLE }}" class="w-20 h-20 object-cover rounded-xl shadow-lg mr-6 transform hover:scale-105 transition">
                        <div>
-                           <h3 class="text-gray-800 font-semibold mb-1">{{ $latestBlog->TITLE }}</h3>
+                           <h3 class="text-gray-800 font-semibold mb-1">{{ $blog->TITLE }}</h3>
                            <p class="text-gray-500 text-sm">{{ $blog->created_at->diffForHumans() }}</p>
                        </div>
                     </a>
@@ -215,12 +215,12 @@
     <section id="cta-section" class="relative py-20 bg-gradient-to-b from-white to-white white-900 to-white-800 scroll-animation">
        <div class="container mx-auto">
            <div class="relative rounded-lg overflow-hidden shadow-lg">
-               <img src="images/sign-in-cta.jpeg" alt="Star Background" class="w-full h-80 object-cover">
+               <img src="{{ URL::asset('images/sign-in-cta.jpeg') }}" alt="Star Background" class="w-full h-80 object-cover">
                <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-start text-white p-10">
                    <h2 class="text-3xl md:text-4xl font-extrabold mb-5 leading-tight">
                        Suddenly Grasping Your Elusive Stars Becomes a Tangible Reality
                    </h2>
-                   <a href="#" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold px-8 py-3 rounded-full shadow-lg hover:from-blue-600 hover:to-purple-700 transform hover:scale-105 transition-transform duration-300">
+                   <a href="{{ route('login') }}" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold px-8 py-3 rounded-full shadow-lg hover:from-blue-600 hover:to-purple-700 transform hover:scale-105 transition-transform duration-300">
                        Sign In
                    </a>
                </div>

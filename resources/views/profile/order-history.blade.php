@@ -53,7 +53,7 @@
             <p class="text-gray-500 mt-1">Your total spend across all orders</p>
         </div>
         <div class="text-3xl font-bold text-indigo-600">
-            Rp. 5,000,000 
+            Rp {{ number_format(Auth::user()->total_spending, 0, ',', '.') }}
         </div>
     </div>
     <!-- Profile Heading -->
